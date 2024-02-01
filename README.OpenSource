@@ -1,11 +1,11 @@
 [
     {
-        "Name": " xxx",
-        "License": " Apache License ",
+        "Name": " QRCode4cj ",
+        "License": " Apache-2.0 license ",
         "License File": " LICENSE ",
         "Version Number": " v2.0 ",
-        "Owner": "xxx"
-        "Upstream URL": "https://github.com/xxx",
-        "Description": " xxx."
+        "Owner": "Srikanth Reddy Lingala"
+        "Upstream URL": " https://github.com/zxing/zxing ",
+        "Description": "  barcode scanning library for Java, Android "
     }
 ]

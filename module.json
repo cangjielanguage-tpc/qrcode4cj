@@ -1,0 +1,35 @@
+{
+	"cjc_version": "0.47.2",
+	"organization": "cangjie",
+	"name": "QRCode4cj",
+	"description": "CangjieUI Application",
+	"version": "0.0.1",
+	"requires": {
+		"charset": {
+		  "branch": "qrcode_lib",
+		  "version": "0.0.2",
+		  "path": "./charset"
+		},
+		"image": {
+			"branch": "qrcode_lib",
+			"version": "0.0.1",
+			"path": "./image"
+		}
+	},
+	"package_requires": {
+		"path_option": [
+		],
+		"package_option": {}
+	},
+	"foreign_requires": {},
+	"output_type": "dynamic",
+	"command_option": "-O2 --int-overflow=wrapping --warn-off all",
+	"condition_option": {
+		"release": "--fast-math -O2",
+		"debug": "-g"
+	},
+	"link_option": "",
+	"cross_compile_configuration": {
+	},
+	"package_configuration": {}
+}
