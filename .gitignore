@@ -19,3 +19,7 @@ bin/
 .cjpm-history
 module-lock.json
 report/
+cjpm.lock
+cjpm.toml
+target/
+test_temp/

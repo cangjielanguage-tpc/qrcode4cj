@@ -1,5 +1,5 @@
 {
-	"cjc_version": "0.47.2",
+	"cjc_version": "0.49.2",
 	"organization": "cangjie",
 	"name": "QRCode4cj",
 	"description": "CangjieUI Application",
@@ -8,12 +8,12 @@
 		"charset": {
 		  "branch": "qrcode_lib",
 		  "version": "0.0.2",
-		  "path": "./charset"
+		  "git": "https://gitee.com/HW-PLLab/charset.git"
 		},
 		"image": {
 			"branch": "qrcode_lib",
 			"version": "0.0.1",
-			"path": "./image"
+			"git": "https://gitee.com/HW-PLLab/image.git"
 		}
 	},
 	"package_requires": {
