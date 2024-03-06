@@ -1,0 +1,177 @@
+/*
+ * Copyright 2013 ZXing authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package zxing.code.pdf417.decoder
+
+import zxing.code.common.NotFoundException
+import zxing.code.common.ResultPoint
+import zxing.code.common.BitMatrix
+from std import math.*
+
+/**
+ * @author Guenther Grau
+ */
+open class BoundingBox {
+    private var image: BitMatrix = BitMatrix()
+    private var topLeft: ResultPoint = ResultPoint();
+    private var bottomLeft: ResultPoint = ResultPoint();
+    private var topRight: ResultPoint = ResultPoint();
+    private var bottomRight: ResultPoint = ResultPoint();
+    private var minX: Int64 = 0
+    private var maxX: Int64 = 0
+    private var minY: Int64 = 0
+    private var maxY: Int64 = 0
+    public var flag: Bool = false;
+    init() {}
+
+    init(
+        image: BitMatrix,
+        topLeft: ResultPoint,
+        bottomLeft: ResultPoint,
+        topRight: ResultPoint,
+        bottomRight: ResultPoint
+    ) {
+        var topLeft_: ResultPoint = topLeft
+        var bottomLeft_: ResultPoint = bottomLeft
+        var topRight_: ResultPoint = topRight
+        var bottomRight_: ResultPoint = bottomRight
+
+        var leftUnspecified: Bool = !topLeft_.flag || !bottomLeft_.flag
+        var rightUnspecified: Bool = !topRight_.flag || !bottomRight_.flag
+        if (leftUnspecified && rightUnspecified) {
+            throw NotFoundException.getNotFoundInstance();
+        }
+        if (leftUnspecified) {
+            topLeft_ = ResultPoint(0.0, topRight.getY())
+            bottomLeft_ = ResultPoint(0.0, bottomRight.getY())
+        } else if (rightUnspecified) {
+            topRight_ = ResultPoint(Float32(image.getWidth() - 1), topLeft.getY())
+            bottomRight_ = ResultPoint(Float32(image.getWidth() - 1), bottomLeft.getY())
+        }
+        this.image = image
+        this.topLeft = topLeft_
+        this.bottomLeft = bottomLeft_
+        this.topRight = topRight_
+        this.bottomRight = bottomRight_
+        this.minX = Int64(min(topLeft_.getX(), bottomLeft_.getX()))
+        this.maxX = Int64(max(topRight_.getX(), bottomRight_.getX()))
+        this.minY = Int64(min(topLeft_.getY(), topRight_.getY()))
+        this.maxY = Int64(max(bottomLeft_.getY(), bottomRight_.getY()))
+        this.flag = true
+    }
+
+    init(boundingBox: BoundingBox) {
+        this.image = boundingBox.image
+        this.topLeft = boundingBox.topLeft
+        this.bottomLeft = boundingBox.bottomLeft
+        this.topRight = boundingBox.topRight
+        this.bottomRight = boundingBox.bottomRight
+        this.minX = boundingBox.minX
+        this.maxX = boundingBox.maxX
+        this.minY = boundingBox.minY
+        this.maxY = boundingBox.maxY
+        this.flag = boundingBox.flag
+    }
+
+    static func merge(leftBox: BoundingBox, rightBox: BoundingBox): BoundingBox {
+        if (leftBox.flag == false) {
+            return rightBox
+        }
+        if (rightBox.flag == false) {
+            return leftBox
+        }
+        return BoundingBox(leftBox.image, leftBox.topLeft, leftBox.bottomLeft, rightBox.topRight, rightBox.bottomRight);
+    }
+
+    func addMissingRows(missingStartRows: Int64, missingEndRows: Int64, isLeft: Bool): BoundingBox {
+        var newTopLeft: ResultPoint = topLeft
+        var newBottomLeft: ResultPoint = bottomLeft
+        var newTopRight: ResultPoint = topRight
+        var newBottomRight: ResultPoint = bottomRight
+
+        if (missingStartRows > 0) {
+            var top: ResultPoint
+            if (isLeft) {
+                top = topLeft
+            } else {
+                top = topRight
+            }
+            var newMinY: Int64 = Int64(top.getY()) - missingStartRows
+            if (newMinY < 0) {
+                newMinY = 0
+            }
+            var newTop: ResultPoint = ResultPoint(top.getX(), Float32(newMinY));
+            if (isLeft) {
+                newTopLeft = newTop
+            } else {
+                newTopRight = newTop
+            }
+        }
+
+        if (missingEndRows > 0) {
+            var bottom: ResultPoint
+            if (isLeft) {
+                bottom = bottomLeft
+            } else {
+                bottom = bottomRight
+            }
+            var newMaxY: Int64 = Int64(bottom.getY()) + missingEndRows
+            if (newMaxY >= image.getHeight()) {
+                newMaxY = image.getHeight() - 1
+            }
+            var newBottom: ResultPoint = ResultPoint(bottom.getX(), Float32(newMaxY));
+            if (isLeft) {
+                newBottomLeft = newBottom
+            } else {
+                newBottomRight = newBottom
+            }
+        }
+
+        return BoundingBox(image, newTopLeft, newBottomLeft, newTopRight, newBottomRight);
+    }
+
+    func getMinX(): Int64 {
+        return minX
+    }
+
+    func getMaxX(): Int64 {
+        return maxX
+    }
+
+    func getMinY(): Int64 {
+        return minY
+    }
+
+    func getMaxY(): Int64 {
+        return maxY
+    }
+
+    func getTopLeft(): ResultPoint {
+        return topLeft
+    }
+
+    func getTopRight(): ResultPoint {
+        return topRight
+    }
+
+    func getBottomLeft(): ResultPoint {
+        return bottomLeft
+    }
+
+    func getBottomRight(): ResultPoint {
+        return bottomRight
+    }
+}
