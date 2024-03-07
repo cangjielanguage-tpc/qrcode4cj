@@ -5,123 +5,181 @@
 <p align="center">
 <img alt="" src="https://img.shields.io/badge/release-v0.0.1-brightgreen" style="display: inline-block;" />
 <img alt="" src="https://img.shields.io/badge/build-pass-brightgreen" style="display: inline-block;" />
-<img alt="" src="https://img.shields.io/badge/cjc-v0.47.2-brightgreen" style="display: inline-block;" />
-<img alt="" src="https://img.shields.io/badge/cjcov-50%25-red" style="display: inline-block;" />
+<img alt="" src="https://img.shields.io/badge/cjc-v0.49.2-brightgreen" style="display: inline-block;" />
+<img alt="" src="https://img.shields.io/badge/cjcov-87.5%25-green" style="display: inline-block;" />
 <img alt="" src="https://img.shields.io/badge/project-open-brightgreen" style="display: inline-block;" />
 </p>
 
 ## 介绍
 
-介绍库或者框架符合的标准，应用领域，解决什么问题。有哪些主要的特点，与同类库相比有哪些优点。
+一个解析/生成一维码/二维码的库。
 
 ### 特性
 
-- 🚀 特性1
+- 🚀 可根据实际场景需求生成或解析一维或二维码
 
-- 🚀 特性2
-
-- 💪 特性3
-
-- 🛠️ 特性4
-
-- 🌍 特性5
-
-- 💡  特性6
-
-### 路线
-
-<p align="center">
-<img src="./doc/assets/milestone.png" width="100%" >
-</p>
-路线图roadmap在 doc/framework-roadmap-logo.pptx 中有源文件。
+- 🚀 可在终端设备相机扫描解析一维或二维码
 
 
-## 软件架构
+## <img alt="" src="./doc/assets/readme-icon-framework.png" style="display: inline-block;" width=3%/> 架构
 
-### 架构图
-
-<p align="center">
-<img src="./doc/assets/framework.png" width="60%" >
-</p>
-
-架构图文字说明，包括模块说明、架构层次等详细说明。
 
 ### 源码目录
 
 ```shell
-├── README.md              #整体介绍
-├── doc                    #文档目录，包括设计文档，API接口文档等
-│   ├── cjcov              #覆盖率信息
-│   ├── design.md          #整体设计文档
-│   └── feature_api.md     #API接口文档
-├── src                    #源码目录
-│   └── Template.cj        #描述关键代码文件的功能
-└── test                   #测试代码目录
+.
+├── README.md
+├── doc
+├── src
+│   └── zxing
+│       └── code
+└── test   
     ├── HLT
-    └── LLT
+    ├── LLT
+    └── DOC
 ```
+
+- `doc`存放库的设计文档、提案、库的使用文档
+- `src`存放库源码目录
+- `test/HLT`存放HLT用例
+- `test/LLT`存放LLT用例
+- `test/DOC`存放示例代码
 
 ### 接口说明
 
-主要类和函数接口说明详见 [API](./doc/api.md)
+主要是核心类和成员函数说明,详情见 [API](./doc/feature_api.md)
 
+## <img alt="" src="./doc/assets/readme-icon-compile.png" style="display: inline-block;" width=3%/> 使用说明
 
-## 使用说明
-
-### 编译构建
-
-描述具体的编译过程：
+### 编译（win/linux）
 
 ```shell
-cpm update
-cpm build
+cjpm build
 ```
 
 ### 功能示例
-#### xxx 功能示例
 
-功能示例描述:
+#### 解码功能示例:
 
 示例代码如下：
 
 ```cangjie
-import xxx.*
-main() {
- xxxx
+from QRCode4cj import zxing.code.common.FormatException
+from QRCode4cj import zxing.code.common.ResultPoint
+from QRCode4cj import zxing.code.aztec.common.AztecDetectorResult
+from QRCode4cj import zxing.code.common.BitArray
+from QRCode4cj import zxing.code.common.BitMatrix
+from QRCode4cj import zxing.code.common.DecoderResult
+from QRCode4cj import zxing.code.aztec.decoder.Decoder
+from charset import charset.tools.UTF32String
+from std import unittest.*
+from std import unittest.testmacro.*
+
+main(): Int64 {
+    let tester = DecoderTestCase()
+    tester.execute()
+    tester.printResult()
+    tester.getTestInfo().errorCount + tester.getTestInfo().failedCount
+}
+
+@Test
+public class DecoderTestCase {
+    @TestCase
+    public func testDecode(): Unit {
+        var matrix: BitMatrix = BitMatrix.parse(
+            UTF32String(
+                "X X X X X     X X X       X X X     X X X     \n" + "X X X     X X X     X X X X     X X X     X X \n" +
+                "  X   X X       X   X   X X X X     X     X X \n" + "  X   X X     X X     X     X   X       X   X \n" +
+                "  X X   X X         X               X X     X \n" + "  X X   X X X X X X X X X X X X X X X     X   \n" +
+                "  X X X X X                       X   X X X   \n" + "  X   X   X   X X X X X X X X X   X X X   X X \n" +
+                "  X   X X X   X               X   X X       X \n" + "  X X   X X   X   X X X X X   X   X X X X   X \n" +
+                "  X X   X X   X   X       X   X   X   X X X   \n" + "  X   X   X   X   X   X   X   X   X   X   X   \n" +
+                "  X X X   X   X   X       X   X   X X   X X   \n" + "  X X X X X   X   X X X X X   X   X X X   X X \n" +
+                "X X   X X X   X               X   X   X X   X \n" + "  X       X   X X X X X X X X X   X   X     X \n" +
+                "  X X   X X                       X X   X X   \n" + "  X X X   X X X X X X X X X X X X X X   X X   \n" +
+                "X     X     X     X X   X X               X X \n" + "X   X X X X X   X X X X X     X   X   X     X \n" +
+                "X X X   X X X X           X X X       X     X \n" + "X X     X X X     X X X X     X X X     X X   \n" +
+                "    X X X     X X X       X X X     X X X X   \n"),
+            UTF32String("X "),
+            UTF32String("  ")
+        )
+        var aztecResult: AztecDetectorResult = AztecDetectorResult(matrix, Array<ResultPoint>(), false, 30, 2)
+        var result: DecoderResult = Decoder().decode(aztecResult)
+        @Assert("88888TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", result.getText())
+    }
 }
 ```
 
 执行结果如下：
 
 ```shell
-xxx
+[ PASSED ] CASE: testDecode (2342200 ns)
 ```
 
-#### xxx 功能示例
-
-功能示例描述:
+#### 编码功能示例:
 
 示例代码如下：
 
 ```cangjie
-import xxx.*
-main() {
- xxxx
+from QRCode4cj import zxing.code.common.*
+from QRCode4cj import zxing.code.qrcode.*
+from std import unittest.*
+from std import unittest.testmacro.*
+
+main(): Int64 {
+    let tester = EncoderTestCase()
+    tester.execute()
+    tester.printResult()
+    tester.getTestInfo().errorCount + tester.getTestInfo().failedCount
+}
+
+@Test
+public class EncoderTestCase {
+    @TestCase
+    public func testEncode2(): Unit {
+        var res = QRCodeWriter().encode("ABCDEF", BarcodeFormat.QR_CODE, 21, 21)
+        var expected = """
+                                                          
+                                                          
+                                                          
+                                                          
+        X X X X X X X   X   X X X   X X X X X X X         
+        X           X       X X     X           X         
+        X   X X X   X   X X   X     X   X X X   X         
+        X   X X X   X   X X     X   X   X X X   X         
+        X   X X X   X   X     X     X   X X X   X         
+        X           X     X X X X   X           X         
+        X X X X X X X   X   X   X   X X X X X X X         
+                              X X                         
+        X X X X     X   X X X X X X     X X X   X         
+          X   X X X   X X X   X X X X     X X X           
+            X X X   X   X   X X           X   X           
+            X   X X   X     X X     X X X X   X           
+        X         X X   X   X   X     X   X X X X         
+                        X X   X     X     X   X X         
+        X X X X X X X         X X     X     X X           
+        X           X     X X         X X     X X         
+        X   X X X   X     X     X X X X X X X   X         
+        X   X X X   X   X X   X     X   X     X           
+        X   X X X   X   X X     X   X X   X X             
+        X           X   X X       X                       
+        X X X X X X X   X   X     X     X     X           
+                                                          
+                                                          
+                                                          
+                                                          
+"""
+        @Assert(expected, res.toString())
+    }
 }
 ```
 
 执行结果如下：
 
 ```shell
-xxx
+[ PASSED ] CASE: testEncode (2362800 ns)
 ```
 
-## 约束与限制
-描述环境限制，版本限制，依赖版本等
-
-## 开源协议
-xxx License
-
-## 参与贡献
+## <img alt="" src="./doc/assets/readme-icon-contribute.png" style="display: inline-block;" width=3%/> 参与贡献
 
 欢迎给我们提交PR，欢迎给我们提交Issue，欢迎参与任何形式的贡献。
