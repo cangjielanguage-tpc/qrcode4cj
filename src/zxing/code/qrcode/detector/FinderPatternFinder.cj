@@ -349,12 +349,7 @@ public open class FinderPatternFinder {
      * observed in any reading state, based on the results of the horizontal scan
      * @return vertical center of finder pattern, or {@link Float#NaN} if not found
      */
-    private func crossCheckVertical(
-        startI: Int64,
-        centerJ: Int64,
-        maxCount: Int64,
-        originalStateCountTotal: Int64
-    ): Float64 {
+    private func crossCheckVertical(startI: Int64, centerJ: Int64, maxCount: Int64, originalStateCountTotal: Int64): Float64 {
         let image: BitMatrix = this.image;
 
         let maxI: Int64 = image.getHeight();
@@ -417,7 +412,11 @@ public open class FinderPatternFinder {
             return Float64.NaN;
         }
 
-        return if (foundPatternCross(stateCount)) {
+        return returncrossCheckVertical(stateCount, i)
+    }
+
+    private func returncrossCheckVertical(stateCount: Array<Int64>, i: Int64): Float64 {
+        if (foundPatternCross(stateCount)) {
             centerFromEnd(stateCount, i)
         } else {
             return Float64.NaN
@@ -429,12 +428,7 @@ public open class FinderPatternFinder {
      * except it reads horizontally instead of vertically. This is used to cross-cross
      * check a vertical cross check and locate the real center of the alignment pattern.</p>
      */
-    private func crossCheckHorizontal(
-        startJ: Int64,
-        centerI: Int64,
-        maxCount: Int64,
-        originalStateCountTotal: Int64
-    ): Float64 {
+    private func crossCheckHorizontal(startJ: Int64, centerI: Int64, maxCount: Int64, originalStateCountTotal: Int64): Float64 {
         let image: BitMatrix = this.image;
 
         let maxJ: Int64 = image.getWidth();
@@ -493,10 +487,14 @@ public open class FinderPatternFinder {
             return Float64.NaN;
         }
 
-        return if (foundPatternCross(stateCount)) {
-            centerFromEnd(stateCount, j)
+        return returncrossCheckHorizontal(stateCount, j)
+    }
+
+    private func returncrossCheckHorizontal(stateCount: Array<Int64>, j: Int64): Float64 {
+        if (foundPatternCross(stateCount)) {
+            return centerFromEnd(stateCount, j)
         } else {
-            Float64.NaN
+            return Float64.NaN
         }
     }
 

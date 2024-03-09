@@ -70,17 +70,11 @@ public class TextEncoder <: C40Encoder {
             return 2;
         }
         if (c <= 'Z') {
-            sb.append(Char(2));
-
-            //Shift 3 Set
-            sb.append(Char(c.hashCode() - 65 + 1));
+            extracted2(c, sb)
             return 2;
         }
         if (c.hashCode() <= 127) {
-            sb.append(Char(2));
-
-            //Shift 3 Set
-            sb.append(Char(c.hashCode() - 123 + 27));
+            extracted(c, sb)
             return 2;
         }
         sb.appendAll("\u{2}\u{001e}".toRuneArray());
@@ -89,5 +83,15 @@ public class TextEncoder <: C40Encoder {
         var len: Int64 = 2;
         len += encodeChar(Char(c.hashCode() - 128), sb)
         return len
+    }
+
+    private static func extracted(c: Char, sb: ArrayList<Char>) {
+        sb.append(Char(2))
+        sb.append(Char(c.hashCode() - 123 + 27))
+    }
+
+    private static func extracted2(c: Char, sb: ArrayList<Char>) {
+        sb.append(Char(2));
+        sb.append(Char(c.hashCode() - 65 + 1));
     }
 }

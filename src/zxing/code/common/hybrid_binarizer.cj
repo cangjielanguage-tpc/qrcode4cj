@@ -161,13 +161,8 @@ public class HybridBinarizer <: GlobalHistogramBinarizer {
      * See the following thread for a discussion of this algorithm:
      * http://groups.google.com/group/zxing/browse_thread/thread/d06efa2c35a7ddc0
      */
-    static func calculateBlackPoints(
-        luminances: Array<UInt8>,
-        subWidth: Int64,
-        subHeight: Int64,
-        width: Int64,
-        height: Int64
-    ): Array<Array<Int64>> {
+    static func calculateBlackPoints(luminances: Array<UInt8>, subWidth: Int64, subHeight: Int64, width: Int64,
+        height: Int64): Array<Array<Int64>> {
         let maxYOffset = height - BLOCK_SIZE
         let maxXOffset = width - BLOCK_SIZE
         let blackPoints = Array<Array<Int64>>(subHeight, {n: Int64 => Array<Int64>(subWidth, item: 0)})
@@ -215,20 +210,24 @@ public class HybridBinarizer <: GlobalHistogramBinarizer {
 
                 var average = sum >> (BLOCK_SIZE_POWER * 2)
                 if (max - min <= MIN_DYNAMIC_RANGE) {
-                    average = min / 2
-
-                    if (y > 0 && x > 0) {
-                        let averageNeighborBlackPoint = (blackPoints[y - 1][x] + (2 * blackPoints[y][x - 1]) +
-                            blackPoints[y - 1][x - 1]) / 4
-                        if (min < averageNeighborBlackPoint) {
-                            average = averageNeighborBlackPoint
-                        }
-                    }
+                    average = getaverage(blackPoints, min, x, y)
                 }
                 blackPoints[y][x] = average
             }
         }
 
         blackPoints
+    }
+
+    static func getaverage(blackPoints: Array<Array<Int64>>, min: Int64, x: Int64, y: Int64) {
+        var average = min / 2
+        if (y > 0 && x > 0) {
+            let averageNeighborBlackPoint = (blackPoints[y - 1][x] + (2 * blackPoints[y][x - 1]) + blackPoints[y - 1][x -
+                    1]) / 4
+            if (min < averageNeighborBlackPoint) {
+                average = averageNeighborBlackPoint
+            }
+        }
+        return average
     }
 }

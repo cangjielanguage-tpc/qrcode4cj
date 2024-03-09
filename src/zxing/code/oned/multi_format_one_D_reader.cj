@@ -69,15 +69,19 @@ public open class MultiFormatOneDReader <: OneDReader {
         }
         if (readers.isEmpty()) {
             readers.append(MultiFormatUPCEANReader(hints));
-            readers.append(Code39Reader());
-            readers.append(CodaBarReader());
-            readers.append(Code93Reader());
-            readers.append(Code128Reader());
-            readers.append(ITFReader());
-            readers.append(RSS14Reader());
-            readers.append(RSSExpandedReader());
+            appendReader(readers)
         }
         this.readers = readers.toArray()
+    }
+
+    static func appendReader(readers: ArrayList<OneDReader>) {
+        readers.append(Code39Reader());
+        readers.append(CodaBarReader());
+        readers.append(Code93Reader());
+        readers.append(Code128Reader());
+        readers.append(ITFReader());
+        readers.append(RSS14Reader());
+        readers.append(RSSExpandedReader());
     }
 
     public override func decodeRow(rowNumber: Int64, row: BitArray, hints: HashMap<DecodeHintType, Any>): Result {

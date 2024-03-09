@@ -1,7 +1,7 @@
 package zxing.code.tools
 
 foreign func malloc(size: UIntNative): CPointer<Unit>
-foreign func sprintf(ptr: CString, fmt: CString, ...): Int32
+foreign func sprintf_s(ptr: CString, fmt: CString, ...): Int32
 foreign func free(ptr: CPointer<Float32>): Unit
 
 @OverflowWrapping
@@ -60,7 +60,7 @@ public func intToHexString(indata: Int64): String {
     unsafe {
         var fmt = LibC.mallocCString("%x")
         var ptr = LibC.mallocCString("")
-        sprintf(ptr, fmt, indata)
+        sprintf_s(ptr, fmt, indata)
         outdata = ptr.toString()
     }
 

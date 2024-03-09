@@ -483,11 +483,7 @@ public class Decoder {
     private func extractBits(matrix: BitMatrix): Array<Bool> {
         var compact: Bool = ddata.getOrThrow().isCompact()
         var layers: Int64 = ddata.getOrThrow().getNbLayers()
-        var baseMatrixSize: Int64 = (if (compact) {
-            11
-        } else {
-            14
-        }) + layers * 4 // not including alignment lines
+        var baseMatrixSize: Int64 = getbaseMatrixSize(compact, layers) // not including alignment lines
         var alignmentMap: Array<Int64> = Array<Int64>(baseMatrixSize, item: 0)
         var rawbits: Array<Bool> = Array<Bool>(totalBitsInLayer(layers, compact), item: true)
 
@@ -548,6 +544,14 @@ public class Decoder {
             rowOffset += rowSize * 8
         }
         return rawbits
+    }
+
+    private func getbaseMatrixSize(compact: Bool, layers: Int64): Int64 {
+        return (if (compact) {
+            11
+        } else {
+            14
+        }) + layers * 4
     }
 
     /**

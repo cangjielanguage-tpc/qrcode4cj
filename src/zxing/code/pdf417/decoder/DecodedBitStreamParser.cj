@@ -145,12 +145,8 @@ public open class DecodedBitStreamParser {
         if (result.isEmpty() && resultMetadata.getFileId().isEmpty()) {
             throw FormatException.getFormatInstance()
         }
-        var decoderResult: DecoderResult = DecoderResult(
-            Array<UInt8>(),
-            result.toString(),
-            ArrayList<Array<UInt8>>(),
-            ecLevel
-        )
+        var decoderResult: DecoderResult = DecoderResult(Array<UInt8>(), result.toString(), ArrayList<Array<UInt8>>(),
+            ecLevel)
         decoderResult.setOther(resultMetadata)
         return decoderResult
     }
@@ -373,8 +369,8 @@ public open class DecodedBitStreamParser {
             var ch: Char = Char(0x00)
             match (subMode) {
                 case ALPHA =>
-                        // Alpha (uppercase alphabetic)
-                        if (subModeCh < 26) {
+                    // Alpha (uppercase alphabetic)
+                    if (subModeCh < 26) {
                     // Upper case Alpha Character
                     ch = Char('A'.hashCode() + subModeCh)
                 } else {
@@ -397,8 +393,8 @@ public open class DecodedBitStreamParser {
                     }
                 }
                 case LOWER =>
-                        // Lower (lowercase alphabetic)
-                        if (subModeCh < 26) {
+                    // Lower (lowercase alphabetic)
+                    if (subModeCh < 26) {
                     ch = Char('a'.hashCode() + subModeCh)
                 } else {
                     if (subModeCh == 26) {
@@ -420,8 +416,8 @@ public open class DecodedBitStreamParser {
                     }
                 }
                 case MIXED =>
-                        // Mixed (numeric and some punctuation)
-                        if (subModeCh < PL) {
+                    // Mixed (numeric and some punctuation)
+                    if (subModeCh < PL) {
                     ch = MIXED_CHARS[subModeCh]
                 } else {
                     if (subModeCh == PL) {
@@ -443,8 +439,8 @@ public open class DecodedBitStreamParser {
                     }
                 }
                 case PUNCT =>
-                        // Punctuation
-                        if (subModeCh < PAL) {
+                    // Punctuation
+                    if (subModeCh < PAL) {
                     ch = PUNCT_CHARS[subModeCh]
                 } else {
                     if (subModeCh == PAL || subModeCh == TEXT_COMPACTION_MODE_LATCH) {

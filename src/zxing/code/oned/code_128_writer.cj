@@ -355,16 +355,8 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
 
             // At this point, there are at least 4 consecutive digits.
             // Look ahead to choose whether to switch now or on the next round.
-            var index: Int64 = start + 4
-            lookahead = findCType(value, index)
-            while (lookahead == CType.TWO_DIGITS) {
-                lookahead = findCType(value, index)
-                index += 2
-            }
-            if (lookahead == CType.ONE_DIGIT) { // odd number of digits, switch later
-                return CODE_CODE_B
-            }
-            return CODE_CODE_C
+            return extracted(value, start)
+
             // even number of digits, switch now
         }
 
@@ -377,7 +369,21 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
         }
         return CODE_CODE_B
     }
+
+    private static func extracted(value: UTF32String, start: Int64): Int64 {
+        var index: Int64 = start + 4
+        var lookahead = findCType(value, index)
+        while (lookahead == CType.TWO_DIGITS) {
+            lookahead = findCType(value, index)
+            index += 2
+        }
+        if (lookahead == CType.ONE_DIGIT) { // odd number of digits, switch later
+            return CODE_CODE_B
+        }
+        return CODE_CODE_C
+    }
 }
+
 enum Charset <: ToString & Equatable<Charset> {
     A | B | C | CNONE
 
@@ -414,6 +420,7 @@ enum Charset <: ToString & Equatable<Charset> {
         }
     }
 }
+
 enum Latch <: ToString & Equatable<Latch> {
     A | B | C | SHIFT | LNONE
 

@@ -144,17 +144,9 @@ public open class Code93Reader <: OneDReader {
 
         var left: Float32 = Float32(start[1] + start[0]) / 2.0
         var right: Float32 = Float32(lastStart) + Float32(lastPatternSize) / 2.0
-        var resultObject: Result = Result(
-            resultString,
-            Array<UInt8>(),
-            Array<ResultPoint>(
-                [
-                    ResultPoint(left, Float32(rowNumber)),
-                    ResultPoint(right, Float32(rowNumber))
-                ]
-            ),
-            BarcodeFormat.CODE_93
-        );
+        var resultObject: Result = Result(resultString, Array<UInt8>(),
+            Array<ResultPoint>([ResultPoint(left, Float32(rowNumber)), ResultPoint(right, Float32(rowNumber))]),
+            BarcodeFormat.CODE_93);
         resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]G0");
 
         return resultObject

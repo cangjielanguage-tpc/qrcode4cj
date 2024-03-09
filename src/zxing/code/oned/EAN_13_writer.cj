@@ -25,8 +25,8 @@ public open class EAN13Writer <: UPCEANWriter {
     private static let CODE_WIDTH: Int64 = 3 + // start guard
         (7 * 6) + // left bars
         5 + // middle guard
-    (7 * 6) + // right bars
-    3
+        (7 * 6) + // right bars
+        3
 
     // end guard
     protected func getSupportedWriteFormats(): ArrayList<BarcodeFormat> {
@@ -87,15 +87,22 @@ public open class EAN13Writer <: UPCEANWriter {
 
         pos += appendPattern(result, pos, UPCEANReader.MIDDLE_PATTERN, false)
 
+        pos = getPos(pos, result, contentsinutf32)
+
+        appendPattern(result, pos, UPCEANReader.START_END_PATTERN, true);
+
+        return result
+    }
+
+    private static func getPos(pos: Int64, result: Array<Bool>, contentsinutf32: UTF32String): Int64 {
+        var pos_p = pos
         for (i in 7..13) {
             var digit: Int64 = -1
             if (contentsinutf32[i].isAsciiNumber()) {
                 digit = contentsinutf32.get(i).hashCode() - 48
             }
-            pos += appendPattern(result, pos, UPCEANReader.L_PATTERNS[digit], true)
+            pos_p += appendPattern(result, pos_p, UPCEANReader.L_PATTERNS[digit], true)
         }
-        appendPattern(result, pos, UPCEANReader.START_END_PATTERN, true);
-
-        return result
+        return pos_p
     }
 }

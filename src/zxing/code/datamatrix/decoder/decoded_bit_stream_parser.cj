@@ -290,17 +290,17 @@ public class DecodedBitStreamParser {
             }
         }
 
-        return DecoderResult(
-            bytes,
-            result.toString(),
+        return returndecode(bytes, result, byteSegments, symbologyModifier)
+    }
+
+    private static func returndecode(bytes: Array<UInt8>, result: ECIStringBuilder,
+        byteSegments: ArrayList<Array<UInt8>>, symbologyModifier: Int64): DecoderResult {
+        return DecoderResult(bytes, result.toString(),
             if (byteSegments.isEmpty()) {
-                ArrayList<Array<UInt8>>()
-            } else {
-                byteSegments
-            },
-            String(),
-            symbologyModifier
-        );
+            ArrayList<Array<UInt8>>()
+        } else {
+            byteSegments
+        }, String(), symbologyModifier);
     }
 
     /**
@@ -336,11 +336,11 @@ public class DecodedBitStreamParser {
             } else {
                 match (oneByte) {
                     case 230 =>
-                    // Latch to C40 encodation
-                    return Mode.C40_ENCODE;
+                        // Latch to C40 encodation
+                        return Mode.C40_ENCODE;
                     case 231 =>
-                    // Latch to Base 256 encodation
-                    return Mode.BASE256_ENCODE;
+                        // Latch to Base 256 encodation
+                        return Mode.BASE256_ENCODE;
                     case 232 =>
                         // FNC1
                         fnc1positions.put(result.length());
@@ -348,7 +348,7 @@ public class DecodedBitStreamParser {
                         break
                     case 233 => break // Structured Append
                     case 234 => // Reader Programming
-                    break
+                        break
                     case 235 =>
                         // Upper Shift (shift to Extended ASCII)
                         upperShift = true
@@ -364,17 +364,17 @@ public class DecodedBitStreamParser {
                         resultTrailer.insertAll(0, "\u{001E}\u{0004}".toRuneArray());
                         break
                     case 238 =>
-                    // Latch to ANSI X12 encodation
-                    return Mode.ANSIX12_ENCODE;
+                        // Latch to ANSI X12 encodation
+                        return Mode.ANSIX12_ENCODE;
                     case 239 =>
-                    // Latch to Text encodation
-                    return Mode.TEXT_ENCODE;
+                        // Latch to Text encodation
+                        return Mode.TEXT_ENCODE;
                     case 240 =>
-                    // Latch to EDIFACT encodation
-                    return Mode.EDIFACT_ENCODE;
+                        // Latch to EDIFACT encodation
+                        return Mode.EDIFACT_ENCODE;
                     case 241 =>
-                    // ECI Character
-                    return Mode.ECI_ENCODE;
+                        // ECI Character
+                        return Mode.ECI_ENCODE;
                     case _ =>
                         // Not to be used in ASCII encodation
                         // but work around encoders that end with 254, latch back to ASCII
@@ -453,7 +453,7 @@ public class DecodedBitStreamParser {
                                     fnc1positions.put(result.length());
                                     result.append(Char(29)) // translate as ASCII 29
                                 case 30 => // Upper Shift
-                                upperShift = true
+                                    upperShift = true
                                 case _ => throw FormatException.getFormatInstance();
                             }
                         }
@@ -538,7 +538,7 @@ public class DecodedBitStreamParser {
                                     fnc1positions.put(result.length());
                                     result.append(Char(29)) // translate as ASCII 29
                                 case 30 => // Upper Shift
-                                upperShift = true
+                                    upperShift = true
                                 case _ => throw FormatException.getFormatInstance();
                             }
                         }
