@@ -230,14 +230,8 @@ public open class Detector {
         }
     }
 
-    private static func findRowsWithPattern(
-        matrix: BitMatrix,
-        height: Int64,
-        width: Int64,
-        startRow: Int64,
-        startColumn: Int64,
-        pattern: Array<Int64>
-    ): Array<ResultPoint> {
+    private static func findRowsWithPattern(matrix: BitMatrix, height: Int64, width: Int64, startRow: Int64,
+        startColumn: Int64, pattern: Array<Int64>): Array<ResultPoint> {
         var startRow_ = startRow
         var result: Array<ResultPoint> = Array<ResultPoint>(4, item: ResultPoint())
         var found: Bool = false
@@ -248,14 +242,8 @@ public open class Detector {
             if (loc.size != 0) {
                 while (startRow_ > 0) {
                     startRow_--
-                    var previousRowLoc: Array<Int64> = findGuardPattern(
-                        matrix,
-                        startColumn,
-                        startRow_,
-                        /*--startRow*/ width,
-                        pattern,
-                        counters
-                    )
+                    var previousRowLoc: Array<Int64> = findGuardPattern(matrix, startColumn, startRow_, width, pattern,
+                        counters)
 
                     if (previousRowLoc.size != 0) {
                         loc = previousRowLoc

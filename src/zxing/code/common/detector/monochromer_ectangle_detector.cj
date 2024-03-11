@@ -142,17 +142,8 @@ public class MonochromeRectangleDetector {
      * @return a {@link ResultPoint} encapsulating the corner that was found
      * @throws NotFoundException if such a point cannot be found
      */
-    private func findCornerFromCenter(
-        centerX: Int64,
-        deltaX: Int64,
-        left: Int64,
-        right: Int64,
-        centerY: Int64,
-        deltaY: Int64,
-        top: Int64,
-        bottom: Int64,
-        maxWhiteRun: Int64
-    ): ResultPoint {
+    private func findCornerFromCenter(centerX: Int64, deltaX: Int64, left: Int64, right: Int64, centerY: Int64,
+        deltaY: Int64, top: Int64, bottom: Int64, maxWhiteRun: Int64): ResultPoint {
         try {
             var lastRange: Array<Int64> = []
             var x: Int64 = centerX
@@ -233,13 +224,8 @@ public class MonochromeRectangleDetector {
      * @return int[] with start and end of found range, or null if no such range is found
      * (e.g. only white was found)
      */
-    private func blackWhiteRange(
-        fixedDimension: Int64,
-        maxWhiteRun: Int64,
-        minDim: Int64,
-        maxDim: Int64,
-        horizontal: Bool
-    ): Array<Int64> {
+    private func blackWhiteRange(fixedDimension: Int64, maxWhiteRun: Int64, minDim: Int64, maxDim: Int64,
+        horizontal: Bool): Array<Int64> {
         let center: Int64 = Int64((minDim + maxDim) / 2)
 
         // Scan left/up first
@@ -295,10 +281,9 @@ public class MonochromeRectangleDetector {
         end--
         let rt: Array<Int64>
         if (end > start) {
-            rt = [start, end]
+            return [start, end]
         } else {
-            rt = []
+            return []
         }
-        return rt
     }
 }

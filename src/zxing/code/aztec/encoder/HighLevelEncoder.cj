@@ -50,7 +50,7 @@ public class HighLevelEncoder {
             0,
             (9 << 16) + (14 << 5) + 29, // DIGIT -> UPPER -> MIXED
             (14 << 16) + (14 << 10) + (29 << 5) + 30
-            // DIGIT -> UPPER -> MIXED -> PUNCT
+        // DIGIT -> UPPER -> MIXED -> PUNCT
         ],
         [
             (5 << 16) + 29, // MIXED -> UPPER
@@ -216,21 +216,9 @@ public class HighLevelEncoder {
                 nextChar = text[index + 1]
             }
             match (Char(text[index])) {
-                case '\r' =>
-                    pairCode = 0
-                    if (Char(nextChar) == '\n') {
-                        pairCode = 2
-                    }
-                case '.' =>
-                    pairCode = 0
-                    if (Char(nextChar) == ' ') {
-                        pairCode = 3
-                    }
-                case ',' =>
-                    pairCode = 0
-                    if (Char(nextChar) == ' ') {
-                        pairCode = 4
-                    }
+                case '\r' => pairCode = getpairCode1(nextChar)
+                case '.' => pairCode = getpairCode2(nextChar)
+                case ',' => pairCode = getpairCode3(nextChar)
                 case ':' =>
                     pairCode = 0
                     if (Char(nextChar) == ' ') {
@@ -260,6 +248,27 @@ public class HighLevelEncoder {
 
         // Convert it to a bit array, and return.
         return minState.toBitArray(text)
+    }
+
+    static private func getpairCode1(nextChar: UInt8): Int64 {
+        if (Char(nextChar) == '\n') {
+            return 2
+        }
+        return 0
+    }
+
+    static private func getpairCode2(nextChar: UInt8): Int64 {
+        if (Char(nextChar) == ' ') {
+            return 3
+        }
+        return 0
+    }
+
+    static private func getpairCode3(nextChar: UInt8): Int64 {
+        if (Char(nextChar) == ' ') {
+            return 4
+        }
+        return 0
     }
 
     // We update a set of states for a new character by updating each state

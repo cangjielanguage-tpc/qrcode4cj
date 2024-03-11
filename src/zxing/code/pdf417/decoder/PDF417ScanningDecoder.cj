@@ -519,12 +519,8 @@ public open class PDF417ScanningDecoder {
         return barcodeColumn >= 0 && barcodeColumn <= detectionResult.getBarcodeColumnCount() + 1
     }
 
-    static func getStartColumn(
-        detectionResult: DetectionResult,
-        barcodeColumn: Int64,
-        imageRow: Int64,
-        leftToRight: Bool
-    ): Int64 {
+    static func getStartColumn(detectionResult: DetectionResult, barcodeColumn: Int64, imageRow: Int64,
+        leftToRight: Bool): Int64 {
         var barcodeColumn_ = barcodeColumn
         var offset: Int64
         if (leftToRight) {
@@ -538,11 +534,7 @@ public open class PDF417ScanningDecoder {
             codeword = detectionResult.getDetectionResultColumn(barcodeColumn_ - offset).getCodeword(imageRow)
         }
         if (codeword.flag) {
-            if (leftToRight) {
-                return codeword.getEndX()
-            } else {
-                return codeword.getStartX()
-            }
+            return getStartColumn(leftToRight, codeword)
         }
         codeword = detectionResult.getDetectionResultColumn(barcodeColumn_).getCodewordNearby(imageRow)
         if (codeword.flag) {
@@ -556,11 +548,7 @@ public open class PDF417ScanningDecoder {
             codeword = detectionResult.getDetectionResultColumn(barcodeColumn_ - offset).getCodewordNearby(imageRow)
         }
         if (codeword.flag) {
-            if (leftToRight) {
-                return codeword.getEndX()
-            } else {
-                return codeword.getStartX()
-            }
+            return getStartColumn(leftToRight, codeword)
         }
         var skippedColumns: Int64 = 0
 
@@ -583,6 +571,14 @@ public open class PDF417ScanningDecoder {
             return detectionResult.getBoundingBox().getMinX()
         } else {
             return detectionResult.getBoundingBox().getMaxX()
+        }
+    }
+
+    private static func getStartColumn(leftToRight: Bool, codeword: Codeword) {
+        if (leftToRight) {
+            return codeword.getEndX()
+        } else {
+            return codeword.getStartX()
         }
     }
 

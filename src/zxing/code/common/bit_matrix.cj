@@ -136,10 +136,7 @@ public class BitMatrix <: Equatable<BitMatrix> & ToString {
                 bits[bitsPos] = false
                 bitsPos++
             } else {
-                throw IllegalArgumentException(
-                    "illegal character encountered: " +
-                        stringRepresentation[pos..stringRepresentation.charSize].toString()
-                )
+                throwError(stringRepresentation, pos)
             }
         }
 
@@ -159,6 +156,11 @@ public class BitMatrix <: Equatable<BitMatrix> & ToString {
             }
         }
         matrix
+    }
+
+    static private func throwError(stringRepresentation: UTF32String, pos: Int64) {
+        throw IllegalArgumentException(
+            "illegal character encountered: " + stringRepresentation[pos..stringRepresentation.charSize].toString())
     }
 
     /**

@@ -125,10 +125,7 @@ public abstract class GridSampler {
      * @param points actual points in x1,y1,...,xn,yn form
      * @throws NotFoundException if an endpoint is lies outside the image boundaries
      */
-    protected static func checkAndNudgePoints(
-        image: BitMatrix,
-        points: Array<Float64>
-    ) {
+    protected static func checkAndNudgePoints(image: BitMatrix, points: Array<Float64>) {
         let (width, height) = (image.width, image.height)
 
         // Check and nudge points from start until we see some that are OK:
@@ -164,8 +161,7 @@ public abstract class GridSampler {
         nudged = true
         offset = points.size - 2
         while (offset >= 0 && nudged) {
-            let x = Int64(points[offset])
-            let y = Int64(points[offset + 1])
+            let (x, y) = xY(points, offset)
             if (x < -1 || x > width || y < -1 || y > height) {
                 throw NotFoundException()
             }
@@ -186,5 +182,9 @@ public abstract class GridSampler {
             }
             offset -= 2
         }
+    }
+
+    private static func xY(points: Array<Float64>, offset: Int64): (Int64, Int64) {
+        return (Int64(points[offset]), Int64(points[offset + 1]))
     }
 }

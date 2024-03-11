@@ -43,11 +43,7 @@ class DataBlock {
      * @return DataBlocks containing original bytes, "de-interleaved" from representation in the
      * QR Code
      */
-    static func getDataBlocks(
-        rawCodewords: Array<Byte>,
-        version: Version,
-        ecLevel: ErrorCorrectionLevel
-    ): ArrayList<DataBlock> {
+    static func getDataBlocks(rawCodewords: Array<Byte>, version: Version, ecLevel: ErrorCorrectionLevel): ArrayList<DataBlock> {
         if (rawCodewords.size != version.getTotalCodewords()) {
             throw IllegalArgumentException();
         }
@@ -112,17 +108,21 @@ class DataBlock {
         let max: Int64 = result[0].codewords.size;
         for (i in shorterBlocksNumDataCodewords..max) {
             for (j in 0..numResultBlocks) {
-                let iOffset: Int64 = if (j < longerBlocksStartAt) {
-                    i
-                } else {
-                    i + 1
-                }
+                let iOffset: Int64 = getiOffset(i, j, longerBlocksStartAt)
                 result[j].codewords[iOffset] = rawCodewords[rawCodewordsOffset]
                 rawCodewordsOffset++
             }
         }
 
         return result
+    }
+
+    private static func getiOffset(i: Int64, j: Int64, longerBlocksStartAt: Int64): Int64 {
+        if (j < longerBlocksStartAt) {
+            return i
+        } else {
+            return i + 1
+        }
     }
 
     func getNumDataCodewords(): Int64 {

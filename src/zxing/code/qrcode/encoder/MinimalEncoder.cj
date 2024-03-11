@@ -75,16 +75,8 @@ public class Edge {
     public var encoders: ECIEncoderSet
     public var stringToEncode: UTF32String
 
-    init(
-        mode: Mode,
-        fromPosition: Int64,
-        charsetEncoderIndex: Int64,
-        characterLength: Int64,
-        previous: ?Edge,
-        version: Version,
-        encoders: ECIEncoderSet,
-        stringToEncode: UTF32String
-    ) {
+    init(mode: Mode, fromPosition: Int64, charsetEncoderIndex: Int64, characterLength: Int64, previous: ?Edge,
+        version: Version, encoders: ECIEncoderSet, stringToEncode: UTF32String) {
         this.mode = mode
         this.fromPosition = fromPosition
         this.encoders = encoders
@@ -114,7 +106,7 @@ public class Edge {
 
         var needECI: Bool = (mode == Mode.BYTE([8, 16, 16], 0x04) && (!hasPrevious && this.charsetEncoderIndex != 0) ||
             // at the beginning and charset is not ISO-8859-1
-        (hasPrevious &&
+            (hasPrevious &&
             this.charsetEncoderIndex != previous.getOrThrow().charsetEncoderIndex))
 
         if (!hasPrevious || mode != previous.getOrThrow().mode || needECI) {
@@ -226,15 +218,18 @@ public class ResultList {
             }
             if (hasFirst && first.getOrThrow().mode != Mode.ECI([0, 0, 0], 0x07) && containsECI) {
                 // prepend a default character set ECI
-                resultnodelist.insert(0, ResultNode(
-                    Mode.ECI([0, 0, 0], 0x07),
+                resultnodelist.insert(
                     0,
-                    0,
-                    0,
-                    encoders,
-                    stringToEncode,
-                    version
-                ));
+                    ResultNode(
+                        Mode.ECI([0, 0, 0], 0x07),
+                        0,
+                        0,
+                        0,
+                        encoders,
+                        stringToEncode,
+                        version
+                    )
+                );
             }
             first = resultnodelist[0]
 

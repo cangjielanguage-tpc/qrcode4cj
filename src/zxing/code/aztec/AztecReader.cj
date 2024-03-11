@@ -43,13 +43,7 @@ public class AztecReader <: Reader {
                 points = detectorResult.getPoints()
                 decoderResult = Decoder().decode(detectorResult)
             } catch (e: NotFoundException | FormatException) {
-                if (let Some(n) <- notFoundException) {
-                    throw NotFoundException()
-                }
-                if (let Some(n) <- formatException) {
-                    throw FormatException()
-                }
-                throw e
+                throwdecode(e, notFoundException, formatException)
             }
         }
 
@@ -62,14 +56,8 @@ public class AztecReader <: Reader {
             }
         }
 
-        var result: Result = Result(
-            decoderResult.getOrThrow().getText(),
-            decoderResult.getOrThrow().getRawBytes(),
-            decoderResult.getOrThrow().getNumBits(),
-            points,
-            BarcodeFormat.AZTEC,
-            System.currentTimeMillis()
-        )
+        var result: Result = Result(decoderResult.getOrThrow().getText(), decoderResult.getOrThrow().getRawBytes(),
+            decoderResult.getOrThrow().getNumBits(), points, BarcodeFormat.AZTEC, System.currentTimeMillis())
         var byteSegments: ArrayList<Array<UInt8>> = decoderResult.getOrThrow().getByteSegments();
         if (byteSegments.size != 0) {
             result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, byteSegments)
@@ -84,6 +72,16 @@ public class AztecReader <: Reader {
         )
 
         return result
+    }
+
+    private func throwdecode(e: Exception, notFoundException: ?NotFoundException, formatException: ?FormatException) {
+        if (let Some(n) <- notFoundException) {
+            throw NotFoundException()
+        }
+        if (let Some(n) <- formatException) {
+            throw FormatException()
+        }
+        throw e
     }
 
     public override func reset() {

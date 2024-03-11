@@ -227,7 +227,7 @@ public class Edge {
                 size++
                 if (previousMode != Mode.B256) {
                     size++
-                    //byte count
+                //byte count
                 } else {
                     var cnt: Int64 = 0;
                     var current: ?Edge = this
@@ -250,7 +250,7 @@ public class Edge {
                 }
                 if (previousMode == Mode.ASCII) {
                     size++
-                    //latch to B256
+                //latch to B256
                 } else if (previousMode == Mode.C40 || previousMode == Mode.TEXT || previousMode == Mode.X12) {
                     size += 2
                     //unlatch to ASCII, latch to B256
@@ -265,7 +265,7 @@ public class Edge {
 
                 if (previousMode == Mode.ASCII || previousMode == Mode.B256) {
                     size++
-                    //additional byte for latch start ASCII to this mode
+                //additional byte for latch start ASCII to this mode
                 } else if (previousMode != mode && (previousMode == Mode.C40 || previousMode == Mode.TEXT ||
                     previousMode == Mode.X12)) {
                     size += 2
@@ -275,7 +275,7 @@ public class Edge {
                 size += 3
                 if (previousMode == Mode.ASCII || previousMode == Mode.B256) {
                     size++
-                    //additional byte for latch start ASCII to this mode
+                //additional byte for latch start ASCII to this mode
                 } else if (previousMode == Mode.C40 || previousMode == Mode.TEXT || previousMode == Mode.X12) {
                     size += 2
                     //unlatch 254 to ASCII followed by latch to this mode
@@ -525,33 +525,37 @@ public class Edge {
                 return c.hashCode();
             }
         } else {
-            if (c.hashCode() == 0) {
-                return 0;
-            } else if (setIndex == 0 && c.hashCode() <= 3) {
-                return c.hashCode() - 1
-            } else if (setIndex == 1 && c.hashCode() <= 31) {
-                return c.hashCode();
-            } else if (c.hashCode() == 32) {
-                return 3;
-            } else if (c.hashCode() >= 33 && c.hashCode() <= 47) {
-                return c.hashCode() - 33
-            } else if (c.hashCode() >= 48 && c.hashCode() <= 57) {
-                return c.hashCode() - 44
-            } else if (c.hashCode() >= 58 && c.hashCode() <= 64) {
-                return c.hashCode() - 43
-            } else if (c.hashCode() >= 65 && c.hashCode() <= 90) {
-                return c.hashCode() - 64
-            } else if (c.hashCode() >= 91 && c.hashCode() <= 95) {
-                return c.hashCode() - 69
-            } else if (c.hashCode() == 96) {
-                return 0;
-            } else if (c.hashCode() >= 97 && c.hashCode() <= 122) {
-                return c.hashCode() - 83
-            } else if (c.hashCode() >= 123 && c.hashCode() <= 127) {
-                return c.hashCode() - 96
-            } else {
-                return c.hashCode()
-            }
+            returnhashCode(c, setIndex)
+        }
+    }
+
+    private static func returnhashCode(c: Char, setIndex: Int64): Int64 {
+        if (c.hashCode() == 0) {
+            return 0;
+        } else if (setIndex == 0 && c.hashCode() <= 3) {
+            return c.hashCode() - 1
+        } else if (setIndex == 1 && c.hashCode() <= 31) {
+            return c.hashCode();
+        } else if (c.hashCode() == 32) {
+            return 3;
+        } else if (c.hashCode() >= 33 && c.hashCode() <= 47) {
+            return c.hashCode() - 33
+        } else if (c.hashCode() >= 48 && c.hashCode() <= 57) {
+            return c.hashCode() - 44
+        } else if (c.hashCode() >= 58 && c.hashCode() <= 64) {
+            return c.hashCode() - 43
+        } else if (c.hashCode() >= 65 && c.hashCode() <= 90) {
+            return c.hashCode() - 64
+        } else if (c.hashCode() >= 91 && c.hashCode() <= 95) {
+            return c.hashCode() - 69
+        } else if (c.hashCode() == 96) {
+            return 0;
+        } else if (c.hashCode() >= 97 && c.hashCode() <= 122) {
+            return c.hashCode() - 83
+        } else if (c.hashCode() >= 123 && c.hashCode() <= 127) {
+            return c.hashCode() - 96
+        } else {
+            return c.hashCode()
         }
     }
 
@@ -649,8 +653,8 @@ public class Edge {
     func getLatchBytes(): Array<UInt8> {
         match (getPreviousMode()) {
             case ASCII | B256 =>
-                    //after B256 ends (via length) we are back to ASCII
-                    match (mode) {
+                //after B256 ends (via length) we are back to ASCII
+                match (mode) {
                 case B256 => return getBytes(231);
                 case C40 => return getBytes(230);
                 case TEXT => return getBytes(239);
@@ -683,8 +687,7 @@ public class Edge {
             } else if (characterLength == 2) {
                 return getBytes(
                     (input.charAt(fromPosition).hashCode() - '0'.hashCode()) * 10 +
-                        input.charAt(fromPosition + 1).hashCode() - '0'.hashCode() + 130
-                );
+                    input.charAt(fromPosition + 1).hashCode() - '0'.hashCode() + 130);
             } else if (input.isFNC1(fromPosition)) {
                 return getBytes(232);
             } else {
@@ -987,16 +990,16 @@ public class MinimalEncoder {
             var ci: Char = input.charAt(i);
             if (c40 && HighLevelEncoder.isNativeC40(ci) || !c40 && HighLevelEncoder.isNativeText(ci)) {
                 thirdsCount++
-                //native
+            //native
             } else if (!isExtendedASCII(ci, input.getFNC1Character())) {
                 thirdsCount += 2
-                //shift
+            //shift
             } else {
                 var asciiValue: Int64 = ci.hashCode() & 0xff
                 if (asciiValue >= 128 && (c40 && HighLevelEncoder.isNativeC40(Char(asciiValue - 128)) || !c40 &&
                     HighLevelEncoder.isNativeText(Char(asciiValue - 128)))) {
                     thirdsCount += 3
-                    // shift, Upper shift
+                // shift, Upper shift
                 } else {
                     thirdsCount += 4
                     // shift, Upper shift, shift

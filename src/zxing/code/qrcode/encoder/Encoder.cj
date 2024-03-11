@@ -557,12 +557,8 @@ public class Encoder {
      * Interleave "bits" with corresponding error correction bytes. On success, store the result in
      * "result". The interleave rule is complicated. See 8.6 of JISX0510:2004 (p.37) for details.
      */
-    public static func interleaveWithECBytes(
-        bits: BitArray,
-        numTotalBytes: Int64,
-        numDataBytes: Int64,
-        numRSBlocks: Int64
-    ): BitArray {
+    public static func interleaveWithECBytes(bits: BitArray, numTotalBytes: Int64, numDataBytes: Int64,
+        numRSBlocks: Int64): BitArray {
 
         // "bits" must have "getNumDataBytes" bytes of data.
         if (bits.getSizeInBytes() != numDataBytes) {
@@ -581,14 +577,8 @@ public class Encoder {
         for (i in 0..numRSBlocks) {
             var numDataBytesInBlock: Array<Int64> = Array<Int64>(1, item: 0)
             var numEcBytesInBlock: Array<Int64> = Array<Int64>(1, item: 0)
-            getNumDataBytesAndNumECBytesForBlockID(
-                numTotalBytes,
-                numDataBytes,
-                numRSBlocks,
-                i,
-                numDataBytesInBlock,
-                numEcBytesInBlock
-            );
+            getNumDataBytesAndNumECBytesForBlockID(numTotalBytes, numDataBytes, numRSBlocks, i, numDataBytesInBlock,
+                numEcBytesInBlock);
 
             var size: Int64 = numDataBytesInBlock[0]
             var dataBytes: Array<UInt8> = Array<UInt8>(size, item: 0)
@@ -628,8 +618,7 @@ public class Encoder {
         if (numTotalBytes != result.getSizeInBytes()) { // Should be same.
             throw WriterException(
                 "Interleaving error: " + numTotalBytes.toString() + " and " + result.getSizeInBytes().toString() +
-                    " differ."
-            );
+                " differ.");
         }
 
         return result

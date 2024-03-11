@@ -255,6 +255,11 @@ public class MultiFinderPatternFinder <: FinderPatternFinder {
             }
             i += iSkip
         } // for i=iSkip-1 ...
+
+        return returnfindMulti()
+    }
+
+    private func returnfindMulti(): Array<FinderPatternInfo> {
         var patternInfo: Array<Array<FinderPattern>> = selectMultipleBestPatterns()
         var result: ArrayList<FinderPatternInfo> = ArrayList<FinderPatternInfo>()
         for (patternN in 0..patternInfo.size) {
@@ -266,7 +271,6 @@ public class MultiFinderPatternFinder <: FinderPatternFinder {
             }
             result.append(FinderPatternInfo(pattern))
         }
-
         return result.toArray()
     }
 }
