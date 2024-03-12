@@ -362,14 +362,8 @@ public open class Detector {
 
     //////////////////////////////////////////////////////////////////////
 
-    private static func findGuardPatternDetect(
-        matrix: BitMatrix,
-        column: Int64,
-        row: Int64,
-        width: Int64,
-        pattern: Array<Int64>,
-        counters: Array<Int64>
-    ): Array<Int64> {
+    private static func findGuardPatternDetect(matrix: BitMatrix, column: Int64, row: Int64, width: Int64,
+        pattern: Array<Int64>, counters: Array<Int64>): Array<Int64> {
         for (i in 0..counters.size) {
             counters[i] = 0
         }

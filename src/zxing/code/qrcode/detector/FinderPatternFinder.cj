@@ -90,38 +90,13 @@ public open class FinderPatternFinder {
 
             var j: Int64 = 0;
             while (j < maxJ) {
-                if (image.get(j, i)) {
-                    // Black pixel
-                    if ((currentState & 1) == 1) { // Counting white pixels
-                        currentState++
-                    }
-                    stateCount[Int64(currentState)] += 1
-                } else { // White pixel
+                currentState = exfind3(currentState, done, i, j,stateCount, maxJ)
+                if (!image.get(j, i)) { // White pixel
                     if ((currentState & 1) == 0) { // Counting black pixels
                         if (currentState == 4) { // A winner?
                             if (foundPatternCross(stateCount)) { // Yes
-                                let confirmed: Bool = handlePossibleCenter(stateCount, i, j);
-                                if (confirmed) {
-                                    // Start examining every other line. Checking each line turned out to be too
-                                    // expensive and didn't improve performance.
-                                    iSkip = 2
-                                    if (hasSkipped) {
-                                        done = haveMultiplyConfirmedCenters()
-                                    } else {
-                                        let rowSkip: Int64 = findRowSkip();
-                                        if (rowSkip > stateCount[2]) {
-                                            // Skip rows between row of lower confirmed center
-                                            // and top of presumed third confirmed center
-                                            // but back up a bit to get a full chance of detecting
-                                            // it, entire width of center of finder pattern
-
-                                            // Skip by rowSkip, but back off by stateCount[2] (size of last center
-                                            // of pattern we saw) to be conservative, and also back off by iSkip which
-                                            // is about to be re-added
-                                            i += rowSkip - stateCount[2] - iSkip
-                                            j = maxJ - 1
-                                        }
-                                    }
+                                if (handlePossibleCenter(stateCount, i, j)) {
+                                    (iSkip, i, j, done) = exfind(iSkip, done, i, j, stateCount, maxJ)
                                 } else {
                                     doShiftCounts2(stateCount);
                                     currentState = 3
@@ -148,16 +123,7 @@ public open class FinderPatternFinder {
 
                 j++
             }
-            if (foundPatternCross(stateCount)) {
-                let confirmed: Bool = handlePossibleCenter(stateCount, i, maxJ);
-                if (confirmed) {
-                    iSkip = stateCount[0]
-                    if (hasSkipped) {
-                        // Found a third one
-                        done = haveMultiplyConfirmedCenters()
-                    }
-                }
-            }
+            (iSkip, done) = exfind2(iSkip, done, i, stateCount, maxJ)
 
             i += iSkip
         }
@@ -171,6 +137,63 @@ public open class FinderPatternFinder {
         }
 
         return FinderPatternInfo(patternInfo);
+    }
+
+    private func exfind(iSkip: Int64, done: Bool, i: Int64, j: Int64, stateCount: Array<Int64>, maxJ: Int64): (Int64, 
+        Int64, Int64, Bool) {
+        // Start examining every other line. Checking each line turned out to be too
+        // expensive and didn't improve performance.
+        var iSkip_p = iSkip
+        var i_p = i
+        var j_p = j
+        var done_p = done
+        iSkip_p = 2
+        if (hasSkipped) {
+            done_p = haveMultiplyConfirmedCenters()
+        } else {
+            let rowSkip: Int64 = findRowSkip();
+            if (rowSkip > stateCount[2]) {
+                // Skip rows between row of lower confirmed center
+                // and top of presumed third confirmed center
+                // but back up a bit to get a full chance of detecting
+                // it, entire width of center of finder pattern
+
+                // Skip by rowSkip, but back off by stateCount[2] (size of last center
+                // of pattern we saw) to be conservative, and also back off by iSkip which
+                // is about to be re-added
+                i_p += rowSkip - stateCount[2] - iSkip_p
+                j_p = maxJ - 1
+            }
+        }
+        return (iSkip_p, i_p, j_p, done_p)
+    }
+
+    private func exfind2(iSkip: Int64, done: Bool, i: Int64, stateCount: Array<Int64>, maxJ: Int64): (Int64, Bool) {
+        var iSkip_p = iSkip
+        var done_p = done
+        if (foundPatternCross(stateCount)) {
+            let confirmed: Bool = handlePossibleCenter(stateCount, i, maxJ);
+            if (confirmed) {
+                iSkip_p = stateCount[0]
+                if (hasSkipped) {
+                    // Found a third one
+                    done_p = haveMultiplyConfirmedCenters()
+                }
+            }
+        }
+        return (iSkip_p, done_p)
+    }
+
+    private func exfind3(currentState: Int64, done: Bool, i: Int64, j: Int64,stateCount: Array<Int64>, maxJ: Int64): Int64{
+        var currentState_p = currentState
+        if (image.get(j, i)) {
+            // Black pixel
+            if ((currentState_p & 1) == 1) { // Counting white pixels
+                currentState_p++
+            }
+            stateCount[Int64(currentState_p)] += 1
+        }
+        return currentState_p
     }
 
     public static func changeFinderPatternArray(arrayFinder: Array<FinderPattern>): Array<ResultPoint> {

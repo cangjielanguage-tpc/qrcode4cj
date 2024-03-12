@@ -190,39 +190,7 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
                 // Encode the current character
                 // First handle escapes
                 var data: Char = contents.get(position)
-                if (data == ESCAPE_FNC_1) {
-                    patternIndex = CODE_FNC_1
-                } else if (data == ESCAPE_FNC_2) {
-                    patternIndex = CODE_FNC_2
-                } else if (data == ESCAPE_FNC_3) {
-                    patternIndex = CODE_FNC_3
-                } else if (data == ESCAPE_FNC_4) {
-                    if (codeSet == CODE_CODE_A) {
-                        patternIndex = CODE_FNC_4_A
-                    } else {
-                        patternIndex = CODE_FNC_4_B
-                    }
-                } else {
-                    // Then handle normal characters otherwise
-                    if (codeSet == CODE_CODE_A) {
-                        patternIndex = contents.get(position).hashCode() - ' '.hashCode()
-                        if (patternIndex < 0) {
-                            // everything below a space character comes behind the underscore in the code patterns table
-                            patternIndex += '`'.hashCode()
-                        }
-                    } else if (codeSet == CODE_CODE_B) {
-                        patternIndex = contents.get(position).hashCode() - ' '.hashCode()
-                    } else {
-                        // CODE_CODE_C
-                        if (position + 1 == length) {
-                            // this is the last character, but the encoding is C, which always encodes two characers
-                            throw IllegalArgumentException("Bad number of characters for digit only encoding.")
-                        }
-                        patternIndex = Int64.parse(contents.substring(position, 2).toString())
-                        position++
-                        // Also incremented below
-                    }
-                }
+                (patternIndex, position) = extencodeFast(patternIndex, data, codeSet, contents, position, length)
                 position++
             } else {
                 // Should we change the current code?
@@ -253,6 +221,46 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
             }
         }
         return produceResult(patterns, checkSum)
+    }
+
+    private static func extencodeFast(patternIndex: Int64, data: Char, codeSet: Int64, contents: UTF32String,
+        position: Int64, length: Int64): (Int64, Int64) {
+        var patternIndex_p = patternIndex
+        var position_p = position
+        if (data == ESCAPE_FNC_1) {
+            patternIndex_p = CODE_FNC_1
+        } else if (data == ESCAPE_FNC_2) {
+            patternIndex_p = CODE_FNC_2
+        } else if (data == ESCAPE_FNC_3) {
+            patternIndex_p = CODE_FNC_3
+        } else if (data == ESCAPE_FNC_4) {
+            if (codeSet == CODE_CODE_A) {
+                patternIndex_p = CODE_FNC_4_A
+            } else {
+                patternIndex_p = CODE_FNC_4_B
+            }
+        } else {
+            // Then handle normal characters otherwise
+            if (codeSet == CODE_CODE_A) {
+                patternIndex_p = contents.get(position_p).hashCode() - ' '.hashCode()
+                if (patternIndex_p < 0) {
+                    // everything below a space character comes behind the underscore in the code patterns table
+                    patternIndex_p += '`'.hashCode()
+                }
+            } else if (codeSet == CODE_CODE_B) {
+                patternIndex_p = contents.get(position_p).hashCode() - ' '.hashCode()
+            } else {
+                // CODE_CODE_C
+                if (position_p + 1 == length) {
+                    // this is the last character, but the encoding is C, which always encodes two characers
+                    throw IllegalArgumentException("Bad number of characters for digit only encoding.")
+                }
+                patternIndex_p = Int64.parse(contents.substring(position_p, 2).toString())
+                position_p++
+                // Also incremented below
+            }
+        }
+        return (patternIndex_p, position_p)
     }
 
     static func produceResult(patterns: ArrayList<Array<Int64>>, checkSumin: Int64): Array<Bool> {
@@ -542,30 +550,7 @@ open class MinimalEncoder <: OneDimensionalCodeWriter {
 
         while (i < length) {
             var latch: Latch = minPath[charset.ordinal()][i]
-            if (latch == Latch.A) {
-                charset = Charset.A
-                if (i == 0) {
-                    addPattern(patterns, CODE_START_A, checkSum, checkWeight, i)
-                } else {
-                    addPattern(patterns, CODE_CODE_A, checkSum, checkWeight, i)
-                }
-            } else if (latch == Latch.B) {
-                charset = Charset.B
-                if (i == 0) {
-                    addPattern(patterns, CODE_START_B, checkSum, checkWeight, i)
-                } else {
-                    addPattern(patterns, CODE_CODE_B, checkSum, checkWeight, i)
-                }
-            } else if (latch == Latch.C) {
-                charset = Charset.C
-                if (i == 0) {
-                    addPattern(patterns, CODE_START_C, checkSum, checkWeight, i)
-                } else {
-                    addPattern(patterns, CODE_CODE_C, checkSum, checkWeight, i)
-                }
-            } else if (latch == Latch.SHIFT) {
-                addPattern(patterns, CODE_SHIFT, checkSum, checkWeight, i)
-            }
+            (charset,latch) = exencode(charset, i, patterns, checkSum, checkWeight)
             match (charset) {
                 case Charset.C => if (contentsUtf.get(i) == ESCAPE_FNC_1) {
                     addPattern(patterns, CODE_FNC_1, checkSum, checkWeight, i)
@@ -601,9 +586,40 @@ open class MinimalEncoder <: OneDimensionalCodeWriter {
             }
             i++
         }
-        memoizedCost = Array<Array<Int64>>()
-        minPath = Array<Array<Latch>>()
+        // memoizedCost = Array<Array<Int64>>()
+        // minPath = Array<Array<Latch>>()
         return produceResult(patterns, checkSum[0])
+    }
+
+    private func exencode(charset: Charset, i: Int64, patterns: ArrayList<Array<Int64>>, checkSum: Array<Int64>,
+        checkWeight: Array<Int64>): (Charset, Latch){
+        var charset_p = charset
+        var latch: Latch = minPath[charset_p.ordinal()][i]
+        if (latch == Latch.A) {
+            charset_p = Charset.A
+            if (i == 0) {
+                addPattern(patterns, CODE_START_A, checkSum, checkWeight, i)
+            } else {
+                addPattern(patterns, CODE_CODE_A, checkSum, checkWeight, i)
+            }
+        } else if (latch == Latch.B) {
+            charset_p = Charset.B
+            if (i == 0) {
+                addPattern(patterns, CODE_START_B, checkSum, checkWeight, i)
+            } else {
+                addPattern(patterns, CODE_CODE_B, checkSum, checkWeight, i)
+            }
+        } else if (latch == Latch.C) {
+            charset_p = Charset.C
+            if (i == 0) {
+                addPattern(patterns, CODE_START_C, checkSum, checkWeight, i)
+            } else {
+                addPattern(patterns, CODE_CODE_C, checkSum, checkWeight, i)
+            }
+        } else if (latch == Latch.SHIFT) {
+            addPattern(patterns, CODE_SHIFT, checkSum, checkWeight, i)
+        }
+        return (charset_p,latch)
     }
 
     private static func addPattern(
@@ -717,6 +733,7 @@ open class MinimalEncoder <: OneDimensionalCodeWriter {
                 minCost = cost
                 minLatch = latch
             }
+            //(minCost, minLatch) = getminCostminLatch(minCost, minLatch, contents, charset, position)
         }
         if (minCost == 0x7fffffff) {
             throw IllegalArgumentException("Bad character in input: ASCII value=${contents.get(position).hashCode()}")
@@ -724,5 +741,28 @@ open class MinimalEncoder <: OneDimensionalCodeWriter {
         memoizedCost[charset.ordinal()][position] = minCost
         minPath[charset.ordinal()][position] = minLatch
         return minCost
+    }
+
+    private func getminCostminLatch(minCost: Int64, minLatch: Latch, contents: UTF32String, charset: Charset,
+        position: Int64): (Int64, Latch) {
+        var cost: Int64 = 1
+        var latch: Latch = Latch.LNONE
+        if (charset != Charset.C) {
+            cost++
+            latch = Latch.C
+        }
+        var advance: Int64 = 0
+        if (contents.get(position) == ESCAPE_FNC_1) {
+            advance = 1
+        } else {
+            advance = 2
+        }
+        if (position + advance < contents.charSize) {
+            cost += encode(contents, Charset.C, position + advance)
+        }
+        if (cost < minCost) {
+            return (cost, latch)
+        }
+        return (minCost, minLatch)
     }
 }

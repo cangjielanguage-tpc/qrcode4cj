@@ -134,22 +134,7 @@ public open class Code39Reader <: OneDReader {
         var decodedChar: Char
         var lastStart: Int64
         do {
-            recordPattern(row, nextStart, theCounters);
-
-            var pattern: Int64 = toNarrowWidePattern(theCounters);
-
-            if (pattern < 0) {
-                throw NotFoundException.getNotFoundInstance();
-            }
-            decodedChar = patternToChar(pattern)
-            result.append(decodedChar);
-            lastStart = nextStart
-            for (i in 0..theCounters.size) {
-                nextStart += theCounters[i]
-            }
-
-            // Read off white space
-            nextStart = row.getNextSet(nextStart)
+            (decodedChar, lastStart, nextStart) = exdecodeRow(row, nextStart, theCounters, result)
         } while (decodedChar != '*')
 
         result = result[Range<Int64>(0, result.size - 1, 1, true, true, false)]
@@ -197,20 +182,32 @@ public open class Code39Reader <: OneDReader {
         var left: Float32 = Float32(start[1] + start[0]) / 2.0
         var right: Float32 = Float32(lastStart + lastPatternSize) / 2.0
 
-        var resultObject: Result = Result(
-            resultString,
-            Array<UInt8>(),
-            Array<ResultPoint>(
-                [
-                    ResultPoint(left, Float32(rowNumber)),
-                    ResultPoint(right, Float32(rowNumber))
-                ]
-            ),
-            BarcodeFormat.CODE_39
-        );
+        var resultObject: Result = Result(resultString, Array<UInt8>(),
+            Array<ResultPoint>([ResultPoint(left, Float32(rowNumber)), ResultPoint(right, Float32(rowNumber))]),
+            BarcodeFormat.CODE_39);
         resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]A0");
 
         return resultObject
+    }
+
+    private func exdecodeRow(row: BitArray, nextStart: Int64, theCounters: Array<Int64>, result: ArrayList<Char>) {
+        var nextStart_p = nextStart
+        recordPattern(row, nextStart_p, theCounters);
+        var pattern: Int64 = toNarrowWidePattern(theCounters);
+
+        if (pattern < 0) {
+            throw NotFoundException.getNotFoundInstance();
+        }
+        var decodedChar = patternToChar(pattern)
+        result.append(decodedChar);
+        var lastStart = nextStart_p
+        for (i in 0..theCounters.size) {
+            nextStart_p += theCounters[i]
+        }
+
+        // Read off white space
+        nextStart_p = row.getNextSet(nextStart_p)
+        return (decodedChar, lastStart, nextStart_p)
     }
 
     private static func findAsteriskPattern(row: BitArray, counters: Array<Int64>): Array<Int64> {
@@ -322,43 +319,23 @@ public open class Code39Reader <: OneDReader {
                 var decodedChar: Char = '\0';
                 match (c) {
                     case '+' =>
-                            // +A to +Z map to a to z
-                            if (next >= 'A' && next <= 'Z') {
+                        // +A to +Z map to a to z
+                        if (next >= 'A' && next <= 'Z') {
                         decodedChar = Char(next.hashCode() + 32)
                     } else {
                         throw FormatException.getFormatInstance();
                     }
                     case '$' =>
-                            // $A to $Z map to control codes SH to SB
-                            if (next >= 'A' && next <= 'Z') {
+                        // $A to $Z map to control codes SH to SB
+                        if (next >= 'A' && next <= 'Z') {
                         decodedChar = Char(next.hashCode() - 64)
                     } else {
                         throw FormatException.getFormatInstance();
                     }
-                    case '%' =>
-                            // %A to %E map to control codes ESC to US
-                            if (next >= 'A' && next <= 'E') {
-                        decodedChar = Char(next.hashCode() - 38)
-                    } else if (next >= 'F' && next <= 'J') {
-                        decodedChar = Char(next.hashCode() - 11)
-                    } else if (next >= 'K' && next <= 'O') {
-                        decodedChar = Char(next.hashCode() + 16)
-                    } else if (next >= 'P' && next <= 'T') {
-                        decodedChar = Char(next.hashCode() + 43)
-                    } else if (next == 'U') {
-                        decodedChar = Char(0)
-                    } else if (next == 'V') {
-                        decodedChar = '@'
-                    } else if (next == 'W') {
-                        decodedChar = '`'
-                    } else if (next == 'X' || next == 'Y' || next == 'Z') {
-                        decodedChar = Char(127)
-                    } else {
-                        throw FormatException.getFormatInstance();
-                    }
+                    case '%' => decodedChar = getDecodedChar(next)
                     case '/' =>
-                            // /A to /O map to ! to , and /Z maps to :
-                            if (next >= 'A' && next <= 'O') {
+                        // /A to /O map to ! to , and /Z maps to :
+                        if (next >= 'A' && next <= 'O') {
                         decodedChar = Char(next.hashCode() - 32)
                     } else if (next == 'Z') {
                         decodedChar = ':'
@@ -377,5 +354,29 @@ public open class Code39Reader <: OneDReader {
             i++
         }
         return String(decoded);
+    }
+
+    private static func getDecodedChar(next: Char) {
+        var decodedChar = ' '
+        if (next >= 'A' && next <= 'E') {
+            decodedChar = Char(next.hashCode() - 38)
+        } else if (next >= 'F' && next <= 'J') {
+            decodedChar = Char(next.hashCode() - 11)
+        } else if (next >= 'K' && next <= 'O') {
+            decodedChar = Char(next.hashCode() + 16)
+        } else if (next >= 'P' && next <= 'T') {
+            decodedChar = Char(next.hashCode() + 43)
+        } else if (next == 'U') {
+            decodedChar = Char(0)
+        } else if (next == 'V') {
+            decodedChar = '@'
+        } else if (next == 'W') {
+            decodedChar = '`'
+        } else if (next == 'X' || next == 'Y' || next == 'Z') {
+            decodedChar = Char(127)
+        } else {
+            throw FormatException.getFormatInstance();
+        }
+        return decodedChar
     }
 }

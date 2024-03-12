@@ -41,10 +41,7 @@ public open class VEventResultParser <: ResultParser {
         if (start == "") {
             return None
         }
-        var end: String = matchSingleVCardPrefixedField("DTEND", rawText);
-        var duration: String = matchSingleVCardPrefixedField("DURATION", rawText);
-        var location: String = matchSingleVCardPrefixedField("LOCATION", rawText);
-        var organizer: String = stripMailto(matchSingleVCardPrefixedField("ORGANIZER", rawText));
+        var (end, duration, location, organizer) = getmatchSingleVCardPrefixedField(rawText)
 
         var attendees: Array<String> = matchVCardPrefixedField("ATTENDEE", rawText);
         if (attendees.size != 0) {
@@ -76,21 +73,17 @@ public open class VEventResultParser <: ResultParser {
         }
 
         try {
-            return CalendarParsedResult(
-                summary,
-                start,
-                end,
-                duration,
-                location,
-                organizer,
-                attendees,
-                description,
-                latitude,
-                longitude
-            );
+            return CalendarParsedResult(summary, start, end, duration, location, organizer, attendees, description,
+                latitude, longitude);
         } catch (ignored: IllegalArgumentException) {
             return None
         }
+    }
+
+    private func getmatchSingleVCardPrefixedField(rawText: UTF32String): (String, String, String, String) {
+        return (matchSingleVCardPrefixedField("DTEND", rawText), matchSingleVCardPrefixedField("DURATION", rawText),
+            matchSingleVCardPrefixedField("LOCATION", rawText), stripMailto(
+                matchSingleVCardPrefixedField("ORGANIZER", rawText)))
     }
 
     private static func matchSingleVCardPrefixedField(prefix: String, rawText: UTF32String): String {

@@ -456,6 +456,12 @@ public class Decoder {
 
         // Now, actually unpack the bits and remove the stuffing
         var correctedBits: Array<Bool> = Array<Bool>(numDataCodewords * codewordSize - stuffedBits, item: false)
+        extracted(numDataCodewords, dataWords, mask, correctedBits, codewordSize)
+        return CorrectedBitsResult(correctedBits, 100 * (numCodewords - numDataCodewords) / numCodewords)
+    }
+
+    private static func extracted(numDataCodewords: Int64, dataWords: Array<Int64>, mask: Int64,
+        correctedBits: Array<Bool>, codewordSize: Int64) {
         var index: Int64 = 0
         for (i in 0..numDataCodewords) {
             var dataWord: Int64 = dataWords[i]
@@ -472,7 +478,6 @@ public class Decoder {
                 }
             }
         }
-        return CorrectedBitsResult(correctedBits, 100 * (numCodewords - numDataCodewords) / numCodewords)
     }
 
     /**

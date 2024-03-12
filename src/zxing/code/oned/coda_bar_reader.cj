@@ -133,26 +133,7 @@ public open class CodaBarReader <: OneDReader {
         decodeRowResult = ldecodeRowResult
 
         // Ensure a valid start and end character
-        var startchar: Char = decodeRowResult.get(0).getOrThrow()
-        if (!arrayContains(STARTEND_ENCODING, startchar)) {
-            throw NotFoundException.getNotFoundInstance();
-        }
-
-        var endchar: Char = decodeRowResult.get(decodeRowResult.size - 1).getOrThrow()
-        if (!arrayContains(STARTEND_ENCODING, endchar)) {
-            throw NotFoundException.getNotFoundInstance();
-        }
-
-        // remove stop/start characters character and check if a long enough string is contained
-        if (decodeRowResult.size <= MIN_CHARACTER_LENGTH) {
-            // Almost surely a false positive ( start + stop + at least 1 character)
-            throw NotFoundException.getNotFoundInstance();
-        }
-
-        if (hints.size == 0 || !hints.contains(DecodeHintType.RETURN_CODABAR_START_END)) {
-            decodeRowResult.remove(decodeRowResult.size - 1);
-            decodeRowResult.remove(0);
-        }
+        extdecodeRow(decodeRowResult, hints)
 
         var runningCount: Int64 = 0;
 
@@ -165,21 +146,36 @@ public open class CodaBarReader <: OneDReader {
         }
         var right: Float32 = Float32(runningCount)
 
-        var result: Result = Result(
-            String(decodeRowResult),
-            Array<UInt8>(),
-            Array<ResultPoint>(
-                [
-                    ResultPoint(left, Float32(rowNumber)),
-                    ResultPoint(right, Float32(rowNumber))
-                ]
-            ),
-            BarcodeFormat.CODABAR
-        );
+        var result: Result = Result(String(decodeRowResult), Array<UInt8>(),
+            Array<ResultPoint>([ResultPoint(left, Float32(rowNumber)), ResultPoint(right, Float32(rowNumber))]),
+            BarcodeFormat.CODABAR)
 
-        result.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]F0");
+        result.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]F0")
 
         return result
+    }
+
+    private func extdecodeRow(decodeRowResult: ArrayList<Char>, hints: HashMap<DecodeHintType, Any>) {
+        var startchar: Char = decodeRowResult.get(0).getOrThrow()
+        if (!arrayContains(STARTEND_ENCODING, startchar)) {
+            throw NotFoundException.getNotFoundInstance()
+        }
+
+        var endchar: Char = decodeRowResult.get(decodeRowResult.size - 1).getOrThrow()
+        if (!arrayContains(STARTEND_ENCODING, endchar)) {
+            throw NotFoundException.getNotFoundInstance()
+        }
+
+        // remove stop/start characters character and check if a long enough string is contained
+        if (decodeRowResult.size <= MIN_CHARACTER_LENGTH) {
+            // Almost surely a false positive ( start + stop + at least 1 character)
+            throw NotFoundException.getNotFoundInstance()
+        }
+
+        if (hints.size == 0 || !hints.contains(DecodeHintType.RETURN_CODABAR_START_END)) {
+            decodeRowResult.remove(decodeRowResult.size - 1)
+            decodeRowResult.remove(0)
+        }
     }
 
     private func validatePattern(start: Int64) {

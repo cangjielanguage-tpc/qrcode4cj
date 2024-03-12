@@ -120,24 +120,7 @@ public open class MultiFormatReader <: Reader {
                 BarcodeFormat.RSS_EXPANDED)
 
             // Put 1D readers upfront in "normal" mode
-            if (addOneDReader && !tryHarder) {
-                readers.append(MultiFormatOneDReader(hints))
-            }
-            if (formats.contains(BarcodeFormat.QR_CODE)) {
-                readers.append(QRCodeReader())
-            }
-            if (formats.contains(BarcodeFormat.DATA_MATRIX)) {
-                readers.append(DataMatrixReader())
-            }
-            if (formats.contains(BarcodeFormat.AZTEC)) {
-                readers.append(AztecReader())
-            }
-            if (formats.contains(BarcodeFormat.PDF_417)) {
-                readers.append(PDF417Reader())
-            }
-            if (formats.contains(BarcodeFormat.MAXICODE)) {
-                readers.append(MaxiCodeReader())
-            }
+            extracsetHints(addOneDReader, tryHarder, readers, hints, formats)
 
             // At end in "try harder" mode
             if (addOneDReader && tryHarder) {
@@ -167,6 +150,28 @@ public open class MultiFormatReader <: Reader {
         }
         this.readers = readers
         EMPTY_READER_ARRAY = this.readers
+    }
+
+    public func extracsetHints(addOneDReader: Bool, tryHarder: Bool, readers: ArrayList<Reader>,
+        hints: HashMap<DecodeHintType, Any>, formats: ArrayList<BarcodeFormat>) {
+        if (addOneDReader && !tryHarder) {
+            readers.append(MultiFormatOneDReader(hints))
+        }
+        if (formats.contains(BarcodeFormat.QR_CODE)) {
+            readers.append(QRCodeReader())
+        }
+        if (formats.contains(BarcodeFormat.DATA_MATRIX)) {
+            readers.append(DataMatrixReader())
+        }
+        if (formats.contains(BarcodeFormat.AZTEC)) {
+            readers.append(AztecReader())
+        }
+        if (formats.contains(BarcodeFormat.PDF_417)) {
+            readers.append(PDF417Reader())
+        }
+        if (formats.contains(BarcodeFormat.MAXICODE)) {
+            readers.append(MaxiCodeReader())
+        }
     }
 
     public func reset() {

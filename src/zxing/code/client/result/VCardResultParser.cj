@@ -58,13 +58,7 @@ public open class VCardResultParser <: ResultParser {
             // If no display names found, look for regular name fields and format them
             names = matchVCardPrefixedField("N", rawText, true, false)
             formatNames(names);
-            for (name in names) {
-                var nam: ArrayList<String> = ArrayList<String>()
-                for (na in name) {
-                    nam.append(na)
-                }
-                namess.append(nam)
-            }
+            exparse(names, namess)
         }
         var nicknameString: ArrayList<String> = matchSingleVCardPrefixedField("NICKNAME", rawText, true, false);
 
@@ -94,24 +88,20 @@ public open class VCardResultParser <: ResultParser {
         if (geo.size != 2) {
             geo = Array<String>()
         }
-        return AddressBookParsedResult(
-            toPrimaryValues(namess),
-            nicknames,
-            "",
-            toPrimaryValues(phoneNumbers),
-            phoneTypes,
-            toPrimaryValues(emails),
-            toTypes(emails),
-            toPrimaryValue(instantMessenger),
-            toPrimaryValue(note),
-            toPrimaryValues(addresses),
-            toTypes(addresses),
-            toPrimaryValue(org),
-            toPrimaryValue(birthday),
-            toPrimaryValue(title),
-            toPrimaryValues(urls),
-            geo
-        );
+        return AddressBookParsedResult(toPrimaryValues(namess), nicknames, "", toPrimaryValues(phoneNumbers), phoneTypes,
+            toPrimaryValues(emails), toTypes(emails), toPrimaryValue(instantMessenger), toPrimaryValue(note),
+            toPrimaryValues(addresses), toTypes(addresses), toPrimaryValue(org), toPrimaryValue(birthday),
+            toPrimaryValue(title), toPrimaryValues(urls), geo);
+    }
+
+    private func exparse(names: ArrayList<ArrayList<String>>, namess: ArrayList<ArrayList<String>>) {
+        for (name in names) {
+            var nam: ArrayList<String> = ArrayList<String>()
+            for (na in name) {
+                nam.append(na)
+            }
+            namess.append(nam)
+        }
     }
 
     static func matchVCardPrefixedField(prefix: String, rawText: UTF32String, trim: Bool, parseFieldDivider: Bool): ArrayList<ArrayList<String>> {
@@ -173,16 +163,16 @@ public open class VCardResultParser <: ResultParser {
             while (let Some(v) <- rawText.indexOf('\n'.toString(), start: i)) { // Really, end in \r\n
                 i = v
                 if (i < rawText.charSize - 1 && // But if followed by tab or space,
-                                (rawText.get(i + 1) == ' ' || // this is only a continuation
-                                rawText.get(i + 1) == '\t')) {
+                    (rawText.get(i + 1) == ' ' || // this is only a continuation
+                    rawText.get(i + 1) == '\t')) {
                     i = i + 2
-                    // Skip \n and continutation whitespace
+                // Skip \n and continutation whitespace
                 } else if (quotedPrintable && // If preceded by = in quoted printable
-                            ((i >= 1 && rawText.get(i - 1) == '=') || // this is a continuation
+                    ((i >= 1 && rawText.get(i - 1) == '=') || // this is a continuation
                     (i >= 2 && rawText.get(i - 2) ==
                     '='))) {
                     i++
-                    // Skip \n
+                // Skip \n
                 } else {
                     break
                 }

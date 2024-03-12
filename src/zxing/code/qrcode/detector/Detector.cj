@@ -328,16 +328,8 @@ public open class Detector {
         let dx: Int64 = abs(toX_ - fromX_);
         let dy: Int64 = abs(toY_ - fromY_);
         var error: Int64 = -dx / 2
-        let xstep: Int64 = if (fromX_ < toX_) {
-            1
-        } else {
-            -1
-        }
-        let ystep: Int64 = if (fromY_ < toY_) {
-            1
-        } else {
-            -1
-        }
+        let xstep: Int64 = getxstep(fromX_, toX_)
+        let ystep: Int64 = getystep(fromY_, toY_)
 
         // In black pixels, looking for white, first or second time.
         var state: Int64 = 0;
@@ -347,16 +339,8 @@ public open class Detector {
         var x: Int64 = fromX_
         var y: Int64 = fromY_
         while (x != xLimit) {
-            let realX: Int64 = if (steep) {
-                y
-            } else {
-                x
-            }
-            let realY: Int64 = if (steep) {
-                x
-            } else {
-                y
-            }
+            let realX: Int64 = getrealX(steep, x, y)
+            let realY: Int64 = getrealY(steep, x, y)
 
             // Does current pixel mean we have moved white to black or vice versa?
             // Scanning black in state 0,2 and white in state 1, so if we find the wrong
@@ -389,6 +373,38 @@ public open class Detector {
 
         // else we didn't find even black-white-black; no estimate is really possible
         return Float64.NaN;
+    }
+
+    private func getxstep(fromX_: Int64, toX_: Int64): Int64 {
+        if (fromX_ < toX_) {
+            1
+        } else {
+            -1
+        }
+    }
+
+    private func getystep(fromY_: Int64, toY_: Int64): Int64 {
+        if (fromY_ < toY_) {
+            1
+        } else {
+            -1
+        }
+    }
+
+    private func getrealX(steep: Bool, x: Int64, y: Int64): Int64 {
+        if (steep) {
+            y
+        } else {
+            x
+        }
+    }
+
+    private func getrealY(steep: Bool, x: Int64, y: Int64): Int64 {
+        if (steep) {
+            x
+        } else {
+            y
+        }
     }
 
     /**

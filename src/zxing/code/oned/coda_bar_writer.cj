@@ -37,37 +37,7 @@ public open class CodaBarWriter <: OneDimensionalCodeWriter {
 
     public override func encode(contentsin: String): Array<Bool> {
         var contents: UTF32String = UTF32String(contentsin)
-        if (contents.charSize < 2) {
-            // Can't have a start/end guard, so tentatively add default guards
-            contents = UTF32String(DEFAULT_GUARD.toString() + contentsin + DEFAULT_GUARD.toString())
-        } else {
-            // Verify input and calculate decoded length.
-            var firstChar: Char = contents.get(0).toAsciiUpperCase();
-            var lastChar: Char = contents.get(contents.charSize - 1).toAsciiUpperCase();
-            var startsNormal: Bool = CodaBarReader.arrayContains(START_END_CHARS, firstChar);
-            var endsNormal: Bool = CodaBarReader.arrayContains(START_END_CHARS, lastChar);
-            var startsAlt: Bool = CodaBarReader.arrayContains(ALT_START_END_CHARS, firstChar);
-            var endsAlt: Bool = CodaBarReader.arrayContains(ALT_START_END_CHARS, lastChar);
-            if (startsNormal) {
-                if (!endsNormal) {
-                    throw IllegalArgumentException("Invalid start/end guards: " + contents.toString());
-                }
-                // else already has valid start/end
-            } else if (startsAlt) {
-                if (!endsAlt) {
-                    throw IllegalArgumentException("Invalid start/end guards: " + contents.toString());
-                }
-                // else already has valid start/end
-            } else {
-                // Doesn't start with a guard
-                if (endsNormal || endsAlt) {
-                    throw IllegalArgumentException("Invalid start/end guards: " + contents.toString());
-                }
-
-                // else doesn't end with guard either, so add a default
-                contents = UTF32String(DEFAULT_GUARD.toString() + contents.toString() + DEFAULT_GUARD.toString())
-            }
-        }
+        contents = exencode(contents, contentsin)
 
         // The start character and the end character are decoded to 10 length each.
         var resultLength: Int64 = 20;
@@ -90,13 +60,7 @@ public open class CodaBarWriter <: OneDimensionalCodeWriter {
             var c: Char = contents.get(index).toAsciiUpperCase();
             if (index == 0 || index == contents.charSize - 1) {
                 // The start/end chars are not in the CodaBarReader.ALPHABET_STRING.
-                match (c) {
-                    case 'T' => c = 'A'
-                    case 'N' => c = 'B'
-                    case '*' => c = 'C'
-                    case 'E' => c = 'D'
-                    case _ => c = contents.get(index).toAsciiUpperCase()
-                }
+                c = exencode2(c, contents, index)
             }
             var code: Int64 = 0;
 
@@ -130,5 +94,51 @@ public open class CodaBarWriter <: OneDimensionalCodeWriter {
         }
 
         return result
+    }
+
+    private func exencode2(c: Char, contents: UTF32String, index: Int64): Char {
+        match (c) {
+            case 'T' => return 'A'
+            case 'N' => return 'B'
+            case '*' => return 'C'
+            case 'E' => return 'D'
+            case _ => return contents.get(index).toAsciiUpperCase()
+        }
+    }
+
+    private func exencode(contents: UTF32String, contentsin: String): UTF32String {
+        var contents_p = contents
+        if (contents_p.charSize < 2) {
+            // Can't have a start/end guard, so tentatively add default guards
+            contents_p = UTF32String(DEFAULT_GUARD.toString() + contentsin + DEFAULT_GUARD.toString())
+        } else {
+            // Verify input and calculate decoded length.
+            var firstChar: Char = contents_p.get(0).toAsciiUpperCase();
+            var lastChar: Char = contents_p.get(contents_p.charSize - 1).toAsciiUpperCase();
+            var startsNormal: Bool = CodaBarReader.arrayContains(START_END_CHARS, firstChar);
+            var endsNormal: Bool = CodaBarReader.arrayContains(START_END_CHARS, lastChar);
+            var startsAlt: Bool = CodaBarReader.arrayContains(ALT_START_END_CHARS, firstChar);
+            var endsAlt: Bool = CodaBarReader.arrayContains(ALT_START_END_CHARS, lastChar);
+            if (startsNormal) {
+                if (!endsNormal) {
+                    throw IllegalArgumentException("Invalid start/end guards: " + contents_p.toString());
+                }
+            // else already has valid start/end
+            } else if (startsAlt) {
+                if (!endsAlt) {
+                    throw IllegalArgumentException("Invalid start/end guards: " + contents_p.toString());
+                }
+            // else already has valid start/end
+            } else {
+                // Doesn't start with a guard
+                if (endsNormal || endsAlt) {
+                    throw IllegalArgumentException("Invalid start/end guards: " + contents_p.toString());
+                }
+
+                // else doesn't end with guard either, so add a default
+                contents_p = UTF32String(DEFAULT_GUARD.toString() + contents_p.toString() + DEFAULT_GUARD.toString())
+            }
+        }
+        return contents_p
     }
 }

@@ -623,70 +623,46 @@ public class MinimalEncoder {
 
         for (i in start..end) {
             if (encoders.canEncode(stringToEncode[startNum], i)) {
-                addEdge(
-                    edges,
-                    startNum,
-                    Edge(Mode.BYTE([8, 16, 16], 0x04), startNum, i, 1, previous, version, encoders, stringToEncode)
-                );
+                addEdge(edges, startNum,
+                    Edge(Mode.BYTE([8, 16, 16], 0x04), startNum, i, 1, previous, version, encoders, stringToEncode));
             }
         }
 
         if (canEncode(Mode.KANJI([8, 10, 12], 0x08), stringToEncode[startNum])) {
-            addEdge(
-                edges,
-                startNum,
-                Edge(Mode.KANJI([8, 10, 12], 0x08), startNum, 0, 1, previous, version, encoders, stringToEncode)
-            );
+            addEdge(edges, startNum,
+                Edge(Mode.KANJI([8, 10, 12], 0x08), startNum, 0, 1, previous, version, encoders, stringToEncode));
         }
 
         var inputLength: Int64 = stringToEncode.charSize;
         if (canEncode(Mode.ALPHANUMERIC([9, 11, 13], 0x02), stringToEncode[startNum])) {
-            addEdge(
-                edges,
-                startNum,
-                Edge(
-                    Mode.ALPHANUMERIC([9, 11, 13], 0x02),
-                    startNum,
-                    0,
-                    if (startNum + 1 >= inputLength ||
-                        !canEncode(Mode.ALPHANUMERIC([9, 11, 13], 0x02), stringToEncode[startNum + 1])) {
-                        1
-                    } else {
-                        2
-                    },
-                    previous,
-                    version,
-                    encoders,
-                    stringToEncode
-                )
-            );
+            addEdge(edges, startNum,
+                Edge(Mode.ALPHANUMERIC([9, 11, 13], 0x02), startNum, 0,
+                if (startNum + 1 >= inputLength ||
+                !canEncode(Mode.ALPHANUMERIC([9, 11, 13], 0x02), stringToEncode[startNum + 1])) {
+                1
+            } else {
+                2
+            }, previous, version, encoders, stringToEncode));
         }
 
         if (canEncode(Mode.NUMERIC([10, 12, 14], 0x01), stringToEncode[startNum])) {
-            addEdge(
-                edges,
-                startNum,
-                Edge(
+            addEdge(edges, startNum,
+                Edge(Mode.NUMERIC([10, 12, 14], 0x01), startNum, 0,
+                if (startNum + 1 >= inputLength || !canEncode(
+                Mode.NUMERIC([10, 12, 14], 0x01),
+                stringToEncode[startNum + 1]
+            )) {
+                1
+            } else {
+                if (startNum + 2 >= inputLength || !canEncode(
                     Mode.NUMERIC([10, 12, 14], 0x01),
-                    startNum,
-                    0,
-                    if (startNum + 1 >= inputLength ||
-                        !canEncode(Mode.NUMERIC([10, 12, 14], 0x01), stringToEncode[startNum + 1])) {
-                        1
-                    } else {
-                        if (startNum + 2 >= inputLength ||
-                            !canEncode(Mode.NUMERIC([10, 12, 14], 0x01), stringToEncode[startNum + 2])) {
-                            2
-                        } else {
-                            3
-                        }
-                    },
-                    previous,
-                    version,
-                    encoders,
-                    stringToEncode
-                )
-            );
+                    stringToEncode[startNum + 2]
+                )) {
+                    2
+                } else {
+                    3
+                }
+            }, previous, version, encoders, stringToEncode));
         }
     }
     func encodeSpecificVersion(version: Version): ResultList {

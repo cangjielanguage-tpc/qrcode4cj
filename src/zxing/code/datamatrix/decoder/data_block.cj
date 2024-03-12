@@ -108,7 +108,19 @@ class DataBlock {
             rawCodewordsOffset++
         }
 
-        // Now add in error correction blocks
+        rawCodewordsOffset = ExgetDataBlocks(result, longerBlocksNumDataCodewords, specialVersion, numResultBlocks,
+            rawCodewords, rawCodewordsOffset)
+
+        if (rawCodewordsOffset != rawCodewords.size) {
+            throw IllegalArgumentException();
+        }
+
+        return result
+    }
+
+    static func ExgetDataBlocks(result: ArrayList<DataBlock>, longerBlocksNumDataCodewords: Int64, specialVersion: Bool,
+        numResultBlocks: Int64, rawCodewords: Array<UInt8>, rawCodewordsOffset: Int64): Int64 {
+        var rawCodewordsOffset_p = rawCodewordsOffset
         var max: Int64 = result[0].codewords.size;
 
         var jOffset: Int64
@@ -126,16 +138,11 @@ class DataBlock {
                     iOffset = i
                 }
 
-                result[jOffset].codewords[iOffset] = rawCodewords[rawCodewordsOffset]
-                rawCodewordsOffset++
+                result[jOffset].codewords[iOffset] = rawCodewords[rawCodewordsOffset_p]
+                rawCodewordsOffset_p++
             }
         }
-
-        if (rawCodewordsOffset != rawCodewords.size) {
-            throw IllegalArgumentException();
-        }
-
-        return result
+        return rawCodewordsOffset_p
     }
 
     func getNumDataCodewords(): Int64 {
