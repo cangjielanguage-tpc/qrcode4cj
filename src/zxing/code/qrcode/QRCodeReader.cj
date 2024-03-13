@@ -138,34 +138,7 @@ public open class QRCodeReader <: Reader {
             }
         }
 
-        var pointx = Float32(right - left + 1) / modulesize
-        var pointy = Float32(bottom - top + 1) / modulesize
-
-        var pointx_o = round(pointx)
-        var pointy_o = round(pointy)
-
-        var pointx_d = Int64(pointx) % 2
-        var pointx_f = pointx - Float32(Int64(pointx))
-        if (pointx_d == 0 && pointx_f == 0.5) {
-            pointx_o = pointx_o + 1.0
-        }
-
-        var pointy_d = Int64(pointy) % 2
-        var pointy_f = pointy - Float32(Int64(pointy))
-        if (pointy_d == 0 && pointy_f == 0.5) {
-            pointy_o = pointy_o + 1.0
-        }
-
-        var matrixWidth: Int64 = Int64(pointx_o)
-        var matrixHeight: Int64 = Int64(pointy_o)
-
-        if (matrixWidth <= 0 || matrixHeight <= 0) {
-            throw NotFoundException.getNotFoundInstance();
-        }
-        if (matrixHeight != matrixWidth) {
-            // Only possibly decode square regions
-            throw NotFoundException.getNotFoundInstance();
-        }
+        var (matrixWidth, matrixHeight) = exextractPureBits(right, left, bottom, top, modulesize)
 
         // Push in the "border" by half the module width so that we start
         // sampling in the middle of the module. Just in case the image is a
@@ -206,6 +179,39 @@ public open class QRCodeReader <: Reader {
             }
         }
         return bits
+    }
+
+    private static func exextractPureBits(right: Int64, left: Int64, bottom: Int64, top: Int64, modulesize: Float32): (Int64, 
+        Int64) {
+        var pointx = Float32(right - left + 1) / modulesize
+        var pointy = Float32(bottom - top + 1) / modulesize
+
+        var pointx_o = round(pointx)
+        var pointy_o = round(pointy)
+
+        var pointx_d = Int64(pointx) % 2
+        var pointx_f = pointx - Float32(Int64(pointx))
+        if (pointx_d == 0 && pointx_f == 0.5) {
+            pointx_o = pointx_o + 1.0
+        }
+
+        var pointy_d = Int64(pointy) % 2
+        var pointy_f = pointy - Float32(Int64(pointy))
+        if (pointy_d == 0 && pointy_f == 0.5) {
+            pointy_o = pointy_o + 1.0
+        }
+
+        var matrixWidth: Int64 = Int64(pointx_o)
+        var matrixHeight: Int64 = Int64(pointy_o)
+
+        if (matrixWidth <= 0 || matrixHeight <= 0) {
+            throw NotFoundException.getNotFoundInstance();
+        }
+        if (matrixHeight != matrixWidth) {
+            // Only possibly decode square regions
+            throw NotFoundException.getNotFoundInstance();
+        }
+        return (matrixWidth, matrixHeight)
     }
 
     private static func moduleSize(leftTopBlack: Array<Int64>, image: BitMatrix): Float32 {

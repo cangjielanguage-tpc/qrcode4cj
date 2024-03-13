@@ -46,18 +46,14 @@ open class DetectionResultRowIndicatorColumn <: DetectionResultColumn {
         removeIncorrectCodewords(codewords, barcodeMetadata);
         var boundingBox: BoundingBox = getBoundingBox();
 
-        var top: ResultPoint
+        var top: ResultPoint = boundingBox.getTopRight()
         if (isLeft_) {
             top = boundingBox.getTopLeft()
-        } else {
-            top = boundingBox.getTopRight()
         }
 
-        var bottom: ResultPoint
+        var bottom: ResultPoint = boundingBox.getBottomRight()
         if (isLeft_) {
             bottom = boundingBox.getBottomLeft()
-        } else {
-            bottom = boundingBox.getBottomRight()
         }
 
         var firstRow: Int64 = imageRowToCodewordIndex(Int64(top.getY()))

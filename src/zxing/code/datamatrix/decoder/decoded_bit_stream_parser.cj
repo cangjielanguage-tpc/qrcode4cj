@@ -306,12 +306,8 @@ public class DecodedBitStreamParser {
     /**
      * See ISO 16022:2006, 5.2.3 and Annex C, Table C.2
      */
-    private static func decodeAsciiSegment(
-        bits: BitSource,
-        result: ECIStringBuilder,
-        resultTrailer: ArrayList<Char>,
-        fnc1positions: Set<Int64>
-    ): Mode {
+    private static func decodeAsciiSegment(bits: BitSource, result: ECIStringBuilder, resultTrailer: ArrayList<Char>,
+        fnc1positions: Set<Int64>): Mode {
         var upperShift: Bool = false;
         do {
             var oneByte: Int64 = bits.readBits(8);
@@ -335,20 +331,15 @@ public class DecodedBitStreamParser {
                 result.append(value);
             } else {
                 match (oneByte) {
-                    case 230 =>
-                        // Latch to C40 encodation
-                        return Mode.C40_ENCODE;
-                    case 231 =>
-                        // Latch to Base 256 encodation
-                        return Mode.BASE256_ENCODE;
+                    case 230 => return Mode.C40_ENCODE;
+                    case 231 => return Mode.BASE256_ENCODE;
                     case 232 =>
                         // FNC1
                         fnc1positions.put(result.length());
                         result.append(Char(29)) // translate as ASCII 29
                         break
                     case 233 => break // Structured Append
-                    case 234 => // Reader Programming
-                        break
+                    case 234 => break // Reader Programming 
                     case 235 =>
                         // Upper Shift (shift to Extended ASCII)
                         upperShift = true
@@ -363,18 +354,10 @@ public class DecodedBitStreamParser {
                         result.append("[)>\u{001E06}\u{001D}");
                         resultTrailer.insertAll(0, "\u{001E}\u{0004}".toRuneArray());
                         break
-                    case 238 =>
-                        // Latch to ANSI X12 encodation
-                        return Mode.ANSIX12_ENCODE;
-                    case 239 =>
-                        // Latch to Text encodation
-                        return Mode.TEXT_ENCODE;
-                    case 240 =>
-                        // Latch to EDIFACT encodation
-                        return Mode.EDIFACT_ENCODE;
-                    case 241 =>
-                        // ECI Character
-                        return Mode.ECI_ENCODE;
+                    case 238 => return Mode.ANSIX12_ENCODE; // Latch to ANSI X12 encodation
+                    case 239 => return Mode.TEXT_ENCODE; // Latch to Text encodation
+                    case 240 => return Mode.EDIFACT_ENCODE; // Latch to EDIFACT encodation
+                    case 241 => return Mode.ECI_ENCODE; // ECI Character
                     case _ =>
                         // Not to be used in ASCII encodation
                         // but work around encoders that end with 254, latch back to ASCII
@@ -437,39 +420,48 @@ public class DecodedBitStreamParser {
                             result.append(Char(cValue))
                         }
                         shift = 0
-                    case 2 =>
-                        if (cValue < C40_SHIFT2_SET_CHARS.size) {
-                            var c40char: Char = C40_SHIFT2_SET_CHARS[cValue]
-                            if (upperShift) {
-                                result.append(Char(c40char.hashCode() + 128));
-                                upperShift = false
-                            } else {
-                                result.append(c40char);
-                            }
-                        } else {
-                            match (cValue) {
-                                case 27 =>
-                                    // FNC1
-                                    fnc1positions.put(result.length());
-                                    result.append(Char(29)) // translate as ASCII 29
-                                case 30 => // Upper Shift
-                                    upperShift = true
-                                case _ => throw FormatException.getFormatInstance();
-                            }
-                        }
-                        shift = 0
-                    case 3 =>
-                        if (upperShift) {
-                            result.append(Char(cValue + 224));
-                            upperShift = false
-                        } else {
-                            result.append(Char(cValue + 96));
-                        }
-                        shift = 0
+                    case 2 => (upperShift, shift) = exdecodeC40Segment2(upperShift, result, cValue, fnc1positions)
+                    case 3 => (upperShift, shift) = exdecodeC40Segment3(upperShift, result, cValue)
                     case _ => throw FormatException.getFormatInstance();
                 }
             }
         } while (bits.available() > 0)
+    }
+
+    private static func exdecodeC40Segment2(upperShift: Bool, result: ECIStringBuilder, cValue: Int64,
+        fnc1positions: Set<Int64>): (Bool, Int64) {
+        var upperShift_p = upperShift
+        if (cValue < C40_SHIFT2_SET_CHARS.size) {
+            var c40char: Char = C40_SHIFT2_SET_CHARS[cValue]
+            if (upperShift_p) {
+                result.append(Char(c40char.hashCode() + 128));
+                upperShift_p = false
+            } else {
+                result.append(c40char);
+            }
+        } else {
+            match (cValue) {
+                case 27 =>
+                    // FNC1
+                    fnc1positions.put(result.length());
+                    result.append(Char(29)) // translate as ASCII 29
+                case 30 => // Upper Shift
+                    upperShift_p = true
+                case _ => throw FormatException.getFormatInstance();
+            }
+        }
+        return (upperShift_p, 0)
+    }
+
+    private static func exdecodeC40Segment3(upperShift: Bool, result: ECIStringBuilder, cValue: Int64): (Bool, Int64) {
+        var upperShift_p = upperShift
+        if (upperShift_p) {
+            result.append(Char(cValue + 224));
+            upperShift_p = false
+        } else {
+            result.append(Char(cValue + 96));
+        }
+        return (upperShift_p, 0)
     }
 
     /**
@@ -521,44 +513,54 @@ public class DecodedBitStreamParser {
                             result.append(Char(cValue))
                         }
                         shift = 0
-                    case 2 =>
-                        // Shift 2 for Text is the same encoding as C40
-                        if (cValue < TEXT_SHIFT2_SET_CHARS.size) {
-                            var textChar: Char = TEXT_SHIFT2_SET_CHARS[cValue]
-                            if (upperShift) {
-                                result.append(Char(textChar.hashCode() + 128));
-                                upperShift = false
-                            } else {
-                                result.append(textChar);
-                            }
-                        } else {
-                            match (cValue) {
-                                case 27 =>
-                                    // FNC1
-                                    fnc1positions.put(result.length());
-                                    result.append(Char(29)) // translate as ASCII 29
-                                case 30 => // Upper Shift
-                                    upperShift = true
-                                case _ => throw FormatException.getFormatInstance();
-                            }
-                        }
-                        shift = 0
-                    case 3 => if (cValue < TEXT_SHIFT3_SET_CHARS.size) {
-                        var textChar: Char = TEXT_SHIFT3_SET_CHARS[cValue]
-                        if (upperShift) {
-                            result.append(Char(textChar.hashCode() + 128));
-                            upperShift = false
-                        } else {
-                            result.append(textChar);
-                        }
-                        shift = 0
-                    } else {
-                        throw FormatException.getFormatInstance();
-                    }
+                    case 2 => (upperShift, shift) = exdecodeTextSegment2(upperShift, result, cValue, fnc1positions)
+                    case 3 => (upperShift, shift) = exdecodeTextSegment3(upperShift, result, cValue)
                     case _ => throw FormatException.getFormatInstance();
                 }
             }
         } while (bits.available() > 0)
+    }
+
+    private static func exdecodeTextSegment2(upperShift: Bool, result: ECIStringBuilder, cValue: Int64,
+        fnc1positions: Set<Int64>): (Bool, Int64) {
+        var upperShift_p = upperShift
+        // Shift 2 for Text is the same encoding as C40
+        if (cValue < TEXT_SHIFT2_SET_CHARS.size) {
+            var textChar: Char = TEXT_SHIFT2_SET_CHARS[cValue]
+            if (upperShift_p) {
+                result.append(Char(textChar.hashCode() + 128));
+                upperShift_p = false
+            } else {
+                result.append(textChar);
+            }
+        } else {
+            match (cValue) {
+                case 27 =>
+                    // FNC1
+                    fnc1positions.put(result.length());
+                    result.append(Char(29)) // translate as ASCII 29
+                case 30 => // Upper Shift
+                    upperShift_p = true
+                case _ => throw FormatException.getFormatInstance();
+            }
+        }
+        return (upperShift_p, 0)
+    }
+
+    private static func exdecodeTextSegment3(upperShift: Bool, result: ECIStringBuilder, cValue: Int64): (Bool, Int64) {
+        var upperShift_p = upperShift
+        if (cValue < TEXT_SHIFT3_SET_CHARS.size) {
+            var textChar: Char = TEXT_SHIFT3_SET_CHARS[cValue]
+            if (upperShift_p) {
+                result.append(Char(textChar.hashCode() + 128));
+                upperShift_p = false
+            } else {
+                result.append(textChar);
+            }
+            return (upperShift_p, 0)
+        } else {
+            throw FormatException.getFormatInstance();
+        }
     }
 
     /**

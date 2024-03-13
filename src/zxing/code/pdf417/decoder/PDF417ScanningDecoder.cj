@@ -212,22 +212,13 @@ public open class PDF417ScanningDecoder {
             var codewords: Array<Codeword> = rowIndicator.getCodewords();
 
             var row: Int64 = 0
-            var flag: Bool = false;
-            if (codewords[row].flag) {
-                flag = true
-            } else {
-                flag = false
-            }
+            var flag: Bool = getFlag(codewords, row)
 
             while (missingStartRows > 0 && flag == false) {
                 missingStartRows--
                 row++
 
-                if (codewords[row].flag) {
-                    flag = true
-                } else {
-                    flag = false
-                }
+                flag = getFlag(codewords, row)
             }
             var missingEndRows: Int64 = 0
             for (row in rowHeights.size - 1..=0 : -1) {
@@ -238,20 +229,11 @@ public open class PDF417ScanningDecoder {
             }
 
             row = codewords.size - 1
-            if (codewords[row].flag) {
-                flag = true
-            } else {
-                flag = false
-            }
+            flag = getFlag(codewords, row)
             while (missingEndRows > 0 && flag == false) {
                 missingEndRows--
                 row--
-
-                if (codewords[row].flag) {
-                    flag = true
-                } else {
-                    flag = false
-                }
+                flag = getFlag(codewords, row)
             }
             return rowIndicator.getBoundingBox().addMissingRows(
                 missingStartRows,
@@ -260,6 +242,14 @@ public open class PDF417ScanningDecoder {
             );
         } else {
             return BoundingBox()
+        }
+    }
+
+    static func getFlag(codewords: Array<Codeword>, row: Int64): Bool {
+        if (codewords[row].flag) {
+            return true
+        } else {
+            return false
         }
     }
 

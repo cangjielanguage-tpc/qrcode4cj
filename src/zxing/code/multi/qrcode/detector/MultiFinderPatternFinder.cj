@@ -114,6 +114,18 @@ public class MultiFinderPatternFinder <: FinderPatternFinder {
          */
         var results: ArrayList<Array<FinderPattern>> = ArrayList<Array<FinderPattern>>();
 
+        exselectMultipleBestPatterns(size, possibleCenters, results)
+
+        if (results.size > 0) {
+            return results.toArray()
+        }
+
+        // Nothing found!
+        throw NotFoundException.getNotFoundInstance()
+    }
+
+    private func exselectMultipleBestPatterns(size: Int64, possibleCenters: ArrayList<FinderPattern>,
+        results: ArrayList<Array<FinderPattern>>) {
         for (i1 in 0..(size - 2)) {
             var p1: FinderPattern = possibleCenters[i1]
 
@@ -185,13 +197,6 @@ public class MultiFinderPatternFinder <: FinderPatternFinder {
                 }
             }
         }
-
-        if (results.size > 0) {
-            return results.toArray()
-        }
-
-        // Nothing found!
-        throw NotFoundException.getNotFoundInstance()
     }
 
     public func findMulti(hints: HashMap<DecodeHintType, Any>): Array<FinderPatternInfo> {

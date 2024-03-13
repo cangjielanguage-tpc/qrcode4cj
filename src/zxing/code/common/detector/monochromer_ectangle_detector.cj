@@ -56,53 +56,17 @@ public class MonochromeRectangleDetector {
             var bottom = height
             var left = 0
             var right = width
-            var pointA: ResultPoint = findCornerFromCenter(
-                halfWidth,
-                0,
-                left,
-                right,
-                halfHeight,
-                -deltaY,
-                top,
-                bottom,
-                halfWidth / 2
-            )
+            var pointA: ResultPoint = findCornerFromCenter(halfWidth, 0, left, right, halfHeight, -deltaY, top, bottom,
+                halfWidth / 2)
             top = Int64(pointA.getY()) - 1
-            let pointB: ResultPoint = findCornerFromCenter(
-                halfWidth,
-                -deltaX,
-                left,
-                right,
-                halfHeight,
-                0,
-                top,
-                bottom,
-                halfHeight / 2
-            )
+            let pointB: ResultPoint = findCornerFromCenter(halfWidth, -deltaX, left, right, halfHeight, 0, top, bottom,
+                halfHeight / 2)
             left = Int64(pointB.getX()) - 1
-            let pointC: ResultPoint = findCornerFromCenter(
-                halfWidth,
-                deltaX,
-                left,
-                right,
-                halfHeight,
-                0,
-                top,
-                bottom,
-                halfHeight / 2
-            )
+            let pointC: ResultPoint = findCornerFromCenter(halfWidth, deltaX, left, right, halfHeight, 0, top, bottom,
+                halfHeight / 2)
             right = Int64(pointC.getX()) + 1
-            let pointD: ResultPoint = findCornerFromCenter(
-                halfWidth,
-                0,
-                left,
-                right,
-                halfHeight,
-                deltaY,
-                top,
-                bottom,
-                halfWidth / 2
-            )
+            let pointD: ResultPoint = findCornerFromCenter(halfWidth, 0, left, right, halfHeight, deltaY, top, bottom,
+                halfWidth / 2)
             bottom = Int64(pointD.getY()) + 1
 
             // Go try to find point A again with better information -- might have been off at first.

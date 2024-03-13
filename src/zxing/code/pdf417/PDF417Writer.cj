@@ -43,13 +43,8 @@ public open class PDF417Writer <: Writer {
      */
     private static let DEFAULT_ERROR_CORRECTION_LEVEL: Int64 = 2
 
-    public func encode(
-        contents: String,
-        format: BarcodeFormat,
-        width: Int64,
-        height: Int64,
-        hints: HashMap<EncodeHintType, Any>
-    ): BitMatrix {
+    public func encode(contents: String, format: BarcodeFormat, width: Int64, height: Int64,
+        hints: HashMap<EncodeHintType, Any>): BitMatrix {
         if (format != BarcodeFormat.PDF_417) {
             throw IllegalArgumentException("Can only encode PDF_417, but got " + format.toString());
         }
@@ -63,36 +58,16 @@ public open class PDF417Writer <: Writer {
             if (hints.contains(EncodeHintType.PDF417_COMPACT)) {
                 encoder.setCompact(
                     Bool.parse(
-                        EncodeHintType.getHashMapValue(
-                            EncodeHintType.PDF417_COMPACT,
-                            hints[EncodeHintType.PDF417_COMPACT]
-                        )
-                    )
+                    EncodeHintType.getHashMapValue(EncodeHintType.PDF417_COMPACT, hints[EncodeHintType.PDF417_COMPACT]))
                 );
             }
             if (hints.contains(EncodeHintType.PDF417_COMPACTION)) {
-                let compaction = if (hints[EncodeHintType.PDF417_COMPACTION] is Compaction) {
-                    (hints[EncodeHintType.PDF417_COMPACTION] as Compaction).getOrThrow()
-                } else {
-                    Compaction.valueOf((hints[EncodeHintType.PDF417_COMPACTION] as String).getOrThrow())
-                }
-                encoder.setCompaction(
-                    Compaction.valueOf(
-                        EncodeHintType.getHashMapValue(
-                            EncodeHintType.PDF417_COMPACTION,
-                            hints[EncodeHintType.PDF417_COMPACTION]
-                        )
-                    )
-                );
+                exencode(hints, encoder)
             }
             if (hints.contains(EncodeHintType.PDF417_DIMENSIONS)) {
                 var dimensions: Dimensions = (hints[EncodeHintType.PDF417_DIMENSIONS] as Dimensions).getOrThrow();
-                encoder.setDimensions(
-                    dimensions.getMaxCols(),
-                    dimensions.getMinCols(),
-                    dimensions.getMaxRows(),
-                    dimensions.getMinRows()
-                );
+                encoder.setDimensions(dimensions.getMaxCols(), dimensions.getMinCols(), dimensions.getMaxRows(),
+                    dimensions.getMinRows());
             }
             if (hints.contains(EncodeHintType.MARGIN)) {
                 margin = Int64.parse(EncodeHintType.getHashMapValue(EncodeHintType.MARGIN, hints[EncodeHintType.MARGIN])
@@ -101,13 +76,12 @@ public open class PDF417Writer <: Writer {
             if (hints.contains(EncodeHintType.ERROR_CORRECTION)) {
                 errorCorrectionLevel = Int64.parse(
                     if (hints[EncodeHintType.ERROR_CORRECTION] is Int64) {
-                        (hints[EncodeHintType.ERROR_CORRECTION] as Int64).getOrThrow().toString()
-                    } else if (hints[EncodeHintType.ERROR_CORRECTION] is String) {
-                        (hints[EncodeHintType.ERROR_CORRECTION] as String).getOrThrow()
-                    } else {
-                        (hints[EncodeHintType.ERROR_CORRECTION] as ErrorCorrectionLevel).getOrThrow().toString()
-                    }
-                )
+                    (hints[EncodeHintType.ERROR_CORRECTION] as Int64).getOrThrow().toString()
+                } else if (hints[EncodeHintType.ERROR_CORRECTION] is String) {
+                    (hints[EncodeHintType.ERROR_CORRECTION] as String).getOrThrow()
+                } else {
+                    (hints[EncodeHintType.ERROR_CORRECTION] as ErrorCorrectionLevel).getOrThrow().toString()
+                })
             }
             if (hints.contains(EncodeHintType.CHARACTER_SET)) {
                 var encoding: MyCharset = MyCharset.forName(
@@ -119,6 +93,22 @@ public open class PDF417Writer <: Writer {
         }
 
         return bitMatrixFromEncoder(encoder, UTF32String(contents), errorCorrectionLevel, width, height, margin, autoECI
+        );
+    }
+
+    private func exencode(hints: HashMap<EncodeHintType, Any>, encoder: PDF417) {
+        let compaction = if (hints[EncodeHintType.PDF417_COMPACTION] is Compaction) {
+            (hints[EncodeHintType.PDF417_COMPACTION] as Compaction).getOrThrow()
+        } else {
+            Compaction.valueOf((hints[EncodeHintType.PDF417_COMPACTION] as String).getOrThrow())
+        }
+        encoder.setCompaction(
+            Compaction.valueOf(
+                EncodeHintType.getHashMapValue(
+                    EncodeHintType.PDF417_COMPACTION,
+                    hints[EncodeHintType.PDF417_COMPACTION]
+                )
+            )
         );
     }
 

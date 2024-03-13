@@ -260,33 +260,7 @@ public open class Code93Reader <: OneDReader {
                         throw FormatException.getFormatInstance();
                     }
                 } else if (c == 'b') {
-                    if (next >= 'A' && next <= 'E') {
-                        // %A to %E map to control codes ESC to USep
-                        decodedChar = Char(next.hashCode() - 38)
-                    } else if (next >= 'F' && next <= 'J') {
-                        // %F to %J map to ; < = > ?
-                        decodedChar = Char(next.hashCode() - 11)
-                    } else if (next >= 'K' && next <= 'O') {
-                        // %K to %O map to [ \ ] ^ _
-                        decodedChar = Char(next.hashCode() + 16)
-                    } else if (next >= 'P' && next <= 'T') {
-                        // %P to %T map to { | } ~ DEL
-                        decodedChar = Char(next.hashCode() + 43)
-                    } else if (next == 'U') {
-                        // %U map to NUL
-                        decodedChar = '\0'
-                    } else if (next == 'V') {
-                        // %V map to @
-                        decodedChar = '@'
-                    } else if (next == 'W') {
-                        // %W map to `
-                        decodedChar = '`'
-                    } else if (next >= 'X' && next <= 'Z') {
-                        // %X to %Z all map to DEL (127)
-                        decodedChar = Char(127)
-                    } else {
-                        throw FormatException.getFormatInstance();
-                    }
+                    decodedChar = getDecoded93Char(next)
                 } else if (c == 'c') {
                     // /A to /O map to ! to , and /Z maps to :
                     if (next >= 'A' && next <= 'O') {
@@ -307,6 +281,38 @@ public open class Code93Reader <: OneDReader {
             i++
         }
         return String(decoded);
+    }
+
+    private static func getDecoded93Char(next: Char) {
+        var decodedChar = ' '
+        if (next >= 'A' && next <= 'E') {
+            // %A to %E map to control codes ESC to USep
+            decodedChar = Char(next.hashCode() - 38)
+        } else if (next >= 'F' && next <= 'J') {
+            // %F to %J map to ; < = > ?
+            decodedChar = Char(next.hashCode() - 11)
+        } else if (next >= 'K' && next <= 'O') {
+            // %K to %O map to [ \ ] ^ _
+            decodedChar = Char(next.hashCode() + 16)
+        } else if (next >= 'P' && next <= 'T') {
+            // %P to %T map to { | } ~ DEL
+            decodedChar = Char(next.hashCode() + 43)
+        } else if (next == 'U') {
+            // %U map to NUL
+            decodedChar = '\0'
+        } else if (next == 'V') {
+            // %V map to @
+            decodedChar = '@'
+        } else if (next == 'W') {
+            // %W map to `
+            decodedChar = '`'
+        } else if (next >= 'X' && next <= 'Z') {
+            // %X to %Z all map to DEL (127)
+            decodedChar = Char(127)
+        } else {
+            throw FormatException.getFormatInstance();
+        }
+        return decodedChar
     }
 
     private static func checkChecksums(result: UTF32String) {

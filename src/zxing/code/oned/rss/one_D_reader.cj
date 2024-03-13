@@ -100,13 +100,10 @@ public abstract class OneDReader <: Reader {
             rowStep = max(1, height >> (5))
         }
 
-        var maxLines: Int64
+        var maxLines: Int64 = 15
         if (tryHarder) {
             maxLines = height
             // Look at the whole image, not just the center
-        } else {
-            maxLines = 15
-            // 15 rows spaced 1/32 apart is roughly the middle half of the image
         }
 
         var middle: Int64 = height / 2
@@ -117,12 +114,7 @@ public abstract class OneDReader <: Reader {
             var isAbove: Bool = (x & 0x01) == 0
 
             // i.e. is x even?
-            var rowNumber: Int64 = 0
-            if (isAbove) {
-                rowNumber = middle + rowStep * (rowStepsAboveOrBelow)
-            } else {
-                rowNumber = middle + rowStep * (-rowStepsAboveOrBelow)
-            }
+            var rowNumber: Int64 = getrowNumber(isAbove, middle, rowStep, rowStepsAboveOrBelow)
             if (rowNumber < 0 || rowNumber >= height) {
                 break
             }
@@ -153,23 +145,7 @@ public abstract class OneDReader <: Reader {
                     }
                 }
                 try {
-                    // Look for a barcode
-                    var result: Result = decodeRow(rowNumber, row, hintsuse)
-
-                    // We found our barcode
-                    if (attempt == 1) {
-                        // But it was upside down, so note that
-                        result.putMetadata(ResultMetadataType.ORIENTATION, 180)
-
-                        // And remember to flip the result points horizontally.
-                        var points: Array<ResultPoint> = result.getResultPoints()
-                        if (points.size > 0) {
-                            points[0] = ResultPoint(Float32(width) - points[0].getX() - 1.0, points[0].getY())
-                            points[1] = ResultPoint(Float32(width) - points[1].getX() - 1.0, points[1].getY())
-                        }
-                    }
-
-                    return result
+                    return getdoDecodeResult(rowNumber, row, hintsuse, width, attempt)
                 } catch (re: ReaderException) {
                     // continue -- just couldn't decode this row
                 }
@@ -177,6 +153,33 @@ public abstract class OneDReader <: Reader {
         }
 
         throw NotFoundException.getNotFoundInstance()
+    }
+
+    private func getrowNumber(isAbove: Bool, middle: Int64, rowStep: Int64, rowStepsAboveOrBelow: Int64) {
+        if (isAbove) {
+            return middle + rowStep * (rowStepsAboveOrBelow)
+        } else {
+            return middle + rowStep * (-rowStepsAboveOrBelow)
+        }
+    }
+
+    private func getdoDecodeResult(rowNumber: Int64, row: BitArray, hintsuse: HashMap<DecodeHintType, Any>,
+        width: Int64, attempt: Int64): Result {
+        var result: Result = decodeRow(rowNumber, row, hintsuse)
+
+        // We found our barcode
+        if (attempt == 1) {
+            // But it was upside down, so note that
+            result.putMetadata(ResultMetadataType.ORIENTATION, 180)
+
+            // And remember to flip the result points horizontally.
+            var points: Array<ResultPoint> = result.getResultPoints()
+            if (points.size > 0) {
+                points[0] = ResultPoint(Float32(width) - points[0].getX() - 1.0, points[0].getY())
+                points[1] = ResultPoint(Float32(width) - points[1].getX() - 1.0, points[1].getY())
+            }
+        }
+        return result
     }
 
     /**

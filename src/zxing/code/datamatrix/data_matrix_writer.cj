@@ -45,13 +45,8 @@ public class DataMatrixWriter <: Writer {
         return encode(contents, format, width, height, HashMap<EncodeHintType, Any>());
     }
 
-    public func encode(
-        contents: String,
-        format: BarcodeFormat,
-        width: Int64,
-        height: Int64,
-        hints: HashMap<EncodeHintType, Any>
-    ): BitMatrix {
+    public func encode(contents: String, format: BarcodeFormat, width: Int64, height: Int64,
+        hints: HashMap<EncodeHintType, Any>): BitMatrix {
         if (contents.isEmpty()) {
             throw IllegalArgumentException("Found empty contents");
         }
@@ -70,26 +65,7 @@ public class DataMatrixWriter <: Writer {
         var minSize: ?Dimension = None
         var maxSize: ?Dimension = None
         if (hints.size != 0) {
-            if (hints.contains(EncodeHintType.DATA_MATRIX_SHAPE)) {
-                var requestedShape: ?SymbolShapeHint = hints.get(EncodeHintType.DATA_MATRIX_SHAPE).getOrThrow() as SymbolShapeHint
-                if (let Some(t) <- requestedShape) {
-                    shape = t
-                }
-            }
-
-            if (hints.contains(EncodeHintType.MIN_SIZE)) {
-                var requestedMinSize: ?Dimension = hints.get(EncodeHintType.MIN_SIZE).getOrThrow() as Dimension
-                if (let Some(t) <- requestedMinSize) {
-                    minSize = t
-                }
-            }
-
-            if (hints.contains(EncodeHintType.MAX_SIZE)) {
-                var requestedMaxSize: ?Dimension = hints.get(EncodeHintType.MAX_SIZE).getOrThrow() as Dimension
-                if (let Some(t) <- requestedMaxSize) {
-                    maxSize = t
-                }
-            }
+            (shape, minSize, maxSize) = exencode(shape, minSize, maxSize, hints)
         }
 
         //1. step: Data encodation
@@ -97,8 +73,7 @@ public class DataMatrixWriter <: Writer {
 
         let hasCompactionHint = hints.size != 0 && hints.contains(EncodeHintType.DATA_MATRIX_COMPACT) && Bool.parse(
             EncodeHintType.getHashMapValue(EncodeHintType.DATA_MATRIX_COMPACT, hints[EncodeHintType.DATA_MATRIX_COMPACT]
-            )
-        )
+        ))
         if (hasCompactionHint) {
             let hasGS1FormatHint = hints.contains(EncodeHintType.GS1_FORMAT) && Bool.parse(
                 EncodeHintType.getHashMapValue(EncodeHintType.GS1_FORMAT, hints[EncodeHintType.GS1_FORMAT]))
@@ -111,16 +86,12 @@ public class DataMatrixWriter <: Writer {
             } else {
                 charset = MyCharset()
             }
-            encoded = MinimalEncoder.encodeHighLevel(
-                UTF32String(contents),
-                charset,
+            encoded = MinimalEncoder.encodeHighLevel(UTF32String(contents), charset,
                 if (hasGS1FormatHint) {
-                    0x1D
-                } else {
-                    -1
-                },
-                shape
-            )
+                0x1D
+            } else {
+                -1
+            }, shape)
         } else {
             let hasForceC40Hint = hints.size != 0 && hints.contains(EncodeHintType.FORCE_C40) && Bool.parse(
                 EncodeHintType.getHashMapValue(EncodeHintType.FORCE_C40, hints[EncodeHintType.FORCE_C40]))
@@ -133,17 +104,42 @@ public class DataMatrixWriter <: Writer {
         var codewords: String = ErrorCorrection.encodeECC200(encoded, symbolInfo.getOrThrow());
 
         //3. step: Module placement in Matrix
-        let placement = DefaultPlacement(
-            codewords,
-            symbolInfo.getOrThrow().getSymbolDataWidth(),
-            symbolInfo.getOrThrow().getSymbolDataHeight()
-        );
+        let placement = DefaultPlacement(codewords, symbolInfo.getOrThrow().getSymbolDataWidth(),
+            symbolInfo.getOrThrow().getSymbolDataHeight());
         placement.place();
 
         //4. step: low-level encoding
         var a = encodeLowLevel(placement, symbolInfo.getOrThrow(), width, height);
 
         return a
+    }
+
+    private func exencode(shape: SymbolShapeHint, minSize: ?Dimension, maxSize: ?Dimension,
+        hints: HashMap<EncodeHintType, Any>): (SymbolShapeHint, ?Dimension, ?Dimension) {
+        var shape_p = shape
+        var minSize_p = minSize
+        var maxSize_p = maxSize
+        if (hints.contains(EncodeHintType.DATA_MATRIX_SHAPE)) {
+            var requestedShape: ?SymbolShapeHint = hints.get(EncodeHintType.DATA_MATRIX_SHAPE).getOrThrow() as SymbolShapeHint
+            if (let Some(t) <- requestedShape) {
+                shape_p = t
+            }
+        }
+
+        if (hints.contains(EncodeHintType.MIN_SIZE)) {
+            var requestedMinSize: ?Dimension = hints.get(EncodeHintType.MIN_SIZE).getOrThrow() as Dimension
+            if (let Some(t) <- requestedMinSize) {
+                minSize_p = t
+            }
+        }
+
+        if (hints.contains(EncodeHintType.MAX_SIZE)) {
+            var requestedMaxSize: ?Dimension = hints.get(EncodeHintType.MAX_SIZE).getOrThrow() as Dimension
+            if (let Some(t) <- requestedMaxSize) {
+                maxSize_p = t
+            }
+        }
+        return (shape_p, minSize_p, maxSize_p)
     }
 
     /**

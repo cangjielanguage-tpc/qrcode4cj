@@ -108,27 +108,13 @@ public open class ExpandedProductResultParser <: ResultParser {
                     priceCurrency = value.substring(0, 3).toString()
                     priceIncrement = ai.substring(3).toString()
                 case _ => // No match with common AIs
-                            uncommonAIs.put(ai.toString(), value.toString());
+                    uncommonAIs.put(ai.toString(), value.toString());
             }
         }
 
-        return ExpandedProductParsedResult(
-            rawText.toString(),
-            productID,
-            sscc,
-            lotNumber,
-            productionDate,
-            packagingDate,
-            bestBeforeDate,
-            expirationDate,
-            weight,
-            weightType,
-            weightIncrement,
-            price,
-            priceIncrement,
-            priceCurrency,
-            uncommonAIs
-        );
+        return ExpandedProductParsedResult(rawText.toString(), productID, sscc, lotNumber, productionDate, packagingDate,
+            bestBeforeDate, expirationDate, weight, weightType, weightIncrement, price, priceIncrement, priceCurrency,
+            uncommonAIs);
     }
 
     private static func findAIvalue(i: Int64, rawText: UTF32String): UTF32String {
