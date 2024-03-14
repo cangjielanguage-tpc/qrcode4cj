@@ -3,7 +3,6 @@
  */
 package zxing.code.common
 
-
 public abstract class GridSampler {
     private static var gridSampler: GridSampler = DefaultGridSampler()
 
@@ -56,11 +55,7 @@ public abstract class GridSampler {
         var offset = 0
 
         while (offset < maxOffset && nudged) {
-            let x = Int64(points[offset])
-            let y = Int64(points[offset + 1])
-            if (x < -1 || x > width || y < -1 || y > height) {
-                throw NotFoundException.getNotFoundInstance()
-            }
+            let (x, y) = excheckAndNudgePoints(points, offset, width, height)
             nudged = false
             if (x == -1) {
                 points[offset] = 0.0
@@ -104,6 +99,16 @@ public abstract class GridSampler {
             }
             offset -= 2
         }
+    }
+
+    private static func excheckAndNudgePoints(points: Array<Float64>, offset: Int64, width: Int64, height: Int64): (Int64, 
+        Int64) {
+        let x = Int64(points[offset])
+        let y = Int64(points[offset + 1])
+        if (x < -1 || x > width || y < -1 || y > height) {
+            throw NotFoundException.getNotFoundInstance()
+        }
+        return (x, y)
     }
 
     private static func xY(points: Array<Float64>, offset: Int64): (Int64, Int64) {

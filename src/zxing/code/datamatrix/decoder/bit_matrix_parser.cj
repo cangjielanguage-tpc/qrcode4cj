@@ -38,9 +38,7 @@ class BitMatrixParser {
     /**
      * <p>Creates the version object based on the dimension of the original bit matrix from
      * the datamatrix code.</p>
-     *
      * <p>See ISO 16022:2006 Table 7 - ECC 200 symbol attributes</p>
-     *
      * @param bitMatrix Original {@link BitMatrix} including alignment patterns
      * @return {@link Version} encapsulating the Data Matrix Code's "version"
      * @throws FormatException if the dimensions of the mapping matrix are not valid
@@ -62,40 +60,23 @@ class BitMatrixParser {
      */
     func readCodewords(): Array<UInt8> {
         var result = Array<Byte>(version.getTotalCodewords(), item: 0)
-        var resultOffset: Int64 = 0;
+        var (resultOffset, row, column, numRows, numColumns): (Int64, Int64, Int64, Int64, Int64) = (0, 4, 0,
+            mappingBitMatrix.getHeight(), mappingBitMatrix.getWidth());
 
-        var row: Int64 = 4;
-        var column: Int64 = 0;
-
-        var numRows: Int64 = mappingBitMatrix.getHeight();
-        var numColumns: Int64 = mappingBitMatrix.getWidth();
-
-        var corner1Read: Bool = false;
-        var corner2Read: Bool = false;
-        var corner3Read: Bool = false;
-        var corner4Read: Bool = false;
+        var (corner1Read, corner2Read, corner3Read, corner4Read): (Bool, Bool, Bool, Bool) = (false, false, false, false)
 
         // Read all of the codewords
         do {
             // Check the four corner cases
             if ((row == numRows) && (column == 0) && !corner1Read) {
                 result[resultOffset] = UInt8(readCorner1(numRows, numColumns))
-                resultOffset++
-                row -= 2
-                column += 2
-                corner1Read = true
+                (resultOffset, row, column, corner1Read) = (resultOffset + 1, row - 2, column + 2, true)
             } else if ((row == numRows - 2) && (column == 0) && ((numColumns & 0x03) != 0) && !corner2Read) {
                 result[resultOffset] = UInt8(readCorner2(numRows, numColumns))
-                resultOffset++
-                row -= 2
-                column += 2
-                corner2Read = true
+                (resultOffset, row, column, corner1Read) = (resultOffset + 1, row - 2, column + 2, true)
             } else if ((row == numRows + 4) && (column == 2) && ((numColumns & 0x07) == 0) && !corner3Read) {
                 result[resultOffset] = UInt8(readCorner3(numRows, numColumns))
-                resultOffset++
-                row -= 2
-                column += 2
-                corner3Read = true
+                (resultOffset, row, column, corner1Read) = (resultOffset + 1, row - 2, column + 2, true)
             } else if ((row == numRows - 2) && (column == 0) && ((numColumns & 0x07) == 4) && !corner4Read) {
                 result[resultOffset] = UInt8(readCorner4(numRows, numColumns))
                 resultOffset++

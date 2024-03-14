@@ -59,15 +59,9 @@ public class Edge {
         this.characterLength = characterLength
         this.previous = previous
 
-        var size: Int64 = if (let Some(p) <- previous) {
-            p.cachedTotalSize
-        } else {
-            0
-        }
+        var size: Int64 = exinit(previous)
 
-        var needECI: Bool = (mode == Mode.BYTE([8, 16, 16], 0x04) && (!hasPrevious && this.charsetEncoderIndex != 0) ||
-            // at the beginning and charset is not ISO-8859-1
-            (hasPrevious &&
+        var needECI: Bool = (mode == Mode.BYTE([8, 16, 16], 0x04) && (!hasPrevious && this.charsetEncoderIndex != 0) || (hasPrevious &&
             this.charsetEncoderIndex != previous.getOrThrow().charsetEncoderIndex))
 
         if (!hasPrevious || mode != previous.getOrThrow().mode || needECI) {
@@ -101,6 +95,14 @@ public class Edge {
             case _ => size += 0
         }
         cachedTotalSize = size
+    }
+
+    private static func exinit(previous: ?Edge): Int64 {
+        if (let Some(p) <- previous) {
+            p.cachedTotalSize
+        } else {
+            0
+        }
     }
 }
 

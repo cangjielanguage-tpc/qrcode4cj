@@ -64,14 +64,7 @@ class DataBlock {
         // (where n may be 0) have 1 more byte. Figure out where these start.
         let shorterBlocksTotalCodewords: Int64 = result[0].codewords.size;
         var longerBlocksStartAt: Int64 = result.size - 1
-        while (longerBlocksStartAt >= 0) {
-            let numCodewords: Int64 = result[longerBlocksStartAt].codewords.size;
-            if (numCodewords == shorterBlocksTotalCodewords) {
-                break
-            }
-            longerBlocksStartAt--
-        }
-        longerBlocksStartAt++
+        longerBlocksStartAt = exgetDataBlocks(longerBlocksStartAt, shorterBlocksTotalCodewords, result)
 
         let shorterBlocksNumDataCodewords: Int64 = shorterBlocksTotalCodewords - ecBlocks.getECCodewordsPerBlock()
 
@@ -102,6 +95,20 @@ class DataBlock {
         }
 
         return result
+    }
+
+    static func exgetDataBlocks(longerBlocksStartAt: Int64, shorterBlocksTotalCodewords: Int64,
+        result: ArrayList<DataBlock>): Int64 {
+        var longerBlocksStartAt_p = longerBlocksStartAt
+        while (longerBlocksStartAt_p >= 0) {
+            let numCodewords: Int64 = result[longerBlocksStartAt_p].codewords.size;
+            if (numCodewords == shorterBlocksTotalCodewords) {
+                break
+            }
+            longerBlocksStartAt_p--
+        }
+        longerBlocksStartAt_p++
+        return longerBlocksStartAt_p
     }
 
     private static func getiOffset(i: Int64, j: Int64, longerBlocksStartAt: Int64): Int64 {

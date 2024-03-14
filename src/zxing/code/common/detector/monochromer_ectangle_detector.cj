@@ -58,24 +58,6 @@ public class MonochromeRectangleDetector {
         }
     }
 
-    /**
-     * Attempts to locate a corner of the barcode by scanning up, down, left or right from a center
-     * point which should be within the barcode.
-     *
-     * @param centerX center's x component (horizontal)
-     * @param deltaX same as deltaY but change in x per step instead
-     * @param left minimum value of x
-     * @param right maximum value of x
-     * @param centerY center's y component (vertical)
-     * @param deltaY change in y per step. If scanning up this is negative; down, positive;
-     * left or right, 0
-     * @param top minimum value of y to search through (meaningless when di == 0)
-     * @param bottom maximum value of y
-     * @param maxWhiteRun maximum run of white pixels that can still be considered to be within
-     * the barcode
-     * @return a {@link ResultPoint} encapsulating the corner that was found
-     * @throws NotFoundException if such a point cannot be found
-     */
     private func findCornerFromCenter(centerX: Int64, deltaX: Int64, left: Int64, right: Int64, centerY: Int64,
         deltaY: Int64, top: Int64, bottom: Int64, maxWhiteRun: Int64): ResultPoint {
         try {
@@ -99,22 +81,7 @@ public class MonochromeRectangleDetector {
 
                     // lastRange was found
                     if (deltaX == 0) {
-                        let lastY: Int64 = y - deltaY
-                        if (lastRange[0] < centerX) {
-                            if (lastRange[1] > centerX) {
-                                // straddle, choose one or the other based on direction
-                                var indext: Int64 = 0
-                                if (deltaY > 0) {
-                                    indext = 0
-                                } else {
-                                    indext = 1
-                                }
-                                return ResultPoint(Float32(lastRange[indext]), Float32(lastY))
-                            }
-                            return ResultPoint(Float32(lastRange[0]), Float32(lastY))
-                        } else {
-                            return ResultPoint(Float32(lastRange[1]), Float32(lastY))
-                        }
+                        return exfindCornerFromCenter(y, deltaY, lastRange, centerX)
                     } else {
                         let lastX: Int64 = x - deltaX
                         if (lastRange[0] < centerY) {
@@ -144,20 +111,25 @@ public class MonochromeRectangleDetector {
         }
     }
 
-    /**
-     * Computes the start and end of a region of pixels, either horizontally or vertically, that could
-     * be part of a Data Matrix barcode.
-     *
-     * @param fixedDimension if scanning horizontally, this is the row (the fixed vertical location)
-     * where we are scanning. If scanning vertically it's the column, the fixed horizontal location
-     * @param maxWhiteRun largest run of white pixels that can still be considered part of the
-     * barcode region
-     * @param minDim minimum pixel location, horizontally or vertically, to consider
-     * @param maxDim maximum pixel location, horizontally or vertically, to consider
-     * @param horizontal if true, we're scanning left-right, instead of up-down
-     * @return int[] with start and end of found range, or null if no such range is found
-     * (e.g. only white was found)
-     */
+    private func exfindCornerFromCenter(y: Int64, deltaY: Int64, lastRange: Array<Int64>, centerX: Int64): ResultPoint {
+        let lastY: Int64 = y - deltaY
+        if (lastRange[0] < centerX) {
+            if (lastRange[1] > centerX) {
+                // straddle, choose one or the other based on direction
+                var indext: Int64 = 0
+                if (deltaY > 0) {
+                    indext = 0
+                } else {
+                    indext = 1
+                }
+                return ResultPoint(Float32(lastRange[indext]), Float32(lastY))
+            }
+            return ResultPoint(Float32(lastRange[0]), Float32(lastY))
+        } else {
+            return ResultPoint(Float32(lastRange[1]), Float32(lastY))
+        }
+    }
+
     private func blackWhiteRange(fixedDimension: Int64, maxWhiteRun: Int64, minDim: Int64, maxDim: Int64,
         horizontal: Bool): Array<Int64> {
         let center: Int64 = Int64((minDim + maxDim) / 2)
@@ -191,12 +163,7 @@ public class MonochromeRectangleDetector {
         // Then try right/down
         var end: Int64 = center
         while (end < maxDim) {
-            var tmpImageGet: Bool
-            if (horizontal) {
-                tmpImageGet = image.get(end, fixedDimension)
-            } else {
-                tmpImageGet = image.get(fixedDimension, end)
-            }
+            var tmpImageGet: Bool = exblackWhiteRange(horizontal, end, fixedDimension)
             if (tmpImageGet) {
                 end++
             } else {
@@ -218,6 +185,14 @@ public class MonochromeRectangleDetector {
             return [start, end]
         } else {
             return []
+        }
+    }
+
+    private func exblackWhiteRange(horizontal: Bool, end: Int64, fixedDimension: Int64): Bool {
+        if (horizontal) {
+            return image.get(end, fixedDimension)
+        } else {
+            return image.get(fixedDimension, end)
         }
     }
 }

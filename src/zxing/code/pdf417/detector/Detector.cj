@@ -157,21 +157,6 @@ public open class Detector {
         return barcodeCoordinates
     }
 
-    /**
-     * Locate the vertices and the codewords area of a black blob using the Start
-     * and Stop patterns as locators.
-     *
-     * @param matrix the scanned barcode image.
-     * @return an array containing the vertices:
-     * vertices[0] x, y top left barcode
-     * vertices[1] x, y bottom left barcode
-     * vertices[2] x, y top right barcode
-     * vertices[3] x, y bottom right barcode
-     * vertices[4] x, y top left codeword area
-     * vertices[5] x, y bottom left codeword area
-     * vertices[6] x, y top right codeword area
-     * vertices[7] x, y bottom right codeword area
-     */
     private static func findVertices(matrix: BitMatrix, startRow: Int64, startColumn: Int64, flagReadSecond: Int64): Array<ResultPoint> {
         var height: Int64 = matrix.getHeight()
         var width: Int64 = matrix.getWidth()
@@ -247,6 +232,12 @@ public open class Detector {
             }
             startRow_ += ROW_STEP
         }
+        result = exfindRowsWithPattern(result, startRow_, found, height, matrix, width, pattern, counters)
+        return result
+    }
+
+    private static func exfindRowsWithPattern(result: Array<ResultPoint>, startRow_: Int64, found: Bool, height: Int64,
+        matrix: BitMatrix, width: Int64, pattern: Array<Int64>, counters: Array<Int64>): Array<ResultPoint> {
         var stopRow: Int64 = startRow_ + 1
 
         // Last row of the current symbol that contains pattern
@@ -279,7 +270,7 @@ public open class Detector {
             result[3] = ResultPoint(Float32(previousRowLoc[1]), Float32(stopRow))
         }
         if (stopRow - startRow_ < BARCODE_MIN_HEIGHT) {
-            result = Array<ResultPoint>(4, item: ResultPoint())
+            return Array<ResultPoint>(4, item: ResultPoint())
         }
         return result
     }
@@ -364,17 +355,9 @@ public open class Detector {
             patternStart--
         }
 
-        var x: Int64 = patternStart
-        var counterPosition: Int64 = 0
-        var patternLength: Int64 = pattern.size
-        var isWhite: Bool = false
-        var threshold = 2
-        var tflag = 0
-        if (pattern[0] == 8) {
-            threshold = 3
-        } else {
-            threshold = 2
-        }
+        var (x, counterPosition, patternLength, isWhite, threshold, tflag): (Int64, Int64, Int64, Bool, Int64, Int64) = (patternStart,
+            0, pattern.size, false, 2, 0)
+        threshold = exfindGuardPatternDetect2(pattern)
         while (x < width) {
             let pixel: Bool = matrix.get(x, row)
             if (pixel != isWhite) {
@@ -391,39 +374,17 @@ public open class Detector {
                                 break
                             }
                         }
-                        if (tflag > 0) {
-                            System.arraycopy(counters, tflag, counters, 0, counterPosition - tflag + 1)
-                            counterPosition = counterPosition - tflag
-                        } else {
-                            counters[0] = counters[counterPosition - 2]
-                            counters[1] = counters[counterPosition - 1]
-                            counters[2] = counters[counterPosition]
-                            counterPosition = 2
-                        }
-
-                        tflag = 0
+                        (counterPosition, tflag) = exfindGuardPatternDetect(tflag, counters, counterPosition)
                     } else {
-                        counters[0] = counters[1]
-                        counters[1] = counters[2]
-                        counters[2] = 1
-                        counterPosition = 2
+                        (counters[0], counters[1], counters[2], counterPosition) = (counters[1], counters[2], 1, 2)
                     }
                 } else {
-                    if (counterPosition == patternLength - 1) {
-                        if (patternMatchVariance(counters, pattern) < MAX_AVG_VARIANCE) {
-                            return [patternStart, x]
-                        }
-
-                        patternStart += counters[0] + counters[1]
-                        System.arraycopy(counters, 2, counters, 0, counterPosition - 1)
-
-                        counters[counterPosition - 1] = 0
-                        counters[counterPosition] = 0
-                        counterPosition--
-                    } else {
-                        counterPosition++
+                    var (flag, res) = (false, Array<Int64>())
+                    (flag, counterPosition, patternStart, res) = exfindGuardPatternDetect3(patternLength, pattern, x,
+                        counterPosition, patternStart, counters)
+                    if (flag) {
+                        return res
                     }
-                    counters[counterPosition] = 1
                 }
 
                 isWhite = !isWhite
@@ -436,12 +397,58 @@ public open class Detector {
         return Array<Int64>()
     }
 
+    private static func exfindGuardPatternDetect2(pattern: Array<Int64>): Int64 {
+        if (pattern[0] == 8) {
+            return 3
+        } else {
+            return 2
+        }
+    }
+
+    private static func exfindGuardPatternDetect3(patternLength: Int64, pattern: Array<Int64>, x: Int64,
+        counterPosition: Int64, patternStart: Int64, counters: Array<Int64>): (Bool, Int64, Int64, Array<Int64>) {
+        var counterPosition_p = counterPosition
+        var patternStart_p = patternStart
+        if (counterPosition_p == patternLength - 1) {
+            if (patternMatchVariance(counters, pattern) < MAX_AVG_VARIANCE) {
+                return (true, counterPosition_p, counterPosition_p, [patternStart_p, x])
+            }
+
+            patternStart_p += counters[0] + counters[1]
+            System.arraycopy(counters, 2, counters, 0, counterPosition_p - 1)
+
+            counters[counterPosition_p - 1] = 0
+            counters[counterPosition_p] = 0
+            counterPosition_p--
+        } else {
+            counterPosition_p++
+        }
+        counters[counterPosition_p] = 1
+        return (false, counterPosition_p, patternStart_p, [patternStart_p, x])
+    }
+
+    private static func exfindGuardPatternDetect(tflag: Int64, counters: Array<Int64>, counterPosition: Int64): (Int64, 
+        Int64) {
+        var tflag_p = tflag
+        var counterPosition_p = counterPosition
+        if (tflag_p > 0) {
+            System.arraycopy(counters, tflag_p, counters, 0, counterPosition_p - tflag_p + 1)
+            counterPosition_p = counterPosition_p - tflag_p
+        } else {
+            counters[0] = counters[counterPosition_p - 2]
+            counters[1] = counters[counterPosition_p - 1]
+            counters[2] = counters[counterPosition_p]
+            counterPosition_p = 2
+        }
+        tflag_p = 0
+        return (counterPosition_p, tflag_p)
+    }
+
     /**
      * Determines how closely a set of observed counts of runs of black/white
      * values matches a given target pattern. This is reported as the ratio of
      * the total variance from the expected pattern proportions across all
      * pattern elements, to the size of the pattern.
-     *
      * @param counters observed counters
      * @param pattern expected pattern
      * @return ratio of total variance between counters and pattern compared to total pattern size

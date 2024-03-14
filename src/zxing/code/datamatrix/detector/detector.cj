@@ -392,7 +392,15 @@ public class Detector {
             t1 = fromX
             t2 = fromY
         }
+        transitions = extransitionsBetween(fromX, fromY, toX, steep, transitions, error, dy, toY, dx, xstep, ystep)
 
+        return transitions
+    }
+
+    private func extransitionsBetween(fromX: Int64, fromY: Int64, toX: Int64, steep: Bool, transitions: Int64,
+        error: Int64, dy: Int64, toY: Int64, dx: Int64, xstep: Int64, ystep: Int64) {
+        var transitions_p = transitions
+        var error_p = error
         var inBlack = image.get(
             if (steep) {
                 fromY
@@ -421,21 +429,20 @@ public class Detector {
                 }
             );
             if (isBlack != inBlack) {
-                transitions++
+                transitions_p++
                 inBlack = isBlack
             }
-            error += dy
-            if (error > 0) {
+            error_p += dy
+            if (error_p > 0) {
                 if (y == toY) {
                     break
                 }
                 y += ystep
-                error -= dx
+                error_p -= dx
             }
 
             x += xstep
         }
-
-        return transitions
+        return transitions_p
     }
 }

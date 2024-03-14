@@ -54,22 +54,6 @@ public open class MinimalECIInput <: ECIInput {
         return true;
     }
 
-    /**
-     * Returns the {@code byte} value at the specified index.  An index ranges from zero
-     * to {@code length() - 1}.  The first {@code byte} value of the sequence is at
-     * index zero, the next at index one, and so on, as for array
-     * indexing.
-     *
-     * @param   index the index of the {@code byte} value to be returned
-     *
-     * @return  the specified {@code byte} value as character or the FNC1 character
-     *
-     * @throws  IndexOutOfBoundsException
-     * if the {@code index} argument is negative or not less than
-     * {@code length()}
-     * @throws  IllegalArgumentException
-     * if the value at the {@code index} argument is an ECI (@see #isECI)
-     */
     public func charAt(index: Int64): Char {
         if (index < 0 || index >= length()) {
             throw IndexOutOfBoundsException(index.toString());
@@ -84,26 +68,6 @@ public open class MinimalECIInput <: ECIInput {
         }
     }
 
-    /**
-     * Returns a {@code CharSequence} that is a subsequence of this sequence.
-     * The subsequence starts with the {@code char} value at the specified index and
-     * ends with the {@code char} value at index {@code end - 1}.  The length
-     * (in {@code char}s) of the
-     * returned sequence is {@code end - start}, so if {@code start == end}
-     * then an empty sequence is returned.
-     *
-     * @param   start   the start index, inclusive
-     * @param   end     the end index, exclusive
-     *
-     * @return  the specified subsequence
-     *
-     * @throws  IndexOutOfBoundsException
-     * if {@code start} or {@code end} are negative,
-     * if {@code end} is greater than {@code length()},
-     * or if {@code start} is greater than {@code end}
-     * @throws  IllegalArgumentException
-     * if a value in the range {@code start}-{@code end} is an ECI (@see #isECI)
-     */
     public func subSequence(start: Int64, end: Int64): UTF32String {
         if (start < 0 || start > end || end > length()) {
             throw IndexOutOfBoundsException(start.toString());
@@ -121,11 +85,8 @@ public open class MinimalECIInput <: ECIInput {
 
     /**
      * Determines if a value is an ECI
-     *
      * @param   index the index of the value
-     *
      * @return  true if the value at position {@code index} is an ECI
-     *
      * @throws  IndexOutOfBoundsException
      * if the {@code index} argument is negative or not less than
      * {@code length()}
@@ -139,11 +100,8 @@ public open class MinimalECIInput <: ECIInput {
 
     /**
      * Determines if a value is the FNC1 character
-     *
      * @param   index the index of the value
-     *
      * @return  true if the value at position {@code index} is the FNC1 character
-     *
      * @throws  IndexOutOfBoundsException
      * if the {@code index} argument is negative or not less than
      * {@code length()}
@@ -155,24 +113,6 @@ public open class MinimalECIInput <: ECIInput {
         return bytes[index] == 1000
     }
 
-    /**
-     * Returns the {@code int} ECI value at the specified index.  An index ranges from zero
-     * to {@code length() - 1}.  The first {@code byte} value of the sequence is at
-     * index zero, the next at index one, and so on, as for array
-     * indexing.
-     *
-     * @param   index the index of the {@code int} value to be returned
-     *
-     * @return  the specified {@code int} ECI value.
-     * The ECI specified the encoding of all bytes with a higher index until the
-     * next ECI or until the end of the input if no other ECI follows.
-     *
-     * @throws  IndexOutOfBoundsException
-     * if the {@code index} argument is negative or not less than
-     * {@code length()}
-     * @throws  IllegalArgumentException
-     * if the value at the {@code index} argument is not an ECI (@see #isECI)
-     */
     public func getECIValue(index: Int64): Int64 {
         if (index < 0 || index >= length()) {
             throw IndexOutOfBoundsException(index.toString());
@@ -284,28 +224,7 @@ public open class MinimalECIInput <: ECIInput {
             currentFlag = true
         }
         while (currentFlag) {
-            if (current.getOrThrow().isFNC1()) {
-                intsAL.insert(0, 1000);
-            } else {
-                var bytes: Array<UInt8> = encoderSet.encode(current.getOrThrow().c, current.getOrThrow().encoderIndex);
-                for (i in bytes.size - 1..=0 : -1) {
-                    intsAL.insert(0, Int64(bytes[i] & 0xFF));
-                }
-            }
-            var previousEncoderIndex: Int64 = 0
-            if (let Some(p) <- current.getOrThrow().previous) {
-                previousEncoderIndex = p.encoderIndex
-            }
-
-            if (previousEncoderIndex != current.getOrThrow().encoderIndex) {
-                intsAL.insert(0, 256 + encoderSet.getECIValue(current.getOrThrow().encoderIndex));
-            }
-            current = current.getOrThrow().previous
-            if (let Some(c) <- current) {
-                currentFlag = true
-            } else {
-                currentFlag = false
-            }
+            (current, currentFlag) = exencodeMinimally(current, intsAL, encoderSet)
         }
         var ints: Array<Int64> = Array<Int64>(intsAL.size, item: 0)
         for (i in 0..ints.size) {
@@ -313,6 +232,35 @@ public open class MinimalECIInput <: ECIInput {
         }
 
         return ints
+    }
+
+    static func exencodeMinimally(current: ?InputEdge, intsAL: ArrayList<Int64>, encoderSet: ECIEncoderSet): (?InputEdge, 
+        Bool) {
+        var currentFlag: Bool
+        var current_p = current
+        if (current_p.getOrThrow().isFNC1()) {
+            intsAL.insert(0, 1000);
+        } else {
+            var bytes: Array<UInt8> = encoderSet.encode(current_p.getOrThrow().c, current_p.getOrThrow().encoderIndex);
+            for (i in bytes.size - 1..=0 : -1) {
+                intsAL.insert(0, Int64(bytes[i] & 0xFF));
+            }
+        }
+        var previousEncoderIndex: Int64 = 0
+        if (let Some(p) <- current_p.getOrThrow().previous) {
+            previousEncoderIndex = p.encoderIndex
+        }
+
+        if (previousEncoderIndex != current_p.getOrThrow().encoderIndex) {
+            intsAL.insert(0, 256 + encoderSet.getECIValue(current_p.getOrThrow().encoderIndex));
+        }
+        current_p = current_p.getOrThrow().previous
+        if (let Some(c) <- current_p) {
+            currentFlag = true
+        } else {
+            currentFlag = false
+        }
+        return (current_p, currentFlag)
     }
 }
 

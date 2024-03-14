@@ -61,10 +61,7 @@ public open class FinderPatternFinder {
         // image, and then account for the center being 3 modules in size. This gives the smallest
         // number of pixels the center could be, so skip this often. When trying harder, look for all
         // QR versions regardless of how dense they are.
-        var iSkip: Int64 = (3 * maxI) / (4 * MAX_MODULES)
-        if (iSkip < MIN_SKIP || tryHarder) {
-            iSkip = MIN_SKIP
-        }
+        var iSkip: Int64 = exfind4(maxI, tryHarder)
 
         var done: Bool = false;
         var stateCount: Array<Int64> = Array<Int64>(5, item: 0);
@@ -77,7 +74,7 @@ public open class FinderPatternFinder {
 
             var j: Int64 = 0;
             while (j < maxJ) {
-                currentState = exfind3(currentState, done, i, j,stateCount, maxJ)
+                currentState = exfind3(currentState, done, i, j, stateCount, maxJ)
                 if (!image.get(j, i)) { // White pixel
                     if ((currentState & 1) == 0) { // Counting black pixels
                         if (currentState == 4) { // A winner?
@@ -117,11 +114,7 @@ public open class FinderPatternFinder {
 
         let patternInfo: Array<FinderPattern> = selectBestPatterns();
         var resultPointArray: Array<ResultPoint> = changeFinderPatternArray(patternInfo);
-        ResultPoint.orderBestPatterns(resultPointArray);
-
-        for (i in 0..resultPointArray.size) {
-            patternInfo[i] = (resultPointArray[i] as FinderPattern).getOrThrow()
-        }
+        exfind5(resultPointArray, patternInfo)
 
         return FinderPatternInfo(patternInfo);
     }
@@ -171,7 +164,7 @@ public open class FinderPatternFinder {
         return (iSkip_p, done_p)
     }
 
-    private func exfind3(currentState: Int64, done: Bool, i: Int64, j: Int64,stateCount: Array<Int64>, maxJ: Int64): Int64{
+    private func exfind3(currentState: Int64, done: Bool, i: Int64, j: Int64, stateCount: Array<Int64>, maxJ: Int64): Int64 {
         var currentState_p = currentState
         if (image.get(j, i)) {
             // Black pixel
@@ -181,6 +174,22 @@ public open class FinderPatternFinder {
             stateCount[Int64(currentState_p)] += 1
         }
         return currentState_p
+    }
+
+    private func exfind4(maxI: Int64, tryHarder: Bool): Int64 {
+        var iSkip: Int64 = (3 * maxI) / (4 * MAX_MODULES)
+        if (iSkip < MIN_SKIP || tryHarder) {
+            iSkip = MIN_SKIP
+        }
+        return iSkip
+    }
+
+    private func exfind5(resultPointArray: Array<ResultPoint>, patternInfo: Array<FinderPattern>) {
+        ResultPoint.orderBestPatterns(resultPointArray);
+
+        for (i in 0..resultPointArray.size) {
+            patternInfo[i] = (resultPointArray[i] as FinderPattern).getOrThrow()
+        }
     }
 
     public static func changeFinderPatternArray(arrayFinder: Array<FinderPattern>): Array<ResultPoint> {
@@ -366,11 +375,8 @@ public open class FinderPatternFinder {
         var stateCount: Array<Int64> = getCrossCheckStateCount();
 
         // Start counting up from center
-        var i: Int64 = startI
-        while (i >= 0 && image.get(centerJ, i)) {
-            stateCount[2] += 1
-            i--
-        }
+        var i: Int64 = excrossCheckVertical(startI, centerJ, stateCount)
+
         if (i < 0) {
             return Float64.NaN;
         }
@@ -425,6 +431,15 @@ public open class FinderPatternFinder {
         return returncrossCheckVertical(stateCount, i)
     }
 
+    private func excrossCheckVertical(startI: Int64, centerJ: Int64, stateCount: Array<Int64>): Int64 {
+        var i = startI
+        while (i >= 0 && image.get(centerJ, i)) {
+            stateCount[2] += 1
+            i--
+        }
+        return i
+    }
+
     private func returncrossCheckVertical(stateCount: Array<Int64>, i: Int64): Float64 {
         if (foundPatternCross(stateCount)) {
             centerFromEnd(stateCount, i)
@@ -444,11 +459,7 @@ public open class FinderPatternFinder {
         let maxJ: Int64 = image.getWidth();
         var stateCount: Array<Int64> = getCrossCheckStateCount();
 
-        var j: Int64 = startJ
-        while (j >= 0 && image.get(j, centerI)) {
-            stateCount[2] += 1
-            j--
-        }
+        var j: Int64 = excrossCheckHorizontal(startJ, centerI, stateCount)
         if (j < 0) {
             return Float64.NaN;
         }
@@ -500,6 +511,15 @@ public open class FinderPatternFinder {
         return returncrossCheckHorizontal(stateCount, j)
     }
 
+    private func excrossCheckHorizontal(startJ: Int64, centerI: Int64, stateCount: Array<Int64>): Int64 {
+        var j = startJ
+        while (j >= 0 && image.get(j, centerI)) {
+            stateCount[2] += 1
+            j--
+        }
+        return j
+    }
+
     private func returncrossCheckHorizontal(stateCount: Array<Int64>, j: Int64): Float64 {
         if (foundPatternCross(stateCount)) {
             return centerFromEnd(stateCount, j)
@@ -521,23 +541,6 @@ public open class FinderPatternFinder {
         return handlePossibleCenter(stateCount, i, j);
     }
 
-    /**
-     * <p>This is called when a horizontal scan finds a possible alignment pattern. It will
-     * cross check with a vertical scan, and if successful, will, ah, cross-cross-check
-     * with another horizontal scan. This is needed primarily to locate the real horizontal
-     * center of the pattern in cases of extreme skew.
-     * And then we cross-cross-cross check with another diagonal scan.</p>
-     *
-     * <p>If that succeeds the finder pattern location is added to a list that tracks
-     * the number of times each location has been nearly-matched as a finder pattern.
-     * Each additional find is more evidence that the location is in fact a finder
-     * pattern center
-     *
-     * @param stateCount reading state module counts from horizontal scan
-     * @param i row where finder pattern may be found
-     * @param j end of possible finder pattern in row
-     * @return true if a finder pattern candidate was found this time
-     */
     protected func handlePossibleCenter(stateCount: Array<Int64>, i: Int64, j: Int64): Bool {
         let stateCountTotal: Int64 = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4]
         var centerJ: Float64 = centerFromEnd(stateCount, j);
@@ -692,64 +695,7 @@ public open class FinderPatternFinder {
             for (j in i + 1..possibleCenters.size - 1) {
                 let fpj: FinderPattern = possibleCenters[j]
                 let squares0: Float32 = squaredDistance(fpi, fpj);
-
-                for (k in j + 1..possibleCenters.size) {
-                    let fpk: FinderPattern = possibleCenters[k]
-                    let maxModuleSize: Float32 = fpk.getEstimatedModuleSize();
-                    if (maxModuleSize > minModuleSize * 1.4f32) {
-                        continue
-                    }
-
-                    var a: Float32 = squares0
-                    var b: Float32 = squaredDistance(fpj, fpk);
-                    var c: Float32 = squaredDistance(fpi, fpk);
-
-                    // sorts ascending - inlined
-                    if (a < b) {
-                        if (b > c) {
-                            if (a < c) {
-                                var temp: Float32 = b
-                                b = c
-                                c = temp
-                            } else {
-                                var temp: Float32 = a
-                                a = c
-                                c = b
-                                b = temp
-                            }
-                        }
-                    } else {
-                        if (b < c) {
-                            if (a < c) {
-                                var temp: Float32 = a
-                                a = b
-                                b = temp
-                            } else {
-                                var temp: Float32 = a
-                                a = b
-                                b = c
-                                c = temp
-                            }
-                        } else {
-                            var temp: Float32 = a
-                            a = c
-                            c = temp
-                        }
-                    }
-
-                    // a^2 + b^2 = c^2 (Pythagorean theorem), and a = b (isosceles triangle).
-                    // Since any right triangle satisfies the formula c^2 - b^2 - a^2 = 0,
-                    // we need to check both two equal sides separately.
-                    // The value of |c^2 - 2 * b^2| + |c^2 - 2 * a^2| increases as dissimilarity
-                    // from isosceles right triangle.
-                    let d: Float32 = abs(c - 2.0f32 * b) + abs(c - 2.0f32 * a)
-                    if (d < distortion) {
-                        distortion = d
-                        bestPatterns[0] = fpi
-                        bestPatterns[1] = fpj
-                        bestPatterns[2] = fpk
-                    }
-                }
+                distortion = exselectBestPatterns(j, minModuleSize, squares0, fpj, fpi, distortion, bestPatterns)
             }
         }
 
@@ -758,6 +704,59 @@ public open class FinderPatternFinder {
         }
 
         return bestPatterns
+    }
+
+    private func exselectBestPatterns(j: Int64, minModuleSize: Float32, squares0: Float32, fpj: FinderPattern,
+        fpi: FinderPattern, distortion: Float32, bestPatterns: Array<FinderPattern>): Float32 {
+        var distortion_P = distortion
+        for (k in j + 1..possibleCenters.size) {
+            let fpk: FinderPattern = possibleCenters[k]
+            let maxModuleSize: Float32 = fpk.getEstimatedModuleSize();
+            if (maxModuleSize > minModuleSize * 1.4f32) {
+                continue
+            }
+
+            var (a, b, c): (Float32, Float32, Float32) = (squares0, squaredDistance(fpj, fpk), squaredDistance(fpi, fpk))
+
+            // sorts ascending - inlined
+            if (a < b) {
+                if (b > c) {
+                    if (a < c) {
+                        var temp: Float32 = b
+                        b = c
+                        c = temp
+                    } else {
+                        var temp: Float32 = a
+                        a = c
+                        c = b
+                        b = temp
+                    }
+                }
+            } else {
+                if (b < c) {
+                    if (a < c) {
+                        var temp: Float32 = a
+                        a = b
+                        b = temp
+                    } else {
+                        var temp: Float32 = a
+                        a = b
+                        b = c
+                        c = temp
+                    }
+                } else {
+                    var temp: Float32 = a
+                    a = c
+                    c = temp
+                }
+            }
+            let d: Float32 = abs(c - 2.0f32 * b) + abs(c - 2.0f32 * a)
+            if (d < distortion_P) {
+                distortion_P = d
+                (bestPatterns[0], bestPatterns[1], bestPatterns[2]) = (fpi, fpj, fpk)
+            }
+        }
+        return distortion_P
     }
 }
 
