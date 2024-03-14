@@ -88,24 +88,10 @@ public class AlignmentPatternFinder {
             while (j < maxJ) {
                 if (image.get(j, i)) {
                     // Black pixel
-                    if (currentState == 1) { // Counting black pixels
-                        stateCount[1] += 1
-                    } else { // Counting white pixels
-                        if (currentState == 2) { // A winner?
-                            if (foundPatternCross(stateCount)) { // Yes
-                                let confirmed: Option<AlignmentPattern> = handlePossibleCenter(stateCount, i, j);
-                                if (let Some(con) <- confirmed) {
-                                    return con
-                                }
-                            }
-                            stateCount[0] = stateCount[2]
-                            stateCount[1] = 1
-                            stateCount[2] = 0
-                            currentState = 1
-                        } else {
-                            currentState++
-                            stateCount[Int64(currentState)] += 1
-                        }
+                    var res: Option<AlignmentPattern>
+                    (currentState, res) = exfind(currentState, stateCount, i, j)
+                    if (let Some(con) <- res) {
+                        return con
                     }
                 } else { // White pixel
                     if (currentState == 1) { // Counting black pixels
@@ -132,6 +118,30 @@ public class AlignmentPatternFinder {
         }
 
         throw NotFoundException.getNotFoundInstance();
+    }
+
+    func exfind(currentState: Int64, stateCount: Array<Int64>, i: Int64, j: Int64): (Int64, Option<AlignmentPattern>) {
+        var currentState_p = currentState
+        if (currentState == 1) { // Counting black pixels
+            stateCount[1] += 1
+        } else {
+            if (currentState_p == 2) { // A winner?
+                if (foundPatternCross(stateCount)) { // Yes
+                    let confirmed: Option<AlignmentPattern> = handlePossibleCenter(stateCount, i, j);
+                    if (let Some(con) <- confirmed) {
+                        return (0, con)
+                    }
+                }
+                stateCount[0] = stateCount[2]
+                stateCount[1] = 1
+                stateCount[2] = 0
+                currentState_p = 1
+            } else {
+                currentState_p++
+                stateCount[Int64(currentState_p)] += 1
+            }
+        }
+        return (currentState_p, None)
     }
 
     /**

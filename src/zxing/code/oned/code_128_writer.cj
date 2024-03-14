@@ -702,26 +702,7 @@ open class MinimalEncoder <: OneDimensionalCodeWriter {
             }
         }
         if (canEncode(contents, Charset.C, position)) {
-            var cost: Int64 = 1
-            var latch: Latch = Latch.LNONE
-            if (charset != Charset.C) {
-                cost++
-                latch = Latch.C
-            }
-            var advance: Int64 = 0
-            if (contents.get(position) == ESCAPE_FNC_1) {
-                advance = 1
-            } else {
-                advance = 2
-            }
-            if (position + advance < contents.charSize) {
-                cost += encode(contents, Charset.C, position + advance)
-            }
-            if (cost < minCost) {
-                minCost = cost
-                minLatch = latch
-            }
-            //(minCost, minLatch) = getminCostminLatch(minCost, minLatch, contents, charset, position)
+            (minCost, minLatch) = getminCostminLatch(minCost, minLatch, contents, charset, position)
         }
         if (minCost == 0x7fffffff) {
             throw IllegalArgumentException("Bad character in input: ASCII value=${contents.get(position).hashCode()}")

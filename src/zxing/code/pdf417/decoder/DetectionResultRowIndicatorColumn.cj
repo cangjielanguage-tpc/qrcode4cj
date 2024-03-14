@@ -34,15 +34,9 @@ open class DetectionResultRowIndicatorColumn <: DetectionResultColumn {
         removeIncorrectCodewords(codewords, barcodeMetadata);
         var boundingBox: BoundingBox = getBoundingBox();
 
-        var top: ResultPoint = boundingBox.getTopRight()
-        if (isLeft_) {
-            top = boundingBox.getTopLeft()
-        }
+        var top: ResultPoint = exadjustCompleteIndicatorColumnRowNumbers(boundingBox)
 
-        var bottom: ResultPoint = boundingBox.getBottomRight()
-        if (isLeft_) {
-            bottom = boundingBox.getBottomLeft()
-        }
+        var bottom: ResultPoint = exadjustCompleteIndicatorColumnRowNumbers2(boundingBox)
 
         var firstRow: Int64 = imageRowToCodewordIndex(Int64(top.getY()))
         var lastRow: Int64 = imageRowToCodewordIndex(Int64(bottom.getY()))
@@ -67,12 +61,7 @@ open class DetectionResultRowIndicatorColumn <: DetectionResultColumn {
                     rowDifference > codewordsRow) {
                     codewords[codewordsRow] = Codeword()
                 } else {
-                    var checkedRows: Int64
-                    if (maxRowHeight > 2) {
-                        checkedRows = (maxRowHeight - 2) * rowDifference
-                    } else {
-                        checkedRows = rowDifference
-                    }
+                    var checkedRows: Int64 = exadjustCompleteIndicatorColumnRowNumbers3(maxRowHeight, rowDifference)
                     var closePreviousCodewordFound: Bool = checkedRows >= codewordsRow
                     var i = 1;
                     while (i < checkedRows && !closePreviousCodewordFound) {
@@ -94,6 +83,32 @@ open class DetectionResultRowIndicatorColumn <: DetectionResultColumn {
                 continue
             }
         }
+    }
+
+    func exadjustCompleteIndicatorColumnRowNumbers(boundingBox: BoundingBox): ResultPoint {
+        var top: ResultPoint = boundingBox.getTopRight()
+        if (isLeft_) {
+            top = boundingBox.getTopLeft()
+        }
+        return top
+    }
+
+    func exadjustCompleteIndicatorColumnRowNumbers2(boundingBox: BoundingBox): ResultPoint {
+        var bottom: ResultPoint = boundingBox.getBottomRight()
+        if (isLeft_) {
+            bottom = boundingBox.getBottomLeft()
+        }
+        return bottom
+    }
+
+    func exadjustCompleteIndicatorColumnRowNumbers3(maxRowHeight: Int64, rowDifference: Int64): Int64 {
+        var checkedRows: Int64
+        if (maxRowHeight > 2) {
+            checkedRows = (maxRowHeight - 2) * rowDifference
+        } else {
+            checkedRows = rowDifference
+        }
+        return checkedRows
     }
 
     func getRowHeights(): Array<Int64> {

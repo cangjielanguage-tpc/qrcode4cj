@@ -19,28 +19,8 @@ public class ECIEncoderSet {
      * code. When specified, it is considered an error to pass it as argument to the methods canEncode() or encode().
      */
     public init(stringToEncodeIn: UTF32String, priorityCharset: MyCharset, fnc1: Int64) {
-        let names = [
-            "IBM437",
-            "ISO-8859-2",
-            "ISO-8859-3",
-            "ISO-8859-4",
-            "ISO-8859-5",
-            //"ISO-8859-6",
-            "ISO-8859-7",
-            //"ISO-8859-8",
-            "ISO-8859-9",
-            //"ISO-8859-10",
-            //"ISO-8859-11",
-            "ISO-8859-13",
-            //"ISO-8859-14",
-            "ISO-8859-15",
-            "ISO-8859-16",
-            "windows-1250",
-            "windows-1251",
-            "windows-1252",
-            "windows-1256",
-            "Shift_JIS"
-        ]
+        let names = ["IBM437", "ISO-8859-2", "ISO-8859-3", "ISO-8859-4", "ISO-8859-5", "ISO-8859-7", "ISO-8859-9",
+        "ISO-8859-13", "ISO-8859-16", "windows-1250", "windows-1251", "windows-1252", "windows-1256", "Shift_JIS"]
         for (i in 0..names.size) {
             if (CharacterSetECI.getCharacterSetECIByName(names[i]).flag) {
                 try {
@@ -63,35 +43,7 @@ public class ECIEncoderSet {
         }
 
         //Walk over the input string and see if all characters can be encoded with the list of encoders 
-        for (i in 0..stringToEncodeIn.charSize) {
-            var canEncode: Bool = false;
-            for (j in 0..neededEncoders.size) {
-                var c: Char = stringToEncodeIn[i];
-                if (c.hashCode() == fnc1 || neededEncoders[j].canEncode(c)) {
-                    canEncode = true
-                    break
-                }
-            }
-
-            if (!canEncode) {
-                //for the character at position i we don't yet have an encoder in the list
-                for (j in 0..ENCODERS.size) {
-                    if (ENCODERS[j].canEncode(stringToEncodeIn[i])) {
-                        //Good, we found an encoder that can encode the character. We add him to the list and continue scanning
-                        //the input
-                        neededEncoders.append(ENCODERS[j]);
-                        canEncode = true
-                        break
-                    }
-                }
-            }
-
-            if (!canEncode) {
-                //The character is not encodeable by any of the single byte encoders so we remember that we will need a
-                //Unicode encoder.
-                needUnicodeEncoder = true.toString()
-            }
-        }
+        needUnicodeEncoder = exinit(stringToEncodeIn, neededEncoders, needUnicodeEncoder, fnc1)
 
         if (neededEncoders.size == 1 && needUnicodeEncoder == false.toString()) {
             //the entire input can be encoded by the ISO-8859-1 encoder
@@ -127,6 +79,41 @@ public class ECIEncoderSet {
         if (!encoders[0].charset().equals(StandardCharsets.ISO_8859_1)) {
             throw Exception()
         }
+    }
+
+    private static func exinit(stringToEncodeIn: UTF32String, neededEncoders: ArrayList<CharsetEncoder>,
+        needUnicodeEncoder: String, fnc1: Int64) {
+        var needUnicodeEncoder_p = needUnicodeEncoder
+        for (i in 0..stringToEncodeIn.charSize) {
+            var canEncode: Bool = false;
+            for (j in 0..neededEncoders.size) {
+                var c: Char = stringToEncodeIn[i];
+                if (c.hashCode() == fnc1 || neededEncoders[j].canEncode(c)) {
+                    canEncode = true
+                    break
+                }
+            }
+
+            if (!canEncode) {
+                //for the character at position i we don't yet have an encoder in the list
+                for (j in 0..ENCODERS.size) {
+                    if (ENCODERS[j].canEncode(stringToEncodeIn[i])) {
+                        //Good, we found an encoder that can encode the character. We add him to the list and continue scanning
+                        //the input
+                        neededEncoders.append(ENCODERS[j]);
+                        canEncode = true
+                        break
+                    }
+                }
+            }
+
+            if (!canEncode) {
+                //The character is not encodeable by any of the single byte encoders so we remember that we will need a
+                //Unicode encoder.
+                needUnicodeEncoder_p = true.toString()
+            }
+        }
+        return needUnicodeEncoder_p
     }
 
     public func length(): Int64 {

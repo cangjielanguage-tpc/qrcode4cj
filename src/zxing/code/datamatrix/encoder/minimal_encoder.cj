@@ -149,20 +149,6 @@ public class Edge {
             Mode.ASCII
         }
 
-        /*
-         * Switching modes
-         * ASCII -> C40: latch 230
-         * ASCII -> TEXT: latch 239
-         * ASCII -> X12: latch 238
-         * ASCII -> EDF: latch 240
-         * ASCII -> B256: latch 231
-         * C40 -> ASCII: word(c1,c2,c3), 254
-         * TEXT -> ASCII: word(c1,c2,c3), 254
-         * X12 -> ASCII: word(c1,c2,c3), 254
-         * EDIFACT -> ASCII: Unlatch character,0,0,0 or c1,Unlatch character,0,0 or c1,c2,Unlatch character,0 or
-         * c1,c2,c3,Unlatch character
-         * B256 -> ASCII: without latch after n bytes
-         */
         match (mode) {
             case ASCII =>
                 size++
@@ -176,38 +162,7 @@ public class Edge {
                     size++
                     // unlatch 254 to ASCII
                 }
-            case B256 =>
-                size++
-                if (previousMode != Mode.B256) {
-                    size++
-                //byte count
-                } else {
-                    var cnt: Int64 = 0;
-                    var current: ?Edge = this
-                    var flag: Bool = false;
-
-                    while ((cnt == 0 && this.mode == Mode.B256 && cnt <= 250) ||
-                            current.getOrThrow().mode == Mode.B256 && cnt <= 250) {
-                        cnt++
-                        current = current.getOrThrow().previous
-                        if (let Some(c) <- current) {}
-                        else {
-                            break
-                        }
-                    }
-
-                    if (cnt == 250) {
-                        size++
-                        //extra byte count
-                    }
-                }
-                if (previousMode == Mode.ASCII) {
-                    size++
-                //latch to B256
-                } else if (previousMode == Mode.C40 || previousMode == Mode.TEXT || previousMode == Mode.X12) {
-                    size += 2
-                    //unlatch to ASCII, latch to B256
-                }
+            case B256 => size = exinit1(size, previousMode, this, this.mode)
             case C40 | TEXT | X12 =>
                 if (mode == Mode.X12) {
                     size += 2
@@ -224,17 +179,57 @@ public class Edge {
                     size += 2
                     //unlatch 254 to ASCII followed by latch to this mode
                 }
-            case EDF =>
-                size += 3
-                if (previousMode == Mode.ASCII || previousMode == Mode.B256) {
-                    size++
-                //additional byte for latch start ASCII to this mode
-                } else if (previousMode == Mode.C40 || previousMode == Mode.TEXT || previousMode == Mode.X12) {
-                    size += 2
-                    //unlatch 254 to ASCII followed by latch to this mode
-                }
+            case EDF => size = exinit2(size, previousMode)
         }
         cachedTotalSize = size
+    }
+
+    private static func exinit1(size: Int64, previousMode: Mode, val: ?Edge, mode: Mode): Int64 {
+        var size_p = size
+        size_p++
+        if (previousMode != Mode.B256) {
+            size_p++
+        //byte count
+        } else {
+            var cnt: Int64 = 0;
+            var current: ?Edge = val
+            var flag: Bool = false;
+
+            while ((cnt == 0 && mode == Mode.B256 && cnt <= 250) || current.getOrThrow().mode == Mode.B256 && cnt <= 250) {
+                cnt++
+                current = current.getOrThrow().previous
+                if (let Some(c) <- current) {}
+                else {
+                    break
+                }
+            }
+
+            if (cnt == 250) {
+                size_p++
+                //extra byte count
+            }
+        }
+        if (previousMode == Mode.ASCII) {
+            size_p++
+        //latch to B256
+        } else if (previousMode == Mode.C40 || previousMode == Mode.TEXT || previousMode == Mode.X12) {
+            size_p += 2
+            //unlatch to ASCII, latch to B256
+        }
+        return size_p
+    }
+
+    private static func exinit2(size: Int64, previousMode: Mode): Int64 {
+        var size_p = size
+        size_p += 3
+        if (previousMode == Mode.ASCII || previousMode == Mode.B256) {
+            size_p++
+        //additional byte for latch start ASCII to this mode
+        } else if (previousMode == Mode.C40 || previousMode == Mode.TEXT || previousMode == Mode.X12) {
+            size_p += 2
+            //unlatch 254 to ASCII followed by latch to this mode
+        }
+        return size_p
     }
 
     // does not count beyond 250
@@ -675,51 +670,8 @@ public class Result {
         if (let Some(c) <- current) {
             currentFlag = true
         }
-        while (currentFlag) {
-            size += Result.prepend(current.getOrThrow().getDataBytes(), bytesAL)
-
-            if (let Some(p) <- current.getOrThrow().previous) {
-                if (current.getOrThrow().getPreviousStartMode() != current.getOrThrow().getMode()) {
-                    if (current.getOrThrow().getMode() == Mode.B256) {
-                        if (size <= 249) {
-                            bytesAL.insert(0, UInt8(size))
-                            size++
-                        } else {
-                            bytesAL.insert(0, UInt8(size % 250));
-                            bytesAL.insert(0, UInt8(size / 250 + 249));
-                            size += 2
-                        }
-                        randomizePostfixLength.append(bytesAL.size);
-                        randomizeLengths.append(size);
-                    }
-                    prepend(current.getOrThrow().getLatchBytes(), bytesAL);
-                    size = 0
-                }
-            } else {
-                if (current.getOrThrow().getMode() == Mode.B256) {
-                    if (size <= 249) {
-                        bytesAL.insert(0, UInt8(size))
-                        size++
-                    } else {
-                        bytesAL.insert(0, UInt8(size % 250));
-                        bytesAL.insert(0, UInt8(size / 250 + 249));
-                        size += 2
-                    }
-                    randomizePostfixLength.append(bytesAL.size);
-                    randomizeLengths.append(size);
-                }
-                prepend(current.getOrThrow().getLatchBytes(), bytesAL);
-                size = 0
-            }
-
-            current = current.getOrThrow().previous
-
-            if (let Some(c) <- current) {
-                currentFlag = true
-            } else {
-                currentFlag = false
-            }
-        }
+        (size, currentFlag, current) = exinit(currentFlag, size, bytesAL, randomizePostfixLength, randomizeLengths,
+            current)
         if (input.getMacroId() == 5) {
             size += Result.prepend(Edge.getBytes(236), bytesAL)
         } else if (input.getMacroId() == 6) {
@@ -746,6 +698,59 @@ public class Result {
         for (i in 0..bytes.size) {
             bytes[i] = bytesAL[i]
         }
+    }
+
+    private static func exinit(currentFlag: Bool, size: Int64, bytesAL: ArrayList<UInt8>,
+        randomizePostfixLength: ArrayList<Int64>, randomizeLengths: ArrayList<Int64>, current: ?Edge): (Int64, Bool, ?Edge) {
+        var size_p = size
+        var currentFlag_p = currentFlag
+        var current_p = current
+        while (currentFlag_p) {
+            size_p += Result.prepend(current_p.getOrThrow().getDataBytes(), bytesAL)
+
+            if (let Some(p) <- current_p.getOrThrow().previous) {
+                if (current_p.getOrThrow().getPreviousStartMode() != current_p.getOrThrow().getMode()) {
+                    if (current_p.getOrThrow().getMode() == Mode.B256) {
+                        if (size_p <= 249) {
+                            bytesAL.insert(0, UInt8(size_p))
+                            size_p++
+                        } else {
+                            bytesAL.insert(0, UInt8(size_p % 250));
+                            bytesAL.insert(0, UInt8(size_p / 250 + 249));
+                            size_p += 2
+                        }
+                        randomizePostfixLength.append(bytesAL.size);
+                        randomizeLengths.append(size_p);
+                    }
+                    prepend(current_p.getOrThrow().getLatchBytes(), bytesAL);
+                    size_p = 0
+                }
+            } else {
+                if (current_p.getOrThrow().getMode() == Mode.B256) {
+                    if (size_p <= 249) {
+                        bytesAL.insert(0, UInt8(size_p))
+                        size_p++
+                    } else {
+                        bytesAL.insert(0, UInt8(size_p % 250));
+                        bytesAL.insert(0, UInt8(size_p / 250 + 249));
+                        size_p += 2
+                    }
+                    randomizePostfixLength.append(bytesAL.size);
+                    randomizeLengths.append(size_p);
+                }
+                prepend(current_p.getOrThrow().getLatchBytes(), bytesAL);
+                size_p = 0
+            }
+
+            current_p = current_p.getOrThrow().previous
+
+            if (let Some(c) <- current_p) {
+                currentFlag_p = true
+            } else {
+                currentFlag_p = false
+            }
+        }
+        return (size_p, currentFlag_p, current_p)
     }
 
     public static func prepend(bytes: Array<UInt8>, into: ArrayList<UInt8>): Int64 {

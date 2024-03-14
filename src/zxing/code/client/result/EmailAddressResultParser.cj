@@ -41,26 +41,9 @@ public open class EmailAddressResultParser <: ResultParser {
             var subject: String = ""
             var body: String = ""
             if (nameValues != HashMap<String, String>()) {
-                if (tos == Array<String>()) {
-                    if (let Some(v) <- nameValues.get("to")) {
-                        var tosString = v
-                        if (!tosString.isEmpty()) {
-                            tos = tosString.split(COMMA.string())
-                        }
-                    }
-                }
-                if (let Some(v) <- nameValues.get("cc")) {
-                    var ccString: String = v
-                    if (!ccString.isEmpty()) {
-                        ccs = ccString.split(COMMA.string())
-                    }
-                }
-                if (let Some(v) <- nameValues.get("bcc")) {
-                    var bccString: String = v
-                    if (!bccString.isEmpty()) {
-                        bccs = bccString.split(COMMA.string())
-                    }
-                }
+                tos = exparse(tos, nameValues)
+                ccs = exparse2(ccs, nameValues)
+                bccs = exparse3(bccs, nameValues)
                 if (let Some(v) <- nameValues.get("subject")) {
                     subject = v
                 }
@@ -76,5 +59,37 @@ public open class EmailAddressResultParser <: ResultParser {
 
             return EmailAddressParsedResult(rawText.toString());
         }
+    }
+
+    public func exparse(tos: Array<String>, nameValues: HashMap<String, String>): Array<String> {
+        if (tos == Array<String>()) {
+            if (let Some(v) <- nameValues.get("to")) {
+                var tosString = v
+                if (!tosString.isEmpty()) {
+                    return tosString.split(COMMA.string())
+                }
+            }
+        }
+        return tos
+    }
+
+    public func exparse2(ccs: Array<String>, nameValues: HashMap<String, String>): Array<String> {
+        if (let Some(v) <- nameValues.get("cc")) {
+            var ccString: String = v
+            if (!ccString.isEmpty()) {
+                return ccString.split(COMMA.string())
+            }
+        }
+        return ccs
+    }
+
+    public func exparse3(bccs: Array<String>, nameValues: HashMap<String, String>): Array<String> {
+        if (let Some(v) <- nameValues.get("bcc")) {
+            var bccString: String = v
+            if (!bccString.isEmpty()) {
+                return bccString.split(COMMA.string())
+            }
+        }
+        return bccs
     }
 }

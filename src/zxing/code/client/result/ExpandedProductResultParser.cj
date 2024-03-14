@@ -21,19 +21,8 @@ public open class ExpandedProductResultParser <: ResultParser {
         }
         var rawText: UTF32String = getMassagedText(result);
 
-        var productID: String = "";
-        var sscc: String = "";
-        var lotNumber: String = "";
-        var productionDate: String = "";
-        var packagingDate: String = "";
-        var bestBeforeDate: String = "";
-        var expirationDate: String = "";
-        var weight: String = "";
-        var weightType: String = "";
-        var weightIncrement: String = "";
-        var price: String = "";
-        var priceIncrement: String = "";
-        var priceCurrency: String = "";
+        var (productID, sscc, lotNumber, productionDate, packagingDate, bestBeforeDate, expirationDate, weight, weightType, weightIncrement, price, priceIncrement, priceCurrency) = ("",
+            "", "", "", "", "", "", "", "", "", "", "", "")
         var uncommonAIs: HashMap<String, String> = HashMap<String, String>();
 
         var i: Int64 = 0;
@@ -72,9 +61,8 @@ public open class ExpandedProductResultParser <: ResultParser {
                     weight = value.toString()
                     weightType = ExpandedProductParsedResult.POUND
                     weightIncrement = ai.substring(3).toString()
-                case "3920" | "3921" | "3922" | "3923" =>
-                    price = value.toString()
-                    priceIncrement = ai.substring(3).toString()
+                case "3920" | "3921" | "3922" | "3923" => (price, priceIncrement) = (value.toString(),
+                    ai.substring(3).toString())
                 case "3930" | "3931" | "3932" | "3933" =>
                     if (value.charSize < 4) {
                         // The value must have more of 3 symbols (3 for currency and

@@ -469,28 +469,14 @@ public class RSSExpandedReader <: AbstractRSSReader {
 
         var width: Int64 = row.getSize();
 
-        var rowOffset: Int64
-        if (forcedOffset >= 0) {
-            rowOffset = forcedOffset
-        } else if (previousPairs.isEmpty()) {
-            rowOffset = 0
-        } else {
-            var lastPair: ExpandedPair = previousPairs.get(previousPairs.size - 1).getOrThrow();
-            rowOffset = lastPair.getFinderPattern().getOrThrow().getStartEnd()[1]
-        }
+        var rowOffset: Int64 = exfindNextPair(forcedOffset, previousPairs)
         var searchingEvenPair: Bool = previousPairs.size % 2 != 0
         if (startFromEven) {
             searchingEvenPair = !searchingEvenPair
         }
 
         var isWhite: Bool = false;
-        while (rowOffset < width) {
-            isWhite = !row.get(rowOffset)
-            if (!isWhite) {
-                break
-            }
-            rowOffset++
-        }
+        (rowOffset, isWhite) = exfindNextPair2(rowOffset, isWhite, width, row)
 
         var counterPosition: Int64 = 0;
         var patternStart: Int64 = rowOffset
@@ -528,6 +514,32 @@ public class RSSExpandedReader <: AbstractRSSReader {
             }
         }
         throw NotFoundException.getNotFoundInstance();
+    }
+
+    private func exfindNextPair2(rowOffset: Int64, isWhite: Bool, width: Int64, row: BitArray): (Int64, Bool) {
+        var rowOffset_p = rowOffset
+        var isWhite_p = isWhite
+        while (rowOffset_p < width) {
+            isWhite_p = !row.get(rowOffset_p)
+            if (!isWhite_p) {
+                break
+            }
+            rowOffset_p++
+        }
+        return (rowOffset_p, isWhite_p)
+    }
+
+    private func exfindNextPair(forcedOffset: Int64, previousPairs: ArrayList<ExpandedPair>): Int64 {
+        var rowOffset: Int64
+        if (forcedOffset >= 0) {
+            rowOffset = forcedOffset
+        } else if (previousPairs.isEmpty()) {
+            rowOffset = 0
+        } else {
+            var lastPair: ExpandedPair = previousPairs.get(previousPairs.size - 1).getOrThrow();
+            rowOffset = lastPair.getFinderPattern().getOrThrow().getStartEnd()[1]
+        }
+        return rowOffset
     }
 
     private static func reverseCounters(counters: Array<Int64>) {
@@ -723,53 +735,9 @@ public class RSSExpandedReader <: AbstractRSSReader {
         } else if (evenSum < 4) {
             incrementEven = true
         }
-        var mismatch: Int64 = oddSum + evenSum - numModules
-        var oddParityBad: Bool = (oddSum & 0x01) == 1
-        var evenParityBad: Bool = (evenSum & 0x01) == 0
-        match (mismatch) {
-            case 1 => if (oddParityBad) {
-                if (evenParityBad) {
-                    throw NotFoundException.getNotFoundInstance();
-                }
-                decrementOdd = true
-            } else {
-                if (!evenParityBad) {
-                    throw NotFoundException.getNotFoundInstance();
-                }
-                decrementEven = true
-            }
-            case -1 => if (oddParityBad) {
-                if (evenParityBad) {
-                    throw NotFoundException.getNotFoundInstance();
-                }
-                incrementOdd = true
-            } else {
-                if (!evenParityBad) {
-                    throw NotFoundException.getNotFoundInstance();
-                }
-                incrementEven = true
-            }
-            case 0 => if (oddParityBad) {
-                if (!evenParityBad) {
-                    throw NotFoundException.getNotFoundInstance();
-                }
 
-                // Both bad
-                if (oddSum < evenSum) {
-                    incrementOdd = true
-                    decrementEven = true
-                } else {
-                    decrementOdd = true
-                    incrementEven = true
-                }
-            } else {
-                if (evenParityBad) {
-                    throw NotFoundException.getNotFoundInstance();
-                }
-                // Nothing to do!
-            }
-            case _ => throw NotFoundException.getNotFoundInstance();
-        }
+        (decrementOdd, decrementEven, incrementOdd, incrementEven) = exadjustOddEvenCounts(oddSum, evenSum, numModules,
+            decrementOdd, decrementEven, incrementOdd, incrementEven)
 
         if (incrementOdd) {
             if (decrementOdd) {
@@ -789,5 +757,59 @@ public class RSSExpandedReader <: AbstractRSSReader {
         if (decrementEven) {
             decrement(this.getEvenCounts(), this.getEvenRoundingErrors());
         }
+    }
+
+    private func exadjustOddEvenCounts(oddSum: Int64, evenSum: Int64, numModules: Int64, decrementOdd: Bool,
+        decrementEven: Bool, incrementOdd: Bool, incrementEven: Bool) {
+        var (decrementOdd_p, decrementEven_p, incrementOdd_p, incrementEven_p) = (decrementOdd, decrementEven,
+            incrementOdd, incrementEven)
+        var mismatch: Int64 = oddSum + evenSum - numModules
+        var oddParityBad: Bool = (oddSum & 0x01) == 1
+        var evenParityBad: Bool = (evenSum & 0x01) == 0
+        match (mismatch) {
+            case 1 => if (oddParityBad) {
+                if (evenParityBad) {
+                    throw NotFoundException.getNotFoundInstance();
+                }
+                decrementOdd_p = true
+            } else {
+                if (!evenParityBad) {
+                    throw NotFoundException.getNotFoundInstance();
+                }
+                decrementEven_p = true
+            }
+            case -1 => if (oddParityBad) {
+                if (evenParityBad) {
+                    throw NotFoundException.getNotFoundInstance();
+                }
+                incrementOdd_p = true
+            } else {
+                if (!evenParityBad) {
+                    throw NotFoundException.getNotFoundInstance();
+                }
+                incrementEven_p = true
+            }
+            case 0 => if (oddParityBad) {
+                if (!evenParityBad) {
+                    throw NotFoundException.getNotFoundInstance();
+                }
+
+                // Both bad
+                if (oddSum < evenSum) {
+                    incrementOdd_p = true
+                    decrementEven_p = true
+                } else {
+                    decrementOdd_p = true
+                    incrementEven_p = true
+                }
+            } else {
+                if (evenParityBad) {
+                    throw NotFoundException.getNotFoundInstance();
+                }
+                // Nothing to do!
+            }
+            case _ => throw NotFoundException.getNotFoundInstance();
+        }
+        return (decrementOdd_p, decrementEven_p, incrementOdd_p, incrementEven_p)
     }
 }

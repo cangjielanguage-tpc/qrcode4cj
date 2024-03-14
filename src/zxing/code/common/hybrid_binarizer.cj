@@ -179,15 +179,19 @@ public class HybridBinarizer <: GlobalHistogramBinarizer {
                     offset += width
                 }
 
-                var average = sum >> (BLOCK_SIZE_POWER * 2)
-                if (max - min <= MIN_DYNAMIC_RANGE) {
-                    average = getaverage(blackPoints, min, x, y)
-                }
-                blackPoints[y][x] = average
+                excalculateBlackPoints(sum,max,min,x,y,blackPoints)
             }
         }
 
         blackPoints
+    }
+
+    static func excalculateBlackPoints(sum: Int64,max: Int64,min: Int64,x: Int64,y: Int64,blackPoints: Array<Array<Int64>>) {
+        var average = sum >> (BLOCK_SIZE_POWER * 2)
+        if (max - min <= MIN_DYNAMIC_RANGE) {
+            average = getaverage(blackPoints, min, x, y)
+        }
+        blackPoints[y][x] = average
     }
 
     static func getaverage(blackPoints: Array<Array<Int64>>, min: Int64, x: Int64, y: Int64) {

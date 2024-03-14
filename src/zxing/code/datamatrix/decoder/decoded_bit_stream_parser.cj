@@ -312,11 +312,7 @@ public class DecodedBitStreamParser {
 
                 return Mode.PAD_ENCODE;
             } else if (oneByte <= 229) { // 2-digit data 00-99 (Numeric Value + 130)
-                var value: Int64 = oneByte - 130
-                if (value < 10) { // pad with '0' for single digit values
-                    result.append('0');
-                }
-                result.append(value);
+                var value: Int64 = exdecodeAsciiSegment(oneByte, result)
             } else {
                 match (oneByte) {
                     case 230 => return Mode.C40_ENCODE;
@@ -358,6 +354,15 @@ public class DecodedBitStreamParser {
         } while (bits.available() > 0)
 
         return Mode.ASCII_ENCODE;
+    }
+
+    private static func exdecodeAsciiSegment(oneByte: Int64, result: ECIStringBuilder): Int64 {
+        var value: Int64 = oneByte - 130
+        if (value < 10) { // pad with '0' for single digit values
+            result.append('0');
+        }
+        result.append(value);
+        return value
     }
 
     /**
