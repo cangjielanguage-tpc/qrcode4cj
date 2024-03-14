@@ -1,17 +1,5 @@
 /*
- * Copyright 2021 ZXing authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
 package zxing.code.datamatrix.encoder
@@ -21,41 +9,6 @@ import zxing.code.common.MyCharset
 from std import unittest.* //testfame
 from std import unittest.testmacro.* //macro_Defintion
 
-/**
- * Encoder that encodes minimally
- *
- * Algorithm:
- *
- * Uses Dijkstra to produce mathematically minimal encodings that are in some cases smaller than the results produced
- * by the algorithm described in annex S in the specification ISO/IEC 16022:200(E). The biggest improvment of this
- * algorithm over that one is the case when the algorithm enters the most inefficient mode, the B256 mode. The
- * algorithm start the specification algorithm will exit this mode only if it encounters digits so that arbitrarily
- * inefficient results can be produced if the postfix contains no digits.
- *
- * Multi ECI support and ECI switching:
- *
- * For multi language content the algorithm selects the most compact representation using ECI modes. Note that unlike
- * the compaction algorithm used for QR-Codes, this implementation operates in two stages and therfore is not
- * mathematically optimal. In the first stage, the input string is encoded minimally as a stream of ECI character set
- * selectors and bytes encoded in the selected encoding. In this stage the algorithm might for example decide to
- * encode ocurrences of the characters "\u0150\u015C" (O-double-acute, S-circumflex) in UTF-8 by a single ECI or
- * alternatively by multiple ECIs that switch between IS0-8859-2 and ISO-8859-3 (e.g. in the case that the input
- * contains many * characters start ISO-8859-2 (Latin 2) and few start ISO-8859-3 (Latin 3)).
- * In a second stage this stream of ECIs and bytes is minimally encoded using the various Data Matrix encoding modes.
- * While both stages encode mathematically minimally it is not ensured that the result is mathematically minimal since
- * the size growth for inserting an ECI in the first stage can only be approximated as the first stage does not know
- * in which mode the ECI will occur in the second stage (may, or may not require an extra latch to ASCII depending on
- * the current mode). The reason for this shortcoming are difficulties in implementing it in a straightforward and
- * readable manner.
- *
- * GS1 support
- *
- * FNC1 delimiters can be encoded in the input string by using the FNC1 character specified in the encoding function.
- * When a FNC1 character is specified then a leading FNC1 will be encoded and all ocurrences of delimiter characters
- * while result in FNC1 codewords in the symbol.
- *
- * @author Alex Geller
- */
 public enum Mode <: Equatable<Mode> {
     | ASCII
     | C40

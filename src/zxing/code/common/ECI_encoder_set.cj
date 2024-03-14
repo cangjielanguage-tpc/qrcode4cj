@@ -1,35 +1,9 @@
 /*
- * Copyright 2021 ZXing authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
 package zxing.code.common
 
-/**
- * Set of CharsetEncoders for a given input string
- *
- * Invariants:
- * - The list contains only encoders from CharacterSetECI (list is shorter then the list of encoders available on
- * the platform for which ECI values are defined).
- * - The list contains encoders at least one encoder for every character in the input.
- * - The first encoder in the list is always the ISO-8859-1 encoder even of no character in the input can be encoded
- * by it.
- * - If the input contains a character that is not in ISO-8859-1 then the last two entries in the list will be the
- * UTF-8 encoder and the UTF-16BE encoder.
- *
- * @author Alex Geller
- */
 public class ECIEncoderSet {
     // List of encoders that potentially encode characters not in ISO-8859-1 in one byte.
     private static let ENCODERS: ArrayList<CharsetEncoder> = ArrayList<CharsetEncoder>();

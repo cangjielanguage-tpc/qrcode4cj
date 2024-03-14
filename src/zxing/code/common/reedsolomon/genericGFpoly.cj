@@ -1,47 +1,17 @@
 /*
- * Copyright 2007 ZXing authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-
 package zxing.code.common.reedsolomon
 
 from std import collection.*
 from std import core.*
 
-/**
- * <p>Represents a polynomial whose coefficients are elements of a GF.
- * Instances of this class are immutable.</p>
- *
- * <p>Much credit is due to William Rucklidge since portions of this code are an indirect
- * port of his C++ Reed-Solomon implementation.</p>
- *
- * @author Sean Owen
- */
+
 public class GenericGFPoly <: Equatable<GenericGFPoly> & ToString {
     private var field: ?GenericGF = None
     private var coefficients = Array<Int64>()
     public var flag: Bool = false
 
-    /**
-     * @param field the {@link GenericGF} instance representing the field to use
-     * to perform computations
-     * @param coefficients coefficients as ints representing elements of GF(size), arranged
-     * from most significant (highest-power term) coefficient to least significant
-     * @throws IllegalArgumentException if argument is null or empty,
-     * or if leading coefficient is 0 and this is not a
-     * constant polynomial (that is, it is not the monomial "0")
-     */
     public init(field: GenericGF, coefficients: Array<Int64>) {
         if (coefficients.size == 0) {
             throw IllegalArgumentException()
