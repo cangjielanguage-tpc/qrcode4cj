@@ -1,25 +1,10 @@
 /*
- * Copyright 2008 ZXing authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License")
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS| * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
 package zxing.code.common
 
-/**
- * These are a set of hints that you may pass to Writers to specify their behavior.
- *
- * @author dswitkin@google.com (Daniel Switkin)
- */
+
 public enum EncodeHintType <: Hashable & Equatable<EncodeHintType> {
     /**
      * Specifies what degree of error correction to use, for example in QR Codes.
@@ -39,20 +24,7 @@ public enum EncodeHintType <: Hashable & Equatable<EncodeHintType> {
      * Specifies the matrix shape for Data Matrix (type {@link com.google.zxing.datamatrix.encoder.SymbolShapeHint})
      */
     | DATA_MATRIX_SHAPE
-    /**
-     * Specifies whether to use compact mode for Data Matrix (type {@link Boolean}, or "true" or "false"
-     * {@link String } value).
-     * The compact encoding mode also supports the encoding of characters that are not in the ISO-8859-1
-     * character set via ECIs.
-     * Please note that in that case, the most compact character encoding is chosen for characters in
-     * the input that are not in the ISO-8859-1 character set. Based on experience, some scanners do not
-     * support encodings like cp-1256 (Arabic). In such cases the encoding can be forced to UTF-8 by
-     * means of the {@link #CHARACTER_SET} encoding hint.
-     * Compact encoding also provides GS1-FNC1 support when {@link #GS1_FORMAT} is selected. In this case
-     * group-separator character (ASCII 29 decimal) can be used to encode the positions of FNC1 codewords
-     * for the purpose of delimiting AIs.
-     * This option and {@link #FORCE_C40} are mutually exclusive.
-     */
+
     | DATA_MATRIX_COMPACT
     /**
      * Specifies a minimum barcode size (type {@link Dimension}). Only applicable to Data Matrix now.

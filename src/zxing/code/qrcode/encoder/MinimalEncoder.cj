@@ -1,17 +1,5 @@
 /*
- * Copyright 2021 ZXing authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
 package zxing.code.qrcode.encoder
@@ -22,33 +10,6 @@ import zxing.code.common.WriterException
 import zxing.code.common.MyCharset
 from charset import charset.tools.UTF32String
 
-/**
- * Encoder that encodes minimally
- *
- * Algorithm:
- *
- * The eleventh commandment was "Thou Shalt Compute" or "Thou Shalt Not Compute" - I forget which (Alan Perilis).
- *
- * This implementation computes. As an alternative, the QR-Code specification suggests heuristics like this one:
- *
- * If initial input data is in the exclusive subset of the Alphanumeric character set AND if there are less than
- * [6,7,8] characters followed by data from the remainder of the 8-bit byte character set, THEN select the 8-
- * bit byte mode ELSE select Alphanumeric mode;
- *
- * This is probably right for 99.99% of cases but there is at least this one counter example: The string "AAAAAAa"
- * encodes 2 bits smaller as ALPHANUMERIC(AAAAAA), BYTE(a) than by encoding it as BYTE(AAAAAAa).
- * Perhaps that is the only counter example but without having proof, it remains unclear.
- *
- * ECI switching:
- *
- * In multi language content the algorithm selects the most compact representation using ECI modes.
- * For example the most compact representation of the string "\u0150\u015C" (O-double-acute, S-circumflex) is
- * ECI(UTF-8), BYTE(\u0150\u015C) while prepending one or more times the same leading character as in
- * "\u0150\u0150\u015C", the most compact representation uses two ECIs so that the string is encoded as
- * ECI(ISO-8859-2), BYTE(\u0150\u0150), ECI(ISO-8859-3), BYTE(\u015C).
- *
- * @author Alex Geller
- */
 enum VersionSize {
     | SMALL(String) //("version 1-9")
     | MEDIUM(String) //("version 10-26")
