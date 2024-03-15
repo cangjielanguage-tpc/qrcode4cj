@@ -83,29 +83,14 @@ public open class DefaultPlacement {
             }
 
             // sweep upward diagonally, inserting successive characters...
-            do {
-                if ((row < numrows) && (col >= 0) && noBit(col, row)) {
-                    utah(row, col, pos);
-                    pos++
-                }
-                row -= 2
-                col += 2
-            } while (row >= 0 && (col < numcols))
+            (row, col, pos) = explace2(row, col, pos)
             row++
             col += 3
+            (row, col, pos) = explace(row, col, pos)
 
-            // and then sweep downward diagonally, inserting successive characters, ...
-            do {
-                if ((row >= 0) && (col < numcols) && noBit(col, row)) {
-                    utah(row, col, pos);
-                    pos++
-                }
-                row += 2
-                col -= 2
-            } while ((row < numrows) && (col >= 0))
             row += 3
             col++
-            // ...until the entire array is scanned
+        // ...until the entire array is scanned
         } while ((row < numrows) || (col < numcols))
 
         // Lastly, if the lower right-hand corner is untouched, fill in fixed pattern
@@ -113,6 +98,35 @@ public open class DefaultPlacement {
             setBit(numcols - 1, numrows - 1, true);
             setBit(numcols - 2, numrows - 2, true);
         }
+    }
+    func explace2(row: Int64, col: Int64, pos: Int64): (Int64, Int64, Int64) {
+        var row_p = row
+        var col_p = col
+        var pos_p = pos
+        do {
+            if ((row_p < numrows) && (col_p >= 0) && noBit(col_p, row_p)) {
+                utah(row_p, col_p, pos_p);
+                pos_p++
+            }
+            row_p -= 2
+            col_p += 2
+        } while (row_p >= 0 && (col_p < numcols))
+        return (row_p, col_p, pos_p)
+    }
+
+    func explace(row: Int64, col: Int64, pos: Int64): (Int64, Int64, Int64) {
+        var row_p = row
+        var col_p = col
+        var pos_p = pos
+        do {
+            if ((row_p >= 0) && (col_p < numcols) && noBit(col_p, row_p)) {
+                utah(row_p, col_p, pos_p);
+                pos_p++
+            }
+            row_p += 2
+            col_p -= 2
+        } while ((row_p < numrows) && (col_p >= 0))
+        return (row_p, col_p, pos_p)
     }
 
     private func module(row: Int64, col: Int64, pos: Int64, bit: Int64) {

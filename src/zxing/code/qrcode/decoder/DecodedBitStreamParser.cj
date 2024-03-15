@@ -127,7 +127,8 @@ public class DecodedBitStreamParser {
             if (let Some(c) <- currentCharacterSetECI) {
                 if (hasFNC1first) {
                     symbologyModifier = 4
-                } else if (hasFNC1second) {
+                }
+                if (!hasFNC1first && hasFNC1second) {
                     symbologyModifier = 6
                 } else {
                     symbologyModifier = 2
@@ -135,7 +136,8 @@ public class DecodedBitStreamParser {
             } else {
                 if (hasFNC1first) {
                     symbologyModifier = 3
-                } else if (hasFNC1second) {
+                }
+                if (!hasFNC1first && hasFNC1second) {
                     symbologyModifier = 5
                 } else {
                     symbologyModifier = 1

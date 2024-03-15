@@ -199,10 +199,9 @@ public class RSS14Reader <: AbstractRSSReader {
             }
         }
 
-        var numModules: Int64 = if (outsideChar) {
-            16
-        } else {
-            15
+        var numModules: Int64 = 15
+        if (outsideChar) {
+            numModules = 16
         }
         var elementWidth: Float32 = Float32(GetArraySum(counters)) / Float32(numModules)
 
@@ -218,7 +217,8 @@ public class RSS14Reader <: AbstractRSSReader {
             // Round
             if (count < 1) {
                 count = 1
-            } else if (count > 8) {
+            }
+            if (count > 8) {
                 count = 8
             }
             var offset: Int64 = i / 2

@@ -302,19 +302,14 @@ public open class FinderPatternFinder {
 
         // Start counting up, left from center finding black center mass
         var i: Int64 = 0;
-        while (centerI >= i && centerJ >= i && image.get(centerJ - i, centerI - i)) {
-            stateCount[2] += 1
-            i++
-        }
+        i = excrossCheckDiagonal1(i, centerI, centerJ, stateCount)
+
         if (stateCount[2] == 0) {
             return false;
         }
 
         // Continue up, left finding white space
-        while (centerI >= i && centerJ >= i && !image.get(centerJ - i, centerI - i)) {
-            stateCount[1] += 1
-            i++
-        }
+        i = excrossCheckDiagonal2(i, centerI, centerJ, stateCount)
         if (stateCount[1] == 0) {
             return false;
         }
@@ -357,16 +352,34 @@ public open class FinderPatternFinder {
         return foundPatternDiagonal(stateCount);
     }
 
+    private func excrossCheckDiagonal1(i_p: Int64, centerI: Int64, centerJ: Int64, stateCount: Array<Int64>): Int64 {
+        var i = i_p
+        while (centerI >= i && centerJ >= i && image.get(centerJ - i, centerI - i)) {
+            stateCount[2] += 1
+            i++
+        }
+        return i
+    }
+
+    private func excrossCheckDiagonal2(i_p: Int64, centerI: Int64, centerJ: Int64, stateCount: Array<Int64>): Int64 {
+        var i = i_p
+        while (centerI >= i && centerJ >= i && !image.get(centerJ - i, centerI - i)) {
+            stateCount[1] += 1
+            i++
+        }
+        return i
+    }
+
     /**
-     * <p>After a horizontal scan finds a potential finder pattern, this method
+     * After a horizontal scan finds a potential finder pattern, this method
      * "cross-checks" by scanning down vertically through the center of the possible
-     * finder pattern to see if the same proportion is detected.</p>
+     * finder pattern to see if the same proportion is detected.
      *
      * @param startI row where a finder pattern was detected
      * @param centerJ center of the section that appears to cross a finder pattern
      * @param maxCount maximum reasonable number of modules that should be
      * observed in any reading state, based on the results of the horizontal scan
-     * @return vertical center of finder pattern, or {@link Float#NaN} if not found
+     * @return vertical center of finder pattern
      */
     private func crossCheckVertical(startI: Int64, centerJ: Int64, maxCount: Int64, originalStateCountTotal: Int64): Float64 {
         let image: BitMatrix = this.image;
@@ -380,19 +393,13 @@ public open class FinderPatternFinder {
         if (i < 0) {
             return Float64.NaN;
         }
-        while (i >= 0 && !image.get(centerJ, i) && stateCount[1] <= maxCount) {
-            stateCount[1] += 1
-            i--
-        }
+        i = excrossCheckVertica3(i, maxCount, centerJ, stateCount)
 
         // If already too many modules in this state or ran off the edge:
         if (i < 0 || stateCount[1] > maxCount) {
             return Float64.NaN;
         }
-        while (i >= 0 && image.get(centerJ, i) && stateCount[0] <= maxCount) {
-            stateCount[0] += 1
-            i--
-        }
+        i = excrossCheckVertica4(i, maxCount, centerJ, stateCount)
         if (stateCount[0] > maxCount) {
             return Float64.NaN;
         }
@@ -431,6 +438,24 @@ public open class FinderPatternFinder {
         return returncrossCheckVertical(stateCount, i)
     }
 
+    private func excrossCheckVertica4(i_p: Int64, maxCount: Int64, centerJ: Int64, stateCount: Array<Int64>): Int64 {
+        var i = i_p
+        while (i >= 0 && image.get(centerJ, i) && stateCount[0] <= maxCount) {
+            stateCount[0] += 1
+            i--
+        }
+        return i
+    }
+
+    private func excrossCheckVertica3(i_p: Int64, maxCount: Int64, centerJ: Int64, stateCount: Array<Int64>): Int64 {
+        var i = i_p
+        while (i >= 0 && !image.get(centerJ, i) && stateCount[1] <= maxCount) {
+            stateCount[1] += 1
+            i--
+        }
+        return i
+    }
+
     private func excrossCheckVertical(startI: Int64, centerJ: Int64, stateCount: Array<Int64>): Int64 {
         var i = startI
         while (i >= 0 && image.get(centerJ, i)) {
@@ -463,17 +488,12 @@ public open class FinderPatternFinder {
         if (j < 0) {
             return Float64.NaN;
         }
-        while (j >= 0 && !image.get(j, centerI) && stateCount[1] <= maxCount) {
-            stateCount[1] += 1
-            j--
-        }
+        j = excrossCheckHorizontal2(j, maxCount, centerI, stateCount)
         if (j < 0 || stateCount[1] > maxCount) {
             return Float64.NaN;
         }
-        while (j >= 0 && image.get(j, centerI) && stateCount[0] <= maxCount) {
-            stateCount[0] += 1
-            j--
-        }
+        j = excrossCheckHorizontal3(j, maxCount, centerI, stateCount)
+
         if (stateCount[0] > maxCount) {
             return Float64.NaN;
         }
@@ -509,6 +529,24 @@ public open class FinderPatternFinder {
         }
 
         return returncrossCheckHorizontal(stateCount, j)
+    }
+
+    private func excrossCheckHorizontal3(j_p: Int64, maxCount: Int64, centerI: Int64, stateCount: Array<Int64>): Int64 {
+        var j = j_p
+        while (j >= 0 && image.get(j, centerI) && stateCount[0] <= maxCount) {
+            stateCount[0] += 1
+            j--
+        }
+        return j
+    }
+
+    private func excrossCheckHorizontal2(j_p: Int64, maxCount: Int64, centerI: Int64, stateCount: Array<Int64>): Int64 {
+        var j = j_p
+        while (j >= 0 && !image.get(j, centerI) && stateCount[1] <= maxCount) {
+            stateCount[1] += 1
+            j--
+        }
+        return j
     }
 
     private func excrossCheckHorizontal(startJ: Int64, centerI: Int64, stateCount: Array<Int64>): Int64 {

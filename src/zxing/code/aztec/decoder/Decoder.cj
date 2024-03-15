@@ -316,15 +316,7 @@ public class Decoder {
                             if (endIndex - index < 4 * n) {
                                 break
                             }
-                            while (n > 0) {
-                                n--
-                                var nextDigit: Int64 = readCode(correctedBits, index, 4)
-                                index += 4
-                                if (nextDigit < 2 || nextDigit > 11) {
-                                    throw FormatException.getFormatInstance() // Not a decimal digit
-                                }
-                                eci = eci * 10 + (nextDigit - 2)
-                            }
+                            (n, eci, index) = exgetEncodedData(n, index, correctedBits, eci)
                             var charsetECI: CharacterSetECI = CharacterSetECI.getCharacterSetECIByValue(eci)
 
                             encoding = charsetECI.getCharset()
@@ -362,6 +354,22 @@ public class Decoder {
             throw IllegalArgumentException()
         }
         return String(result)
+    }
+
+    private static func exgetEncodedData(n: Int64, index: Int64, correctedBits: Array<Bool>, eci: Int64) {
+        var n_p = n
+        var eci_p = eci
+        var index_p = index
+        while (n_p > 0) {
+            n_p--
+            var nextDigit: Int64 = readCode(correctedBits, index_p, 4)
+            index_p += 4
+            if (nextDigit < 2 || nextDigit > 11) {
+                throw FormatException.getFormatInstance() // Not a decimal digit
+            }
+            eci_p = eci_p * 10 + (nextDigit - 2)
+        }
+        return (n_p, eci_p, index_p)
     }
 
     /**

@@ -77,15 +77,22 @@ public class MaskUtil {
                 ) || isWhiteHorizontal(arrayY, x + 7, x + 11))) {
                     numPenalties++
                 }
-                if (y + 6 < height && array[y][x] == 1 && array[y + 1][x] == 0 && array[y + 2][x] == 1 &&
-                    array[y + 3][x] == 1 && array[y + 4][x] == 1 && array[y + 5][x] == 0 && array[y + 6][x] == 1 && (isWhiteVertical(
-                    array, x, y - 4, y) || isWhiteVertical(array, x, y + 7, y + 11))) {
-                    numPenalties++
-                }
+                numPenalties = exapplyMaskPenaltyRule3(array, x, y, height, numPenalties)
             }
         }
 
         return numPenalties * N3
+    }
+
+    public static func exapplyMaskPenaltyRule3(array: Array<Array<UInt8>>, x: Int64, y: Int64, height: Int64,
+        numPenalties: Int64): Int64 {
+        var numPenalties_p = numPenalties
+        if (y + 6 < height && array[y][x] == 1 && array[y + 1][x] == 0 && array[y + 2][x] == 1 && array[y + 3][x] == 1 &&
+            array[y + 4][x] == 1 && array[y + 5][x] == 0 && array[y + 6][x] == 1 && (isWhiteVertical(array, x, y - 4, y) ||
+            isWhiteVertical(array, x, y + 7, y + 11))) {
+            numPenalties_p++
+        }
+        return numPenalties_p
     }
 
     private static func isWhiteHorizontal(rowArray: Array<UInt8>, start: Int64, to: Int64): Bool {

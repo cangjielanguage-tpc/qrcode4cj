@@ -515,24 +515,31 @@ public open class DecodedBitStreamParser {
                     }
                 } else {
                     codeIndex_ -= count
-                    while ((codeIndex_ < codewords[0]) && !end) {
-                        var code: Int64 = codewords[codeIndex_]
-                        codeIndex_++
-                        if (code < TEXT_COMPACTION_MODE_LATCH) {
-                            result.append(UInt8(code))
-                        } else if (code == ECI_CHARSET) {
-                            result.appendECI(codewords[codeIndex_])
-                            codeIndex_++
-                        } else {
-                            codeIndex_--
-                            end = true
-                        }
-                    }
+                    (codeIndex_,end) = exbyteCompaction(codeIndex_, codewords, end, result)
                 }
             }
         }
 
         return codeIndex_
+    }
+
+    private static func exbyteCompaction(codeIndex_: Int64, codewords: Array<Int64>, end: Bool, result: ECIStringBuilder):(Int64,Bool) {
+        var codeIndex_p = codeIndex_
+        var end_p = end
+        while ((codeIndex_p < codewords[0]) && !end_p) {
+            var code: Int64 = codewords[codeIndex_p]
+            codeIndex_p++
+            if (code < TEXT_COMPACTION_MODE_LATCH) {
+                result.append(UInt8(code))
+            } else if (code == ECI_CHARSET) {
+                result.appendECI(codewords[codeIndex_p])
+                codeIndex_p++
+            } else {
+                codeIndex_p--
+                end_p = true
+            }
+        }
+        return (codeIndex_p,end_p)
     }
 
     /**

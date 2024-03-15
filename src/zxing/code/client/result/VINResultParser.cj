@@ -145,20 +145,10 @@ public open class VINResultParser <: ResultParser {
             case 'M' => if (c2 >= 'A' && c2 <= 'E') {
                 return "IN";
             }
-            case 'S' =>
-                if (c2 >= 'A' && c2 <= 'M') {
-                    return "UK";
-                }
-                if (c2 >= 'N' && c2 <= 'T') {
-                    return "DE";
-                }
-            case 'V' =>
-                if (c2 >= 'F' && c2 <= 'R') {
-                    return "FR";
-                }
-                if (c2 >= 'S' && c2 <= 'W') {
-                    return "ES";
-                }
+            case 'S' => return excountryCode(c2)
+
+            case 'V' => return excountryCode2(c2)
+
             case 'W' => return "DE";
             case 'X' => if (c2 == '0' || (c2 >= '3' && c2 <= '9')) {
                 return "RU";
@@ -169,5 +159,25 @@ public open class VINResultParser <: ResultParser {
             case _ => return "UNKNOWN"
         }
         return "";
+    }
+
+    private static func excountryCode2(c2: Char): String {
+        if (c2 >= 'F' && c2 <= 'R') {
+            return "FR";
+        }
+        if (c2 >= 'S' && c2 <= 'W') {
+            return "ES";
+        }
+        return ""
+    }
+
+    private static func excountryCode(c2: Char): String {
+        if (c2 >= 'A' && c2 <= 'M') {
+            return "UK";
+        }
+        if (c2 >= 'N' && c2 <= 'T') {
+            return "DE";
+        }
+        return ""
     }
 }
