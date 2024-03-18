@@ -212,7 +212,24 @@ public abstract class UPCEANReader <: OneDReader {
         } catch (re: ReaderException) {
             // continue
         }
+        exdecoderow(hints, extensionLength)
 
+        if (format == BarcodeFormat.EAN_13 || format == BarcodeFormat.UPC_A) {
+            var countryID: String = eanManSupport.lookupCountryIdentifier(resultString);
+            if (countryID != "") {
+                decodeResult.putMetadata(ResultMetadataType.POSSIBLE_COUNTRY, countryID);
+            }
+        }
+        if (format == BarcodeFormat.EAN_8) {
+            symbologyIdentifier = 4
+        }
+
+        decodeResult.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]E" + symbologyIdentifier.toString());
+
+        return decodeResult
+    }
+
+    private func exdecoderow(hints: HashMap<DecodeHintType, Any>, extensionLength: Int64) {
         var allowedExtensions: Array<Int64>
         if (hints.size == 0) {
             allowedExtensions = Array<Int64>()
@@ -239,20 +256,6 @@ public abstract class UPCEANReader <: OneDReader {
                 throw NotFoundException.getNotFoundInstance();
             }
         }
-
-        if (format == BarcodeFormat.EAN_13 || format == BarcodeFormat.UPC_A) {
-            var countryID: String = eanManSupport.lookupCountryIdentifier(resultString);
-            if (countryID != "") {
-                decodeResult.putMetadata(ResultMetadataType.POSSIBLE_COUNTRY, countryID);
-            }
-        }
-        if (format == BarcodeFormat.EAN_8) {
-            symbologyIdentifier = 4
-        }
-
-        decodeResult.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]E" + symbologyIdentifier.toString());
-
-        return decodeResult
     }
 
     /**

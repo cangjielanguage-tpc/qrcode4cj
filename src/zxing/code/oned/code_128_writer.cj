@@ -90,10 +90,7 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
     private static func check(contents: UTF32String, hints: HashMap<EncodeHintType, Any>): Int64 {
         var length: Int64 = contents.charSize
 
-        // Check length
-        if (length < 1 || length > 80) {
-            throw IllegalArgumentException("Contents length should be between 1 and 80 characters, but got ${length}")
-        }
+        excheck(length)
 
         // Check for forced code set hint.
         var forcedCodeSet: Int64 = -1
@@ -118,8 +115,7 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
             // check for non ascii characters that are not special GS1 characters
 
             // special function characters
-            if (c == ESCAPE_FNC_1 || c == ESCAPE_FNC_2 || c == ESCAPE_FNC_3 || c == ESCAPE_FNC_4) {}
-            else {
+            if (!(c == ESCAPE_FNC_1 || c == ESCAPE_FNC_2 || c == ESCAPE_FNC_3 || c == ESCAPE_FNC_4)) {
                 if (c.hashCode() > 127) {
                     // no full Latin-1 character set available at the moment
                     // shift and manual code change are not supported
@@ -134,13 +130,15 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
                     throw IllegalArgumentException(
                         "Bad character in input for forced code set A: ASCII value=${c.hashCode()}")
                 }
-            } else if (forcedCodeSet == CODE_CODE_B) {
+            }
+            if (forcedCodeSet == CODE_CODE_B) {
                 // allows no ascii below 32 (terminal symbols)
                 if (c.hashCode() <= 32) {
                     throw IllegalArgumentException(
                         "Bad character in input for forced code set B: ASCII value=${c.hashCode()}")
                 }
-            } else if (forcedCodeSet == CODE_CODE_C) {
+            }
+            if (forcedCodeSet == CODE_CODE_C) {
                 // allows only numbers and no FNC 2/3/4
                 if (c.hashCode() < 48 || (c.hashCode() > 57 && c.hashCode() <= 127) || c == ESCAPE_FNC_2 || c ==
                     ESCAPE_FNC_3 || c == ESCAPE_FNC_4) {
@@ -150,6 +148,13 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
             }
         }
         return forcedCodeSet
+    }
+
+    private static func excheck(length: Int64) {
+        // Check length
+        if (length < 1 || length > 80) {
+            throw IllegalArgumentException("Contents length should be between 1 and 80 characters, but got ${length}")
+        }
     }
 
     private static func encodeFast(contents: UTF32String, forcedCodeSet: Int64): Array<Bool> {
@@ -311,15 +316,7 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
             return CODE_CODE_B
         }
         if (lookahead == CType.UNCODABLE) {
-            if (start < value.size) {
-                var c: Char = value.get(start)
-                if (c < ' ' || (oldCode == CODE_CODE_A && (c < '`' || (c >= ESCAPE_FNC_1 && c <= ESCAPE_FNC_4)))) {
-                    // can continue in code A, encodes ASCII 0 to 95 or FNC1 to FNC4
-                    return CODE_CODE_A
-                }
-            }
-            return CODE_CODE_B
-            // no choice
+            return exchooseCode(start, value, oldCode)
         }
         if (oldCode == CODE_CODE_A && lookahead == CType.FNC_1) {
             return CODE_CODE_A
@@ -364,6 +361,19 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
             return CODE_CODE_C
         }
         return CODE_CODE_B
+    }
+
+    private static func exchooseCode(start: Int64, value: UTF32String, oldCode: Int64) {
+        if (start < value.size) {
+            var c: Char = value.get(start)
+            if (c < ' ' || (oldCode == CODE_CODE_A && (c < '`' || (c >= ESCAPE_FNC_1 && c <= ESCAPE_FNC_4)))) {
+                // can continue in code A, encodes ASCII 0 to 95 or FNC1 to FNC4
+                return CODE_CODE_A
+            }
+        }
+        return CODE_CODE_B
+        // no choice
+
     }
 
     private static func extracted(value: UTF32String, start: Int64): Int64 {
@@ -538,7 +548,7 @@ open class MinimalEncoder <: OneDimensionalCodeWriter {
 
         while (i < length) {
             var latch: Latch = minPath[charset.ordinal()][i]
-            (charset,latch) = exencode(charset, i, patterns, checkSum, checkWeight)
+            (charset, latch) = exencode(charset, i, patterns, checkSum, checkWeight)
             match (charset) {
                 case Charset.C => if (contentsUtf.get(i) == ESCAPE_FNC_1) {
                     addPattern(patterns, CODE_FNC_1, checkSum, checkWeight, i)
@@ -580,7 +590,7 @@ open class MinimalEncoder <: OneDimensionalCodeWriter {
     }
 
     private func exencode(charset: Charset, i: Int64, patterns: ArrayList<Array<Int64>>, checkSum: Array<Int64>,
-        checkWeight: Array<Int64>): (Charset, Latch){
+        checkWeight: Array<Int64>): (Charset, Latch) {
         var charset_p = charset
         var latch: Latch = minPath[charset_p.ordinal()][i]
         if (latch == Latch.A) {
@@ -607,7 +617,7 @@ open class MinimalEncoder <: OneDimensionalCodeWriter {
         } else if (latch == Latch.SHIFT) {
             addPattern(patterns, CODE_SHIFT, checkSum, checkWeight, i)
         }
-        return (charset_p,latch)
+        return (charset_p, latch)
     }
 
     private static func addPattern(

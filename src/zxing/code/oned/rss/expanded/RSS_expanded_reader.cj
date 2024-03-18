@@ -595,22 +595,8 @@ public class RSSExpandedReader <: AbstractRSSReader {
     public func decodeDataCharacter(row: BitArray, pattern: FinderPattern, isOddPattern: Bool, leftChar: Bool): DataCharacter {
         var counters: Array<Int64> = Array<Int64>(this.getDataCharacterCounters().size, item: 0);
 
-        if (leftChar) {
-            recordPatternInReverse(row, pattern.getStartEnd()[0], counters);
-        } else {
-            recordPattern(row, pattern.getStartEnd()[1], counters);
-
-            // reverse it
-            var i: Int64 = 0;
-            var j: Int64 = counters.size - 1
-            while (i < j) {
-                var temp: Int64 = counters[i]
-                counters[i] = counters[j]
-                counters[j] = temp
-                i++
-                j--
-            }
-        } //counters[] has the pixels of the module
+        //counters[] has the pixels of the module
+        exdecodeDataCharacter(leftChar, row, pattern, counters)
 
         var numModules: Int64 = 17; //left and right data characters have all the same length
 
@@ -701,6 +687,25 @@ public class RSSExpandedReader <: AbstractRSSReader {
         var value: Int64 = vOdd * tEven + vEven + gSum
 
         return DataCharacter(value, checksumPortion);
+    }
+
+    private func exdecodeDataCharacter(leftChar: Bool, row: BitArray, pattern: FinderPattern, counters: Array<Int64>) {
+        if (leftChar) {
+            recordPatternInReverse(row, pattern.getStartEnd()[0], counters);
+        } else {
+            recordPattern(row, pattern.getStartEnd()[1], counters);
+
+            // reverse it
+            var i: Int64 = 0;
+            var j: Int64 = counters.size - 1
+            while (i < j) {
+                var temp: Int64 = counters[i]
+                counters[i] = counters[j]
+                counters[j] = temp
+                i++
+                j--
+            }
+        }
     }
 
     private static func isNotA1left(pattern: FinderPattern, isOddPattern: Bool, leftChar: Bool): Bool {

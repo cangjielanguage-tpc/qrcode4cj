@@ -234,7 +234,11 @@ public class AlignmentPatternFinder {
             return Float32.NaN;
         }
 
-        return if (foundPatternCross(stateCount)) {
+        return excrossCheckVertical(stateCount, i)
+    }
+
+    private func excrossCheckVertical(stateCount: Array<Int64>, i: Int64) {
+        if (foundPatternCross(stateCount)) {
             centerFromEnd(stateCount, i)
         } else {
             Float32.NaN

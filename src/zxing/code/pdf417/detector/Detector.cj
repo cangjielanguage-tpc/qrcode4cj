@@ -343,17 +343,12 @@ public open class Detector {
 
     private static func findGuardPatternDetect(matrix: BitMatrix, column: Int64, row: Int64, width: Int64,
         pattern: Array<Int64>, counters: Array<Int64>): Array<Int64> {
-        for (i in 0..counters.size) {
-            counters[i] = 0
-        }
+        exfindGuardPatternDetect3(counters)
         var patternStart: Int64 = column
         var pixelDrift: Int64 = 0
         pixelDrift++
         // if there are black pixels left of the current pixel shift to the left, but only for MAX_PIXEL_DRIFT pixels
-        while (matrix.get(patternStart, row) && patternStart > 0 && pixelDrift < MAX_PIXEL_DRIFT + 1) {
-            pixelDrift++
-            patternStart--
-        }
+        (pixelDrift, patternStart) = exfindGuardPatternDetect4(matrix, patternStart, pixelDrift, row)
 
         var (x, counterPosition, patternLength, isWhite, threshold, tflag): (Int64, Int64, Int64, Bool, Int64, Int64) = (patternStart,
             0, pattern.size, false, 2, 0)
@@ -395,6 +390,23 @@ public open class Detector {
             return [patternStart, x - 1]
         }
         return Array<Int64>()
+    }
+
+    private static func exfindGuardPatternDetect4(matrix: BitMatrix, patternStart: Int64, pixelDrift: Int64, row: Int64): (Int64, 
+        Int64) {
+        var pixelDrift_p = pixelDrift
+        var patternStart_p = patternStart
+        while (matrix.get(patternStart_p, row) && patternStart_p > 0 && pixelDrift_p < MAX_PIXEL_DRIFT + 1) {
+            pixelDrift_p++
+            patternStart_p--
+        }
+        return (pixelDrift_p, patternStart_p)
+    }
+
+    private static func exfindGuardPatternDetect3(counters: Array<Int64>) {
+        for (i in 0..counters.size) {
+            counters[i] = 0
+        }
     }
 
     private static func exfindGuardPatternDetect2(pattern: Array<Int64>): Int64 {

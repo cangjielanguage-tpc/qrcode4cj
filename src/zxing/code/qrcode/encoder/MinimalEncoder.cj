@@ -43,10 +43,9 @@ public class Edge {
         this.encoders = encoders
         this.stringToEncode = stringToEncode
 
-        var hasPrevious: Bool = if (let Some(p) <- previous) {
-            true
-        } else {
-            false
+        var hasPrevious: Bool = false
+        if (let Some(p) <- previous) {
+            hasPrevious = true
         }
 
         this.charsetEncoderIndex = if (mode == Mode.BYTE([8, 16, 16], 0x04) || hasPrevious == false) {

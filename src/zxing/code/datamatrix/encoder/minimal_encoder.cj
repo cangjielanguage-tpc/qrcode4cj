@@ -310,10 +310,7 @@ public class Edge {
             return 0;
         }
         if (length - start == 1) {
-            if (MinimalEncoder.isExtendedASCII(input.charAt(start), input.getFNC1Character())) {
-                return 0;
-            }
-            return 1;
+            return exgetLastASCII(start)
         }
         if (length - start == 2) {
             if (MinimalEncoder.isExtendedASCII(input.charAt(start), input.getFNC1Character()) ||
@@ -344,6 +341,13 @@ public class Edge {
             return 2;
         }
         return 0;
+    }
+
+    private func exgetLastASCII(start: Int64): Int64 {
+        if (MinimalEncoder.isExtendedASCII(input.charAt(start), input.getFNC1Character())) {
+            return 0;
+        }
+        return 1;
     }
 
     /** Returns the capacity in codewords of the smallest symbol that has enough capacity to fit the given minimal
@@ -480,31 +484,41 @@ public class Edge {
     private static func returnhashCode(c: Char, setIndex: Int64): Int64 {
         if (c.hashCode() == 0) {
             return 0;
-        } else if (setIndex == 0 && c.hashCode() <= 3) {
-            return c.hashCode() - 1
-        } else if (setIndex == 1 && c.hashCode() <= 31) {
-            return c.hashCode();
-        } else if (c.hashCode() == 32) {
-            return 3;
-        } else if (c.hashCode() >= 33 && c.hashCode() <= 47) {
-            return c.hashCode() - 33
-        } else if (c.hashCode() >= 48 && c.hashCode() <= 57) {
-            return c.hashCode() - 44
-        } else if (c.hashCode() >= 58 && c.hashCode() <= 64) {
-            return c.hashCode() - 43
-        } else if (c.hashCode() >= 65 && c.hashCode() <= 90) {
-            return c.hashCode() - 64
-        } else if (c.hashCode() >= 91 && c.hashCode() <= 95) {
-            return c.hashCode() - 69
-        } else if (c.hashCode() == 96) {
-            return 0;
-        } else if (c.hashCode() >= 97 && c.hashCode() <= 122) {
-            return c.hashCode() - 83
-        } else if (c.hashCode() >= 123 && c.hashCode() <= 127) {
-            return c.hashCode() - 96
-        } else {
-            return c.hashCode()
         }
+        if (setIndex == 0 && c.hashCode() <= 3) {
+            return c.hashCode() - 1
+        }
+        if (setIndex == 1 && c.hashCode() <= 31) {
+            return c.hashCode();
+        }
+        if (c.hashCode() == 32) {
+            return 3;
+        }
+        if (c.hashCode() >= 33 && c.hashCode() <= 47) {
+            return c.hashCode() - 33
+        }
+        if (c.hashCode() >= 48 && c.hashCode() <= 57) {
+            return c.hashCode() - 44
+        }
+        if (c.hashCode() >= 58 && c.hashCode() <= 64) {
+            return c.hashCode() - 43
+        }
+        if (c.hashCode() >= 65 && c.hashCode() <= 90) {
+            return c.hashCode() - 64
+        }
+        if (c.hashCode() >= 91 && c.hashCode() <= 95) {
+            return c.hashCode() - 69
+        }
+        if (c.hashCode() == 96) {
+            return 0;
+        }
+        if (c.hashCode() >= 97 && c.hashCode() <= 122) {
+            return c.hashCode() - 83
+        }
+        if (c.hashCode() >= 123 && c.hashCode() <= 127) {
+            return c.hashCode() - 96
+        }
+        return c.hashCode()
     }
 
     func getC40Words(c40: Bool, fnc1: Int64): Array<UInt8> {
@@ -1016,6 +1030,13 @@ public class MinimalEncoder {
 
         //We create 4 EDF edges,  with 1, 2 3 or 4 characters length. The fourth normally doesn't have a latch to ASCII
         //unless it is 2 characters away start the end of the input.
+        var i: Int64 = exaddEdges(input, edges, start, previous)
+        if (i == 3 && input.haveNCharacters(start, 4) && HighLevelEncoder.isNativeEDIFACT(input.charAt(start + 3))) {
+            addEdge(edges, Edge(input, Mode.EDF, start, 4, previous));
+        }
+    }
+
+    public static func exaddEdges(input: Input, edges: Array<Array<?Edge>>, start: Int64, previous: ?Edge) {
         var i: Int64 = 0;
         while (i >= 0 && i < 3) {
             var pos: Int64 = start + i
@@ -1026,10 +1047,9 @@ public class MinimalEncoder {
             }
             i++
         }
-        if (i == 3 && input.haveNCharacters(start, 4) && HighLevelEncoder.isNativeEDIFACT(input.charAt(start + 3))) {
-            addEdge(edges, Edge(input, Mode.EDF, start, 4, previous));
-        }
+        return i
     }
+
     public static func encodeMinimally(input: Input): Result {
         /* The minimal encoding is computed by Dijkstra. The acyclic graph is modeled as follows:
          * A vertex represents a combination of a position in the input and an encoding mode where position 0
