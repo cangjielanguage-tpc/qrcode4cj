@@ -11,9 +11,9 @@ public class ReedSolomonDecoder {
     }
 
     /**
-     * <p>Decodes given set of received codewords, which include both data and error-correction
+     * Decodes given set of received codewords, which include both data and error-correction
      * codewords. Really, this means it uses Reed-Solomon to detect and correct errors, in-place,
-     * in the input.</p>
+     * in the input.
      *
      * @param received data and error-correction codewords
      * @param twoS number of error-correction codewords available
@@ -137,10 +137,12 @@ public class ReedSolomonDecoder {
             var denominator = 1
             for (j in 0..s) {
                 if (i != j) {
-                    //denominator = field.multiply(denominator,
-                    //    GenericGF.addOrSubtract(1, field.multiply(errorLocations[j], xiInverse)));
-                    // Above should work but fails on some Apple and Linux JDKs due to a Hotspot bug.
-                    // Below is a funny-looking workaround from Steven Parkes
+                    /*
+                     * denominator = field.multiply(denominator,
+                     *    GenericGF.addOrSubtract(1, field.multiply(errorLocations[j], xiInverse)));
+                     * Above should work but fails on some Apple and Linux JDKs due to a Hotspot bug.
+                     * Below is a funny-looking workaround from Steven Parkes
+                     */
                     var term = field.multiply(errorLocations[j], xiInverse)
                     var termPlus1: Int64
                     if ((term & 0x1) == 0) {

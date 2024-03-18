@@ -5,18 +5,18 @@
 package zxing.code.oned
 
 public open class ITFReader <: OneDReader {
-    private static let MAX_AVG_VARIANCE: Float32 = 0.38;
-    private static let MAX_INDIVIDUAL_VARIANCE: Float32 = 0.5;
+    private static let MAX_AVG_VARIANCE: Float32 = 0.38
+    private static let MAX_INDIVIDUAL_VARIANCE: Float32 = 0.5
 
-    private static let W: Int64 = 3; // Pixel width of a 3x wide line
-    private static let w: Int64 = 2; // Pixel width of a 2x wide line
-    private static let N: Int64 = 1; // Pixed width of a narrow line
+    private static let W: Int64 = 3 // Pixel width of a 3x wide line
+    private static let w: Int64 = 2 // Pixel width of a 2x wide line
+    private static let N: Int64 = 1 // Pixed width of a narrow line
 
     /** Valid ITF lengths. Anything longer than the largest value is also allowed. */
     private static let DEFAULT_ALLOWED_LENGTHS: Array<Int64> = [6, 8, 10, 12, 14]
 
     // Stores the actual narrow line width of the image being decoded.
-    private var narrowLineWidth: Int64 = -1;
+    private var narrowLineWidth: Int64 = -1
 
     /**
      * Start/end guard pattern.
@@ -61,12 +61,12 @@ public open class ITFReader <: OneDReader {
     public override func decodeRow(rowNumber: Int64, row: BitArray, hints: HashMap<DecodeHintType, Any>): Result {
 
         // Find out where the Middle section (payload) starts & ends
-        var startRange: Array<Int64> = decodeStart(row);
-        var endRange: Array<Int64> = decodeEnd(row);
+        var startRange: Array<Int64> = decodeStart(row)
+        var endRange: Array<Int64> = decodeEnd(row)
 
-        var result: ArrayList<Char> = ArrayList<Char>();
-        decodeMiddle(row, startRange[1], endRange[0], result);
-        var resultString: UTF32String = UTF32String(result);
+        var result: ArrayList<Char> = ArrayList<Char>()
+        decodeMiddle(row, startRange[1], endRange[0], result)
+        var resultString: UTF32String = UTF32String(result)
 
         var allowedLengths: Array<Int64> = Array<Int64>()
         if (hints.size > 0) {
@@ -82,8 +82,8 @@ public open class ITFReader <: OneDReader {
         // To avoid false positives with 2D barcodes (and other patterns), make
         // an assumption that the decoded string must be a 'standard' length if it's short
         var length: Int64 = resultString.charSize
-        var lengthOK: Bool = false;
-        var maxAllowedLength: Int64 = 0;
+        var lengthOK: Bool = false
+        var maxAllowedLength: Int64 = 0
 
         for (i in 0..allowedLengths.size) {
             if (length == allowedLengths[i]) {
@@ -98,7 +98,7 @@ public open class ITFReader <: OneDReader {
             lengthOK = true
         }
         if (!lengthOK) {
-            throw FormatException.getFormatInstance();
+            throw FormatException.getFormatInstance()
         }
 
         var resultObject: Result = Result(
@@ -111,8 +111,8 @@ public open class ITFReader <: OneDReader {
                 ]
             ),
             BarcodeFormat.ITF
-        );
-        resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]I0");
+        )
+        resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]I0")
 
         return resultObject
     }
@@ -129,8 +129,7 @@ public open class ITFReader <: OneDReader {
         payloadEnd: Int64,
         resultString: ArrayList<Char>
     ) {
-        // Digits are interleaved in pairs - 5 black lines for one digit, and the
-        // 5
+        // Digits are interleaved in pairs - 5 black lines for one digit, and the 5
         // interleaved white lines for the second digit.
         // Therefore, need to scan 10 lines and then
         // split these into two arrays
@@ -142,7 +141,7 @@ public open class ITFReader <: OneDReader {
 
         while (payloadStart < payloadEnd) {
             // Get 10 runs of black/white.
-            recordPattern(row, payloadStart, counterDigitPair);
+            recordPattern(row, payloadStart, counterDigitPair)
 
             // Split them into each array
             for (k in 0..5) {
@@ -151,10 +150,10 @@ public open class ITFReader <: OneDReader {
                 counterWhite[k] = counterDigitPair[twoK + 1]
             }
 
-            var bestMatch: Int64 = decodeDigit(counterBlack);
-            resultString.append(Char('0'.hashCode() + bestMatch));
+            var bestMatch: Int64 = decodeDigit(counterBlack)
+            resultString.append(Char('0'.hashCode() + bestMatch))
             bestMatch = decodeDigit(counterWhite)
-            resultString.append(Char('0'.hashCode() + bestMatch));
+            resultString.append(Char('0'.hashCode() + bestMatch))
 
             for (i in 0..counterDigitPair.size) {
                 payloadStart += counterDigitPair[i]
@@ -166,36 +165,38 @@ public open class ITFReader <: OneDReader {
      * Identify where the start of the middle / payload section starts.
      *
      * @param row row of black/white values to search
+     *
      * @return Array, containing index of start of 'start block' and end of
      * 'start block'
      */
     private func decodeStart(row: BitArray): Array<Int64> {
-        var endStart: Int64 = skipWhiteSpace(row);
-        var startPattern: Array<Int64> = findGuardPattern(row, endStart, START_PATTERN);
+        var endStart: Int64 = skipWhiteSpace(row)
+        var startPattern: Array<Int64> = findGuardPattern(row, endStart, START_PATTERN)
 
-        // Determine the width of a narrow line in pixels. We can do this by
-        // getting the width of the start pattern and dividing by 4 because its
+        // Determine the width of a narrow line in pixels. We can do this by getting
+        // the width of the start pattern and dividing by 4 because its
         // made up of 4 narrow lines.
         this.narrowLineWidth = (startPattern[1] - startPattern[0]) / 4
 
-        validateQuietZone(row, startPattern[0]);
+        validateQuietZone(row, startPattern[0])
 
         return startPattern
     }
 
     /**
      * The start & end patterns must be pre/post fixed by a quiet zone. This
-     * zone must be at least 10 times the width of a narrow line.  Scan back until
-     * we either get to the start of the barcode or match the necessary number of
+     * zone must be at least 10 times the width of a narrow line.  Scan back until we
+     * either get to the start of the barcode or match the necessary number of
      * quiet zone pixels.
      *
-     * Note: Its assumed the row is reversed when using this method to find
-     * quiet zone after the end pattern.
+     * Note: Its assumed the row is reversed when using this method to find quiet
+     * zone after the end pattern.
      *
      * ref: http://www.barcode-1.net/i25code.html
      *
      * @param row bit array representing the scanned barcode.
      * @param startPattern index into row of the start or end pattern.
+     *
      * @throws NotFoundException if the quiet zone cannot be found
      */
     private func validateQuietZone(row: BitArray, startPattern: Int64) {
@@ -215,7 +216,7 @@ public open class ITFReader <: OneDReader {
         }
         if (quietCount != 0) {
             // Unable to find the necessary number of quiet zone pixels.
-            throw NotFoundException.getNotFoundInstance();
+            throw NotFoundException.getNotFoundInstance()
         }
     }
 
@@ -227,10 +228,10 @@ public open class ITFReader <: OneDReader {
      * @throws NotFoundException Throws exception if no black lines are found in the row
      */
     private static func skipWhiteSpace(row: BitArray): Int64 {
-        var width: Int64 = row.getSize();
-        var endStart: Int64 = row.getNextSet(0);
+        var width: Int64 = row.getSize()
+        var endStart: Int64 = row.getNextSet(0)
         if (endStart == width) {
-            throw NotFoundException.getNotFoundInstance();
+            throw NotFoundException.getNotFoundInstance()
         }
 
         return endStart
@@ -246,9 +247,9 @@ public open class ITFReader <: OneDReader {
     private func decodeEnd(row: BitArray): Array<Int64> {
         // For convenience, reverse the row and then
         // search from 'the start' for the end block
-        row.reverse();
+        row.reverse()
         try {
-            var endStart: Int64 = skipWhiteSpace(row);
+            var endStart: Int64 = skipWhiteSpace(row)
             var endPattern: Array<Int64>
             try {
                 endPattern = findGuardPattern(row, endStart, END_PATTERN_REVERSED[0])
@@ -256,13 +257,12 @@ public open class ITFReader <: OneDReader {
                 endPattern = findGuardPattern(row, endStart, END_PATTERN_REVERSED[1])
             }
 
-            // The start & end patterns must be pre/post fixed by a quiet zone. This
-            // zone must be at least 10 times the width of a narrow line.
+            // The start & end patterns must be pre/post fixed by a quiet zone. This zone
+            // must be at least 10 times the width of a narrow line.
             // ref: http://www.barcode-1.net/i25code.html
-            validateQuietZone(row, endPattern[0]);
+            validateQuietZone(row, endPattern[0])
 
-            // Now recalculate the indices of where the 'endblock' starts & stops to
-            // accommodate
+            // Now recalculate the indices of where the 'endblock' starts & stops to accommodate
             // the reversed nature of the search
             var temp: Int64 = endPattern[0]
             endPattern[0] = row.getSize() - endPattern[1]
@@ -271,26 +271,26 @@ public open class ITFReader <: OneDReader {
             return endPattern
         } finally {
             // Put the row back the right way.
-            row.reverse();
+            row.reverse()
         }
     }
 
     /**
      * @param row       row of black/white values to search
      * @param rowOffset position to start search
-     * @param pattern   pattern of counts of number of black and white pixels that are
-     * being searched for as a pattern
-     * @return start/end horizontal offset of guard pattern, as an array of two
-     * ints
+     * @param pattern   pattern of counts of number of black and white pixels that are being
+     * searched for as a pattern
+     *
+     * @return start/end horizontal offset of guard pattern, as an array of two ints
      * @throws NotFoundException if pattern is not found
      */
     private static func findGuardPattern(row: BitArray, rowOffset: Int64, pattern: Array<Int64>): Array<Int64> {
         var patternLength: Int64 = pattern.size
         var counters: Array<Int64> = Array<Int64>(patternLength, item: 0)
-        var width: Int64 = row.getSize();
-        var isWhite: Bool = false;
+        var width: Int64 = row.getSize()
+        var isWhite: Bool = false
 
-        var counterPosition: Int64 = 0;
+        var counterPosition: Int64 = 0
         var patternStart: Int64 = rowOffset
 
         for (x in rowOffset..width) {
@@ -302,7 +302,7 @@ public open class ITFReader <: OneDReader {
                         return [patternStart, x]
                     }
                     patternStart += counters[0] + counters[1]
-                    System.arraycopy(counters, 2, counters, 0, counterPosition - 1);
+                    System.arraycopy(counters, 2, counters, 0, counterPosition - 1)
                     counters[counterPosition - 1] = 0
                     counters[counterPosition] = 0
                     counterPosition--
@@ -313,12 +313,11 @@ public open class ITFReader <: OneDReader {
                 isWhite = !isWhite
             }
         }
-        throw NotFoundException.getNotFoundInstance();
+        throw NotFoundException.getNotFoundInstance()
     }
 
     /**
-     * Attempts to decode a sequence of ITF black/white lines into single
-     * digit.
+     * Attempts to decode a sequence of ITF black/white lines into single digit.
      *
      * @param counters the counts of runs of observed black/white/black/... values
      * @return The decoded digit
@@ -333,7 +332,7 @@ public open class ITFReader <: OneDReader {
 
         for (i in 0..max) {
             var pattern: Array<Int64> = PATTERNS[i]
-            var variance: Float32 = patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE);
+            var variance: Float32 = patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE)
             if (variance < bestVariance) {
                 bestVariance = variance
                 bestMatch = i
@@ -345,7 +344,7 @@ public open class ITFReader <: OneDReader {
         if (bestMatch >= 0) {
             return bestMatch % 10
         } else {
-            throw NotFoundException.getNotFoundInstance();
+            throw NotFoundException.getNotFoundInstance()
         }
     }
 }

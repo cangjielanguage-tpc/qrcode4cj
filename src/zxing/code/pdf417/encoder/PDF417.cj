@@ -2860,8 +2860,9 @@ public open class PDF417 {
      * @param m the number of source codewords prior to the additional of the Symbol Length
      * Descriptor and any pad codewords
      * @param k the number of error correction codewords
-     * @param c the number of columns in the symbol in the data region (excluding start, stop and
-     * row indicator codewords)
+     * @param c the number of columns in the symbol in the data region (excluding start, stop and row
+     * indicator codewords)
+     *
      * @return the number of rows in the symbol (r)
      */
     private static func calculateNumberOfRows(m: Int64, k: Int64, c: Int64): Int64 {
@@ -2875,12 +2876,13 @@ public open class PDF417 {
     /**
      * Calculates the number of pad codewords as described in 4.9.2 of ISO/IEC 15438:2001(E).
      *
-     * @param m the number of source codewords prior to the additional of the Symbol Length
-     * Descriptor and any pad codewords
+     * @param m the number of source codewords prior to the additional of the Symbol Length Descriptor
+     * and any pad codewords
      * @param k the number of error correction codewords
-     * @param c the number of columns in the symbol in the data region (excluding start, stop and
-     * row indicator codewords)
+     * @param c the number of columns in the symbol in the data region (excluding start, stop and row
+     * indicator codewords)
      * @param r the number of rows in the symbol
+     *
      * @return the number of pad codewords
      */
     private static func getNumberOfPadCodewords(m: Int64, k: Int64, c: Int64, r: Int64): Int64 {
@@ -2963,6 +2965,7 @@ public open class PDF417 {
     /**
      * @param msg message to encode
      * @param errorCorrectionLevel PDF417 error correction level to use
+     *
      * @throws WriterException if the contents cannot be encoded in this format
      */
     public func generateBarcodeLogic(msg: UTF32String, errorCorrectionLevel: Int64) {
@@ -2973,6 +2976,7 @@ public open class PDF417 {
      * @param msg message to encode
      * @param errorCorrectionLevel PDF417 error correction level to use
      * @param autoECI automatically insert ECIs if needed
+     *
      * @throws WriterException if the contents cannot be encoded in this format
      */
     public func generateBarcodeLogic(msg: UTF32String, errorCorrectionLevel: Int64, autoECI: Bool) {

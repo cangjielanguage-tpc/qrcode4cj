@@ -6,8 +6,6 @@ package zxing.code.client.result
 /**
  * Represents a parsed result that encodes an email message including recipients, subject
  * and body text.
- *
- * @author Sean Owen
  */
 public open class EmailAddressParsedResult <: ParsedResult {
     private var tos: Array<String> = Array<String>()
@@ -42,8 +40,8 @@ public open class EmailAddressParsedResult <: ParsedResult {
     }
 
     /**
-     * @return first elements of {@link #getTos()} or {@code null} if none
-     * @deprecated use {@link #getTos()}
+     * @return first elements of getTos() or None if None
+     * @deprecated use getTos()
      */
     public func getEmailAddress(): String {
         if (tos.size == 0) {

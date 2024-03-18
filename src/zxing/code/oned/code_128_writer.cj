@@ -36,8 +36,6 @@ enum CType <: ToString & Equatable<CType> {
 
 /**
  * This object renders a CODE128 code as a {@link BitMatrix}.
- *
- * @author erik.barbara@gmail.com (Erik Barbara)
  */
 public open class Code128Writer <: OneDimensionalCodeWriter {
     private static let CODE_START_A: Int64 = 103
@@ -94,21 +92,9 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
 
         // Check for forced code set hint.
         var forcedCodeSet: Int64 = -1
-        if (hints.size > 0 && hints.contains(EncodeHintType.FORCE_CODE_SET)) {
-            var hashmapvalue = hints.get(EncodeHintType.FORCE_CODE_SET).getOrThrow() as String
-            var codeSetHint: String = hashmapvalue.getOrThrow()
-            match (codeSetHint) {
-                case "A" => forcedCodeSet = CODE_CODE_A
+        forcedCodeSet = excheck(hints, forcedCodeSet)
 
-                case "B" => forcedCodeSet = CODE_CODE_B
-
-                case "C" => forcedCodeSet = CODE_CODE_C
-
-                case _ => throw IllegalArgumentException("Unsupported code set hint: ${codeSetHint}")
-            }
-        }
-
-        // Check content
+        /* Check content */
         for (i in 0..length) {
             var c: Char = contents.get(i)
 
@@ -117,29 +103,29 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
             // special function characters
             if (!(c == ESCAPE_FNC_1 || c == ESCAPE_FNC_2 || c == ESCAPE_FNC_3 || c == ESCAPE_FNC_4)) {
                 if (c.hashCode() > 127) {
-                    // no full Latin-1 character set available at the moment
-                    // shift and manual code change are not supported
+                    // no full Latin-1 character set available at the moment shift
+                    // and manual code change are not supported
                     throw IllegalArgumentException("Bad character in input: ASCII value=${c.hashCode()}")
                 }
             }
 
             // check characters for compatibility with forced code set
             if (forcedCodeSet == CODE_CODE_A) {
-                // allows no ascii above 95 (no lower caps, no special symbols)
+                /* allows no ascii above 95 (no lower caps, no special symbols) */
                 if (c.hashCode() > 95 && c.hashCode() <= 127) {
                     throw IllegalArgumentException(
                         "Bad character in input for forced code set A: ASCII value=${c.hashCode()}")
                 }
             }
             if (forcedCodeSet == CODE_CODE_B) {
-                // allows no ascii below 32 (terminal symbols)
+                /* allows no ascii below 32 (terminal symbols) */
                 if (c.hashCode() <= 32) {
                     throw IllegalArgumentException(
                         "Bad character in input for forced code set B: ASCII value=${c.hashCode()}")
                 }
             }
             if (forcedCodeSet == CODE_CODE_C) {
-                // allows only numbers and no FNC 2/3/4
+                /* allows only numbers and no FNC 2/3/4 */
                 if (c.hashCode() < 48 || (c.hashCode() > 57 && c.hashCode() <= 127) || c == ESCAPE_FNC_2 || c ==
                     ESCAPE_FNC_3 || c == ESCAPE_FNC_4) {
                     throw IllegalArgumentException(
@@ -157,6 +143,23 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
         }
     }
 
+    private static func excheck(hints: HashMap<EncodeHintType, Any>, forcedCodeSet: Int64): Int64 {
+        if (hints.size > 0 && hints.contains(EncodeHintType.FORCE_CODE_SET)) {
+            var hashmapvalue = hints.get(EncodeHintType.FORCE_CODE_SET).getOrThrow() as String
+            var codeSetHint: String = hashmapvalue.getOrThrow()
+            match (codeSetHint) {
+                case "A" => return CODE_CODE_A
+
+                case "B" => return CODE_CODE_B
+
+                case "C" => return CODE_CODE_C
+
+                case _ => throw IllegalArgumentException("Unsupported code set hint: ${codeSetHint}")
+            }
+        }
+        return forcedCodeSet
+    }
+
     private static func encodeFast(contents: UTF32String, forcedCodeSet: Int64): Array<Bool> {
         var length: Int64 = contents.charSize
 
@@ -169,7 +172,7 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
         var position: Int64 = 0 // position in contents
 
         while (position < length) {
-            //Select code to use
+            /* Select code to use */
             var newCodeSet: Int64
             if (forcedCodeSet == -1) {
                 newCodeSet = chooseCode(contents, position, codeSet)
@@ -180,16 +183,15 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
             //Get the pattern index
             var patternIndex: Int64 = 0
             if (newCodeSet == codeSet) {
-                // Encode the current character
-                // First handle escapes
+                // Encode the current character, First handle escapes
                 var data: Char = contents.get(position)
                 (patternIndex, position) = extencodeFast(patternIndex, data, codeSet, contents, position, length)
                 position++
             } else {
-                // Should we change the current code?
-                // Do we have a code set?
+                // Should we change the current code? Do we
+                // have a code set?
                 if (codeSet == 0) {
-                    // No, we don't have a code set
+                    /* No, we don't have a code set */
                     if (newCodeSet == CODE_CODE_A) {
                         patternIndex = CODE_START_A
                     } else if (newCodeSet == CODE_CODE_B) {
@@ -198,16 +200,16 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
                         patternIndex = CODE_START_C
                     }
                 } else {
-                    // Yes, we have a code set
+                    /* Yes, we have a code set */
                     patternIndex = newCodeSet
                 }
                 codeSet = newCodeSet
             }
 
-            // Get the pattern
+            /* Get the pattern */
             patterns.append(Code128Reader.CODE_PATTERNS[patternIndex])
 
-            // Compute checksum
+            /* Compute checksum*/
             checkSum += patternIndex * checkWeight
             if (position != 0) {
                 checkWeight++
@@ -321,7 +323,7 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
         if (oldCode == CODE_CODE_A && lookahead == CType.FNC_1) {
             return CODE_CODE_A
         }
-        if (oldCode == CODE_CODE_C) { // can continue in code C
+        if (oldCode == CODE_CODE_C) { /* can continue in code C */
             return CODE_CODE_C
         }
         if (oldCode == CODE_CODE_B) {
@@ -330,7 +332,7 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
                 // can continue in code B
             }
 
-            // Seen two consecutive digits, see what follows
+            /* Seen two consecutive digits, see what follows */
             lookahead = findCType(value, start + 2)
             if (lookahead == CType.UNCODABLE || lookahead == CType.ONE_DIGIT) {
                 return CODE_CODE_B
@@ -338,7 +340,7 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
             }
             if (lookahead == CType.FNC_1) { // two digits, then FNC_1...
                 lookahead = findCType(value, start + 3)
-                if (lookahead == CType.TWO_DIGITS) { // then two more digits, switch
+                if (lookahead == CType.TWO_DIGITS) { /* then two more digits, switch */
                     return CODE_CODE_C
                 } else {
                     return CODE_CODE_B
@@ -346,8 +348,8 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
                 }
             }
 
-            // At this point, there are at least 4 consecutive digits.
-            // Look ahead to choose whether to switch now or on the next round.
+            // At this point, there are at least 4 consecutive digits. Look
+            // ahead to choose whether to switch now or on the next round.
             return extracted(value, start)
 
             // even number of digits, switch now
@@ -470,7 +472,7 @@ enum Latch <: ToString & Equatable<Latch> {
 
 /**
  * Encodes minimally using Divide-And-Conquer with Memoization
- * */
+ */
 open class MinimalEncoder <: OneDimensionalCodeWriter {
     private static let CODE_START_A: Int64 = 103
     private static let CODE_START_B: Int64 = 104

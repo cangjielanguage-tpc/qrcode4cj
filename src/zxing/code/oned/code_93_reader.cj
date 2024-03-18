@@ -5,9 +5,8 @@
 package zxing.code.oned
 
 /**
- * <p>Decodes Code 93 barcodes.</p>
+ * Decodes Code 93 barcodes.
  *
- * @author Sean Owen
  * @see Code39Reader
  */
 public open class Code93Reader <: OneDReader {
@@ -15,8 +14,8 @@ public open class Code93Reader <: OneDReader {
     static let ALPHABET_STRING: UTF32String = UTF32String("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%abcd*");
 
     /**
-     * These represent the encodings of characters, as patterns of wide and narrow bars.
-     * The 9 least-significant bits of each int correspond to the pattern of wide and narrow.
+     * These represent the encodings of characters, as patterns of wide and narrow bars. The 9
+     * least-significant bits of each int correspond to the pattern of wide and narrow.
      */
     static let CHARACTER_ENCODINGS: Array<Int64> = [
         0x114,
@@ -274,28 +273,28 @@ public open class Code93Reader <: OneDReader {
     private static func getDecoded93Char(next: Char) {
         var decodedChar = ' '
         if (next >= 'A' && next <= 'E') {
-            // %A to %E map to control codes ESC to USep
+            /* %A to %E map to control codes ESC to USep */
             decodedChar = Char(next.hashCode() - 38)
         } else if (next >= 'F' && next <= 'J') {
-            // %F to %J map to ; < = > ?
+            //* %F to %J map to ; < = > ? */
             decodedChar = Char(next.hashCode() - 11)
         } else if (next >= 'K' && next <= 'O') {
-            // %K to %O map to [ \ ] ^ _
+            /* %K to %O map to [ \ ] ^ _ */
             decodedChar = Char(next.hashCode() + 16)
         } else if (next >= 'P' && next <= 'T') {
-            // %P to %T map to { | } ~ DEL
+            /* %P to %T map to { | } ~ DEL */
             decodedChar = Char(next.hashCode() + 43)
         } else if (next == 'U') {
-            // %U map to NUL
+            /* %U map to NUL */
             decodedChar = '\0'
         } else if (next == 'V') {
-            // %V map to @
+            /* %V map to @ */
             decodedChar = '@'
         } else if (next == 'W') {
-            // %W map to `
+            /* %W map to ` */
             decodedChar = '`'
         } else if (next >= 'X' && next <= 'Z') {
-            // %X to %Z all map to DEL (127)
+            /* %X to %Z all map to DEL (127) */
             decodedChar = Char(127)
         } else {
             throw FormatException.getFormatInstance();

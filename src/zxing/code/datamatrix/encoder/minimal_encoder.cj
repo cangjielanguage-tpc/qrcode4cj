@@ -509,6 +509,10 @@ public class Edge {
         if (c.hashCode() >= 91 && c.hashCode() <= 95) {
             return c.hashCode() - 69
         }
+        return exreturnhashCode(c)
+    }
+
+    private static func exreturnhashCode(c: Char): Int64 {
         if (c.hashCode() == 96) {
             return 0;
         }

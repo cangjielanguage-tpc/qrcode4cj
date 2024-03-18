@@ -43,6 +43,7 @@ public class WhiteRectangleDetector {
      * @param initSize initial size of search area around center
      * @param x x position of search center
      * @param y y position of search center
+     *
      * @throws NotFoundException if image is too small to accommodate {@code initSize}
      */
     public init(image: BitMatrix, initSize: Int64, x: Int64, y: Int64) {
@@ -64,16 +65,14 @@ public class WhiteRectangleDetector {
     }
 
     /**
-     * <p>
      * Detects a candidate barcode-like rectangular region within an image. It
      * starts around the center of the image, increases the size of the candidate
      * region until it finds a white rectangular region.
-     * </p>
      *
-     * @return {@link ResultPoint}[] describing the corners of the rectangular
+     * @return ResultPoint[] describing the corners of the rectangular
      * region. The first and last points are opposed on the diagonal, as
-     * are the second and third. The first point will be the topmost
-     * point and the last, the bottommost. The second point will be
+     * are the second and third. The first point will be the topmost point
+     * and the last, the bottommost. The second point will be
      * leftmost and the third, the rightmost
      * @throws NotFoundException if no Data Matrix Code can be found
      */
@@ -255,10 +254,11 @@ public class WhiteRectangleDetector {
      * @param z left most point
      * @param x right most point
      * @param t top most point
-     * @return {@link ResultPoint}[] describing the corners of the rectangular
+     *
+     * @return ResultPoint[] describing the corners of the rectangular
      * region. The first and last points are opposed on the diagonal, as
-     * are the second and third. The first point will be the topmost
-     * point and the last, the bottommost. The second point will be
+     * are the second and third. The first point will be the topmost point
+     * and the last, the bottommost. The second point will be
      * leftmost and the third, the rightmost
      */
     private func centerEdges(
@@ -306,6 +306,7 @@ public class WhiteRectangleDetector {
      * @param b          max value of the scanned coordinate
      * @param fixed      value of fixed coordinate
      * @param horizontal set to true if scan must be horizontal, false if vertical
+     *
      * @return true if a black point has been found, else false.
      */
     private func containsBlackPoint(a: Int64, b: Int64, fixed: Int64, horizontal: Bool): Bool {

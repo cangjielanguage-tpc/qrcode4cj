@@ -5,9 +5,6 @@ package zxing.code.qrcode.decoder
 
 from std import collection.*
 
-/**
- * @author Sean Owen
- */
 public class BitMatrixParser {
     public var bitMatrix: BitMatrix
     public var parsedVersion: ?Version = None
@@ -15,7 +12,7 @@ public class BitMatrixParser {
     public var mirror: Bool = false;
 
     /**
-     * @param bitMatrix {@link BitMatrix} to parse
+     * @param bitMatrix BitMatrix to parse
      * @throws FormatException if dimension is not >= 21 and 1 mod 4
      */
     public init(bitMatrix: BitMatrix) {
@@ -27,9 +24,9 @@ public class BitMatrixParser {
     }
 
     /**
-     * <p>Reads format information from one of its two locations within the QR Code.</p>
+     * Reads format information from one of its two locations within the QR Code.
      *
-     * @return {@link FormatInformation} encapsulating the QR Code's format info
+     * @return FormatInformation encapsulating the QR Code's format info
      * @throws FormatException if both format information locations cannot be parsed as
      * the valid encoding of format information
      */
@@ -78,9 +75,9 @@ public class BitMatrixParser {
     }
 
     /**
-     * <p>Reads version information from one of its two locations within the QR Code.</p>
+     * Reads version information from one of its two locations within the QR Code.
      *
-     * @return {@link Version} encapsulating the QR Code's version
+     * @return Version encapsulating the QR Code's version
      * @throws FormatException if both version information locations cannot be parsed as
      * the valid encoding of version information
      */
@@ -143,9 +140,9 @@ public class BitMatrixParser {
     }
 
     /**
-     * <p>Reads the bits in the {@link BitMatrix} representing the finder pattern in the
+     * Reads the bits in the {@link BitMatrix} representing the finder pattern in the
      * correct order in order to reconstruct the codewords bytes contained within the
-     * QR Code.</p>
+     * QR Code.
      *
      * @return bytes encoded within the QR Code
      * @throws FormatException if the exact number of bytes expected is not read
@@ -232,9 +229,9 @@ public class BitMatrixParser {
 
     /**
      * Prepare the parser for a mirrored operation.
-     * This flag has effect only on the {@link #readFormatInformation()} and the
-     * {@link #readVersion()}. Before proceeding with {@link #readCodewords()} the
-     * {@link #mirror()} method should be called.
+     * This flag has effect only on the readFormatInformation() and the
+     * readVersion(). Before proceeding with readCodewords() the
+     * mirror() method should be called.
      *
      * @param mirror Whether to read version and format information mirrored.
      */

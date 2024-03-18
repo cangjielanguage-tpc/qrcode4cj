@@ -16,7 +16,8 @@ public class Code93Writer <: OneDimensionalCodeWriter {
 
     /**
      * @param contents barcode contents to encode. It should not be encoded for extended characters.
-     * @return a {@code boolean[]} of horizontal pixels (false = white, true = black)
+     *
+     * @return a boolean[] of horizontal pixels (false = white, true = black)
      */
     public override func encode(contentsin: String): Array<Bool> {
         var contentsinuty32 = UTF32String(contentsin)
@@ -65,10 +66,10 @@ public class Code93Writer <: OneDimensionalCodeWriter {
      * @param pos start position
      * @param pattern pattern to append
      * @param startColor unused
+     *
      * @return 9
      * @deprecated without replacement; intended as an internal-only method
      */
-    // @Deprecated
     protected static func appendPattern(targetin: Array<Bool>, posin: Int64, pattern: Array<Int64>, startColor: Bool): Int64 {
         var target: Array<Bool> = targetin
         var pos: Int64 = posin
@@ -110,23 +111,23 @@ public class Code93Writer <: OneDimensionalCodeWriter {
         for (i in 0..length) {
             var character: Char = contents.get(i);
 
-            // ($)=a, (%)=b, (/)=c, (+)=d. see Code93Reader.ALPHABET_STRING
+            /* ($)=a, (%)=b, (/)=c, (+)=d. see Code93Reader.ALPHABET_STRING */
             if (character.hashCode() == 0) {
-                // NUL: (%)U
+                /* NUL: (%)U */
                 extendedContent.appendAll("bU".toRuneArray());
             } else if (character.hashCode() <= 26) {
-                // SOH - SUB: ($)A - ($)Z
+                /* SOH - SUB: ($)A - ($)Z */
                 extendedContent.append('a');
                 extendedContent.append(Char('A'.hashCode() + character.hashCode() - 1));
             } else if (character.hashCode() <= 31) {
-                // ESC - US: (%)A - (%)E
+                /* ESC - US: (%)A - (%)E */
                 extendedContent.append('b');
                 extendedContent.append(Char('A'.hashCode() + character.hashCode() - 27));
             } else if (character == ' ' || character == '$' || character == '%' || character == '+') {
-                // space $ % +
+                /* space $ % + */
                 extendedContent.append(character);
             } else if (character <= ',') {
-                // ! " # & ' ( ) * ,: (/)A - (/)L
+                /* ! " # & ' ( ) * ,: (/)A - (/)L */
                 extendedContent.append('c');
                 extendedContent.append(Char('A'.hashCode() + character.hashCode() - '!'.hashCode()));
             } else if (character <= '9') {
@@ -139,24 +140,24 @@ public class Code93Writer <: OneDimensionalCodeWriter {
                 extendedContent.append('b');
                 extendedContent.append(Char('F'.hashCode() + character.hashCode() - ';'.hashCode()));
             } else if (character == '@') {
-                // @: (%)V
+                /* @: (%)V */
                 extendedContent.appendAll("bV".toRuneArray());
             } else if (character <= 'Z') {
-                // A - Z
+                /* A - Z */
                 extendedContent.append(character);
             } else if (character <= '_') {
-                // [ - _: (%)K - (%)O
+                /* [ - _: (%)K - (%)O */
                 extendedContent.append('b');
                 extendedContent.append(Char('K'.hashCode() + character.hashCode() - '['.hashCode()));
             } else if (character == '`') {
-                // `: (%)W
+                /* `: (%)W */
                 extendedContent.appendAll("bW".toRuneArray());
             } else if (character <= 'z') {
-                // a - z: (*)A - (*)Z
+                /* a - z: (*)A - (*)Z */
                 extendedContent.append('d');
                 extendedContent.append(Char('A'.hashCode() + character.hashCode() - 'a'.hashCode()));
             } else if (character.hashCode() <= 127) {
-                // { - DEL: (%)P - (%)T
+                /* { - DEL: (%)P - (%)T */
                 extendedContent.append('b');
                 extendedContent.append(Char('P'.hashCode() + character.hashCode() - '{'.hashCode()));
             } else {

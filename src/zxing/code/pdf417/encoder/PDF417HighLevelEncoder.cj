@@ -453,19 +453,19 @@ public open class PDF417HighLevelEncoder {
     }
 
     /**
-     * Performs high-level encoding of a PDF417 message using the algorithm described in annex P
-     * of ISO/IEC 15438:2001(E). If byte compaction has been selected, then only byte compaction
-     * is used.
+     * Performs high-level encoding of a PDF417 message using the algorithm described in annex P of
+     * ISO/IEC 15438:2001(E). If byte compaction has been selected, then only byte compaction is used.
      *
      * @param msg the message
      * @param compaction compaction mode to use
      * @param encoding character encoding used to encode in default or byte compaction
-     * or {@code null} for default / not applicable
+     * or None for default / not applicable
      * @param autoECI encode input minimally using multiple ECIs if needed
-     * If autoECI encoding is specified and additionally {@code encoding} is specified, then the encoder
-     * will use the specified {@link Charset} for any character that can be encoded by it, regardless
+     * If autoECI encoding is specified and additionally {@code encoding} is specified, then the encoder will
+     * use the specified {@link Charset} for any character that can be encoded by it, regardless
      * if a different encoding would lead to a more compact encoding. When no {@code encoding} is specified
      * then charsets will be chosen so that the byte representation is minimal.
+     *
      * @return the encoded message (the Char values range from 0 to 928)
      */
     public static func encodeHighLevel(msg: UTF32String, compaction: Compaction, encoding: MyCharset, autoECI: Bool): UTF32String {
@@ -597,14 +597,14 @@ public open class PDF417HighLevelEncoder {
     }
 
     /**
-     * Encode parts of the message using Text Compaction as described in ISO/IEC 15438:2001(E),
-     * chapter 4.4.2.
+     * Encode parts of the message using Text Compaction as described in ISO/IEC 15438:2001(E), chapter 4.4.2.
      *
      * @param input          the input
      * @param startpos       the start position within the message
      * @param count          the number of characters to encode
      * @param sb             receives the encoded codewords
      * @param initialSubmode should normally be SUBMODE_ALPHA
+     *
      * @return the text submode in which this method ends
      */
     private static func encodeText(
@@ -789,8 +789,7 @@ public open class PDF417HighLevelEncoder {
 
     /**
      * Encode parts of the message using Byte Compaction as described in ISO/IEC 15438:2001(E),
-     * chapter 4.4.3. The Unicode characters will be converted to binary using the cp437
-     * codepage.
+     * chapter 4.4.3. The Unicode characters will be converted to binary using the cp437 codepage.
      *
      * @param bytes     the message converted to a byte array
      * @param startpos  the start position within the message

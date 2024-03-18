@@ -5,9 +5,7 @@
 package zxing.code.oned
 
 /**
- * <p>Decodes Code 128 barcodes.</p>
- *
- * @author Sean Owen
+ * Decodes Code 128 barcodes.
  */
 public open class Code128Reader <: OneDReader {
     static let CODE_PATTERNS: Array<Array<Int64>> = [
@@ -306,8 +304,8 @@ public open class Code128Reader <: OneDReader {
                     }
                     shiftUpperMode = false
                 } else {
-                    // Don't let CODE_STOP, which always appears, affect whether whether we think the last
-                    // code was printable or not.
+                    // Don't let CODE_STOP, which always appears, affect whether whether we think the last code
+                    // was printable or not.
                     if (code != CODE_STOP) {
                         lastCharacterWasPrintable = false
                     }
@@ -320,8 +318,8 @@ public open class Code128Reader <: OneDReader {
                         }
                         if (convertFNC1) {
                             if (result.size == 0) {
-                                // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
-                                // is FNC1 then this is GS1-128. We add the symbology identifier.
+                                // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code is
+                                // FNC1 then this is GS1-128. We add the symbology identifier.
                                 result.appendAll("]C1".toRuneArray())
                             } else {
                                 // GS1 specification 5.4.7.5. Every subsequent FNC1 is returned as ASCII 29 (GS)
@@ -452,8 +450,8 @@ public open class Code128Reader <: OneDReader {
 
         var lastPatternSize: Int64 = nextStart - lastStart
 
-        // Check for ample whitespace following pattern, but, to do this we first need to remember that
-        // we fudged decoding CODE_STOP since it actually has 7 bars, not 6. There is a black bar left
+        // Check for ample whitespace following pattern, but, to do this we first need to remember that we
+        // fudged decoding CODE_STOP since it actually has 7 bars, not 6. There is a black bar left
         // to read off. Would be slightly better to properly read. Here we just skip it:
         nextStart = row.getNextUnset(nextStart)
         if (!row.isRange(
@@ -479,8 +477,8 @@ public open class Code128Reader <: OneDReader {
             throw NotFoundException.getNotFoundInstance()
         }
 
-        // Only bother if the result had at least one character, and if the checksum digit happened to
-        // be a printable character. If it was just interpreted as a control code, nothing to remove.
+        // Only bother if the result had at least one character, and if the checksum digit happened to be
+        // a printable character. If it was just interpreted as a control code, nothing to remove.
         if (resultLength > 0 && lastCharacterWasPrintable) {
             if (codeSet == CODE_CODE_C) {
                 let range = Range(resultLength - 2, resultLength - 1, 1, true, true, true)

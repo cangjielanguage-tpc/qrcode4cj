@@ -19,8 +19,6 @@ import zxing.code.qrcode.detector.Detector
 
 /**
  * This implementation can detect and decode QR Codes in an image.
- *
- * @author Sean Owen
  */
 public open class QRCodeReader <: Reader {
     private static let NO_POINTS = Array<ResultPoint>();
@@ -36,6 +34,7 @@ public open class QRCodeReader <: Reader {
      * @return a String representing the content encoded by the QR code
      * @throws NotFoundException if a QR code cannot be found
      * @throws FormatException if a QR code cannot be decoded
+     *
      * @throws ChecksumException if error correction fails
      */
     public func decode(image: BinaryBitmap): Result {
@@ -93,8 +92,7 @@ public open class QRCodeReader <: Reader {
     /**
      * This method detects a code in a "pure" image -- that is, pure monochrome image
      * which contains only an unrotated, unskewed, image of a code, with some white border
-     * around it. This is a specialized method that works exceptionally fast in this special
-     * case.
+     * around it. This is a specialized method that works exceptionally fast in this special case.
      */
     private static func extractPureBits(image: BitMatrix): BitMatrix {
         let leftTopBlack: Array<Int64> = image.getTopLeftOnBit();
@@ -116,8 +114,8 @@ public open class QRCodeReader <: Reader {
         }
 
         if (bottom - top != right - left) {
-            // Special case, where bottom-right module wasn't black so we found something else in the last row
-            // Assume it's a square, so use height as the width
+            // Special case, where bottom-right module wasn't black so we found something else in the last row Assume
+            // it's a square, so use height as the width
             right = left + (bottom - top)
             if (right >= image.getWidth()) {
                 // Abort if that would not make sense -- off image
@@ -127,15 +125,15 @@ public open class QRCodeReader <: Reader {
 
         var (matrixWidth, matrixHeight) = exextractPureBits(right, left, bottom, top, modulesize)
 
-        // Push in the "border" by half the module width so that we start
-        // sampling in the middle of the module. Just in case the image is a
+        // Push in the "border" by half the module width so that we start sampling
+        // in the middle of the module. Just in case the image is a
         // little off, this will help recover.
         var nudge: Int64 = Int64(modulesize / 2.0f32)
         top += nudge
         left += nudge
 
-        // But careful that this does not sample off the edge
-        // "right" is the farthest-right valid pixel location -- right+1 is not necessarily
+        // But careful that this does not sample off the edge "right"
+        // is the farthest-right valid pixel location -- right+1 is not necessarily
         // This is positive by how much the inner x loop below would be too large
         var nudgedTooFarRight: Int64 = left + Int64((matrixWidth - 1) * Int64(modulesize)) - right
         if (nudgedTooFarRight > 0) {

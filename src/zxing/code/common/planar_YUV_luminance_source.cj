@@ -80,13 +80,13 @@ public open class PlanarYUVLuminanceSource <: LuminanceSource {
         var matrix: Array<UInt8> = Array<UInt8>(area, item: 0)
         var inputOffset: Int64 = top * dataWidth + left
 
-        // If the width matches the full width of the underlying data, perform a single copy.
+        /* If the width matches the full width of the underlying data, perform a single copy. */
         if (width == dataWidth) {
             System.arraycopy(yuvData, inputOffset, matrix, 0, area)
             return matrix
         }
 
-        // Otherwise copy one cropped row at a time.
+        /* Otherwise copy one cropped row at a time. */
         for (y in 0..height) {
             let outputOffset: Int64 = y * width
             System.arraycopy(yuvData, inputOffset, matrix, outputOffset, width)

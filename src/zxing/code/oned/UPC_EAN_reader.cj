@@ -5,20 +5,16 @@
 package zxing.code.oned
 
 /**
- * <p>Encapsulates functionality and implementation that is common to UPC and EAN families
- * of one-dimensional barcodes.</p>
- *
- * @author dswitkin@google.com (Daniel Switkin)
- * @author Sean Owen
- * @author alasdair@google.com (Alasdair Mackintosh)
+ * Encapsulates functionality and implementation that is common to UPC and EAN families
+ * of one-dimensional barcodes.
  */
 // 泛型value为ResultPointCallback
 public abstract class UPCEANReader <: OneDReader {
     // These two values are critical for determining how permissive the decoding will be.
-    // We've arrived at these values through a lot of trial and error. Setting them any higher
-    // lets false positives creep in quickly.
-    private static let MAX_AVG_VARIANCE: Float32 = 0.48;
-    private static let MAX_INDIVIDUAL_VARIANCE: Float32 = 0.7;
+    // We've arrived at these values through a lot of trial and error. Setting them any higher lets
+    // false positives creep in quickly.
+    private static let MAX_AVG_VARIANCE: Float32 = 0.48
+    private static let MAX_INDIVIDUAL_VARIANCE: Float32 = 0.7
 
     /**
      * Start/end guard pattern.
@@ -88,9 +84,9 @@ public abstract class UPCEANReader <: OneDReader {
     }
 
     static func findStartGuardPattern(row: BitArray): Array<Int64> {
-        var foundStart: Bool = false;
+        var foundStart: Bool = false
         var startRange: Array<Int64> = Array<Int64>()
-        var nextStart: Int64 = 0;
+        var nextStart: Int64 = 0
         while (!foundStart) {
             var counters: Array<Int64> = Array<Int64>(START_END_PATTERN.size, item: 0)
             startRange = findGuardPattern(row, nextStart, false, START_END_PATTERN, counters)
@@ -98,8 +94,8 @@ public abstract class UPCEANReader <: OneDReader {
             nextStart = startRange[1]
 
             // Make sure there is a quiet zone at least as big as the start pattern before the barcode.
-            // If this check would run off the left edge of the image, do not accept this barcode,
-            // as it is very likely to be a false positive.
+            // If this check would run off the left edge of the image, do not accept this barcode, as
+            // it is very likely to be a false positive.
             var quietStart: Int64 = start - (nextStart - start)
             if (quietStart >= 0) {
                 foundStart = row.isRange(quietStart, start, false)
@@ -109,11 +105,11 @@ public abstract class UPCEANReader <: OneDReader {
     }
 
     public open override func decodeRow(rowNumber: Int64, row: BitArray, hints: HashMap<DecodeHintType, Any>): Result {
-        return decodeRow(rowNumber, row, findStartGuardPattern(row), hints);
+        return decodeRow(rowNumber, row, findStartGuardPattern(row), hints)
     }
 
     /**
-     * <p>Like {@link #decodeRow(int, BitArray, Map)}, but
+     * decodeRow(int, BitArray, Map), but
      * allows caller to inform method about where the UPC/EAN start pattern is
      * found. This allows this to be computed once and reused across many implementations.</p>
      *
@@ -121,7 +117,8 @@ public abstract class UPCEANReader <: OneDReader {
      * @param row encoding of the row of the barcode image
      * @param startGuardRange start/end column where the opening start pattern was found
      * @param hints optional hints that influence decoding
-     * @return {@link Result} encapsulating the result of decoding a barcode in the row
+     *
+     * @return Result encapsulating the result of decoding a barcode in the row
      * @throws NotFoundException if no potential barcode is found
      * @throws ChecksumException if a potential barcode is found but does not pass its checksum
      * @throws FormatException if a potential barcode is found but format is invalid
@@ -142,51 +139,51 @@ public abstract class UPCEANReader <: OneDReader {
         if (hints.size == 0) {
             resultPointCallback = None
         }
-        var symbologyIdentifier: Int64 = 0;
+        var symbologyIdentifier: Int64 = 0
 
         if (let Some(r) <- resultPointCallback) {
             /* != null*/
             r.foundPossibleResultPoint(
-                ResultPoint(Float32(startGuardRange[0] + startGuardRange[1]) / 2.0, Float32(rowNumber)));
+                ResultPoint(Float32(startGuardRange[0] + startGuardRange[1]) / 2.0, Float32(rowNumber)))
         }
 
         var result: ArrayList<Char> = ArrayList<Char>()
 
-        var endStart: Int64 = decodeMiddle(row, startGuardRange, result);
+        var endStart: Int64 = decodeMiddle(row, startGuardRange, result)
 
         if (let Some(r) <- resultPointCallback) {
             /* != null*/
-            r.foundPossibleResultPoint(ResultPoint(Float32(endStart), Float32(rowNumber)));
+            r.foundPossibleResultPoint(ResultPoint(Float32(endStart), Float32(rowNumber)))
         }
 
-        var endRange: Array<Int64> = decodeEnd(row, endStart);
+        var endRange: Array<Int64> = decodeEnd(row, endStart)
 
         if (let Some(r) <- resultPointCallback) {
             /* != null*/
-            r.foundPossibleResultPoint(ResultPoint(Float32(endRange[0] + endRange[1]) / 2.0, Float32(rowNumber)));
+            r.foundPossibleResultPoint(ResultPoint(Float32(endRange[0] + endRange[1]) / 2.0, Float32(rowNumber)))
         }
 
-        // Make sure there is a quiet zone at least as big as the end pattern after the barcode. The
-        // spec might want more whitespace, but in practice this is the maximum we can count on.
+        // Make sure there is a quiet zone at least as big as the end pattern after the barcode. The spec
+        // might want more whitespace, but in practice this is the maximum we can count on.
         var end: Int64 = endRange[1]
         var quietEnd: Int64 = end + (end - endRange[0])
         if (quietEnd >= row.getSize() || !row.isRange(end, quietEnd, false)) {
-            throw NotFoundException.getNotFoundInstance();
+            throw NotFoundException.getNotFoundInstance()
         }
 
-        var resultString: UTF32String = UTF32String(result);
+        var resultString: UTF32String = UTF32String(result)
 
         // UPC/EAN should never be less than 8 chars anyway
         if (resultString.charSize < 8) {
-            throw FormatException.getFormatInstance();
+            throw FormatException.getFormatInstance()
         }
         if (!checkChecksum(resultString)) {
-            throw ChecksumException.getChecksumInstance();
+            throw ChecksumException.getChecksumInstance()
         }
 
         var left: Float32 = Float32(startGuardRange[1] + startGuardRange[0]) / 2.0
         var right: Float32 = Float32(endRange[1] + endRange[0]) / 2.0
-        var format: BarcodeFormat = getBarcodeFormat();
+        var format: BarcodeFormat = getBarcodeFormat()
         var decodeResult: Result = Result(
             resultString.toString(),
             Array<UInt8>(), // no natural byte representation for these barcodes
@@ -197,16 +194,16 @@ public abstract class UPCEANReader <: OneDReader {
                 ]
             ),
             format
-        );
+        )
 
-        var extensionLength: Int64 = 0;
+        var extensionLength: Int64 = 0
         var extensionResult_none: ?Result = extensionReader.decodeRow(rowNumber, row, endRange[1])
 
         try {
             if (let Some(extensionResult) <- extensionResult_none) {
-                decodeResult.putMetadata(ResultMetadataType.UPC_EAN_EXTENSION, extensionResult.getText());
-                decodeResult.putAllMetadata(extensionResult.getResultMetadata());
-                decodeResult.addResultPoints(extensionResult.getResultPoints());
+                decodeResult.putMetadata(ResultMetadataType.UPC_EAN_EXTENSION, extensionResult.getText())
+                decodeResult.putAllMetadata(extensionResult.getResultMetadata())
+                decodeResult.addResultPoints(extensionResult.getResultPoints())
                 extensionLength = extensionResult.getText().toRuneArray().size
             }
         } catch (re: ReaderException) {
@@ -215,16 +212,16 @@ public abstract class UPCEANReader <: OneDReader {
         exdecoderow(hints, extensionLength)
 
         if (format == BarcodeFormat.EAN_13 || format == BarcodeFormat.UPC_A) {
-            var countryID: String = eanManSupport.lookupCountryIdentifier(resultString);
+            var countryID: String = eanManSupport.lookupCountryIdentifier(resultString)
             if (countryID != "") {
-                decodeResult.putMetadata(ResultMetadataType.POSSIBLE_COUNTRY, countryID);
+                decodeResult.putMetadata(ResultMetadataType.POSSIBLE_COUNTRY, countryID)
             }
         }
         if (format == BarcodeFormat.EAN_8) {
             symbologyIdentifier = 4
         }
 
-        decodeResult.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]E" + symbologyIdentifier.toString());
+        decodeResult.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]E" + symbologyIdentifier.toString())
 
         return decodeResult
     }
@@ -244,7 +241,7 @@ public abstract class UPCEANReader <: OneDReader {
             }
         }
         if (!allowedExtensions.isEmpty()) {
-            var valid: Bool = false;
+            var valid: Bool = false
 
             for (i in 0..allowedExtensions.size) {
                 if (extensionLength == allowedExtensions[i]) {
@@ -253,18 +250,18 @@ public abstract class UPCEANReader <: OneDReader {
                 }
             }
             if (!valid) {
-                throw NotFoundException.getNotFoundInstance();
+                throw NotFoundException.getNotFoundInstance()
             }
         }
     }
 
     /**
      * @param s string of digits to check
-     * @return {@link #checkStandardUPCEANChecksum(String)}
+     * @return checkStandardUPCEANChecksum(String)
      * @throws FormatException if the string does not contain only digits
      */
     protected open func checkChecksum(s: UTF32String): Bool {
-        return checkStandardUPCEANChecksum(s);
+        return checkStandardUPCEANChecksum(s)
     }
 
     /**
@@ -272,13 +269,14 @@ public abstract class UPCEANReader <: OneDReader {
      * whether the checksum is correct or not.
      *
      * @param s string of digits to check
+     *
      * @return true iff string of digits passes the UPC/EAN checksum algorithm
      * @throws FormatException if the string does not contain only digits
      */
     static func checkStandardUPCEANChecksum(s: UTF32String): Bool {
-        var length: Int64 = s.charSize;
+        var length: Int64 = s.charSize
         if (length == 0) {
-            return false;
+            return false
         }
         var check: Int64 = -1
         if (s[length - 1].isAsciiNumber()) {
@@ -288,13 +286,13 @@ public abstract class UPCEANReader <: OneDReader {
     }
 
     static func getStandardUPCEANChecksum(s: UTF32String): Int64 {
-        var length: Int64 = s.charSize;
-        var sum: Int64 = 0;
+        var length: Int64 = s.charSize
+        var sum: Int64 = 0
         var i: Int64 = length - 1
         while (i >= 0) {
             var digit: Int64 = s.get(i).hashCode() - '0'.hashCode()
             if (digit < 0 || digit > 9) {
-                throw FormatException.getFormatInstance();
+                throw FormatException.getFormatInstance()
             }
             sum += digit
             i -= 2
@@ -304,7 +302,7 @@ public abstract class UPCEANReader <: OneDReader {
         while (i >= 0) {
             var digit: Int64 = s.get(i).hashCode() - '0'.hashCode()
             if (digit < 0 || digit > 9) {
-                throw FormatException.getFormatInstance();
+                throw FormatException.getFormatInstance()
             }
             sum += digit
             i -= 2
@@ -313,21 +311,22 @@ public abstract class UPCEANReader <: OneDReader {
     }
 
     protected open func decodeEnd(row: BitArray, endStart: Int64): Array<Int64> {
-        return findGuardPattern(row, endStart, false, START_END_PATTERN);
+        return findGuardPattern(row, endStart, false, START_END_PATTERN)
     }
 
     static func findGuardPattern(row: BitArray, rowOffset: Int64, whiteFirst: Bool, pattern: Array<Int64>): Array<Int64> {
-        return findGuardPattern(row, rowOffset, whiteFirst, pattern, Array<Int64>(pattern.size, item: 0));
+        return findGuardPattern(row, rowOffset, whiteFirst, pattern, Array<Int64>(pattern.size, item: 0))
     }
 
     /**
      * @param row row of black/white values to search
      * @param rowOffset position to start search
-     * @param whiteFirst if true, indicates that the pattern specifies white/black/white/...
-     * pixel counts, otherwise, it is interpreted as black/white/black/...
+     * @param whiteFirst if true, indicates that the pattern specifies white/black/white/... pixel
+     * counts, otherwise, it is interpreted as black/white/black/...
      * @param pattern pattern of counts of number of black and white pixels that are being
      * searched for as a pattern
      * @param counters array of counters, as long as pattern, to re-use
+     *
      * @return start/end horizontal offset of guard pattern, as an array of two ints
      * @throws NotFoundException if pattern is not found
      */
@@ -338,7 +337,7 @@ public abstract class UPCEANReader <: OneDReader {
         pattern: Array<Int64>,
         counters: Array<Int64>
     ): Array<Int64> {
-        var width: Int64 = row.getSize();
+        var width: Int64 = row.getSize()
         var rowOffset: Int64 = rowOffsetin
 
         if (whiteFirst) {
@@ -360,7 +359,7 @@ public abstract class UPCEANReader <: OneDReader {
                         return [patternStart, x]
                     }
                     patternStart += counters[0] + counters[1]
-                    System.arraycopy(counters, 2, counters, 0, counterPosition - 1);
+                    System.arraycopy(counters, 2, counters, 0, counterPosition - 1)
                     counters[counterPosition - 1] = 0
                     counters[counterPosition] = 0
                     counterPosition--
@@ -371,7 +370,7 @@ public abstract class UPCEANReader <: OneDReader {
                 isWhite = !isWhite
             }
         }
-        throw NotFoundException.getNotFoundInstance();
+        throw NotFoundException.getNotFoundInstance()
     }
 
     /**
@@ -380,23 +379,23 @@ public abstract class UPCEANReader <: OneDReader {
      * @param row row of black/white values to decode
      * @param counters the counts of runs of observed black/white/black/... values
      * @param rowOffset horizontal offset to start decoding from
-     * @param patterns the set of patterns to use to decode -- sometimes different encodings
-     * for the digits 0-9 are used, and this indicates the encodings for 0 to 9 that should
-     * be used
+     * @param patterns the set of patterns to use to decode -- sometimes different encodings for
+     * the digits 0-9 are used, and this indicates the encodings for 0 to 9 that should be used
+     *
      * @return horizontal offset of first pixel beyond the decoded digit
      * @throws NotFoundException if digit cannot be decoded
      */
     static func decodeDigit(row: BitArray, counters: Array<Int64>, rowOffset: Int64, patterns: Array<Array<Int64>>): Int64 {
-        recordPattern(row, rowOffset, counters);
+        recordPattern(row, rowOffset, counters)
         var bestVariance: Float32 = MAX_AVG_VARIANCE
 
         // worst variance we'll accept
-        var bestMatch: Int64 = -1;
-        var max: Int64 = patterns.size;
+        var bestMatch: Int64 = -1
+        var max: Int64 = patterns.size
 
         for (i in 0..max) {
             var pattern: Array<Int64> = patterns[i]
-            var variance: Float32 = patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE);
+            var variance: Float32 = patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE)
             if (variance < bestVariance) {
                 bestVariance = variance
                 bestMatch = i
@@ -405,7 +404,7 @@ public abstract class UPCEANReader <: OneDReader {
         if (bestMatch >= 0) {
             return bestMatch
         } else {
-            throw NotFoundException.getNotFoundInstance();
+            throw NotFoundException.getNotFoundInstance()
         }
     }
 
@@ -417,12 +416,13 @@ public abstract class UPCEANReader <: OneDReader {
     public func getBarcodeFormat(): BarcodeFormat
 
     /**
-     * Subclasses override this to decode the portion of a barcode between the start
-     * and end guard patterns.
+     * Subclasses override this to decode the portion of a barcode between the start and
+     * end guard patterns.
      *
      * @param row row of black/white values to search
      * @param startRange start/end offset of start guard pattern
      * @param resultString {@link StringBuilder} to append decoded chars to
+     *
      * @return horizontal offset of first pixel after the "middle" that was decoded
      * @throws NotFoundException if decoding could not complete successfully
      */

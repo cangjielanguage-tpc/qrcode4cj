@@ -9,9 +9,6 @@ from std import math.*
 /**
  * Encapsulates functionality and implementation that is common to all families
  * of one-dimensional barcodes.
- *
- * @author dswitkin@google.com (Daniel Switkin)
- * @author Sean Owen
  */
 public abstract class OneDReader <: Reader {
     public open override func decode(image: BinaryBitmap): Result {
@@ -61,16 +58,17 @@ public abstract class OneDReader <: Reader {
     }
 
     /**
-     * We're going to examine rows from the middle outward, searching alternately above and below the
-     * middle, and farther out each time. rowStep is the number of rows between each successive
+     * We're going to examine rows from the middle outward, searching alternately above and below the middle,
+     * and farther out each time. rowStep is the number of rows between each successive
      * attempt above and below the middle. So we'd scan row middle, then middle - rowStep, then
      * middle + rowStep, then middle - (2 * rowStep), etc.
-     * rowStep is bigger as the image is taller, but is always at least 1. We've somewhat arbitrarily
-     * decided that moving up and down by about 1/16 of the image is pretty good we try more of the
+     * rowStep is bigger as the image is taller, but is always at least 1. We've somewhat arbitrarily decided
+     * that moving up and down by about 1/16 of the image is pretty good we try more of the
      * image if "trying harder".
      *
      * @param image The image to decode
      * @param hints Any hints that were requested
+     *
      * @return The contents of the decoded barcode
      * @throws NotFoundException Any spontaneous errors which occur
      */
@@ -114,15 +112,15 @@ public abstract class OneDReader <: Reader {
                 continue
             }
 
-            // While we have the image data in a BitArray, it's fairly cheap to reverse it in place to
-            // handle decoding upside down barcodes.
+            // While we have the image data in a BitArray, it's fairly cheap to reverse it in place to handle
+            // decoding upside down barcodes.
             for (attempt in 0..2) {
                 if (attempt == 1) { // trying again?
                     row.reverse()
 
                     // reverse the row and continue
-                    // This means we will only ever draw result points *once* in the life of this method
-                    // since we want to avoid drawing the wrong points after flipping the row, and,
+                    // This means we will only ever draw result points *once* in the life of this method since
+                    // we want to avoid drawing the wrong points after flipping the row, and,
                     // don't want to clutter with noise from every single row scan -- just the scans
                     // that start on the center line.
                     if (hintsuse.size > 0 && hintsuse.contains(DecodeHintType.NEED_RESULT_POINT_CALLBACK)) {
@@ -172,14 +170,15 @@ public abstract class OneDReader <: Reader {
 
     /**
      * Records the size of successive runs of white and black pixels in a row, starting at a given point.
-     * The values are recorded in the given array, and the number of runs recorded is equal to the size
-     * of the array. If the row starts on a white pixel at the given start point, then the first count
-     * recorded is the run of white pixels starting from that point likewise it is the count of a run
+     * The values are recorded in the given array, and the number of runs recorded is equal to the size of
+     * the array. If the row starts on a white pixel at the given start point, then the first count recorded
+     * is the run of white pixels starting from that point likewise it is the count of a run
      * of black pixels if the row begin on a black pixels at that point.
      *
      * @param row row to count from
      * @param start offset into row to start at
      * @param counters array into which to record counts
+     *
      * @throws NotFoundException if counters cannot be filled entirely from row before running out
      * of pixels
      */
@@ -241,12 +240,13 @@ public abstract class OneDReader <: Reader {
 
     /**
      * Determines how closely a set of observed counts of runs of black/white values matches a given
-     * target pattern. This is reported as the ratio of the total variance from the expected pattern
-     * proportions across all pattern elements, to the length of the pattern.
+     * target pattern. This is reported as the ratio of the total variance from the expected pattern proportions
+     * across all pattern elements, to the length of the pattern.
      *
      * @param counters observed counters
      * @param pattern expected pattern
      * @param maxIndividualVariance The most any counter can differ before we give up
+     * 
      * @return ratio of total variance between counters and pattern compared to total pattern size
      */
     protected static func patternMatchVariance(
@@ -264,8 +264,8 @@ public abstract class OneDReader <: Reader {
             patternLength += pattern[i]
         }
         if (total < patternLength) {
-            // If we don't even have one pixel per unit of bar width, assume this is too small
-            // to reliably match, so fail:
+            // If we don't even have one pixel per unit of bar width, assume this is too small to
+            // reliably match, so fail:
             // return Float.POSITIVE_INFINITY
             return 1.0 / 0.0
         }
@@ -297,13 +297,15 @@ public abstract class OneDReader <: Reader {
     }
 
     /**
-     * <p>Attempts to decode a one-dimensional barcode format given a single row of
-     * an image.</p>
+     * Attempts to decode a one-dimensional barcode format given a single row of
+     * an image.
      *
      * @param rowNumber row number from top of the row
      * @param row the black/white pixel data of the row
      * @param hints decode hints
+     *
      * @return {@link Result} containing encoded string and start/end of barcode
+     *
      * @throws NotFoundException if no potential barcode is found
      * @throws ChecksumException if a potential barcode is found but does not pass its checksum
      * @throws FormatException if a potential barcode is found but format is invalid

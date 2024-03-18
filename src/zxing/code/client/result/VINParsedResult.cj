@@ -31,7 +31,7 @@ public open class VINParsedResult <: ParsedResult {
         plantCode: Char,
         sequentialNumber: String
     ) {
-        super(ParsedResultType.VIN);
+        super(ParsedResultType.VIN)
         this.vin = vin
         this.worldManufacturerID = worldManufacturerID
         this.vehicleDescriptorSection = vehicleDescriptorSection
@@ -81,23 +81,23 @@ public open class VINParsedResult <: ParsedResult {
     }
 
     public override func getDisplayResult(): String {
-        var result: ArrayList<Char> = ArrayList<Char>();
+        var result: ArrayList<Char> = ArrayList<Char>()
         result.appendAll(worldManufacturerID.toRuneArray())
-        result.append(' ');
+        result.append(' ')
         result.appendAll(vehicleDescriptorSection.toRuneArray())
-        result.append(' ');
+        result.append(' ')
         result.appendAll(vehicleIdentifierSection.toRuneArray())
-        result.append('\n');
+        result.append('\n')
         if (countryCode != "") {
             result.appendAll(countryCode.toRuneArray())
-            result.append(' ');
+            result.append(' ')
         }
         result.appendAll(modelYear.toString().toRuneArray())
-        result.append(' ');
+        result.append(' ')
         result.append(plantCode)
-        result.append(' ');
+        result.append(' ')
         result.appendAll(sequentialNumber.toRuneArray())
-        result.append('\n');
-        return String(result);
+        result.append('\n')
+        return String(result)
     }
 }

@@ -12,8 +12,8 @@ from std import math.*
 from std import collection.*
 
 public class MultiFinderPatternFinder <: FinderPatternFinder {
-    // TODO MIN_MODULE_COUNT and MAX_MODULE_COUNT would be great hints to ask the user for
-    // since it limits the number of regions to decode
+    // TODO MIN_MODULE_COUNT and MAX_MODULE_COUNT would be great hints to ask the user for since
+    // it limits the number of regions to decode
 
     // max. legal count of modules per QR code edge (177)
     private static var MAX_MODULE_COUNT_PER_EDGE: Float32 = 180.0
@@ -53,8 +53,8 @@ public class MultiFinderPatternFinder <: FinderPatternFinder {
     }
 
     /**
-     * @return the 3 best {@link FinderPattern}s from our list of candidates. The "best" are
-     * those that have been detected at least 2 times, and whose module
+     * @return the 3 best {@link FinderPattern}s from our list of candidates. The "best" are those
+     * that have been detected at least 2 times, and whose module
      * size differs from the average among those patterns the least
      * @throws NotFoundException if 3 such finder patterns do not exist
      */
@@ -82,23 +82,22 @@ public class MultiFinderPatternFinder <: FinderPatternFinder {
         }
 
         // Sort by estimated module size to speed up the upcoming checks
-        possibleCenters.sortBy(this.ModuleSizeComparator, stable: true);
+        possibleCenters.sortBy(this.ModuleSizeComparator, stable: true)
 
         /*
          * Now lets start: build a list of tuples of three finder locations that
          * - feature similar module sizes
          * - are placed in a distance so the estimated module count is within the QR specification
          * - have similar distance between upper left/right and left top/bottom finder patterns
-         * - form a triangle with 90° angle (checked by comparing top right/bottom left distance
-         * with pythagoras)
+         * - form a triangle with 90° angle (checked by comparing top right/bottom left distance with pythagoras)
          *
          * Note: we allow each point to be used for more than one code region: this might seem
-         * counterintuitive at first, but the performance penalty is not that big. At this point,
-         * we cannot make a good quality decision whether the three finders actually represent
+         * counterintuitive at first, but the performance penalty is not that big. At this point, we cannot
+         * make a good quality decision whether the three finders actually represent
          * a QR code, or are just by chance laid out so it looks like there might be a QR code there.
          * So, if the layout seems right, lets have the decoder try to decode.
          */
-        var results: ArrayList<Array<FinderPattern>> = ArrayList<Array<FinderPattern>>();
+        var results: ArrayList<Array<FinderPattern>> = ArrayList<Array<FinderPattern>>()
 
         exselectMultipleBestPatterns(size, possibleCenters, results)
 
@@ -118,7 +117,7 @@ public class MultiFinderPatternFinder <: FinderPatternFinder {
             for (i2 in (i1 + 1)..(size - 1)) {
                 var p2: FinderPattern = possibleCenters[i2]
 
-                // Compare the expected module sizes; if they are really off, skip
+                // Compare the expected module sizes if they are really off, skip
                 var vModSize12: Float32 = (p1.getEstimatedModuleSize() - p2.getEstimatedModuleSize()) / min(
                     p1.getEstimatedModuleSize(), p2.getEstimatedModuleSize())
                 var vModSize12A: Float32 = abs(p1.getEstimatedModuleSize() - p2.getEstimatedModuleSize())
@@ -131,7 +130,7 @@ public class MultiFinderPatternFinder <: FinderPatternFinder {
                 for (i3 in (i2 + 1)..size) {
                     var p3: FinderPattern = possibleCenters[i3]
 
-                    // Compare the expected module sizes; if they are really off, skip
+                    // Compare the expected module sizes if they are really off, skip
                     var vModSize23: Float32 = (p2.getEstimatedModuleSize() - p3.getEstimatedModuleSize()) / min(
                         p2.getEstimatedModuleSize(), p3.getEstimatedModuleSize())
                     var vModSize23A: Float32 = abs(p2.getEstimatedModuleSize() - p3.getEstimatedModuleSize())
@@ -142,7 +141,7 @@ public class MultiFinderPatternFinder <: FinderPatternFinder {
                     }
 
                     var test: Array<FinderPattern> = [p1, p2, p3]
-                    var testResult = FinderPatternFinder.changeFinderPatternArray(test);
+                    var testResult = FinderPatternFinder.changeFinderPatternArray(test)
                     ResultPoint.orderBestPatterns(testResult)
 
                     for (item in 0..testResult.size) {
@@ -195,10 +194,10 @@ public class MultiFinderPatternFinder <: FinderPatternFinder {
         var maxJ: Int64 = image.getWidth()
 
         // We are looking for black/white/black/white/black modules in
-        // 1:1:3:1:1 ratio; this tracks the number of such modules seen so far
+        // 1:1:3:1:1 ratio this tracks the number of such modules seen so far
 
-        // Let's assume that the maximum version QR Code we support takes up 1/4 the height of the
-        // image, and then account for the center being 3 modules in size. This gives the smallest
+        // Let's assume that the maximum version QR Code we support takes up 1/4 the height of the image,
+        // and then account for the center being 3 modules in size. This gives the smallest
         // number of pixels the center could be, so skip this often. When trying harder, look for all
         // QR versions regardless of how dense they are.
         var iSkip: Int64 = (3 * maxI) / (4 * MAX_MODULES)
@@ -220,14 +219,14 @@ public class MultiFinderPatternFinder <: FinderPatternFinder {
                         currentState++
                     }
                     stateCount[currentState] = stateCount[currentState] + 1
-                } else { // White pixel
+                } else { /* White pixel */
                     if ((currentState & 1) == 0) { // Counting black pixels
                         if (currentState == 4) { // A winner?
                             if (foundPatternCross(stateCount) && handlePossibleCenter(stateCount, i, j)) { // Yes
                                 // Clear state to start looking again
                                 currentState = 0
                                 doClearCounts(stateCount)
-                            } else { // No, shift counts back by two
+                            } else { /* No, shift counts back by two */
                                 doShiftCounts2(stateCount)
                                 currentState = 3
                             }
@@ -235,7 +234,7 @@ public class MultiFinderPatternFinder <: FinderPatternFinder {
                             currentState++
                             stateCount[currentState] = stateCount[currentState] + 1
                         }
-                    } else { // Counting white pixels
+                    } else { /* Counting white pixels */ 
                         stateCount[currentState] = stateCount[currentState] + 1
                     }
                 }
@@ -245,7 +244,7 @@ public class MultiFinderPatternFinder <: FinderPatternFinder {
                 handlePossibleCenter(stateCount, i, maxJ)
             }
             i += iSkip
-        } // for i=iSkip-1 ...
+        } /* for i=iSkip-1 ... */ 
 
         return returnfindMulti()
     }
@@ -255,7 +254,7 @@ public class MultiFinderPatternFinder <: FinderPatternFinder {
         var result: ArrayList<FinderPatternInfo> = ArrayList<FinderPatternInfo>()
         for (patternN in 0..patternInfo.size) {
             var pattern: Array<FinderPattern> = patternInfo[patternN]
-            var patternResult = FinderPatternFinder.changeFinderPatternArray(pattern);
+            var patternResult = FinderPatternFinder.changeFinderPatternArray(pattern)
             ResultPoint.orderBestPatterns(patternResult)
             for (i in 0..patternResult.size) {
                 pattern[i] = (patternResult[i] as FinderPattern).getOrThrow()

@@ -82,7 +82,7 @@ open class UPCEANExtension2Support {
     /**
      * @param raw raw content of extension
      * @return formatted interpretation of raw content as a {@link Map} mapping
-     * one {@link ResultMetadataType} to appropriate value, or {@code null} if not known
+     * one ResultMetadataType to appropriate value, or None if not known
      */
     private static func parseExtensionString(raw: String): HashMap<ResultMetadataType, Any> {
         if (raw.toRuneArray().size != 2) {

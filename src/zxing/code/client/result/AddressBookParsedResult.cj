@@ -32,7 +32,7 @@ public open class AddressBookParsedResult <: ParsedResult {
         addresses: Array<String>,
         addressTypes: Array<String>
     ) {
-        var initData: Array<String> = Array<String>();
+        var initData: Array<String> = Array<String>()
 
         (names, initData, "", phoneNumbers, phoneTypes, emails, emailTypes, "", "", addresses, addressTypes, "", "", "",
             initData, initData)
@@ -59,15 +59,15 @@ public open class AddressBookParsedResult <: ParsedResult {
         urls: Array<String>,
         geo: Array<String>
     ) {
-        super(ParsedResultType.ADDRESSBOOK);
+        super(ParsedResultType.ADDRESSBOOK)
         if (!phoneNumbers.isEmpty() && !phoneTypes.isEmpty() && phoneNumbers.size != phoneTypes.size) {
-            throw IllegalArgumentException("Phone numbers and types lengths differ");
+            throw IllegalArgumentException("Phone numbers and types lengths differ")
         }
         if (!emails.isEmpty() && !emailTypes.isEmpty() && emails.size != emailTypes.size) {
-            throw IllegalArgumentException("Emails and types lengths differ");
+            throw IllegalArgumentException("Emails and types lengths differ")
         }
         if (!addresses.isEmpty() && !addressTypes.isEmpty() && addresses.size != addressTypes.size) {
-            throw IllegalArgumentException("Addresses and types lengths differ");
+            throw IllegalArgumentException("Addresses and types lengths differ")
         }
         this.names = names
         this.nicknames = nicknames
@@ -177,20 +177,20 @@ public open class AddressBookParsedResult <: ParsedResult {
     }
 
     public override func getDisplayResult(): String {
-        var result: ArrayList<Char> = ArrayList<Char>();
-        maybeAppend(names, result);
-        maybeAppend(nicknames, result);
-        maybeAppend(pronunciation, result);
-        maybeAppend(title, result);
-        maybeAppend(org, result);
-        maybeAppend(addresses, result);
-        maybeAppend(phoneNumbers, result);
-        maybeAppend(emails, result);
-        maybeAppend(instantMessenger, result);
-        maybeAppend(urls, result);
-        maybeAppend(birthday, result);
-        maybeAppend(geo, result);
-        maybeAppend(note, result);
-        return String(result);
+        var result: ArrayList<Char> = ArrayList<Char>()
+        maybeAppend(names, result)
+        maybeAppend(nicknames, result)
+        maybeAppend(pronunciation, result)
+        maybeAppend(title, result)
+        maybeAppend(org, result)
+        maybeAppend(addresses, result)
+        maybeAppend(phoneNumbers, result)
+        maybeAppend(emails, result)
+        maybeAppend(instantMessenger, result)
+        maybeAppend(urls, result)
+        maybeAppend(birthday, result)
+        maybeAppend(geo, result)
+        maybeAppend(note, result)
+        return String(result)
     }
 }

@@ -5,22 +5,19 @@ package zxing.code.datamatrix.decoder
 
 import zxing.code.common.BitMatrix
 
-/**
- * @author bbrown@google.com (Brian Brown)
- */
 class BitMatrixParser {
     private var mappingBitMatrix: BitMatrix
     private var readMappingMatrix: BitMatrix
     private var version: Version
 
     /**
-     * @param bitMatrix {@link BitMatrix} to parse
+     * @param bitMatrix BitMatrix}  to parse
      * @throws FormatException if dimension is < 8 or > 144 or not 0 mod 2
      */
     init(bitMatrix: BitMatrix) {
-        var dimension: Int64 = bitMatrix.getHeight();
+        var dimension: Int64 = bitMatrix.getHeight()
         if (dimension < 8 || dimension > 144 || (dimension & 0x01) != 0) {
-            throw FormatException.getFormatInstance();
+            throw FormatException.getFormatInstance()
         }
 
         version = readVersion(bitMatrix)
@@ -36,24 +33,25 @@ class BitMatrixParser {
     }
 
     /**
-     * <p>Creates the version object based on the dimension of the original bit matrix from
-     * the datamatrix code.</p>
-     * <p>See ISO 16022:2006 Table 7 - ECC 200 symbol attributes</p>
+     * Creates the version object based on the dimension of the original bit matrix from
+     * the datamatrix code.
+     * See ISO 16022:2006 Table 7 - ECC 200 symbol attributes
      * @param bitMatrix Original {@link BitMatrix} including alignment patterns
-     * @return {@link Version} encapsulating the Data Matrix Code's "version"
+     *
+     * @returnVersion encapsulating the Data Matrix Code's "version"
      * @throws FormatException if the dimensions of the mapping matrix are not valid
      * Data Matrix dimensions.
      */
     private static func readVersion(bitMatrix: BitMatrix): Version {
-        var numRows: Int64 = bitMatrix.getHeight();
-        var numColumns: Int64 = bitMatrix.getWidth();
-        return Version.getVersionForDimensions(numRows, numColumns);
+        var numRows: Int64 = bitMatrix.getHeight()
+        var numColumns: Int64 = bitMatrix.getWidth()
+        return Version.getVersionForDimensions(numRows, numColumns)
     }
 
     /**
-     * <p>Reads the bits in the {@link BitMatrix} representing the mapping matrix (No alignment patterns)
+     * Reads the bits in the {@link BitMatrix} representing the mapping matrix (No alignment patterns)
      * in the correct order in order to reconstitute the codewords bytes contained within the
-     * Data Matrix Code.</p>
+     * Data Matrix Code.
      *
      * @return bytes encoded within the Data Matrix Code
      * @throws FormatException if the exact number of bytes expected is not read
@@ -61,7 +59,7 @@ class BitMatrixParser {
     func readCodewords(): Array<UInt8> {
         var result = Array<Byte>(version.getTotalCodewords(), item: 0)
         var (resultOffset, row, column, numRows, numColumns): (Int64, Int64, Int64, Int64, Int64) = (0, 4, 0,
-            mappingBitMatrix.getHeight(), mappingBitMatrix.getWidth());
+            mappingBitMatrix.getHeight(), mappingBitMatrix.getWidth())
 
         var (corner1Read, corner2Read, corner3Read, corner4Read): (Bool, Bool, Bool, Bool) = (false, false, false, false)
 
@@ -111,14 +109,14 @@ class BitMatrixParser {
         } while ((row < numRows) || (column < numColumns))
 
         if (resultOffset != version.getTotalCodewords()) {
-            throw FormatException.getFormatInstance();
+            throw FormatException.getFormatInstance()
         }
 
         return result
     }
 
     /**
-     * <p>Reads a bit of the mapping matrix accounting for boundary wrapping.</p>
+     * Reads a bit of the mapping matrix accounting for boundary wrapping.
      *
      * @param row Row to read in the mapping matrix
      * @param column Column to read in the mapping matrix
@@ -141,14 +139,14 @@ class BitMatrixParser {
         if (row2 >= numRows) {
             row2 -= numRows
         }
-        readMappingMatrix.set(column2, row2);
-        return mappingBitMatrix.get(column2, row2);
+        readMappingMatrix.set(column2, row2)
+        return mappingBitMatrix.get(column2, row2)
     }
 
     /**
-     * <p>Reads the 8 bits of the standard Utah-shaped pattern.</p>
+     * Reads the 8 bits of the standard Utah-shaped pattern.
      *
-     * <p>See ISO 16022:2006, 5.8.1 Figure 6</p>
+     * See ISO 16022:2006, 5.8.1 Figure 6
      *
      * @param row Current row in the mapping matrix, anchored at the 8th bit (LSB) of the pattern
      * @param column Current column in the mapping matrix, anchored at the 8th bit (LSB) of the pattern
@@ -157,7 +155,7 @@ class BitMatrixParser {
      * @return byte from the utah shape
      */
     private func readUtah(row: Int64, column: Int64, numRows: Int64, numColumns: Int64): Int64 {
-        var currentByte: Int64 = 0;
+        var currentByte: Int64 = 0
         if (readModule(row - 2, column - 2, numRows, numColumns)) {
             currentByte |= 1
         }
@@ -194,16 +192,16 @@ class BitMatrixParser {
     }
 
     /**
-     * <p>Reads the 8 bits of the special corner condition 1.</p>
+     * Reads the 8 bits of the special corner condition 1.
      *
-     * <p>See ISO 16022:2006, Figure F.3</p>
+     * See ISO 16022:2006, Figure F.3
      *
      * @param numRows Number of rows in the mapping matrix
      * @param numColumns Number of columns in the mapping matrix
      * @return byte from the Corner condition 1
      */
     private func readCorner1(numRows: Int64, numColumns: Int64): Int64 {
-        var currentByte: Int64 = 0;
+        var currentByte: Int64 = 0
         if (readModule(numRows - 1, 0, numRows, numColumns)) {
             currentByte |= 1
         }
@@ -240,16 +238,16 @@ class BitMatrixParser {
     }
 
     /**
-     * <p>Reads the 8 bits of the special corner condition 2.</p>
+     * Reads the 8 bits of the special corner condition 2.
      *
-     * <p>See ISO 16022:2006, Figure F.4</p>
+     * See ISO 16022:2006, Figure F.4
      *
      * @param numRows Number of rows in the mapping matrix
      * @param numColumns Number of columns in the mapping matrix
      * @return byte from the Corner condition 2
      */
     private func readCorner2(numRows: Int64, numColumns: Int64): Int64 {
-        var currentByte: Int64 = 0;
+        var currentByte: Int64 = 0
         if (readModule(numRows - 3, 0, numRows, numColumns)) {
             currentByte |= 1
         }
@@ -286,16 +284,16 @@ class BitMatrixParser {
     }
 
     /**
-     * <p>Reads the 8 bits of the special corner condition 3.</p>
+     * Reads the 8 bits of the special corner condition 3.
      *
-     * <p>See ISO 16022:2006, Figure F.5</p>
+     * See ISO 16022:2006, Figure F.5
      *
      * @param numRows Number of rows in the mapping matrix
      * @param numColumns Number of columns in the mapping matrix
      * @return byte from the Corner condition 3
      */
     private func readCorner3(numRows: Int64, numColumns: Int64): Int64 {
-        var currentByte: Int64 = 0;
+        var currentByte: Int64 = 0
         if (readModule(numRows - 1, 0, numRows, numColumns)) {
             currentByte |= 1
         }
@@ -332,16 +330,16 @@ class BitMatrixParser {
     }
 
     /**
-     * <p>Reads the 8 bits of the special corner condition 4.</p>
+     * Reads the 8 bits of the special corner condition 4.
      *
-     * <p>See ISO 16022:2006, Figure F.6</p>
+     * See ISO 16022:2006, Figure F.6
      *
      * @param numRows Number of rows in the mapping matrix
      * @param numColumns Number of columns in the mapping matrix
      * @return byte from the Corner condition 4
      */
     private func readCorner4(numRows: Int64, numColumns: Int64): Int64 {
-        var currentByte: Int64 = 0;
+        var currentByte: Int64 = 0
         if (readModule(numRows - 3, 0, numRows, numColumns)) {
             currentByte |= 1
         }
@@ -378,22 +376,22 @@ class BitMatrixParser {
     }
 
     /**
-     * <p>Extracts the data region from a {@link BitMatrix} that contains
-     * alignment patterns.</p>
+     * Extracts the data region from a {@link BitMatrix} that contains
+     * alignment patterns.
      *
      * @param bitMatrix Original {@link BitMatrix} with alignment patterns
      * @return BitMatrix that has the alignment patterns removed
      */
     private func extractDataRegion(bitMatrix: BitMatrix): BitMatrix {
-        var symbolSizeRows: Int64 = version.getSymbolSizeRows();
-        var symbolSizeColumns: Int64 = version.getSymbolSizeColumns();
+        var symbolSizeRows: Int64 = version.getSymbolSizeRows()
+        var symbolSizeColumns: Int64 = version.getSymbolSizeColumns()
 
         if (bitMatrix.getHeight() != symbolSizeRows) {
-            throw IllegalArgumentException("Dimension of bitMatrix must match the version size");
+            throw IllegalArgumentException("Dimension of bitMatrix must match the version size")
         }
 
-        var dataRegionSizeRows: Int64 = version.getDataRegionSizeRows();
-        var dataRegionSizeColumns: Int64 = version.getDataRegionSizeColumns();
+        var dataRegionSizeRows: Int64 = version.getDataRegionSizeRows()
+        var dataRegionSizeColumns: Int64 = version.getDataRegionSizeColumns()
 
         let numDataRegionsRow = symbolSizeRows / dataRegionSizeRows
         let numDataRegionsColumn = symbolSizeColumns / dataRegionSizeColumns
@@ -401,7 +399,7 @@ class BitMatrixParser {
         var sizeDataRegionRow: Int64 = numDataRegionsRow * dataRegionSizeRows
         var sizeDataRegionColumn: Int64 = numDataRegionsColumn * dataRegionSizeColumns
 
-        var bitMatrixWithoutAlignment: BitMatrix = BitMatrix(sizeDataRegionColumn, sizeDataRegionRow);
+        var bitMatrixWithoutAlignment: BitMatrix = BitMatrix(sizeDataRegionColumn, sizeDataRegionRow)
 
         for (dataRegionRow in 0..numDataRegionsRow) {
             var dataRegionRowOffset: Int64 = dataRegionRow * dataRegionSizeRows
@@ -417,7 +415,7 @@ class BitMatrixParser {
                         let readColumnOffset: Int64 = dataRegionColumn * (dataRegionSizeColumns + 2) + 1 + j
                         if (bitMatrix.get(readColumnOffset, readRowOffset)) {
                             let writeColumnOffset: Int64 = dataRegionColumnOffset + j
-                            bitMatrixWithoutAlignment.set(writeColumnOffset, writeRowOffset);
+                            bitMatrixWithoutAlignment.set(writeColumnOffset, writeRowOffset)
                         }
                     }
                 }
