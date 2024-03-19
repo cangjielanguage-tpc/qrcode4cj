@@ -4,9 +4,6 @@
 
 package zxing.code.pdf417.decoder
 
-/**
- * @author Guenther Grau
- */
 open class DetectionResult <: ToString {
     private static let ADJUST_ROW_NUMBER_SKIP: Int64 = 2
 
@@ -46,8 +43,8 @@ open class DetectionResult <: ToString {
     // we should be able to estimate the row height and use it as a hint for the row number
     // we should also fill the rows top to bottom and bottom to top
     /**
-     * @return number of codewords which don't have a valid row number. Note that the count is not accurate as codewords
-     * will be counted several times. It just serves as an indicator to see when we can stop adjusting row numbers
+     * @return number of codewords which don't have a valid row number. Note that the count is not accurate as codewords will
+     * be counted several times. It just serves as an indicator to see when we can stop adjusting row numbers
      */
     private func adjustRowNumbers(): Int64 {
         var unadjustedCount: Int64 = adjustRowNumbersByRow();
@@ -71,8 +68,8 @@ open class DetectionResult <: ToString {
         adjustRowNumbersFromBothRI();
 
         // TODO we should only do full row adjustments if row numbers of left and right row indicator column match.
-        // Maybe it's even better to calculated the height (in codeword rows) and divide it by the number of barcode
-        // rows. This, together with the LRI and RRI row numbers should allow us to get a good estimate where a row
+        // Maybe it's even better to calculated the height (in codeword rows) and divide it by the number of barcode rows.
+        // This, together with the LRI and RRI row numbers should allow us to get a good estimate where a row
         // number starts and ends.
         var unadjustedCount: Int64 = adjustRowNumbersFromLRI();
         return unadjustedCount + adjustRowNumbersFromRRI()

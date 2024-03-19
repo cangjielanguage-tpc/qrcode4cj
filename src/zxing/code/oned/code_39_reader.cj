@@ -5,18 +5,17 @@
 package zxing.code.oned
 
 /**
- * <p>Decodes Code 39 barcodes. Supports "Full ASCII Code 39" if USE_CODE_39_EXTENDED_MODE is set.</p>
+ * <Decodes Code 39 barcodes. Supports "Full ASCII Code 39" if USE_CODE_39_EXTENDED_MODE is set.
  *
- * @author Sean Owen
  * @see Code93Reader
  */
 public open class Code39Reader <: OneDReader {
-    static let ALPHABET_STRING: String = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%";
+    static let ALPHABET_STRING: String = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%"
 
     /**
      * These represent the encodings of characters, as patterns of wide and narrow bars.
-     * The 9 least-significant bits of each int correspond to the pattern of wide and narrow,
-     * with 1s representing "wide" and 0s representing narrow.
+     * The 9 least-significant bits of each int correspond to the pattern of wide and narrow, with
+     * 1s representing "wide" and 0s representing narrow.
      */
     static let CHARACTER_ENCODINGS: Array<Int64> = [
         0x034,
@@ -64,7 +63,7 @@ public open class Code39Reader <: OneDReader {
         0x02A // /-%
     ]
 
-    static let ASTERISK_ENCODING: Int64 = 0x094;
+    static let ASTERISK_ENCODING: Int64 = 0x094
 
     private var usingCheckDigit: Bool = false
     private var extendedMode: Bool = false
@@ -72,22 +71,22 @@ public open class Code39Reader <: OneDReader {
     private var counters: Array<Int64> = Array<Int64>()
 
     /**
-     * Creates a reader that assumes all encoded data is data, and does not treat the final
-     * character as a check digit. It will not decoded "extended Code 39" sequences.
+     * Creates a reader that assumes all encoded data is data, and does not treat the final character
+     * as a check digit. It will not decoded "extended Code 39" sequences.
      */
     public init() {
-        this(false);
+        this(false)
     }
 
     /**
      * Creates a reader that can be configured to check the last character as a check digit.
      * It will not decoded "extended Code 39" sequences.
      *
-     * @param usingCheckDigit if true, treat the last data character as a check digit, not
-     * data, and verify that the checksum passes.
+     * @param usingCheckDigit if true, treat the last data character as a check digit, not data,
+     * and verify that the checksum passes.
      */
     public init(usingCheckDigit: Bool) {
-        this(usingCheckDigit, false);
+        this(usingCheckDigit, false)
     }
 
     /**
@@ -95,8 +94,8 @@ public open class Code39Reader <: OneDReader {
      * or optionally attempt to decode "extended Code 39" sequences that are used to encode
      * the full ASCII character set.
      *
-     * @param usingCheckDigit if true, treat the last data character as a check digit, not
-     * data, and verify that the checksum passes.
+     * @param usingCheckDigit if true, treat the last data character as a check digit, not data, 
+     * and verify that the checksum passes.
      * @param extendedMode if true, will attempt to decode extended Code 39 sequences in the
      * text.
      */
@@ -113,11 +112,11 @@ public open class Code39Reader <: OneDReader {
         var theCounters: Array<Int64> = counters
         var result: ArrayList<Char> = decodeRowResult
 
-        var start: Array<Int64> = findAsteriskPattern(row, theCounters);
+        var start: Array<Int64> = findAsteriskPattern(row, theCounters)
 
         // Read off white space
-        var nextStart: Int64 = row.getNextSet(start[1]);
-        var end: Int64 = row.getSize();
+        var nextStart: Int64 = row.getNextSet(start[1])
+        var end: Int64 = row.getSize()
 
         var decodedChar: Char
         var lastStart: Int64
@@ -130,7 +129,7 @@ public open class Code39Reader <: OneDReader {
         // remove asterisk
 
         // Look for whitespace after pattern:
-        var lastPatternSize: Int64 = 0;
+        var lastPatternSize: Int64 = 0
 
         for (i in 0..theCounters.size) {
             lastPatternSize += theCounters[i]
@@ -140,24 +139,24 @@ public open class Code39Reader <: OneDReader {
         // If 50% of last pattern size, following last pattern, is not whitespace, fail
         // (but if it's whitespace to the very end of the image, that's OK)
         if (nextStart != end && (whiteSpaceAfterEnd * 2) < lastPatternSize) {
-            throw NotFoundException.getNotFoundInstance();
+            throw NotFoundException.getNotFoundInstance()
         }
 
         if (usingCheckDigit) {
             var max: Int64 = result.size - 1
-            var total: Int64 = 0;
+            var total: Int64 = 0
 
             for (i in 0..max) {
                 total += ALPHABET_STRING.indexOf(UInt8(decodeRowResult.get(i).getOrThrow().hashCode())).getOrThrow()
             }
             if (result.get(max).getOrThrow() != Char(ALPHABET_STRING[total % 43])) {
-                throw ChecksumException.getChecksumInstance();
+                throw ChecksumException.getChecksumInstance()
             }
         }
 
         if (result.size == 0) {
             // false positive
-            throw NotFoundException.getNotFoundInstance();
+            throw NotFoundException.getNotFoundInstance()
         }
 
         var resultString: String
@@ -172,22 +171,22 @@ public open class Code39Reader <: OneDReader {
 
         var resultObject: Result = Result(resultString, Array<UInt8>(),
             Array<ResultPoint>([ResultPoint(left, Float32(rowNumber)), ResultPoint(right, Float32(rowNumber))]),
-            BarcodeFormat.CODE_39);
-        resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]A0");
+            BarcodeFormat.CODE_39)
+        resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]A0")
 
         return resultObject
     }
 
     private func exdecodeRow(row: BitArray, nextStart: Int64, theCounters: Array<Int64>, result: ArrayList<Char>) {
         var nextStart_p = nextStart
-        recordPattern(row, nextStart_p, theCounters);
-        var pattern: Int64 = toNarrowWidePattern(theCounters);
+        recordPattern(row, nextStart_p, theCounters)
+        var pattern: Int64 = toNarrowWidePattern(theCounters)
 
         if (pattern < 0) {
-            throw NotFoundException.getNotFoundInstance();
+            throw NotFoundException.getNotFoundInstance()
         }
         var decodedChar = patternToChar(pattern)
-        result.append(decodedChar);
+        result.append(decodedChar)
         var lastStart = nextStart_p
         for (i in 0..theCounters.size) {
             nextStart_p += theCounters[i]
@@ -200,12 +199,12 @@ public open class Code39Reader <: OneDReader {
 
     private static func findAsteriskPattern(row: BitArray, counters: Array<Int64>): Array<Int64> {
         var width: Int64 = row.getSize()
-        var rowOffset: Int64 = row.getNextSet(0);
+        var rowOffset: Int64 = row.getNextSet(0)
 
-        var counterPosition: Int64 = 0;
+        var counterPosition: Int64 = 0
         var patternStart: Int64 = rowOffset
-        var isWhite: Bool = false;
-        var patternLength: Int64 = counters.size;
+        var isWhite: Bool = false
+        var patternLength: Int64 = counters.size
 
         for (i in rowOffset..width) {
             if (row.get(i) != isWhite) {
@@ -219,7 +218,7 @@ public open class Code39Reader <: OneDReader {
                         return returnData
                     }
                     patternStart += counters[0] + counters[1]
-                    System.arraycopy(counters, 2, counters, 0, counterPosition - 1);
+                    System.arraycopy(counters, 2, counters, 0, counterPosition - 1)
                     counters[counterPosition - 1] = 0
                     counters[counterPosition] = 0
                     counterPosition--
@@ -230,17 +229,17 @@ public open class Code39Reader <: OneDReader {
                 isWhite = !isWhite
             }
         }
-        throw NotFoundException.getNotFoundInstance();
+        throw NotFoundException.getNotFoundInstance()
     }
 
-    // For efficiency, returns -1 on failure. Not throwing here saved as many as 700 exceptions
-    // per image when using some of our blackbox images.
+    // For efficiency, returns -1 on failure. Not throwing here saved as many as 700 exceptions per
+    // image when using some of our blackbox images.
     private static func toNarrowWidePattern(counters: Array<Int64>): Int64 {
-        var numCounters: Int64 = counters.size;
-        var maxNarrowCounter: Int64 = 0;
+        var numCounters: Int64 = counters.size
+        var maxNarrowCounter: Int64 = 0
         var wideCounters: Int64
         do {
-            var minCounter: Int64 = 0x7fffffff;
+            var minCounter: Int64 = 0x7fffffff
 
             for (counternum in 0..numCounters) {
                 if (counters[counternum] < minCounter && counters[counternum] > maxNarrowCounter) {
@@ -249,8 +248,8 @@ public open class Code39Reader <: OneDReader {
             }
             maxNarrowCounter = minCounter
             wideCounters = 0
-            var totalWideCountersWidth: Int64 = 0;
-            var pattern: Int64 = 0;
+            var totalWideCountersWidth: Int64 = 0
+            var pattern: Int64 = 0
 
             for (i in 0..numCounters) {
                 var counter: Int64 = counters[i]
@@ -262,9 +261,9 @@ public open class Code39Reader <: OneDReader {
             }
             if (wideCounters == 3) {
                 // Found 3 wide counters, but are they close enough in width?
-                // We can perform a cheap, conservative check to see if any individual
-                // counter is more than 1.5 times the average:
-                var i = 0;
+                // We can perform a cheap, conservative check to see if any individual counter
+                // is more than 1.5 times the average:
+                var i = 0
                 while (wideCounters > 0 && i < numCounters) {
                     var counter: Int64 = counters[i]
                     if (counter > maxNarrowCounter) {
@@ -272,7 +271,7 @@ public open class Code39Reader <: OneDReader {
 
                         // totalWideCountersWidth = 3 * average, so this checks if counter >= 3/2 * average
                         if ((counter * 2) >= totalWideCountersWidth) {
-                            return -1;
+                            return -1
                         }
                     }
                     i++
@@ -280,68 +279,68 @@ public open class Code39Reader <: OneDReader {
                 return pattern
             }
         } while (wideCounters > 3)
-        return -1;
+        return -1
     }
 
     private static func patternToChar(pattern: Int64): Char {
         for (i in 0..CHARACTER_ENCODINGS.size) {
             if (CHARACTER_ENCODINGS[i] == pattern) {
-                return Char(ALPHABET_STRING[i]);
+                return Char(ALPHABET_STRING[i])
             }
         }
         if (pattern == ASTERISK_ENCODING) {
-            return '*';
+            return '*'
         }
-        throw NotFoundException.getNotFoundInstance();
+        throw NotFoundException.getNotFoundInstance()
     }
 
     private static func decodeExtended(encoded: UTF32String): String {
-        var length: Int64 = encoded.size;
-        var decoded: ArrayList<Char> = ArrayList<Char>();
+        var length: Int64 = encoded.size
+        var decoded: ArrayList<Char> = ArrayList<Char>()
 
         var i: Int64 = 0
         while (i < length) {
-            var c: Char = encoded.get(i);
+            var c: Char = encoded.get(i)
             if (c == '+' || c == '$' || c == '%' || c == '/') {
-                var next: Char = encoded.get(i + 1);
-                var decodedChar: Char = '\0';
+                var next: Char = encoded.get(i + 1)
+                var decodedChar: Char = '\0'
                 match (c) {
                     case '+' =>
-                        // +A to +Z map to a to z
+                        /* +A to +Z map to a to z */
                         if (next >= 'A' && next <= 'Z') {
                         decodedChar = Char(next.hashCode() + 32)
                     } else {
-                        throw FormatException.getFormatInstance();
+                        throw FormatException.getFormatInstance()
                     }
                     case '$' =>
-                        // $A to $Z map to control codes SH to SB
+                        /* $A to $Z map to control codes SH to SB */
                         if (next >= 'A' && next <= 'Z') {
                         decodedChar = Char(next.hashCode() - 64)
                     } else {
-                        throw FormatException.getFormatInstance();
+                        throw FormatException.getFormatInstance()
                     }
                     case '%' => decodedChar = getDecodedChar(next)
                     case '/' =>
-                        // /A to /O map to ! to , and /Z maps to :
+                        /* /A to /O map to ! to , and /Z maps to : */
                         if (next >= 'A' && next <= 'O') {
                         decodedChar = Char(next.hashCode() - 32)
                     } else if (next == 'Z') {
                         decodedChar = ':'
                     } else {
-                        throw FormatException.getFormatInstance();
+                        throw FormatException.getFormatInstance()
                     }
                     case _ => ""
                 }
-                decoded.append(decodedChar);
+                decoded.append(decodedChar)
 
-                // bump up i again since we read two characters
+                /* bump up i again since we read two characters */
                 i++
             } else {
-                decoded.append(c);
+                decoded.append(c)
             }
             i++
         }
-        return String(decoded);
+        return String(decoded)
     }
 
     private static func getDecodedChar(next: Char) {
@@ -363,7 +362,7 @@ public open class Code39Reader <: OneDReader {
         } else if (next == 'X' || next == 'Y' || next == 'Z') {
             decodedChar = Char(127)
         } else {
-            throw FormatException.getFormatInstance();
+            throw FormatException.getFormatInstance()
         }
         return decodedChar
     }

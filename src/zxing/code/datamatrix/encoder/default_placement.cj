@@ -59,30 +59,30 @@ public open class DefaultPlacement {
     }
 
     public func place() {
-        var pos: Int64 = 0;
-        var row: Int64 = 4;
-        var col: Int64 = 0;
+        var pos: Int64 = 0
+        var row: Int64 = 4
+        var col: Int64 = 0
 
         do {
             // repeatedly first check for one of the special corner cases, then...
             if ((row == numrows) && (col == 0)) {
-                corner1(pos);
+                corner1(pos)
                 pos++
             }
             if ((row == numrows - 2) && (col == 0) && ((numcols % 4) != 0)) {
-                corner2(pos);
+                corner2(pos)
                 pos++
             }
             if ((row == numrows - 2) && (col == 0) && (numcols % 8 == 4)) {
-                corner3(pos);
+                corner3(pos)
                 pos++
             }
             if ((row == numrows + 4) && (col == 2) && ((numcols % 8) == 0)) {
-                corner4(pos);
+                corner4(pos)
                 pos++
             }
 
-            // sweep upward diagonally, inserting successive characters...
+            /* sweep upward diagonally, inserting successive characters... */
             (row, col, pos) = explace2(row, col, pos)
             row++
             col += 3
@@ -93,10 +93,10 @@ public open class DefaultPlacement {
         // ...until the entire array is scanned
         } while ((row < numrows) || (col < numcols))
 
-        // Lastly, if the lower right-hand corner is untouched, fill in fixed pattern
+        /* Lastly, if the lower right-hand corner is untouched, fill in fixed pattern */
         if (noBit(numcols - 1, numrows - 1)) {
-            setBit(numcols - 1, numrows - 1, true);
-            setBit(numcols - 2, numrows - 2, true);
+            setBit(numcols - 1, numrows - 1, true)
+            setBit(numcols - 2, numrows - 2, true)
         }
     }
     func explace2(row: Int64, col: Int64, pos: Int64): (Int64, Int64, Int64) {
@@ -105,7 +105,7 @@ public open class DefaultPlacement {
         var pos_p = pos
         do {
             if ((row_p < numrows) && (col_p >= 0) && noBit(col_p, row_p)) {
-                utah(row_p, col_p, pos_p);
+                utah(row_p, col_p, pos_p)
                 pos_p++
             }
             row_p -= 2
@@ -120,7 +120,7 @@ public open class DefaultPlacement {
         var pos_p = pos
         do {
             if ((row_p >= 0) && (col_p < numcols) && noBit(col_p, row_p)) {
-                utah(row_p, col_p, pos_p);
+                utah(row_p, col_p, pos_p)
                 pos_p++
             }
             row_p += 2
@@ -141,10 +141,10 @@ public open class DefaultPlacement {
             rowt += 4 - ((numcols + 4) % 8)
         }
 
-        var v: Int64 = codewordsArray[pos].hashCode();
+        var v: Int64 = codewordsArray[pos].hashCode()
 
         v &= 1 << (8 - bit)
-        setBit(colt, rowt, v != 0);
+        setBit(colt, rowt, v != 0)
     }
 
     /**
@@ -155,57 +155,57 @@ public open class DefaultPlacement {
      * @param pos character position
      */
     private func utah(row: Int64, col: Int64, pos: Int64) {
-        module(row - 2, col - 2, pos, 1);
-        module(row - 2, col - 1, pos, 2);
-        module(row - 1, col - 2, pos, 3);
-        module(row - 1, col - 1, pos, 4);
-        module(row - 1, col, pos, 5);
-        module(row, col - 2, pos, 6);
-        module(row, col - 1, pos, 7);
-        module(row, col, pos, 8);
+        module(row - 2, col - 2, pos, 1)
+        module(row - 2, col - 1, pos, 2)
+        module(row - 1, col - 2, pos, 3)
+        module(row - 1, col - 1, pos, 4)
+        module(row - 1, col, pos, 5)
+        module(row, col - 2, pos, 6)
+        module(row, col - 1, pos, 7)
+        module(row, col, pos, 8)
     }
 
     private func corner1(pos: Int64) {
-        module(numrows - 1, 0, pos, 1);
-        module(numrows - 1, 1, pos, 2);
-        module(numrows - 1, 2, pos, 3);
-        module(0, numcols - 2, pos, 4);
-        module(0, numcols - 1, pos, 5);
-        module(1, numcols - 1, pos, 6);
-        module(2, numcols - 1, pos, 7);
-        module(3, numcols - 1, pos, 8);
+        module(numrows - 1, 0, pos, 1)
+        module(numrows - 1, 1, pos, 2)
+        module(numrows - 1, 2, pos, 3)
+        module(0, numcols - 2, pos, 4)
+        module(0, numcols - 1, pos, 5)
+        module(1, numcols - 1, pos, 6)
+        module(2, numcols - 1, pos, 7)
+        module(3, numcols - 1, pos, 8)
     }
 
     private func corner2(pos: Int64) {
-        module(numrows - 3, 0, pos, 1);
-        module(numrows - 2, 0, pos, 2);
-        module(numrows - 1, 0, pos, 3);
-        module(0, numcols - 4, pos, 4);
-        module(0, numcols - 3, pos, 5);
-        module(0, numcols - 2, pos, 6);
-        module(0, numcols - 1, pos, 7);
-        module(1, numcols - 1, pos, 8);
+        module(numrows - 3, 0, pos, 1)
+        module(numrows - 2, 0, pos, 2)
+        module(numrows - 1, 0, pos, 3)
+        module(0, numcols - 4, pos, 4)
+        module(0, numcols - 3, pos, 5)
+        module(0, numcols - 2, pos, 6)
+        module(0, numcols - 1, pos, 7)
+        module(1, numcols - 1, pos, 8)
     }
 
     private func corner3(pos: Int64) {
-        module(numrows - 3, 0, pos, 1);
-        module(numrows - 2, 0, pos, 2);
-        module(numrows - 1, 0, pos, 3);
-        module(0, numcols - 2, pos, 4);
-        module(0, numcols - 1, pos, 5);
-        module(1, numcols - 1, pos, 6);
-        module(2, numcols - 1, pos, 7);
-        module(3, numcols - 1, pos, 8);
+        module(numrows - 3, 0, pos, 1)
+        module(numrows - 2, 0, pos, 2)
+        module(numrows - 1, 0, pos, 3)
+        module(0, numcols - 2, pos, 4)
+        module(0, numcols - 1, pos, 5)
+        module(1, numcols - 1, pos, 6)
+        module(2, numcols - 1, pos, 7)
+        module(3, numcols - 1, pos, 8)
     }
 
     private func corner4(pos: Int64) {
-        module(numrows - 1, 0, pos, 1);
-        module(numrows - 1, numcols - 1, pos, 2);
-        module(0, numcols - 3, pos, 3);
-        module(0, numcols - 2, pos, 4);
-        module(0, numcols - 1, pos, 5);
-        module(1, numcols - 3, pos, 6);
-        module(1, numcols - 2, pos, 7);
-        module(1, numcols - 1, pos, 8);
+        module(numrows - 1, 0, pos, 1)
+        module(numrows - 1, numcols - 1, pos, 2)
+        module(0, numcols - 3, pos, 3)
+        module(0, numcols - 2, pos, 4)
+        module(0, numcols - 1, pos, 5)
+        module(1, numcols - 3, pos, 6)
+        module(1, numcols - 2, pos, 7)
+        module(1, numcols - 1, pos, 8)
     }
 }

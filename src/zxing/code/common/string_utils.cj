@@ -185,16 +185,18 @@ public class StringUtils {
             return StandardCharsets.UTF_8;
         }
 
-        // Easy -- if assuming Shift_JIS or >= 3 valid consecutive not-ascii characters (and no evidence it can't be), done
+        /* Easy -- if assuming Shift_JIS or >= 3 valid consecutive not-ascii characters (and no evidence it can't be), done */
         if (canBeShiftJIS && (ASSUME_SHIFT_JIS || sjisMaxKatakanaWordLength >= 3 || sjisMaxDoubleBytesWordLength >= 3)) {
             return SHIFT_JIS_CHARSET
         }
 
-        // Distinguishing Shift_JIS and ISO-8859-1 can be a little tough for short words. The crude heuristic is:
-        // - If we saw
-        //   - only two consecutive katakana chars in the whole text, or
-        //   - at least 10% of bytes that could be "upper" not-alphanumeric Latin1,
-        // - then we conclude Shift_JIS, else ISO-8859-1
+        /*
+         * Distinguishing Shift_JIS and ISO-8859-1 can be a little tough for short words. The crude heuristic is:
+         * - If we saw
+         *   - only two consecutive katakana chars in the whole text, or
+         *   - at least 10% of bytes that could be "upper" not-alphanumeric Latin1,
+         * - then we conclude Shift_JIS, else ISO-8859-1
+         */
         if (canBeISO88591 && canBeShiftJIS) {
             if ((sjisMaxKatakanaWordLength == 2 && sjisKatakanaChars == 2) || isoHighOther * 10 >= length) {
                 return SHIFT_JIS_CHARSET

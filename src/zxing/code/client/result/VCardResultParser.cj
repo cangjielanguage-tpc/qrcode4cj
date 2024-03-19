@@ -12,8 +12,6 @@ import zxing.code.common.MyCharset
 /**
  * Parses contact information formatted according to the VCard (2.1) format. This is not a complete
  * implementation but should parse information as commonly encoded in 2D barcodes.
- *
- * @author Sean Owen
  */
 public open class VCardResultParser <: ResultParser {
     private static let BEGIN_VCARD: Regex = Regex("(?i)BEGIN:VCARD");
@@ -27,8 +25,8 @@ public open class VCardResultParser <: ResultParser {
     private static let COMMA: String = (",")
     private static let SEMICOLON_OR_COMMA: String = ("[;,]")
     public override func parse(result: Result): ?ParsedResult {
-        // Although we should insist on the raw text ending with "END:VCARD", there's no reason
-        // to throw out everything else we parsed just because this was omitted. In fact, Eclair
+        // Although we should insist on the raw text ending with "END:VCARD", there's no reason to
+        // throw out everything else we parsed just because this was omitted. In fact, Eclair
         // is doing just that, and we can't parse its contacts without this leniency.
         var rawText: UTF32String = getMassagedText(result);
         var m = BEGIN_VCARD.matcher(rawText.toString())
@@ -147,37 +145,37 @@ public open class VCardResultParser <: ResultParser {
             }
             var matchStart: Int64 = i
 
-            // Found the start of a match here
-            while (let Some(v) <- rawText.indexOf('\n'.toString(), start: i)) { // Really, end in \r\n
+            /* Found the start of a match here */
+            while (let Some(v) <- rawText.indexOf('\n'.toString(), start: i)) { /* Really, end in \r\n */
                 i = v
-                if (i < rawText.charSize - 1 && // But if followed by tab or space,
-                    (rawText.get(i + 1) == ' ' || // this is only a continuation
+                if (i < rawText.charSize - 1 && /* But if followed by tab or space, */
+                    (rawText.get(i + 1) == ' ' || /* this is only a continuation */
                     rawText.get(i + 1) == '\t')) {
                     i = i + 2
-                // Skip \n and continutation whitespace
-                } else if (quotedPrintable && // If preceded by = in quoted printable
-                    ((i >= 1 && rawText.get(i - 1) == '=') || // this is a continuation
+                /* Skip \n and continutation whitespace */
+                } else if (quotedPrintable && /* If preceded by = in quoted printable */
+                    ((i >= 1 && rawText.get(i - 1) == '=') || /* this is a continuation */
                     (i >= 2 && rawText.get(i - 2) ==
                     '='))) {
                     i++
-                // Skip \n
+                /* Skip \n */
                 } else {
                     break
                 }
             }
 
             if (i < 0) {
-                // No terminating end character? uh, done. Set i such that loop terminates and break
+                /* No terminating end character? uh, done. Set i such that loop terminates and break */
                 i = max
             } else if (i > matchStart) {
-                // found a match
+                /* found a match */
                 if (matches.isEmpty()) {
                     matches = ArrayList()
-                    // lazy init
+                    /* lazy init */
                 }
                 if (i >= 1 && rawText.get(i - 1) == '\r') {
                     i--
-                    // Back up over \r, which really should be there
+                    /* Back up over \r, which really should be there */
                 }
                 var element: String = rawText.substring(matchStart, i - matchStart).toString();
                 if (trim) {
@@ -204,14 +202,14 @@ public open class VCardResultParser <: ResultParser {
                     }
                 }
 
-                // Only handle VALUE=uri specially
+                /* Only handle VALUE=uri specially */
                 if ("uri" == (valueType)) {
                     // Don't actually support dereferencing URIs, but use scheme-specific part not URI
                     // as value, to support tel: and mailto:
                     try {
                         element = URL.parse(element).opaque
                     } catch (iae: IllegalArgumentException) {
-                        // ignore
+                        /* ignore */
                     }
                 }
                 if (metadata.isEmpty()) {

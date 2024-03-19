@@ -6,10 +6,6 @@ package zxing.code.pdf417.decoder
 
 import zxing.code.common.detector.MathUtils
 
-/**
- * @author Guenther Grau
- * @author creatale GmbH (christoph.schulz@creatale.de)
- */
 open class PDF417CodewordDecoder {
     private static var RATIOS_TABLE: Array<Array<Float32>> = Array<Array<Float32>>()
     private init() {

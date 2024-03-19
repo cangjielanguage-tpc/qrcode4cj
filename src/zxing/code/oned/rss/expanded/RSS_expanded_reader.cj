@@ -112,8 +112,8 @@ public class RSSExpandedReader <: AbstractRSSReader {
     private var startFromEven: Bool = false;
 
     public func decodeRow(rowNumber: Int64, row: BitArray, hints: HashMap<DecodeHintType, Any>): Result {
-        // Rows can start with even pattern in case in prev rows there where odd number of patters.
-        // So lets try twice
+        // Rows can start with even pattern in case in prev rows there where odd number of patters. So
+        // lets try twice
         this.pairs.clear();
         this.startFromEven = false
         try {
@@ -157,8 +157,8 @@ public class RSSExpandedReader <: AbstractRSSReader {
 
         // TODO: deal with reversed rows
         if (tryStackedDecode) {
-            // When the image is 180-rotated, then rows are sorted in wrong direction.
-            // Try twice with both the directions.
+            // When the image is 180-rotated, then rows are sorted in wrong direction. Try twice
+            // with both the directions.
             var ps: ArrayList<ExpandedPair> = checkRows(false);
             if (!ps.isEmpty()) {
                 return ps
@@ -175,8 +175,8 @@ public class RSSExpandedReader <: AbstractRSSReader {
     private func checkRows(reverse: Bool): ArrayList<ExpandedPair> {
 
         // Limit number of rows we are checking
-        // We use recursive algorithm with pure complexity and don't want it to take forever
-        // Stacked barcode can have up to 11 rows, so 25 seems reasonable enough
+        // We use recursive algorithm with pure complexity and don't want it to take forever Stacked
+        // barcode can have up to 11 rows, so 25 seems reasonable enough
         if (this.rows.size > 25) {
             this.rows.clear();
 

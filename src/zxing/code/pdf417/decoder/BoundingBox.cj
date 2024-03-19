@@ -9,9 +9,6 @@ import zxing.code.common.ResultPoint
 import zxing.code.common.BitMatrix
 from std import math.*
 
-/**
- * @author Guenther Grau
- */
 open class BoundingBox {
     private var image: BitMatrix = BitMatrix()
     private var topLeft: ResultPoint = ResultPoint();

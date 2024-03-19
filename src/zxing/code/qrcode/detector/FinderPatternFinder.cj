@@ -6,12 +6,11 @@ package zxing.code.qrcode.detector
 from std import time.*
 
 /**
- * <p>This class attempts to find finder patterns in a QR Code. Finder patterns are the square
- * markers at three corners of a QR Code.</p>
+ * This class attempts to find finder patterns in a QR Code. Finder patterns are the square
+ * markers at three corners of a QR Code.
  *
- * <p>This class is thread-safe but not reentrant. Each thread must allocate its own object.
+ * This class is thread-safe but not reentrant. Each thread must allocate its own object.
  *
- * @author Sean Owen
  */
 public open class FinderPatternFinder {
     private static let CENTER_QUORUM: Int64 = 2;
@@ -26,7 +25,7 @@ public open class FinderPatternFinder {
     private var resultPointCallback: ?ResultPointCallback
 
     /**
-     * <p>Creates a finder that will search the image for three finder patterns.</p>
+     * Creates a finder that will search the image for three finder patterns.
      *
      * @param image image to search
      */
@@ -57,8 +56,8 @@ public open class FinderPatternFinder {
         // We are looking for black/white/black/white/black modules in
         // 1:1:3:1:1 ratio; this tracks the number of such modules seen so far
 
-        // Let's assume that the maximum version QR Code we support takes up 1/4 the height of the
-        // image, and then account for the center being 3 modules in size. This gives the smallest
+        // Let's assume that the maximum version QR Code we support takes up 1/4 the height of the image,
+        // and then account for the center being 3 modules in size. This gives the smallest
         // number of pixels the center could be, so skip this often. When trying harder, look for all
         // QR versions regardless of how dense they are.
         var iSkip: Int64 = exfind4(maxI, tryHarder)
@@ -135,11 +134,11 @@ public open class FinderPatternFinder {
             if (rowSkip > stateCount[2]) {
                 // Skip rows between row of lower confirmed center
                 // and top of presumed third confirmed center
-                // but back up a bit to get a full chance of detecting
-                // it, entire width of center of finder pattern
+                // but back up a bit to get a full chance of detecting it,
+                // entire width of center of finder pattern
 
-                // Skip by rowSkip, but back off by stateCount[2] (size of last center
-                // of pattern we saw) to be conservative, and also back off by iSkip which
+                // Skip by rowSkip, but back off by stateCount[2] (size of last center of
+                // pattern we saw) to be conservative, and also back off by iSkip which
                 // is about to be re-added
                 i_p += rowSkip - stateCount[2] - iSkip_p
                 j_p = maxJ - 1
@@ -295,6 +294,7 @@ public open class FinderPatternFinder {
      *
      * @param centerI row where a finder pattern was detected
      * @param centerJ center of the section that appears to cross a finder pattern
+     *
      * @return true if proportions are withing expected limits
      */
     private func crossCheckDiagonal(centerI: Int64, centerJ: Int64): Bool {
@@ -377,8 +377,9 @@ public open class FinderPatternFinder {
      *
      * @param startI row where a finder pattern was detected
      * @param centerJ center of the section that appears to cross a finder pattern
-     * @param maxCount maximum reasonable number of modules that should be
-     * observed in any reading state, based on the results of the horizontal scan
+     * @param maxCount maximum reasonable number of modules that should be observed in any reading state, 
+     * based on the results of the horizontal scan
+     *
      * @return vertical center of finder pattern
      */
     private func crossCheckVertical(startI: Int64, centerJ: Int64, maxCount: Int64, originalStateCountTotal: Int64): Float64 {
@@ -474,9 +475,9 @@ public open class FinderPatternFinder {
     }
 
     /**
-     * <p>Like {@link #crossCheckVertical(int, int, int, int)}, and in fact is basically identical,
+     * Like {@link #crossCheckVertical(int, int, int, int)}, and in fact is basically identical,
      * except it reads horizontally instead of vertically. This is used to cross-cross
-     * check a vertical cross check and locate the real center of the alignment pattern.</p>
+     * check a vertical cross check and locate the real center of the alignment pattern.
      */
     private func crossCheckHorizontal(startJ: Int64, centerI: Int64, maxCount: Int64, originalStateCountTotal: Int64): Float64 {
         let image: BitMatrix = this.image;
@@ -571,7 +572,9 @@ public open class FinderPatternFinder {
      * @param i row where finder pattern may be found
      * @param j end of possible finder pattern in row
      * @param pureBarcode ignored
+     *
      * @return true if a finder pattern candidate was found this time
+     *
      * @deprecated only exists for backwards compatibility
      * @see #handlePossibleCenter(int[], int, int)
      */
@@ -633,8 +636,8 @@ public open class FinderPatternFinder {
                     firstConfirmedCenter = possibleCenters[i]
                 } else {
                     // We have two confirmed centers
-                    // How far down can we skip before resuming looking for the next
-                    // pattern? In the worst case, only the difference between the
+                    // How far down can we skip before resuming looking for the next pattern?
+                    // In the worst case, only the difference between the
                     // difference in the x / y coordinates of the two centers.
                     // This is the case where you find top left last.
                     hasSkipped = true
@@ -648,7 +651,7 @@ public open class FinderPatternFinder {
 
     /**
      * @return true iff we have found at least 3 finder patterns that have been detected
-     * at least {@link #CENTER_QUORUM} times each, and, the estimated module size of the
+     * at least CENTER_QUORUM times each, and, the estimated module size of the
      * candidates is "pretty similar"
      */
     private func haveMultiplyConfirmedCenters(): Bool {
@@ -666,8 +669,8 @@ public open class FinderPatternFinder {
         }
 
         // OK, we have at least 3 confirmed centers, but, it's possible that one is a "false positive"
-        // and that we need to keep looking. We detect this by asking if the estimated module sizes
-        // vary too much. We arbitrarily say that when the total deviation from average exceeds
+        // and that we need to keep looking. We detect this by asking if the estimated module sizes vary too much.
+        // We arbitrarily say that when the total deviation from average exceeds
         // 5% of the total module size estimates, it's too much.
         let average: Float32 = totalModuleSize / Float32(max)
         var totalDeviation: Float32 = 0.0f32;
@@ -687,10 +690,7 @@ public open class FinderPatternFinder {
     }
 
     /**
-     *
-     */
-    /**
-     * @return the 3 best {@link FinderPattern}s from our list of candidates. The "best" are
+     * @return the 3 best FinderPattern from our list of candidates. The "best" are
      * those have similar module size and form a shape closer to a isosceles right triangle.
      * @throws NotFoundException if 3 such finder patterns do not exist
      */
@@ -799,7 +799,7 @@ public open class FinderPatternFinder {
 }
 
 /**
- * <p>Orders by {@link FinderPattern#getEstimatedModuleSize()}</p>
+ * Orders by FinderPattern#getEstimatedModuleSize()
  */
 class EstimatedModuleComparator {
     func compare(center1: FinderPattern, center2: FinderPattern): Int64 {

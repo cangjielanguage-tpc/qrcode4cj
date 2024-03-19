@@ -4,16 +4,13 @@ import zxing.code.common.CharacterSetECI
 from std import collection.*
 
 /**
- * This produces nearly optimal encodings of text into the first-level of
- * encoding used by Aztec code.
+ * This produces nearly optimal encodings of text into the first-level of encoding
+ * used by Aztec code.
  *
  * It uses a dynamic algorithm.  For each prefix of the string, it determines
- * a set of encodings that could lead to this prefix.  We repeatedly add a
- * character and generate a new set of optimal encodings until we have read
+ * a set of encodings that could lead to this prefix.  We repeatedly add a character
+ * and generate a new set of optimal encodings until we have read
  * through the entire input.
- *
- * @author Frank Yellin
- * @author Rustam Abdullaev
  */
 public class HighLevelEncoder {
     static var MODE_NAMES: Array<String> = ["UPPER", "LOWER", "DIGIT", "MIXED", "PUNCT"]
@@ -24,8 +21,8 @@ public class HighLevelEncoder {
     static var MODE_MIXED: Int64 = 3 // 5 bits
     static var MODE_PUNCT: Int64 = 4 // 5 bits
 
-    // The Latch Table shows, for each pair of Modes, the optimal method for
-    // getting from one mode to another.  In the worst possible case, this can
+    // The Latch Table shows, for each pair of Modes, the optimal method for getting
+    // from one mode to another.  In the worst possible case, this can
     // be up to 14 bits.  In the best possible case, we are already there!
     // The high half-word of each entry gives the number of bits.
     // The low half-word of each entry are the actual bits necessary to change
@@ -227,8 +224,10 @@ public class HighLevelEncoder {
                 case _ => pairCode = 0
             }
             if (pairCode > 0) {
-                // We have one of the four special PUNCT pairs.  Treat them specially.
-                // Get a new set of states for the two new characters.
+                /*
+                 * We have one of the four special PUNCT pairs.  Treat them specially.
+                 * Get a new set of states for the two new characters.
+                 */
                 states = updateStateListForPair(states, index, pairCode)
                 index++
             } else {
@@ -300,7 +299,7 @@ public class HighLevelEncoder {
             if (charInMode > 0) {
                 if (let Some(s) <- stateNoBinary) {}
                 else {
-                    // Only create stateNoBinary the first time it's required.
+                    /* Only create stateNoBinary the first time it's required. */
                     stateNoBinary = state.endBinaryShift(index)
                 }
 
@@ -344,7 +343,7 @@ public class HighLevelEncoder {
     private static func updateStateForPair(state: State, index: Int64, pairCode: Int64, result: ArrayList<State>) {
         var stateNoBinary: State = state.endBinaryShift(index)
 
-        // Possibility 1.  Latch to MODE_PUNCT, and then append this code
+        /* Possibility 1.  Latch to MODE_PUNCT, and then append this code */
         result.append(stateNoBinary.latchAndAppend(MODE_PUNCT, pairCode))
         if (state.getMode() != MODE_PUNCT) {
             // Possibility 2.  Shift to MODE_PUNCT, and then append this code.
@@ -352,7 +351,7 @@ public class HighLevelEncoder {
             result.append(stateNoBinary.shiftAndAppend(MODE_PUNCT, pairCode))
         }
         if (pairCode == 3 || pairCode == 4) {
-            // both characters are in DIGITS.  Sometimes better to just add two digits
+            /* both characters are in DIGITS.  Sometimes better to just add two digits */
             var digitState: State = stateNoBinary.latchAndAppend(MODE_DIGIT, 16 - pairCode).latchAndAppend(MODE_DIGIT, 1
             )
             result.append(digitState)

@@ -23,10 +23,7 @@ enum Mode {
 }
 
 /**
- * <p>This class contains the methods for decoding the PDF417 codewords.</p>
- *
- * @author SITA Lab (kevin.osullivan@sita.aero)
- * @author Guenther Grau
+ * This class contains the methods for decoding the PDF417 codewords.
  */
 public open class DecodedBitStreamParser {
     private static let TEXT_COMPACTION_MODE_LATCH: Int64 = 900
@@ -158,8 +155,8 @@ public open class DecodedBitStreamParser {
         }
 
         // Decoding the fileId codewords as 0-899 numbers, each 0-filled to width 3. This follows the spec
-        // (See ISO/IEC 15438:2015 Annex H.6) and preserves all info, but some generators (e.g. TEC-IT) write
-        // the fileId using text compaction, so in those cases the fileId will appear mangled.
+        // (See ISO/IEC 15438:2015 Annex H.6) and preserves all info, but some generators (e.g. TEC-IT) write the
+        // fileId using text compaction, so in those cases the fileId will appear mangled.
         var fileId: ArrayList<Char> = ArrayList<Char>()
         while (codeIndex_ < codewords[0] && codeIndex_ < codewords.size && codewords[codeIndex_] !=
                 MACRO_PDF417_TERMINATOR && codewords[codeIndex_] != BEGIN_MACRO_PDF417_OPTIONAL_FIELD) {
@@ -258,12 +255,13 @@ public open class DecodedBitStreamParser {
 
     /**
      * Text Compaction mode (see 5.4.1.5) permits all printable ASCII characters to be
-     * encoded, i.e. values 32 - 126 inclusive in accordance with ISO/IEC 646 (IRV), as
-     * well as selected control characters.
+     * encoded, i.e. values 32 - 126 inclusive in accordance with ISO/IEC 646 (IRV), as well as
+     * selected control characters.
      *
      * @param codewords The array of codewords (data + error)
      * @param codeIndex The current index into the codeword array.
      * @param result    The decoded data is appended to the result.
+     *
      * @return The next index into the codeword array.
      */
     private static func textCompaction(codewords: Array<Int64>, codeIndex: Int64, result: ECIStringBuilder): Int64 {
@@ -321,12 +319,12 @@ public open class DecodedBitStreamParser {
     /**
      * The Text Compaction mode includes all the printable ASCII characters
      * (i.e. values from 32 to 126) and three ASCII control characters: HT or tab
-     * (ASCII value 9), LF or line feed (ASCII value 10), and CR or carriage
-     * return (ASCII value 13). The Text Compaction mode also includes various latch
-     * and shift characters which are used exclusively within the mode. The Text
-     * Compaction mode encodes up to 2 characters per codeword. The compaction rules
-     * for converting data into PDF417 codewords are defined in 5.4.2.2. The sub-mode
-     * switches are defined in 5.4.2.3.
+     * (ASCII value 9), LF or line feed (ASCII value 10), and CR or carriage return
+     * (ASCII value 13). The Text Compaction mode also includes various latch
+     * and shift characters which are used exclusively within the mode. The Text Compaction
+     * mode encodes up to 2 characters per codeword. The compaction rules
+     * for converting data into PDF417 codewords are defined in 5.4.2.2. The sub-mode switches
+     * are defined in 5.4.2.3.
      *
      * @param textCompactionData The text compaction data.
      * @param byteCompactionData The byte compaction data if there
@@ -334,6 +332,7 @@ public open class DecodedBitStreamParser {
      * @param length             The size of the text compaction and byte compaction data.
      * @param result             The decoded data is appended to the result.
      * @param startMode          The mode in which decoding starts
+     *
      * @return The mode in which decoding ended
      */
     private static func decodeTextCompaction(
@@ -475,13 +474,14 @@ public open class DecodedBitStreamParser {
 
     /**
      * Byte Compaction mode (see 5.4.3) permits all 256 possible 8-bit byte values to be encoded.
-     * This includes all ASCII characters value 0 to 127 inclusive and provides for international
-     * character set support.
+     * This includes all ASCII characters value 0 to 127 inclusive and provides for international character
+     * set support.
      *
      * @param mode      The byte compaction mode i.e. 901 or 924
      * @param codewords The array of codewords (data + error)
      * @param codeIndex The current index into the codeword array.
      * @param result    The decoded data is appended to the result.
+     *
      * @return The next index into the codeword array.
      */
     @OverflowWrapping
@@ -548,6 +548,7 @@ public open class DecodedBitStreamParser {
      * @param codewords The array of codewords (data + error)
      * @param codeIndex The current index into the codeword array.
      * @param result    The decoded data is appended to the result.
+     *
      * @return The next index into the codeword array.
      */
     private static func numericCompaction(codewords: Array<Int64>, codeIndex: Int64, result: ECIStringBuilder): Int64 {
@@ -576,8 +577,8 @@ public open class DecodedBitStreamParser {
             }
             if ((count % MAX_NUMERIC_CODEWORDS == 0 || code == NUMERIC_COMPACTION_MODE_LATCH || end) && count > 0) {
                 // Re-invoking Numeric Compaction mode (by using codeword 902
-                // while in Numeric Compaction mode) serves  to terminate the
-                // current Numeric Compaction mode grouping as described in 5.4.4.2,
+                // while in Numeric Compaction mode) serves  to terminate the current
+                // Numeric Compaction mode grouping as described in 5.4.4.2,
                 // and then to start a new one grouping.
                 result.append(decodeBase900toBase10(numericCodewords, count))
                 count = 0
@@ -592,43 +593,44 @@ public open class DecodedBitStreamParser {
      *
      * @param codewords The array of codewords
      * @param count     The number of codewords
+     *
      * @return The decoded string representing the Numeric data.
      */
-    /*
-       EXAMPLE
-       Encode the fifteen digit numeric string 000213298174000
-       Prefix the numeric string with a 1 and set the initial value of
-       t = 1 000 213 298 174 000
-       Calculate codeword 0
-       d0 = 1 000 213 298 174 000 mod 900 = 200
-
-       t = 1 000 213 298 174 000 div 900 = 1 111 348 109 082
-       Calculate codeword 1
-       d1 = 1 111 348 109 082 mod 900 = 282
-
-       t = 1 111 348 109 082 div 900 = 1 234 831 232
-       Calculate codeword 2
-       d2 = 1 234 831 232 mod 900 = 632
-
-       t = 1 234 831 232 div 900 = 1 372 034
-       Calculate codeword 3
-       d3 = 1 372 034 mod 900 = 434
-
-       t = 1 372 034 div 900 = 1 524
-       Calculate codeword 4
-       d4 = 1 524 mod 900 = 624
-
-       t = 1 524 div 900 = 1
-       Calculate codeword 5
-       d5 = 1 mod 900 = 1
-       t = 1 div 900 = 0
-       Codeword sequence is: 1, 624, 434, 632, 282, 200
-
-       Decode the above codewords involves
-         1 x 900 power of 5 + 624 x 900 power of 4 + 434 x 900 power of 3 +
-       632 x 900 power of 2 + 282 x 900 power of 1 + 200 x 900 power of 0 = 1000213298174000
-
-       Remove leading 1 =>  Result is 000213298174000
+    /**
+     * EXAMPLE
+     * Encode the fifteen digit numeric string 000213298174000
+     * Prefix the numeric string with a 1 and set the initial value of
+     * t = 1 000 213 298 174 000
+     * Calculate codeword 0
+     * d0 = 1 000 213 298 174 000 mod 900 = 200
+     *
+     * t = 1 000 213 298 174 000 div 900 = 1 111 348 109 082
+     * Calculate codeword 1
+     * d1 = 1 111 348 109 082 mod 900 = 282
+     * 
+     * t = 1 111 348 109 082 div 900 = 1 234 831 232
+     * Calculate codeword 2
+     * d2 = 1 234 831 232 mod 900 = 632
+     * 
+     * t = 1 234 831 232 div 900 = 1 372 034
+     * Calculate codeword 3
+     * d3 = 1 372 034 mod 900 = 434
+     * 
+     * t = 1 372 034 div 900 = 1 524
+     * Calculate codeword 4
+     * d4 = 1 524 mod 900 = 624
+     * 
+     * t = 1 524 div 900 = 1
+     * Calculate codeword 5
+     * d5 = 1 mod 900 = 1
+     * t = 1 div 900 = 0
+     * Codeword sequence is: 1, 624, 434, 632, 282, 200
+     * 
+     * Decode the above codewords involves
+     * 1 x 900 power of 5 + 624 x 900 power of 4 + 434 x 900 power of 3 +
+     * 632 x 900 power of 2 + 282 x 900 power of 1 + 200 x 900 power of 0 = 1000213298174000
+     * 
+     * Remove leading 1 =>  Result is 000213298174000
      */
     private static func decodeBase900toBase10(codewords: Array<Int64>, count: Int64): String {
         var result: BigInteger = BigInteger("0")

@@ -11,12 +11,10 @@ import zxing.code.common.StringUtils
 import zxing.code.common.MyCharset
 
 /**
- * <p>QR Codes can encode text as bits in one of several modes, and can use multiple modes
- * in one QR Code. This class decodes the bits back into text.</p>
+ * QR Codes can encode text as bits in one of several modes, and can use multiple modes
+ * in one QR Code. This class decodes the bits back into text.
  *
- * <p>See ISO 18004:2006, 6.4.3 - 6.4.7</p>
- *
- * @author Sean Owen
+ * See ISO 18004:2006, 6.4.3 - 6.4.7
  */
 public class DecodedBitStreamParser {
     /**
@@ -123,26 +121,7 @@ public class DecodedBitStreamParser {
                         }
                 }
             } while (mode != Mode.TERMINATOR([0, 0, 0], 0x00))
-
-            if (let Some(c) <- currentCharacterSetECI) {
-                if (hasFNC1first) {
-                    symbologyModifier = 4
-                }
-                if (!hasFNC1first && hasFNC1second) {
-                    symbologyModifier = 6
-                } else {
-                    symbologyModifier = 2
-                }
-            } else {
-                if (hasFNC1first) {
-                    symbologyModifier = 3
-                }
-                if (!hasFNC1first && hasFNC1second) {
-                    symbologyModifier = 5
-                } else {
-                    symbologyModifier = 1
-                }
-            }
+            symbologyModifier = exdecode(currentCharacterSetECI, hasFNC1first, hasFNC1second)
         } catch (iae: IllegalArgumentException) {
             // from readBits() calls
             throw FormatException.getFormatInstance();
@@ -165,6 +144,28 @@ public class DecodedBitStreamParser {
             parityData,
             symbologyModifier
         );
+    }
+
+    public static func exdecode(currentCharacterSetECI: ?CharacterSetECI, hasFNC1first: Bool, hasFNC1second: Bool): Int64 {
+        if (let Some(c) <- currentCharacterSetECI) {
+            if (hasFNC1first) {
+                return 4
+            }
+            if (!hasFNC1first && hasFNC1second) {
+                return 6
+            } else {
+                return 2
+            }
+        } else {
+            if (hasFNC1first) {
+                return 3
+            }
+            if (!hasFNC1first && hasFNC1second) {
+                return 5
+            } else {
+                return 1
+            }
+        }
     }
 
     /**
@@ -276,8 +277,8 @@ public class DecodedBitStreamParser {
             encoding = c.getCharset()
         } else {
             // The spec isn't clear on this mode; see
-            // section 6.4.5: t does not say which encoding to assuming
-            // upon decoding. I have seen ISO-8859-1 used as well as
+            // section 6.4.5: t does not say which encoding to assuming upon decoding. 
+            // I have seen ISO-8859-1 used as well as
             // Shift_JIS -- without anything like an ECI designator to
             // give a hint.
             encoding = StringUtils.guessCharset(readBytes, hints)

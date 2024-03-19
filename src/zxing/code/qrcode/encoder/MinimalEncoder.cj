@@ -130,11 +130,7 @@ public class ResultList {
             length += c.characterLength
             var previous: ?Edge = c.previous
 
-            var hasprevious = if (let Some(p) <- previous) {
-                true
-            } else {
-                false
-            }
+            var hasprevious = exinit(previous)
 
             let needECI: Bool = c.mode == Mode.BYTE([8, 16, 16], 0x04) && (!hasprevious && c.charsetEncoderIndex != 0) ||
                 // at the beginning and charset is not ISO-8859-1
@@ -244,6 +240,14 @@ public class ResultList {
             versionNumber--
         }
         this.version = Version.getVersionForNumber(versionNumber)
+    }
+
+    func exinit(previous: ?Edge): Bool {
+        if (let Some(p) <- previous) {
+            true
+        } else {
+            false
+        }
     }
 
     /**

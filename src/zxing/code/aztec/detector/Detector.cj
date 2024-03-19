@@ -15,9 +15,6 @@ from std import math.*
 /**
  * Encapsulates logic that can detect an Aztec Code in an image, even if the Aztec Code
  * is rotated or skewed, or partially obscured.
- *
- * @author David Olivier
- * @author Frank Yellin
  */
 public class Point <: ToString {
     private var x: Int64 = 0
@@ -141,16 +138,16 @@ public class Detector {
         // orientation marks to the corner with two.
         shift = getRotation(sides, length)
 
-        // Flatten the parameter bits into a single 28- or 40-bit long
+        /* Flatten the parameter bits into a single 28- or 40-bit long */
         var parameterData: Int64 = /*long*/ 0
         for (i in 0..4) {
             var side: Int64 = sides[(shift + i) % 4]
             if (compact) {
-                // Each side of the form ..XXXXXXX. where Xs are parameter data
+                /* Each side of the form ..XXXXXXX. where Xs are parameter data */
                 parameterData <<= 7
                 parameterData += (side >> 1) & 0x7F
             } else {
-                // Each side of the form ..XXXXX.XXXXX. where Xs are parameter data
+                /* Each side of the form ..XXXXX.XXXXX. where Xs are parameter data */
                 parameterData <<= 10
                 parameterData += ((side >> 2) & (0x1f << 5)) + ((side >> 1) & 0x1F)
             }
@@ -179,8 +176,8 @@ public class Detector {
         //   .      *
         //   ..    ..             C       B
         //
-        // Grab the 3 bits from each of the sides the form the locator pattern and concatenate
-        // into a 12-bit integer.  Start with the bit at A
+        // Grab the 3 bits from each of the sides the form the locator pattern and concatenate into
+        // a 12-bit integer.  Start with the bit at A
         var cornerBits: Int64 = 0
         for (side in 0..sides.size) {
             // XX......X where X's are orientation marks
@@ -193,9 +190,11 @@ public class Detector {
         //  3 orientation bits at A || 3 orientation bits at B || ... || 3 orientation bits at D
         cornerBits = ((cornerBits & 1) << 11) + (cornerBits >> 1)
 
-        // The result shift indicates which element of BullsEyeCorners[] goes into the top-left
-        // corner. Since the four rotation values have a Hamming distance of 8, we
-        // can easily tolerate two errors.
+        /*
+         * The result shift indicates which element of BullsEyeCorners[] goes into the top-left
+         * corner. Since the four rotation values have a Hamming distance of 8, we
+         * can easily tolerate two errors.
+         */ 
         for (shift in 0..4) {
             var a: Int8 = countOne(cornerBits ^ EXPECTED_CORNER_BITS[shift]);
             if (countOne(cornerBits ^ EXPECTED_CORNER_BITS[shift]) <= 2) {

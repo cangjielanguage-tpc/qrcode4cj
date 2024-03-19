@@ -16,14 +16,15 @@ public abstract class LuminanceSource {
 
     /**
      * Fetches one row of luminance data from the underlying platform's bitmap. Values range from
-     * 0 (black) to 255 (white). Because Java does not have an unsigned byte type, callers will have
-     * to bitwise and with 0xff for each value. It is preferable for implementations of this method
-     * to only fetch this row rather than the whole image, since no 2D Readers may be installed and
+     * 0 (black) to 255 (white). Because Java does not have an unsigned byte type, callers will have to
+     * bitwise and with 0xff for each value. It is preferable for implementations of this method to
+     * only fetch this row rather than the whole image, since no 2D Readers may be installed and
      * getMatrix() may never be called.
      *
      * @param y The row to fetch, which must be in [0,getHeight())
-     * @param row An optional preallocated array. If null or too small, it will be ignored.
-     * Always use the returned object, and ignore the .length of the array.
+     * @param row An optional preallocated array. If null or too small, it will be ignored. Always
+     * use the returned object, and ignore the .length of the array.
+     *
      * @return An array containing the luminance data.
      */
     public open func getRow(y: Int64, row: Array<UInt8>): Array<UInt8>
@@ -60,13 +61,14 @@ public abstract class LuminanceSource {
     }
 
     /**
-     * Returns a new object with cropped image data. Implementations may keep a reference to the
-     * original data rather than a copy. Only callable if isCropSupported() is true.
+     * Returns a new object with cropped image data. Implementations may keep a reference to the original
+     * data rather than a copy. Only callable if isCropSupported() is true.
      *
      * @param left The left coordinate, which must be in [0,getWidth())
      * @param top The top coordinate, which must be in [0,getHeight())
      * @param width The width of the rectangle to crop.
      * @param height The height of the rectangle to crop.
+     *
      * @return A cropped version of this object.
      */
     public open func crop(left: Int64, top: Int64, width: Int64, height: Int64): LuminanceSource {
