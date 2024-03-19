@@ -461,11 +461,11 @@ public class RSSExpandedReader <: AbstractRSSReader {
     }
 
     private func findNextPair(row: BitArray, previousPairs: ArrayList<ExpandedPair>, forcedOffset: Int64) {
-        var counters: Array<Int64> = this.getDecodeFinderCounters();
-        counters[0] = 0
-        counters[1] = 0
-        counters[2] = 0
-        counters[3] = 0
+        var counters_: Array<Int64> = this.getDecodeFinderCounters();
+        counters_[0] = 0
+        counters_[1] = 0
+        counters_[2] = 0
+        counters_[3] = 0
 
         var width: Int64 = row.getSize();
 
@@ -483,33 +483,33 @@ public class RSSExpandedReader <: AbstractRSSReader {
 
         for (x in rowOffset..width) {
             if (row.get(x) != isWhite) {
-                counters[counterPosition] = counters[counterPosition] + 1
+                counters_[counterPosition] = counters_[counterPosition] + 1
             } else {
                 if (counterPosition == 3) {
                     if (searchingEvenPair) {
-                        reverseCounters(counters);
+                        reverseCounters(counters_);
                     }
 
-                    if (isFinderPattern(counters)) {
+                    if (isFinderPattern(counters_)) {
                         this.startEnd[0] = patternStart
                         this.startEnd[1] = x
                         return;
                     }
 
                     if (searchingEvenPair) {
-                        reverseCounters(counters);
+                        reverseCounters(counters_);
                     }
 
-                    patternStart += counters[0] + counters[1]
-                    counters[0] = counters[2]
-                    counters[1] = counters[3]
-                    counters[2] = 0
-                    counters[3] = 0
+                    patternStart += counters_[0] + counters_[1]
+                    counters_[0] = counters_[2]
+                    counters_[1] = counters_[3]
+                    counters_[2] = 0
+                    counters_[3] = 0
                     counterPosition--
                 } else {
                     counterPosition++
                 }
-                counters[counterPosition] = 1
+                counters_[counterPosition] = 1
                 isWhite = !isWhite
             }
         }
@@ -559,19 +559,19 @@ public class RSSExpandedReader <: AbstractRSSReader {
 
         if (oddPattern) {
             // If pattern number is odd, we need to locate element 1 *before* the current block.
-            var firstElementStart: Int64 = this.startEnd[0] - 1
+            var firstElementStart_: Int64 = this.startEnd[0] - 1
 
             // Locate element 1
-            while (firstElementStart >= 0 && !row.get(firstElementStart)) {
-                firstElementStart--
+            while (firstElementStart_ >= 0 && !row.get(firstElementStart_)) {
+                firstElementStart_--
             }
 
-            firstElementStart++
-            firstCounter = this.startEnd[0] - firstElementStart
-            start = firstElementStart
+            firstElementStart_++
+            firstCounter = this.startEnd[0] - firstElementStart_
+            start = firstElementStart_
             end = this.startEnd[1]
         } else {
-            // If pattern number is even, the pattern is reversed, so we need to locate element 1 *after* the current block.
+            /* If pattern number is even, the pattern is reversed, so we need to locate element 1 *after* the current block. */
             start = this.startEnd[0]
 
             end = row.getNextUnset(this.startEnd[1] + 1)

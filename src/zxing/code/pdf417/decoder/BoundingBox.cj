@@ -58,17 +58,17 @@ open class BoundingBox {
         this.flag = true
     }
 
-    init(boundingBox: BoundingBox) {
-        this.image = boundingBox.image
-        this.topLeft = boundingBox.topLeft
-        this.bottomLeft = boundingBox.bottomLeft
-        this.topRight = boundingBox.topRight
-        this.bottomRight = boundingBox.bottomRight
-        this.minX = boundingBox.minX
-        this.maxX = boundingBox.maxX
-        this.minY = boundingBox.minY
-        this.maxY = boundingBox.maxY
-        this.flag = boundingBox.flag
+    init(boundingBox_: BoundingBox) {
+        this.image = boundingBox_.image
+        this.topLeft = boundingBox_.topLeft
+        this.bottomLeft = boundingBox_.bottomLeft
+        this.topRight = boundingBox_.topRight
+        this.bottomRight = boundingBox_.bottomRight
+        this.minX = boundingBox_.minX
+        this.maxX = boundingBox_.maxX
+        this.minY = boundingBox_.minY
+        this.maxY = boundingBox_.maxY
+        this.flag = boundingBox_.flag
     }
 
     static func merge(leftBox: BoundingBox, rightBox: BoundingBox): BoundingBox {

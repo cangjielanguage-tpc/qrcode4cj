@@ -72,10 +72,10 @@ public class Detector {
     }
 
     /**
-     * Detects an Aztec Code in an image.
+     * Detects an Aztec Code value in an image.
      *
      * @param isMirror if true, image is a mirror-image of original
-     * @return {@link AztecDetectorResult} encapsulating results of detecting an Aztec Code
+     * @return AztecDetectorResult encapsulating results of detecting an Aztec Code
      * @throws NotFoundException if no Aztec Code can be found
      */
     public func detect(isMirror: Bool): AztecDetectorResult {
@@ -122,21 +122,21 @@ public class Detector {
             !isValid(bullsEyeCorners[3])) {
             throw NotFoundException.getNotFoundInstance()
         }
-        var length: Int64 = 2 * nbCenterLayers
+        var length_: Int64 = 2 * nbCenterLayers
 
         // Get the bits around the bull's eye
         var sides: Array<Int64> = [
-            sampleLine(bullsEyeCorners[0], bullsEyeCorners[1], length), // Right side
-            sampleLine(bullsEyeCorners[1], bullsEyeCorners[2], length), // Bottom
-            sampleLine(bullsEyeCorners[2], bullsEyeCorners[3], length), // Left side
-            sampleLine(bullsEyeCorners[3], bullsEyeCorners[0], length) // Top
+            sampleLine(bullsEyeCorners[0], bullsEyeCorners[1], length_), // Right side
+            sampleLine(bullsEyeCorners[1], bullsEyeCorners[2], length_), // Bottom
+            sampleLine(bullsEyeCorners[2], bullsEyeCorners[3], length_), // Left side
+            sampleLine(bullsEyeCorners[3], bullsEyeCorners[0], length_) // Top
         ]
 
-        // bullsEyeCorners[shift] is the corner of the bulls'eye that has three
-        // orientation marks.
-        // sides[shift] is the row/column that goes from the corner with three
-        // orientation marks to the corner with two.
-        shift = getRotation(sides, length)
+        // bullsEyeCorners[shift] is the corner of the bulls'eye that has three orientation
+        // marks.
+        // sides[shift] is the row/column that goes from the corner with three orientation
+        // marks to the corner with two.
+        shift = getRotation(sides, length_)
 
         /* Flatten the parameter bits into a single 28- or 40-bit long */
         var parameterData: Int64 = /*long*/ 0
@@ -155,16 +155,16 @@ public class Detector {
 
         // Corrects parameter data using RS.  Returns just the data portion
         // without the error correction.
-        var correctedData: Int64 = getCorrectedParameterData(parameterData, compact)
+        var correctedData_: Int64 = getCorrectedParameterData(parameterData, compact)
 
         if (compact) {
             // 8 bits:  2 bits layers and 6 bits data blocks
-            nbLayers = (correctedData >> 6) + 1
-            nbDataBlocks = (correctedData & 0x3F) + 1
+            nbLayers = (correctedData_ >> 6) + 1
+            nbDataBlocks = (correctedData_ & 0x3F) + 1
         } else {
             // 16 bits:  5 bits layers and 11 bits data blocks
-            nbLayers = (correctedData >> 11) + 1
-            nbDataBlocks = (correctedData & 0x7FF) + 1
+            nbLayers = (correctedData_ >> 11) + 1
+            nbDataBlocks = (correctedData_ & 0x7FF) + 1
         }
     }
 
@@ -195,39 +195,39 @@ public class Detector {
          * corner. Since the four rotation values have a Hamming distance of 8, we
          * can easily tolerate two errors.
          */ 
-        for (shift in 0..4) {
-            var a: Int8 = countOne(cornerBits ^ EXPECTED_CORNER_BITS[shift]);
-            if (countOne(cornerBits ^ EXPECTED_CORNER_BITS[shift]) <= 2) {
-                return shift
+        for (shift_ in 0..4) {
+            var a: Int8 = countOne(cornerBits ^ EXPECTED_CORNER_BITS[shift_]);
+            if (countOne(cornerBits ^ EXPECTED_CORNER_BITS[shift_]) <= 2) {
+                return shift_
             }
         }
         throw NotFoundException.getNotFoundInstance()
     }
 
     /**
-     * Corrects the parameter bits using Reed-Solomon algorithm.
+     * Corrects the parameter bits value using Reed-Solomon algorithm.
      *
      * @param parameterData parameter bits
-     * @param compact true if this is a compact Aztec code
+     * @param compact true if this is a compact Aztec code value
      * @throws NotFoundException if the array contains too many errors
      */
     private static func getCorrectedParameterData(parameterData: Int64, compact: Bool): Int64 {
         var parameterDataItem = parameterData
 
-        var numCodewords: Int64
+        var numCodewords_: Int64
         var numDataCodewords: Int64
 
         if (compact) {
-            numCodewords = 7
+            numCodewords_ = 7
             numDataCodewords = 2
         } else {
-            numCodewords = 10
+            numCodewords_ = 10
             numDataCodewords = 4
         }
 
-        var numECCodewords: Int64 = numCodewords - numDataCodewords
-        var parameterWords: Array<Int64> = Array<Int64>(numCodewords, item: 0)
-        var i: Int64 = numCodewords - 1
+        var numECCodewords: Int64 = numCodewords_ - numDataCodewords
+        var parameterWords: Array<Int64> = Array<Int64>(numCodewords_, item: 0)
+        var i: Int64 = numCodewords_ - 1
         while (i >= 0) {
             parameterWords[i] = Int64(parameterDataItem & 0xF)
             parameterDataItem >>= 4
@@ -241,19 +241,19 @@ public class Detector {
         }
 
         // Toss the error correction.  Just return the data as an integer
-        var result: Int64 = 0
+        var result_: Int64 = 0
         for (i in 0..numDataCodewords) {
-            result = (result << 4) + parameterWords[i]
+            result_ = (result_ << 4) + parameterWords[i]
         }
-        return result
+        return result_
     }
 
     /**
-     * Finds the corners of a bull-eye centered on the passed point.
-     * This returns the centers of the diagonal points just outside the bull's eye
+     * Finds the corners of a bull-eye centered on the passed point. This returns
+     * the centers of the diagonal points just outside the bull's eye
      * Returns [topRight, bottomRight, bottomLeft, topLeft]
      *
-     * @param pCenter Center point
+     * @param pCenter Center point value
      * @return The corners of the bull-eye
      * @throws NotFoundException If no valid bull-eye can be found
      */
@@ -267,26 +267,26 @@ public class Detector {
 
         nbCenterLayers = 1
         while (nbCenterLayers < 9) {
-            var pouta: Point = getFirstDifferent(pina, color, 1, -1)
-            var poutb: Point = getFirstDifferent(pinb, color, 1, 1)
-            var poutc: Point = getFirstDifferent(pinc, color, -1, 1)
-            var poutd: Point = getFirstDifferent(pind, color, -1, -1)
+            var pouta_: Point = getFirstDifferent(pina, color, 1, -1)
+            var poutb_: Point = getFirstDifferent(pinb, color, 1, 1)
+            var poutc_: Point = getFirstDifferent(pinc, color, -1, 1)
+            var poutd_: Point = getFirstDifferent(pind, color, -1, -1)
 
             //d      a
             //
             //c      b
             if (nbCenterLayers > 2) {
-                var q: Float32 = distance(poutd, pouta) * Float32(nbCenterLayers) / (distance(pind, pina) * Float32(nbCenterLayers +
+                var q: Float32 = distance(poutd_, pouta_) * Float32(nbCenterLayers) / (distance(pind, pina) * Float32(nbCenterLayers +
                         2))
-                if (q < 0.75 || q > 1.25 || !isWhiteOrBlackRectangle(pouta, poutb, poutc, poutd)) {
+                if (q < 0.75 || q > 1.25 || !isWhiteOrBlackRectangle(pouta_, poutb_, poutc_, poutd_)) {
                     break
                 }
             }
 
-            pina = pouta
-            pinb = poutb
-            pinc = poutc
-            pind = poutd
+            pina = pouta_
+            pinb = poutb_
+            pinc = poutc_
+            pind = poutd_
 
             color = !color
             nbCenterLayers++
@@ -445,9 +445,9 @@ public class Detector {
     /**
      * Samples a line.
      *
-     * @param p1   start point (inclusive)
-     * @param p2   end point (exclusive)
-     * @param size number of bits
+     * @param p1   the start point (inclusive)
+     * @param p2   the end point (exclusive)
+     * @param size the number of bits
      * @return the array of bits as an int (first bit is high-order bit of result)
      */
     private func sampleLine(p1: ResultPoint, p2: ResultPoint, size: Int64): Int64 {
@@ -557,22 +557,22 @@ public class Detector {
     /**
      * Gets the coordinate of the first point with a different color in the given direction
      */
-    private func getFirstDifferent(initPoint: Point, color: Bool, dx: Int64, dy: Int64): Point {
-        var x: Int64 = initPoint.getX() + dx
+    private func getFirstDifferent(initPoint: Point, color: Bool, dx_: Int64, dy: Int64): Point {
+        var x: Int64 = initPoint.getX() + dx_
         var y: Int64 = initPoint.getY() + dy
 
         while (isValid(x, y) && image.get(x, y) == color) {
-            x += dx
+            x += dx_
             y += dy
         }
 
-        x -= dx
+        x -= dx_
         y -= dy
 
         while (isValid(x, y) && image.get(x, y) == color) {
-            x += dx
+            x += dx_
         }
-        x -= dx
+        x -= dx_
 
         while (isValid(x, y) && image.get(x, y) == color) {
             y += dy

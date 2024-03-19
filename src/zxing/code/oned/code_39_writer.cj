@@ -38,24 +38,24 @@ public open class Code39Writer <: OneDimensionalCodeWriter {
 
         var widths: Array<Int64> = Array<Int64>(9, item: 0)
         var codeWidth: Int64 = 24 + 1 + (13 * length)
-        var result: Array<Bool> = Array<Bool>(codeWidth, item: false)
+        var result_: Array<Bool> = Array<Bool>(codeWidth, item: false)
         toIntArray(Code39Reader.ASTERISK_ENCODING, widths)
-        var pos: Int64 = appendPattern(result, 0, widths, true)
+        var pos: Int64 = appendPattern(result_, 0, widths, true)
         var narrowWhite: Array<Int64> = Array<Int64>(1, item: 1)
-        pos += appendPattern(result, pos, narrowWhite, false)
+        pos += appendPattern(result_, pos, narrowWhite, false)
 
         //append next character to byte matrix
         for (i in 0..length) {
             var indexInString: Int64 = Code39Reader.ALPHABET_STRING.indexOf(contents.get(i).toString()).getOrThrow()
             toIntArray(Code39Reader.CHARACTER_ENCODINGS[indexInString], widths)
-            pos += appendPattern(result, pos, widths, true)
-            pos += appendPattern(result, pos, narrowWhite, false)
+            pos += appendPattern(result_, pos, widths, true)
+            pos += appendPattern(result_, pos, narrowWhite, false)
         }
 
         toIntArray(Code39Reader.ASTERISK_ENCODING, widths)
-        appendPattern(result, pos, widths, true)
+        appendPattern(result_, pos, widths, true)
 
-        return result
+        return result_
     }
 
     private static func toIntArray(a: Int64, toReturn: Array<Int64>) {

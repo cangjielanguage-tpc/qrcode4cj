@@ -24,18 +24,18 @@ public open class EmailAddressParsedResult <: ParsedResult {
     }
 
     init(
-        tos: Array<String>,
-        ccs: Array<String>,
-        bccs: Array<String>,
-        subject: String,
-        body: String
+        tos_: Array<String>,
+        ccs_: Array<String>,
+        bccs_: Array<String>,
+        subject_: String,
+        body_: String
     ) {
         super(ParsedResultType.EMAIL_ADDRESS);
-        this.tos = tos
-        this.ccs = ccs
-        this.bccs = bccs
-        this.subject = subject
-        this.body = body
+        this.tos = tos_
+        this.ccs = ccs_
+        this.bccs = bccs_
+        this.subject = subject_
+        this.body = body_
         this.flag = true
     }
 

@@ -175,12 +175,11 @@ public abstract class OneDReader <: Reader {
      * is the run of white pixels starting from that point likewise it is the count of a run
      * of black pixels if the row begin on a black pixels at that point.
      *
-     * @param row row to count from
+     * @param row value of row to count from
      * @param start offset into row to start at
-     * @param counters array into which to record counts
+     * @param counters the array into which to record counts
      *
-     * @throws NotFoundException if counters cannot be filled entirely from row before running out
-     * of pixels
+     * @throws NotFoundException if counters cannot be filled entirely from row before running out of pixels
      */
     protected static func recordPattern(row: BitArray, start: Int64, counters: Array<Int64>) {
         var numCounters: Int64 = counters.size
@@ -195,26 +194,26 @@ public abstract class OneDReader <: Reader {
             throw NotFoundException.getNotFoundInstance()
         }
         var isWhite: Bool = !row.get(start)
-        var counterPosition: Int64 = 0
+        var counterPosition_: Int64 = 0
         var i: Int64 = start
         while (i < end) {
             if (row.get(i) != isWhite) {
-                counters[counterPosition] = counters[counterPosition] + 1
+                counters[counterPosition_] = counters[counterPosition_] + 1
             } else {
-                counterPosition++
-                if (counterPosition == numCounters) {
+                counterPosition_++
+                if (counterPosition_ == numCounters) {
                     break
                 } else {
-                    counters[counterPosition] = 1
+                    counters[counterPosition_] = 1
                     isWhite = !isWhite
                 }
             }
             i++
         }
 
-        // If we read fully the last section of pixels and filled up our counters -- or filled
-        // the last counter but ran off the side of the image, OK. Otherwise, a problem.
-        if (!(counterPosition == numCounters || (counterPosition == numCounters - 1 && i == end))) {
+        /* If we read fully the last section of pixels and filled up our counters -- or filled */ 
+        /* the last counter but ran off the side of the image, OK. Otherwise, a problem. */ 
+        if (!(counterPosition_ == numCounters || (counterPosition_ == numCounters - 1 && i == end))) {
             throw NotFoundException.getNotFoundInstance()
         }
     }
@@ -300,13 +299,13 @@ public abstract class OneDReader <: Reader {
      * Attempts to decode a one-dimensional barcode format given a single row of
      * an image.
      *
-     * @param rowNumber row number from top of the row
-     * @param row the black/white pixel data of the row
+     * @param rowNumber row number value from top of the row
+     * @param row the black/white pixel data value of the row
      * @param hints decode hints
      *
-     * @return {@link Result} containing encoded string and start/end of barcode
+     * @return Result containing encoded string and start/end of barcode
      *
-     * @throws NotFoundException if no potential barcode is found
+     * @throws NotFoundException if no the potential barcode is found
      * @throws ChecksumException if a potential barcode is found but does not pass its checksum
      * @throws FormatException if a potential barcode is found but format is invalid
      */

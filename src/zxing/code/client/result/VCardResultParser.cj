@@ -177,25 +177,25 @@ public open class VCardResultParser <: ResultParser {
                     i--
                     /* Back up over \r, which really should be there */
                 }
-                var element: String = rawText.substring(matchStart, i - matchStart).toString();
+                var element_: String = rawText.substring(matchStart, i - matchStart).toString();
                 if (trim) {
-                    element = element.trim()
+                    element_ = element_.trim()
                 }
                 if (quotedPrintable) {
-                    element = decodeQuotedPrintable(UTF32String(element), quotedPrintableCharset)
+                    element_ = decodeQuotedPrintable(UTF32String(element_), quotedPrintableCharset)
 
                     if (parseFieldDivider == true) {
-                        element = UNESCAPED_SEMICOLONS.matcher(element).replaceAll("\n").trim()
+                        element_ = UNESCAPED_SEMICOLONS.matcher(element_).replaceAll("\n").trim()
                     }
                 } else {
                     if (parseFieldDivider) {
-                        element = UNESCAPED_SEMICOLONS.matcher(element).replaceAll("\n").trim()
+                        element_ = UNESCAPED_SEMICOLONS.matcher(element_).replaceAll("\n").trim()
                     }
-                    element = CR_LF_SPACE_TAB.matcher(element).replaceAll("")
-                    element = NEWLINE_ESCAPE.matcher(element).replaceAll("\n")
+                    element_ = CR_LF_SPACE_TAB.matcher(element_).replaceAll("")
+                    element_ = NEWLINE_ESCAPE.matcher(element_).replaceAll("\n")
                     while (true) {
-                        if (let Some(r) <- VCARD_ESCAPES.matcher(element).find()) {
-                            element = VCARD_ESCAPES.matcher(element).replace(r.matchStr(1))
+                        if (let Some(r) <- VCARD_ESCAPES.matcher(element_).find()) {
+                            element_ = VCARD_ESCAPES.matcher(element_).replace(r.matchStr(1))
                         } else {
                             break
                         }
@@ -207,17 +207,17 @@ public open class VCardResultParser <: ResultParser {
                     // Don't actually support dereferencing URIs, but use scheme-specific part not URI
                     // as value, to support tel: and mailto:
                     try {
-                        element = URL.parse(element).opaque
+                        element_ = URL.parse(element_).opaque
                     } catch (iae: IllegalArgumentException) {
                         /* ignore */
                     }
                 }
                 if (metadata.isEmpty()) {
                     var matchData: ArrayList<String> = ArrayList<String>(1);
-                    matchData.append(element);
+                    matchData.append(element_);
                     matches.append(matchData);
                 } else {
-                    metadata.insert(0, element);
+                    metadata.insert(0, element_);
                     matches.append(metadata);
                 }
                 i++

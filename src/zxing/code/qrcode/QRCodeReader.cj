@@ -32,9 +32,9 @@ public open class QRCodeReader <: Reader {
      * Locates and decodes a QR code in an image.
      *
      * @return a String representing the content encoded by the QR code
+     *
      * @throws NotFoundException if a QR code cannot be found
      * @throws FormatException if a QR code cannot be decoded
-     *
      * @throws ChecksumException if error correction fails
      */
     public func decode(image: BinaryBitmap): Result {
@@ -143,17 +143,17 @@ public open class QRCodeReader <: Reader {
             left -= nudgedTooFarRight
         }
 
-        // See logic above
+        /* See logic above */
         var nudgedTooFarDown: Int64 = top + Int64((matrixHeight - 1) * Int64(modulesize)) - bottom
         if (nudgedTooFarDown > 0) {
             if (nudgedTooFarDown > nudge) {
-                // Neither way fits; abort
+                /* Neither way fits; abort */ 
                 throw NotFoundException.getNotFoundInstance();
             }
             top -= nudgedTooFarDown
         }
 
-        // Now just read off the bits
+        /* Now just read off the bits */ 
         var bits: BitMatrix = BitMatrix(matrixWidth, matrixHeight);
         for (y in 0..matrixHeight) {
             let iOffset: Int64 = top + Int64(y * Int64(modulesize))
@@ -202,24 +202,24 @@ public open class QRCodeReader <: Reader {
     private static func moduleSize(leftTopBlack: Array<Int64>, image: BitMatrix): Float32 {
         let height: Int64 = image.getHeight();
         let width: Int64 = image.getWidth();
-        var x: Int64 = leftTopBlack[0]
+        var x_: Int64 = leftTopBlack[0]
         var y: Int64 = leftTopBlack[1]
         var inBlack: Bool = true;
-        var transitions: Int64 = 0;
-        while (x < width && y < height) {
-            if (inBlack != image.get(x, y)) {
-                transitions++
-                if (transitions == 5) {
+        var transitions_: Int64 = 0;
+        while (x_ < width && y < height) {
+            if (inBlack != image.get(x_, y)) {
+                transitions_++
+                if (transitions_ == 5) {
                     break
                 }
                 inBlack = !inBlack
             }
-            x++
+            x_++
             y++
         }
-        if (x == width || y == height) {
+        if (x_ == width || y == height) {
             throw NotFoundException.getNotFoundInstance();
         }
-        return Float32(x - leftTopBlack[0]) / 7.0f32
+        return Float32(x_ - leftTopBlack[0]) / 7.0f32
     }
 }

@@ -252,29 +252,29 @@ public class Decoder {
         var encoding: MyCharset = DEFAULT_ENCODING
         let ASCIIencoding = MyCharset.forName("ASCII").newEncoder()
 
-        var index: Int64 = 0
-        while (index < endIndex) {
+        var index_: Int64 = 0
+        while (index_ < endIndex) {
             if (shiftTable == DecoderTable.BINARY) {
-                if (endIndex - index < 5) {
+                if (endIndex - index_ < 5) {
                     break
                 }
-                var length: Int64 = readCode(correctedBits, index, 5)
-                index += 5
+                var length: Int64 = readCode(correctedBits, index_, 5)
+                index_ += 5
                 if (length == 0) {
-                    if (endIndex - index < 11) {
+                    if (endIndex - index_ < 11) {
                         break
                     }
-                    length = readCode(correctedBits, index, 11) + 31
-                    index += 11
+                    length = readCode(correctedBits, index_, 11) + 31
+                    index_ += 11
                 }
                 for (charCount in 0..length) {
-                    if (endIndex - index < 8) {
-                        index = endIndex // Force outer loop to exit
+                    if (endIndex - index_ < 8) {
+                        index_ = endIndex // Force outer loop to exit
                         break
                     }
-                    var code: Int64 = readCode(correctedBits, index, 8)
+                    var code: Int64 = readCode(correctedBits, index_, 8)
                     decodedBytes.write(UInt8(code))
-                    index += 8
+                    index_ += 8
                 }
 
                 // Go back to whatever mode we had been in
@@ -284,18 +284,18 @@ public class Decoder {
                 if (shiftTable == DecoderTable.DIGIT) {
                     size = 4
                 }
-                if (endIndex - index < size) {
+                if (endIndex - index_ < size) {
                     break
                 }
-                var code: Int64 = readCode(correctedBits, index, size)
-                index += size
+                var code: Int64 = readCode(correctedBits, index_, size)
+                index_ += size
                 var str: UTF32String = getCharacter(shiftTable, code)
                 if (checkStr == str) {
-                    if (endIndex - index < 3) {
+                    if (endIndex - index_ < 3) {
                         break
                     }
-                    var n: Int64 = readCode(correctedBits, index, 3)
-                    index += 3
+                    var n: Int64 = readCode(correctedBits, index_, 3)
+                    index_ += 3
 
                     //  flush bytes, FLG changes state
                     try {
@@ -313,10 +313,10 @@ public class Decoder {
                         case _ =>
                             // ECI is decimal integer encoded as 1-6 codes in DIGIT mode
                             var eci: Int64 = 0
-                            if (endIndex - index < 4 * n) {
+                            if (endIndex - index_ < 4 * n) {
                                 break
                             }
-                            (n, eci, index) = exgetEncodedData(n, index, correctedBits, eci)
+                            (n, eci, index_) = exgetEncodedData(n, index_, correctedBits, eci)
                             var charsetECI: CharacterSetECI = CharacterSetECI.getCharacterSetECIByValue(eci)
 
                             encoding = charsetECI.getCharset()
@@ -356,10 +356,10 @@ public class Decoder {
         return String(result)
     }
 
-    private static func exgetEncodedData(n: Int64, index: Int64, correctedBits: Array<Bool>, eci: Int64) {
+    private static func exgetEncodedData(n: Int64, index_: Int64, correctedBits: Array<Bool>, eci: Int64) {
         var n_p = n
         var eci_p = eci
-        var index_p = index
+        var index_p = index_
         while (n_p > 0) {
             n_p--
             var nextDigit: Int64 = readCode(correctedBits, index_p, 4)
@@ -470,18 +470,18 @@ public class Decoder {
 
     private static func extracted(numDataCodewords: Int64, dataWords: Array<Int64>, mask: Int64,
         correctedBits: Array<Bool>, codewordSize: Int64) {
-        var index: Int64 = 0
+        var index_: Int64 = 0
         for (i in 0..numDataCodewords) {
             var dataWord: Int64 = dataWords[i]
             if (dataWord == 1 || dataWord == mask - 1) {
                 // next codewordSize-1 bits are all zeros or all ones
-                correctedBits[index..index + codewordSize - 1] = dataWord > 1
-                index += codewordSize - 1
+                correctedBits[index_..index_ + codewordSize - 1] = dataWord > 1
+                index_ += codewordSize - 1
             } else {
                 var bit: Int64 = codewordSize - 1
                 while (bit >= 0) {
-                    correctedBits[index] = (dataWord & (1 << bit)) != 0
-                    index++
+                    correctedBits[index_] = (dataWord & (1 << bit)) != 0
+                    index_++
                     bit--
                 }
             }
@@ -568,17 +568,17 @@ public class Decoder {
     }
 
     /**
-     * Reads a code of given length and at given index in an array of bits
+     * Reads a code of given length and at given index_ in an array of bits
      */
     private static func readCode(rawbits: Array<Bool>, startIndex: Int64, length: Int64): Int64 {
-        var res: Int64 = 0
+        var res_: Int64 = 0
         for (i in startIndex..(startIndex + length)) {
-            res <<= 1
+            res_ <<= 1
             if (rawbits[i]) {
-                res |= 0x01
+                res_ |= 0x01
             }
         }
-        return res
+        return res_
     }
 
     /**

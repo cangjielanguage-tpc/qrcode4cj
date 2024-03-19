@@ -41,12 +41,12 @@ public class BitMatrixParser {
             formatInfoBits1 = copyBit(i, 8, formatInfoBits1)
         }
 
-        // .. and skip a bit in the timing pattern ...
+        /* .. and skip a bit in the timing pattern ... */ 
         formatInfoBits1 = copyBit(7, 8, formatInfoBits1)
         formatInfoBits1 = copyBit(8, 8, formatInfoBits1)
         formatInfoBits1 = copyBit(8, 7, formatInfoBits1)
 
-        // .. and skip a bit in the timing pattern ...
+        /* .. and skip a bit in the timing pattern ... */ 
         for (j in 5..=0 : -1) {
             formatInfoBits1 = copyBit(8, j, formatInfoBits1)
         }
@@ -182,16 +182,16 @@ public class BitMatrixParser {
                     count
                 }
                 for (col in 0..2) {
-                    // Ignore bits covered by the function pattern
+                    /* Ignore bits covered by the function pattern */ 
                     if (!functionPattern.get(j - col, i)) {
-                        // Read a bit
+                        /* Read a bit */
                         bitsRead++
                         currentByte <<= 1
                         if (bitMatrix.get(j - col, i)) {
                             currentByte |= 1
                         }
 
-                        // If we've made a whole byte, save it off
+                        /* If we've made a whole byte, save it off */
                         if (bitsRead == 8) {
                             result[resultOffset] = UInt8(currentByte)
 

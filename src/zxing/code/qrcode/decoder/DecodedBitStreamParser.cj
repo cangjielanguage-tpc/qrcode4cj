@@ -75,8 +75,10 @@ public class DecodedBitStreamParser {
                             throw FormatException.getFormatInstance();
                         }
 
-                        // sequence number and parity is added later to the result metadata
-                        // Read next 8 bits (symbol sequence #) and 8 bits (parity data), then continue
+                        /*
+                         * sequence number and parity is added later to the result metadata Read
+                         * next 8 bits (symbol sequence #) and 8 bits (parity data), then continue
+                         */ 
                         symbolSequence = bits.readBits(8)
                         parityData = bits.readBits(8)
 
@@ -237,10 +239,10 @@ public class DecodedBitStreamParser {
             let twoBytes: Int64 = bits.readBits(13);
             var assembledTwoBytes: Int64 = ((twoBytes / 0x0C0) << 8) | (twoBytes % 0x0C0)
             if (assembledTwoBytes < 0x01F00) {
-                // In the 0x8140 to 0x9FFC range
+                /* In the 0x8140 to 0x9FFC range */ 
                 assembledTwoBytes += 0x08140
             } else {
-                // In the 0xE040 to 0xEBBF range
+                /* In the 0xE040 to 0xEBBF range */
                 assembledTwoBytes += 0x0C140
             }
             buffer[offset] = UInt8(assembledTwoBytes >> 8)
@@ -317,16 +319,16 @@ public class DecodedBitStreamParser {
             count_ -= 2
         }
         if (count_ == 1) {
-            // special case: one character left
+            /* special case: one character left */ 
             if (bits.available() < 6) {
                 throw FormatException.getFormatInstance();
             }
             result.append(toAlphaNumericChar(bits.readBits(6)));
         }
 
-        // See section 6.4.8.1, 6.4.8.2
+        /* See section 6.4.8.1, 6.4.8.2 */
         if (fc1InEffect) {
-            // We need to massage the result a bit if in an FNC1 mode:
+            /* We need to massage the result a bit if in an FNC1 mode: */ 
             for (i in start..result.size) {
                 if (result.get(i).getOrThrow() == '%') {
                     if (i < result.size - 1 && result.get(i + 1).getOrThrow() == '%') {

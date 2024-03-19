@@ -1055,26 +1055,26 @@ open class PDF417ErrorCorrection {
     }
 
     /**
-     * Returns the recommended minimum error correction level as described in annex E of
+     * Returns the recommended minimum error correction level value as described in annex E of
      * ISO/IEC 15438:2001(E).
      *
-     * @param n the number of data codewords
-     * @return the recommended minimum error correction level
+     * @param n_ the number of data codewords
+     * @return the recommended minimum error correction level vlue
      */
-    static func getRecommendedMinimumErrorCorrectionLevel(n: Int64): Int64 {
-        if (n <= 0) {
-            throw IllegalArgumentException("n must be > 0")
+    static func getRecommendedMinimumErrorCorrectionLevel(n_: Int64): Int64 {
+        if (n_ <= 0) {
+            throw IllegalArgumentException("n_ must be > 0")
         }
-        if (n <= 40) {
+        if (n_ <= 40) {
             return 2
         }
-        if (n <= 160) {
+        if (n_ <= 160) {
             return 3
         }
-        if (n <= 320) {
+        if (n_ <= 320) {
             return 4
         }
-        if (n <= 863) {
+        if (n_ <= 863) {
             return 5
         }
         throw WriterException("No recommendation possible")

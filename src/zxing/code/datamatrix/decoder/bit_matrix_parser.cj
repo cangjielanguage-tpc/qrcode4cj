@@ -58,7 +58,7 @@ class BitMatrixParser {
      */
     func readCodewords(): Array<UInt8> {
         var result = Array<Byte>(version.getTotalCodewords(), item: 0)
-        var (resultOffset, row, column, numRows, numColumns): (Int64, Int64, Int64, Int64, Int64) = (0, 4, 0,
+        var (resultOffset, row_, column, numRows, numColumns): (Int64, Int64, Int64, Int64, Int64) = (0, 4, 0,
             mappingBitMatrix.getHeight(), mappingBitMatrix.getWidth())
 
         var (corner1Read, corner2Read, corner3Read, corner4Read): (Bool, Bool, Bool, Bool) = (false, false, false, false)
@@ -66,47 +66,47 @@ class BitMatrixParser {
         // Read all of the codewords
         do {
             // Check the four corner cases
-            if ((row == numRows) && (column == 0) && !corner1Read) {
+            if ((row_ == numRows) && (column == 0) && !corner1Read) {
                 result[resultOffset] = UInt8(readCorner1(numRows, numColumns))
-                (resultOffset, row, column, corner1Read) = (resultOffset + 1, row - 2, column + 2, true)
-            } else if ((row == numRows - 2) && (column == 0) && ((numColumns & 0x03) != 0) && !corner2Read) {
+                (resultOffset, row_, column, corner1Read) = (resultOffset + 1, row_ - 2, column + 2, true)
+            } else if ((row_ == numRows - 2) && (column == 0) && ((numColumns & 0x03) != 0) && !corner2Read) {
                 result[resultOffset] = UInt8(readCorner2(numRows, numColumns))
-                (resultOffset, row, column, corner1Read) = (resultOffset + 1, row - 2, column + 2, true)
-            } else if ((row == numRows + 4) && (column == 2) && ((numColumns & 0x07) == 0) && !corner3Read) {
+                (resultOffset, row_, column, corner1Read) = (resultOffset + 1, row_ - 2, column + 2, true)
+            } else if ((row_ == numRows + 4) && (column == 2) && ((numColumns & 0x07) == 0) && !corner3Read) {
                 result[resultOffset] = UInt8(readCorner3(numRows, numColumns))
-                (resultOffset, row, column, corner1Read) = (resultOffset + 1, row - 2, column + 2, true)
-            } else if ((row == numRows - 2) && (column == 0) && ((numColumns & 0x07) == 4) && !corner4Read) {
+                (resultOffset, row_, column, corner1Read) = (resultOffset + 1, row_ - 2, column + 2, true)
+            } else if ((row_ == numRows - 2) && (column == 0) && ((numColumns & 0x07) == 4) && !corner4Read) {
                 result[resultOffset] = UInt8(readCorner4(numRows, numColumns))
                 resultOffset++
-                row -= 2
+                row_ -= 2
                 column += 2
                 corner4Read = true
             } else {
-                // Sweep upward diagonally to the right
+                /* Sweep upward diagonally to the right */ 
                 do {
-                    if ((row < numRows) && (column >= 0) && !readMappingMatrix.get(column, row)) {
-                        result[resultOffset] = UInt8(readUtah(row, column, numRows, numColumns))
+                    if ((row_ < numRows) && (column >= 0) && !readMappingMatrix.get(column, row_)) {
+                        result[resultOffset] = UInt8(readUtah(row_, column, numRows, numColumns))
                         resultOffset++
                     }
-                    row -= 2
+                    row_ -= 2
                     column += 2
-                } while ((row >= 0) && (column < numColumns))
-                row += 1
+                } while ((row_ >= 0) && (column < numColumns))
+                row_ += 1
                 column += 3
 
                 // Sweep downward diagonally to the left
                 do {
-                    if ((row >= 0) && (column < numColumns) && !readMappingMatrix.get(column, row)) {
-                        result[resultOffset] = UInt8(readUtah(row, column, numRows, numColumns))
+                    if ((row_ >= 0) && (column < numColumns) && !readMappingMatrix.get(column, row_)) {
+                        result[resultOffset] = UInt8(readUtah(row_, column, numRows, numColumns))
                         resultOffset++
                     }
-                    row += 2
+                    row_ += 2
                     column -= 2
-                } while ((row < numRows) && (column >= 0))
-                row += 3
+                } while ((row_ < numRows) && (column >= 0))
+                row_ += 3
                 column += 1
             }
-        } while ((row < numRows) || (column < numColumns))
+        } while ((row_ < numRows) || (column < numColumns))
 
         if (resultOffset != version.getTotalCodewords()) {
             throw FormatException.getFormatInstance()
@@ -116,17 +116,17 @@ class BitMatrixParser {
     }
 
     /**
-     * Reads a bit of the mapping matrix accounting for boundary wrapping.
+     * Reads a bit of the mapping matrix accounting value for boundary wrapping.
      *
-     * @param row Row to read in the mapping matrix
+     * @param row_ Row to read in the mapping matrix
      * @param column Column to read in the mapping matrix
      * @param numRows Number of rows in the mapping matrix
      * @param numColumns Number of columns in the mapping matrix
      * @return value of the given bit in the mapping matrix
      */
-    private func readModule(row: Int64, column: Int64, numRows: Int64, numColumns: Int64): Bool {
-        // Adjust the row and column indices based on boundary wrapping
-        var row2 = row
+    private func readModule(row_: Int64, column: Int64, numRows: Int64, numColumns: Int64): Bool {
+        // Adjust the row_ and column indices based on boundary wrapping
+        var row2 = row_
         var column2 = column
         if (row2 < 0) {
             row2 += numRows
@@ -148,43 +148,43 @@ class BitMatrixParser {
      *
      * See ISO 16022:2006, 5.8.1 Figure 6
      *
-     * @param row Current row in the mapping matrix, anchored at the 8th bit (LSB) of the pattern
+     * @param row_ Current row_ in the mapping matrix, anchored at the 8th bit (LSB) of the pattern
      * @param column Current column in the mapping matrix, anchored at the 8th bit (LSB) of the pattern
      * @param numRows Number of rows in the mapping matrix
      * @param numColumns Number of columns in the mapping matrix
      * @return byte from the utah shape
      */
-    private func readUtah(row: Int64, column: Int64, numRows: Int64, numColumns: Int64): Int64 {
+    private func readUtah(row_: Int64, column: Int64, numRows: Int64, numColumns: Int64): Int64 {
         var currentByte: Int64 = 0
-        if (readModule(row - 2, column - 2, numRows, numColumns)) {
+        if (readModule(row_ - 2, column - 2, numRows, numColumns)) {
             currentByte |= 1
         }
         currentByte <<= 1
-        if (readModule(row - 2, column - 1, numRows, numColumns)) {
+        if (readModule(row_ - 2, column - 1, numRows, numColumns)) {
             currentByte |= 1
         }
         currentByte <<= 1
-        if (readModule(row - 1, column - 2, numRows, numColumns)) {
+        if (readModule(row_ - 1, column - 2, numRows, numColumns)) {
             currentByte |= 1
         }
         currentByte <<= 1
-        if (readModule(row - 1, column - 1, numRows, numColumns)) {
+        if (readModule(row_ - 1, column - 1, numRows, numColumns)) {
             currentByte |= 1
         }
         currentByte <<= 1
-        if (readModule(row - 1, column, numRows, numColumns)) {
+        if (readModule(row_ - 1, column, numRows, numColumns)) {
             currentByte |= 1
         }
         currentByte <<= 1
-        if (readModule(row, column - 2, numRows, numColumns)) {
+        if (readModule(row_, column - 2, numRows, numColumns)) {
             currentByte |= 1
         }
         currentByte <<= 1
-        if (readModule(row, column - 1, numRows, numColumns)) {
+        if (readModule(row_, column - 1, numRows, numColumns)) {
             currentByte |= 1
         }
         currentByte <<= 1
-        if (readModule(row, column, numRows, numColumns)) {
+        if (readModule(row_, column, numRows, numColumns)) {
             currentByte |= 1
         }
 
@@ -201,40 +201,40 @@ class BitMatrixParser {
      * @return byte from the Corner condition 1
      */
     private func readCorner1(numRows: Int64, numColumns: Int64): Int64 {
-        var currentByte: Int64 = 0
+        var currentByte_: Int64 = 0
         if (readModule(numRows - 1, 0, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
-        currentByte <<= 1
+        currentByte_ <<= 1
         if (readModule(numRows - 1, 1, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
-        currentByte <<= 1
+        currentByte_ <<= 1
         if (readModule(numRows - 1, 2, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
-        currentByte <<= 1
+        currentByte_ <<= 1
         if (readModule(0, numColumns - 2, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
-        currentByte <<= 1
+        currentByte_ <<= 1
         if (readModule(0, numColumns - 1, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
-        currentByte <<= 1
+        currentByte_ <<= 1
         if (readModule(1, numColumns - 1, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
-        currentByte <<= 1
+        currentByte_ <<= 1
         if (readModule(2, numColumns - 1, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
-        currentByte <<= 1
+        currentByte_ <<= 1
         if (readModule(3, numColumns - 1, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
 
-        return currentByte
+        return currentByte_
     }
 
     /**
@@ -247,40 +247,40 @@ class BitMatrixParser {
      * @return byte from the Corner condition 2
      */
     private func readCorner2(numRows: Int64, numColumns: Int64): Int64 {
-        var currentByte: Int64 = 0
+        var currentByte_: Int64 = 0
         if (readModule(numRows - 3, 0, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
-        currentByte <<= 1
+        currentByte_ <<= 1
         if (readModule(numRows - 2, 0, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
-        currentByte <<= 1
+        currentByte_ <<= 1
         if (readModule(numRows - 1, 0, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
-        currentByte <<= 1
+        currentByte_ <<= 1
         if (readModule(0, numColumns - 4, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
-        currentByte <<= 1
+        currentByte_ <<= 1
         if (readModule(0, numColumns - 3, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
-        currentByte <<= 1
+        currentByte_ <<= 1
         if (readModule(0, numColumns - 2, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
-        currentByte <<= 1
+        currentByte_ <<= 1
         if (readModule(0, numColumns - 1, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
-        currentByte <<= 1
+        currentByte_ <<= 1
         if (readModule(1, numColumns - 1, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
 
-        return currentByte
+        return currentByte_
     }
 
     /**
@@ -293,40 +293,40 @@ class BitMatrixParser {
      * @return byte from the Corner condition 3
      */
     private func readCorner3(numRows: Int64, numColumns: Int64): Int64 {
-        var currentByte: Int64 = 0
+        var currentByte_: Int64 = 0
         if (readModule(numRows - 1, 0, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
-        currentByte <<= 1
+        currentByte_ <<= 1
         if (readModule(numRows - 1, numColumns - 1, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
-        currentByte <<= 1
+        currentByte_ <<= 1
         if (readModule(0, numColumns - 3, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
-        currentByte <<= 1
+        currentByte_ <<= 1
         if (readModule(0, numColumns - 2, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
-        currentByte <<= 1
+        currentByte_ <<= 1
         if (readModule(0, numColumns - 1, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
-        currentByte <<= 1
+        currentByte_ <<= 1
         if (readModule(1, numColumns - 3, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
-        currentByte <<= 1
+        currentByte_ <<= 1
         if (readModule(1, numColumns - 2, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
-        currentByte <<= 1
+        currentByte_ <<= 1
         if (readModule(1, numColumns - 1, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
 
-        return currentByte
+        return currentByte_
     }
 
     /**
@@ -339,40 +339,40 @@ class BitMatrixParser {
      * @return byte from the Corner condition 4
      */
     private func readCorner4(numRows: Int64, numColumns: Int64): Int64 {
-        var currentByte: Int64 = 0
+        var currentByte_: Int64 = 0
         if (readModule(numRows - 3, 0, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
-        currentByte <<= 1
+        currentByte_ <<= 1
         if (readModule(numRows - 2, 0, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
-        currentByte <<= 1
+        currentByte_ <<= 1
         if (readModule(numRows - 1, 0, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
-        currentByte <<= 1
+        currentByte_ <<= 1
         if (readModule(0, numColumns - 2, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
-        currentByte <<= 1
+        currentByte_ <<= 1
         if (readModule(0, numColumns - 1, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
-        currentByte <<= 1
+        currentByte_ <<= 1
         if (readModule(1, numColumns - 1, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
-        currentByte <<= 1
+        currentByte_ <<= 1
         if (readModule(2, numColumns - 1, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
-        currentByte <<= 1
+        currentByte_ <<= 1
         if (readModule(3, numColumns - 1, numRows, numColumns)) {
-            currentByte |= 1
+            currentByte_ |= 1
         }
 
-        return currentByte
+        return currentByte_
     }
 
     /**

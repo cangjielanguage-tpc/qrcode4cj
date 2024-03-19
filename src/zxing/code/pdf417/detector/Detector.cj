@@ -12,12 +12,8 @@ import zxing.code.tools.System
 from std import math.*
 
 /**
- * <p>Encapsulates logic that can detect a PDF417 Code in an image, even if the
- * PDF417 Code is rotated or skewed, or partially obscured.</p>
- *
- * @author SITA Lab (kevin.osullivan@sita.aero)
- * @author dswitkin@google.com (Daniel Switkin)
- * @author Guenther Grau
+ * Encapsulates logic that can detect a PDF417 Code in an image, even if the
+ * PDF417 Code is rotated or skewed, or partially obscured.
  */
 public open class Detector {
     private static let INDEXES_START_PATTERN: Array<Int64> = [0, 4, 1, 5]
@@ -49,13 +45,14 @@ public open class Detector {
     private init() {}
 
     /**
-     * <p>Detects a PDF417 Code in an image. Checks 0, 90, 180, and 270 degree rotations.</p>
+     * Detects a PDF417 Code in an image. Checks 0, 90, 180, and 270 degree rotations.
      *
      * @param image barcode image to decode
      * @param hints optional hints to detector
-     * @param multiple if true, then the image is searched for multiple codes. If false, then at most one code will
-     * be found and returned
-     * @return {@link PDF417DetectorResult} encapsulating results of detecting a PDF417 code
+     * @param multiple if true, then the image is searched for multiple codes. If false, then at most one code will be found
+     * and returned
+     *
+     * @return PDF417DetectorResult encapsulating results of detecting a PDF417 code
      * @throws NotFoundException if no PDF417 Code can be found
      */
     public static func detect(
@@ -104,9 +101,10 @@ public open class Detector {
 
     /**
      * Detects PDF417 codes in an image. Only checks 0 degree rotation
-     * @param multiple if true, then the image is searched for multiple codes. If false, then at most one code will
-     * be found and returned
+     * @param multiple if true, then the image is searched for multiple codes. If false, then at most one code will be found
+     * and returned
      * @param bitMatrix bit matrix to detect barcodes in
+     *
      * @return List of ResultPoint arrays containing the coordinates of found barcodes
      */
     private static func detect(multiple: Bool, bitMatrix: BitMatrix, flagReadSecond: Int64): ArrayList<Array<ResultPoint>> {
@@ -242,30 +240,30 @@ public open class Detector {
 
         // Last row of the current symbol that contains pattern
         if (found) {
-            var skippedRowCount: Int64 = 0
+            var skippedRowCount_: Int64 = 0
             var previousRowLoc: Array<Int64> = [Int64(result[0].getX()), Int64(result[1].getX())]
 
             while (stopRow < height) {
                 var loc: Array<Int64> = findGuardPattern(matrix, previousRowLoc[0], stopRow, width, pattern, counters)
 
-                // a found pattern is only considered to belong to the same barcode if the start and end positions
-                // don't differ too much. Pattern drift should be not bigger than two for consecutive rows. With
-                // a higher number of skipped rows drift could be larger. To keep it simple for now, we allow a slightly
-                // larger drift and don't check for skipped rows.
+                // a found pattern is only considered to belong to the same barcode if the start and end positions don't differ
+                // too much. Pattern drift should be not bigger than two for consecutive rows. With
+                // a higher number of skipped rows drift could be larger. To keep it simple for now, we allow a slightly larger
+                // drift and don't check for skipped rows.
                 if (loc.size != 0 && abs(previousRowLoc[0] - loc[0]) < MAX_PATTERN_DRIFT &&
                     abs(previousRowLoc[1] - loc[1]) < MAX_PATTERN_DRIFT) {
                     previousRowLoc = loc
-                    skippedRowCount = 0
+                    skippedRowCount_ = 0
                 } else {
-                    if (skippedRowCount > SKIPPED_ROW_COUNT_MAX) {
+                    if (skippedRowCount_ > SKIPPED_ROW_COUNT_MAX) {
                         break
                     } else {
-                        skippedRowCount++
+                        skippedRowCount_++
                     }
                 }
                 stopRow++
             }
-            stopRow -= skippedRowCount + 1
+            stopRow -= skippedRowCount_ + 1
             result[2] = ResultPoint(Float32(previousRowLoc[0]), Float32(stopRow))
             result[3] = ResultPoint(Float32(previousRowLoc[1]), Float32(stopRow))
         }
@@ -276,13 +274,14 @@ public open class Detector {
     }
 
     /**
-     * @param matrix row of black/white values to search
+     * @param matrix the row of black/white values to search
      * @param column x position to start search
-     * @param row y position to start search
-     * @param width the number of pixels to search on this row
-     * @param pattern pattern of counts of number of black and white pixels that are
-     * being searched for as a pattern
+     * @param row y position  value to start search
+     * @param width the number value of pixels to search on this row
+     * @param pattern pattern of counts of number of black and white pixels that are being searched
+     * for as a pattern
      * @param counters array of counters, as long as pattern, to re-use
+     *
      * @return start/end horizontal offset of guard pattern, as an array of two ints.
      */
     private static func findGuardPattern(
@@ -306,34 +305,34 @@ public open class Detector {
         }
 
         var x: Int64 = patternStart
-        var counterPosition: Int64 = 0
+        var counterPosition_: Int64 = 0
         var patternLength: Int64 = pattern.size
         var isWhite: Bool = false
         while (x < width) {
             let pixel: Bool = matrix.get(x, row)
             if (pixel != isWhite) {
-                counters[counterPosition] += 1
+                counters[counterPosition_] += 1
             } else {
-                if (counterPosition == patternLength - 1) {
+                if (counterPosition_ == patternLength - 1) {
                     if (patternMatchVariance(counters, pattern) < MAX_AVG_VARIANCE) {
                         return [patternStart, x]
                     }
 
                     patternStart += counters[0] + counters[1]
-                    System.arraycopy(counters, 2, counters, 0, counterPosition - 1)
+                    System.arraycopy(counters, 2, counters, 0, counterPosition_ - 1)
 
-                    counters[counterPosition - 1] = 0
-                    counters[counterPosition] = 0
-                    counterPosition--
+                    counters[counterPosition_ - 1] = 0
+                    counters[counterPosition_] = 0
+                    counterPosition_--
                 } else {
-                    counterPosition++
+                    counterPosition_++
                 }
-                counters[counterPosition] = 1
+                counters[counterPosition_] = 1
                 isWhite = !isWhite
             }
             x++;
         }
-        if (counterPosition == patternLength - 1 && patternMatchVariance(counters, pattern) < MAX_AVG_VARIANCE) {
+        if (counterPosition_ == patternLength - 1 && patternMatchVariance(counters, pattern) < MAX_AVG_VARIANCE) {
             return [patternStart, x - 1]
         }
         return Array<Int64>()

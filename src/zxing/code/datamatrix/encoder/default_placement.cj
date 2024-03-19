@@ -154,58 +154,58 @@ public open class DefaultPlacement {
      * @param col the column
      * @param pos character position
      */
-    private func utah(row: Int64, col: Int64, pos: Int64) {
-        module(row - 2, col - 2, pos, 1)
-        module(row - 2, col - 1, pos, 2)
-        module(row - 1, col - 2, pos, 3)
-        module(row - 1, col - 1, pos, 4)
-        module(row - 1, col, pos, 5)
-        module(row, col - 2, pos, 6)
-        module(row, col - 1, pos, 7)
-        module(row, col, pos, 8)
+    private func utah(row_: Int64, col: Int64, pos: Int64) {
+        module(row_ - 2, col - 2, pos, 1)
+        module(row_ - 2, col - 1, pos, 2)
+        module(row_ - 1, col - 2, pos, 3)
+        module(row_ - 1, col - 1, pos, 4)
+        module(row_ - 1, col, pos, 5)
+        module(row_, col - 2, pos, 6)
+        module(row_, col - 1, pos, 7)
+        module(row_, col, pos, 8)
     }
 
-    private func corner1(pos: Int64) {
-        module(numrows - 1, 0, pos, 1)
-        module(numrows - 1, 1, pos, 2)
-        module(numrows - 1, 2, pos, 3)
-        module(0, numcols - 2, pos, 4)
-        module(0, numcols - 1, pos, 5)
-        module(1, numcols - 1, pos, 6)
-        module(2, numcols - 1, pos, 7)
-        module(3, numcols - 1, pos, 8)
+    private func corner1(pos_: Int64) {
+        module(numrows - 1, 0, pos_, 1)
+        module(numrows - 1, 1, pos_, 2)
+        module(numrows - 1, 2, pos_, 3)
+        module(0, numcols - 2, pos_, 4)
+        module(0, numcols - 1, pos_, 5)
+        module(1, numcols - 1, pos_, 6)
+        module(2, numcols - 1, pos_, 7)
+        module(3, numcols - 1, pos_, 8)
     }
 
-    private func corner2(pos: Int64) {
-        module(numrows - 3, 0, pos, 1)
-        module(numrows - 2, 0, pos, 2)
-        module(numrows - 1, 0, pos, 3)
-        module(0, numcols - 4, pos, 4)
-        module(0, numcols - 3, pos, 5)
-        module(0, numcols - 2, pos, 6)
-        module(0, numcols - 1, pos, 7)
-        module(1, numcols - 1, pos, 8)
+    private func corner2(pos_: Int64) {
+        module(numrows - 3, 0, pos_, 1)
+        module(numrows - 2, 0, pos_, 2)
+        module(numrows - 1, 0, pos_, 3)
+        module(0, numcols - 4, pos_, 4)
+        module(0, numcols - 3, pos_, 5)
+        module(0, numcols - 2, pos_, 6)
+        module(0, numcols - 1, pos_, 7)
+        module(1, numcols - 1, pos_, 8)
     }
 
-    private func corner3(pos: Int64) {
-        module(numrows - 3, 0, pos, 1)
-        module(numrows - 2, 0, pos, 2)
-        module(numrows - 1, 0, pos, 3)
-        module(0, numcols - 2, pos, 4)
-        module(0, numcols - 1, pos, 5)
-        module(1, numcols - 1, pos, 6)
-        module(2, numcols - 1, pos, 7)
-        module(3, numcols - 1, pos, 8)
+    private func corner3(pos_: Int64) {
+        module(numrows - 3, 0, pos_, 1)
+        module(numrows - 2, 0, pos_, 2)
+        module(numrows - 1, 0, pos_, 3)
+        module(0, numcols - 2, pos_, 4)
+        module(0, numcols - 1, pos_, 5)
+        module(1, numcols - 1, pos_, 6)
+        module(2, numcols - 1, pos_, 7)
+        module(3, numcols - 1, pos_, 8)
     }
 
-    private func corner4(pos: Int64) {
-        module(numrows - 1, 0, pos, 1)
-        module(numrows - 1, numcols - 1, pos, 2)
-        module(0, numcols - 3, pos, 3)
-        module(0, numcols - 2, pos, 4)
-        module(0, numcols - 1, pos, 5)
-        module(1, numcols - 3, pos, 6)
-        module(1, numcols - 2, pos, 7)
-        module(1, numcols - 1, pos, 8)
+    private func corner4(pos_: Int64) {
+        module(numrows - 1, 0, pos_, 1)
+        module(numrows - 1, numcols - 1, pos_, 2)
+        module(0, numcols - 3, pos_, 3)
+        module(0, numcols - 2, pos_, 4)
+        module(0, numcols - 1, pos_, 5)
+        module(1, numcols - 3, pos_, 6)
+        module(1, numcols - 2, pos_, 7)
+        module(1, numcols - 1, pos_, 8)
     }
 }

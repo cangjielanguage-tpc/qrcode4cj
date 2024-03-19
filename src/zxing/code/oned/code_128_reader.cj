@@ -143,14 +143,14 @@ public open class Code128Reader <: OneDReader {
         var rowOffset: Int64 = row.getNextSet(0)
 
         var counterPosition: Int64 = 0
-        var counters: Array<Int64> = Array<Int64>(6, item: 0)
+        var counters_: Array<Int64> = Array<Int64>(6, item: 0)
         var patternStart: Int64 = rowOffset
         var isWhite: Bool = false
-        var patternLength: Int64 = counters.size
+        var patternLength: Int64 = counters_.size
 
         for (i in rowOffset..width) {
             if (row.get(i) != isWhite) {
-                counters[counterPosition] = counters[counterPosition] + 1
+                counters_[counterPosition] = counters_[counterPosition] + 1
             } else {
                 if (counterPosition == patternLength - 1) {
                     var bestVariance: Float32 = MAX_AVG_VARIANCE
@@ -158,7 +158,7 @@ public open class Code128Reader <: OneDReader {
 
                     for (startCode in CODE_START_A..CODE_START_C + 1) {
                         var variance: Float32 = patternMatchVariance(
-                            counters,
+                            counters_,
                             CODE_PATTERNS[startCode],
                             MAX_INDIVIDUAL_VARIANCE
                         )
@@ -176,15 +176,15 @@ public open class Code128Reader <: OneDReader {
                     )) {
                         return Array<Int64>([patternStart, i, bestMatch])
                     }
-                    patternStart += counters[0] + counters[1]
-                    System.arraycopy(counters, 2, counters, 0, counterPosition - 1)
-                    counters[counterPosition - 1] = 0
-                    counters[counterPosition] = 0
+                    patternStart += counters_[0] + counters_[1]
+                    System.arraycopy(counters_, 2, counters_, 0, counterPosition - 1)
+                    counters_[counterPosition - 1] = 0
+                    counters_[counterPosition] = 0
                     counterPosition--
                 } else {
                     counterPosition++
                 }
-                counters[counterPosition] = 1
+                counters_[counterPosition] = 1
                 isWhite = !isWhite
             }
         }
@@ -196,20 +196,20 @@ public open class Code128Reader <: OneDReader {
         var bestVariance: Float32 = MAX_AVG_VARIANCE
 
         // worst variance we'll accept
-        var bestMatch: Int64 = -1
+        var bestMatch_: Int64 = -1
 
         for (d in 0..CODE_PATTERNS.size) {
             var pattern: Array<Int64> = CODE_PATTERNS[d]
             var variance: Float32 = patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE)
             if (variance < bestVariance) {
                 bestVariance = variance
-                bestMatch = d
+                bestMatch_ = d
             }
         }
 
-        // TODO We're overlooking the fact that the STOP pattern has 7 values, not 6.
-        if (bestMatch >= 0) {
-            return bestMatch
+        /* TODO We're overlooking the fact that the STOP pattern has 7 values, not 6. */
+        if (bestMatch_ >= 0) {
+            return bestMatch_
         } else {
             throw NotFoundException.getNotFoundInstance()
         }
@@ -250,7 +250,7 @@ public open class Code128Reader <: OneDReader {
         var checksumTotal: Int64 = startCode
         var multiplier: Int64 = 0
         var lastCharacterWasPrintable: Bool = true
-        var upperMode: Bool = false
+        var upperMode_: Bool = false
         var shiftUpperMode: Bool = false
 
         while (!done) {
@@ -265,18 +265,18 @@ public open class Code128Reader <: OneDReader {
 
             rawCodes.append(UInt8(code))
 
-            // Remember whether the last code was printable or not (excluding CODE_STOP)
+            /* Remember whether the last code was printable or not (excluding CODE_STOP) */
             if (code != CODE_STOP) {
                 lastCharacterWasPrintable = true
             }
 
-            // Add to checksum computation (if not CODE_STOP of course)
+            /* Add to checksum computation (if not CODE_STOP of course) */ 
             if (code != CODE_STOP) {
                 multiplier++
                 checksumTotal += multiplier * code
             }
 
-            // Advance to where the next code will to start
+            /* Advance to where the next code will to start */
             lastStart = nextStart
 
             for (i in 0..counters.size) {
@@ -290,14 +290,14 @@ public open class Code128Reader <: OneDReader {
 
             if (codeSet == CODE_CODE_A) {
                 if (code < 64) {
-                    if (shiftUpperMode == upperMode) {
+                    if (shiftUpperMode == upperMode_) {
                         result.append(Char(' '.hashCode() + code))
                     } else {
                         result.append(Char(' '.hashCode() + code + 128))
                     }
                     shiftUpperMode = false
                 } else if (code < 96) {
-                    if (shiftUpperMode == upperMode) {
+                    if (shiftUpperMode == upperMode_) {
                         result.append(Char(code - 64))
                     } else {
                         result.append(Char(code + 64))
@@ -330,11 +330,11 @@ public open class Code128Reader <: OneDReader {
                         symbologyModifier = 4
                     } else if (code == CODE_FNC_3) {}
                     else if (code == CODE_FNC_4_A) {
-                        if (!upperMode && shiftUpperMode) {
-                            upperMode = true
+                        if (!upperMode_ && shiftUpperMode) {
+                            upperMode_ = true
                             shiftUpperMode = false
-                        } else if (upperMode && shiftUpperMode) {
-                            upperMode = false
+                        } else if (upperMode_ && shiftUpperMode) {
+                            upperMode_ = false
                             shiftUpperMode = false
                         } else {
                             shiftUpperMode = true
@@ -352,7 +352,7 @@ public open class Code128Reader <: OneDReader {
                 }
             } else if (codeSet == CODE_CODE_B) {
                 if (code < 96) {
-                    if (shiftUpperMode == upperMode) {
+                    if (shiftUpperMode == upperMode_) {
                         result.append(Char(' '.hashCode() + code))
                     } else {
                         result.append(Char(' '.hashCode() + code + 128))
@@ -382,11 +382,11 @@ public open class Code128Reader <: OneDReader {
                         symbologyModifier = 4
                     } else if (code == CODE_FNC_3) {}
                     else if (code == CODE_FNC_4_B) {
-                        if (!upperMode && shiftUpperMode) {
-                            upperMode = true
+                        if (!upperMode_ && shiftUpperMode) {
+                            upperMode_ = true
                             shiftUpperMode = false
-                        } else if (upperMode && shiftUpperMode) {
-                            upperMode = false
+                        } else if (upperMode_ && shiftUpperMode) {
+                            upperMode_ = false
                             shiftUpperMode = false
                         } else {
                             shiftUpperMode = true
@@ -462,15 +462,15 @@ public open class Code128Reader <: OneDReader {
             throw NotFoundException.getNotFoundInstance()
         }
 
-        // Pull out from sum the value of the penultimate check code
+        /* Pull out from sum the value of the penultimate check code */
         checksumTotal -= multiplier * lastCode
 
-        // lastCode is the checksum then:
+        /* lastCode is the checksum then: */ 
         if (checksumTotal % 103 != lastCode) {
             throw ChecksumException.getChecksumInstance()
         }
 
-        // Need to pull out the check digits from string
+        /* Need to pull out the check digits from string */
         var resultLength: Int64 = result.size
         if (resultLength == 0) {
             // false positive
