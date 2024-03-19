@@ -143,31 +143,31 @@ public open class Code93Reader <: OneDReader {
         var width: Int64 = row.getSize();
         var rowOffset: Int64 = row.getNextSet(0);
         counters = Array<Int64>(6, item: 0)
-        var theCounters: Array<Int64> = counters
+        var theCounters_: Array<Int64> = counters
         var patternStart: Int64 = rowOffset
         var isWhite: Bool = false;
-        var patternLength: Int64 = theCounters.size;
+        var patternLength: Int64 = theCounters_.size;
 
         var counterPosition: Int64 = 0;
 
         for (i in rowOffset..width) {
             if (row.get(i) != isWhite) {
-                theCounters[counterPosition] = theCounters[counterPosition] + 1
+                theCounters_[counterPosition] = theCounters_[counterPosition] + 1
             } else {
                 if (counterPosition == patternLength - 1) {
-                    if (toPattern(theCounters) == ASTERISK_ENCODING) {
+                    if (toPattern(theCounters_) == ASTERISK_ENCODING) {
                         let returnData: Array<Int64> = [patternStart, i]
                         return returnData
                     }
-                    patternStart += theCounters[0] + theCounters[1]
-                    System.arraycopy(theCounters, 2, theCounters, 0, counterPosition - 1);
-                    theCounters[counterPosition - 1] = 0
-                    theCounters[counterPosition] = 0
+                    patternStart += theCounters_[0] + theCounters_[1]
+                    System.arraycopy(theCounters_, 2, theCounters_, 0, counterPosition - 1);
+                    theCounters_[counterPosition - 1] = 0
+                    theCounters_[counterPosition] = 0
                     counterPosition--
                 } else {
                     counterPosition++
                 }
-                theCounters[counterPosition] = 1
+                theCounters_[counterPosition] = 1
                 isWhite = !isWhite
             }
         }

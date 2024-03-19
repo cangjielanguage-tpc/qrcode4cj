@@ -21,26 +21,26 @@ public open class VINParsedResult <: ParsedResult {
         super(ParsedResultType.VIN)
     }
     public init(
-        vin: String,
-        worldManufacturerID: String,
-        vehicleDescriptorSection: String,
-        vehicleIdentifierSection: String,
-        countryCode: String,
-        vehicleAttributes: String,
-        modelYear: Int64,
-        plantCode: Char,
-        sequentialNumber: String
+        vin_: String,
+        worldManufacturerID_: String,
+        vehicleDescriptorSection_: String,
+        vehicleIdentifierSection_: String,
+        countryCode_: String,
+        vehicleAttributes_: String,
+        modelYear_: Int64,
+        plantCode_: Char,
+        sequentialNumber_: String
     ) {
         super(ParsedResultType.VIN)
-        this.vin = vin
-        this.worldManufacturerID = worldManufacturerID
-        this.vehicleDescriptorSection = vehicleDescriptorSection
-        this.vehicleIdentifierSection = vehicleIdentifierSection
-        this.countryCode = countryCode
-        this.vehicleAttributes = vehicleAttributes
-        this.modelYear = modelYear
-        this.plantCode = plantCode
-        this.sequentialNumber = sequentialNumber
+        this.vin = vin_
+        this.worldManufacturerID = worldManufacturerID_
+        this.vehicleDescriptorSection = vehicleDescriptorSection_
+        this.vehicleIdentifierSection = vehicleIdentifierSection_
+        this.countryCode = countryCode_
+        this.vehicleAttributes = vehicleAttributes_
+        this.modelYear = modelYear_
+        this.plantCode = plantCode_
+        this.sequentialNumber = sequentialNumber_
         this.flag = true
     }
 

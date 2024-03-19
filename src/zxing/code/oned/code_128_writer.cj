@@ -292,18 +292,18 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
         if (start >= last) {
             return CType.UNCODABLE
         }
-        var c: Char = value.get(start)
-        if (c == ESCAPE_FNC_1) {
+        var c_: Char = value.get(start)
+        if (c_ == ESCAPE_FNC_1) {
             return CType.FNC_1
         }
-        if (c < '0' || c > '9') {
+        if (c_ < '0' || c_ > '9') {
             return CType.UNCODABLE
         }
         if (start + 1 >= last) {
             return CType.ONE_DIGIT
         }
-        c = value.get(start + 1)
-        if (c < '0' || c > '9') {
+        c_ = value.get(start + 1)
+        if (c_ < '0' || c_ > '9') {
             return CType.ONE_DIGIT
         }
         return CType.TWO_DIGITS

@@ -503,45 +503,45 @@ public open class PDF417HighLevelEncoder {
         }
 
         var len: Int64 = input.length()
-        var p: Int64 = 0
+        var p_: Int64 = 0
         var textSubMode: Int64 = SUBMODE_ALPHA
 
         // User selected encoding mode
         match (compaction) {
-            case TEXT => encodeText(input, p, len, sb, textSubMode)
+            case TEXT => encodeText(input, p_, len, sb, textSubMode)
             case BYTE => if (autoECI) {
                 encodeMultiECIBinary(input, 0, input.length(), TEXT_COMPACTION, sb)
             } else {
                 var msgBytes: Array<UInt8> = encoding_.newEncoder().getBytes(UTF32String(input.toString()))
-                encodeBinary(msgBytes, p, msgBytes.size, BYTE_COMPACTION, sb)
+                encodeBinary(msgBytes, p_, msgBytes.size, BYTE_COMPACTION, sb)
             }
 
             case NUMERIC =>
                 sb.append(Char(LATCH_TO_NUMERIC))
-                encodeNumeric(input, p, len, sb)
+                encodeNumeric(input, p_, len, sb)
             case _ =>
                 var encodingMode: Int64 = TEXT_COMPACTION
 
                 //Default mode, see 4.4.2.1
-                while (p < len) {
-                    while (p < len && input.isECI(p)) {
-                        encodingECI(input.getECIValue(p), sb)
-                        p++
+                while (p_ < len) {
+                    while (p_ < len && input.isECI(p_)) {
+                        encodingECI(input.getECIValue(p_), sb)
+                        p_++
                     }
-                    if (p >= len) {
+                    if (p_ >= len) {
                         break
                     }
-                    var n: Int64 = determineConsecutiveDigitCount(input, p)
+                    var n: Int64 = determineConsecutiveDigitCount(input, p_)
                     if (n >= 13) {
                         sb.append(Char(LATCH_TO_NUMERIC))
                         encodingMode = NUMERIC_COMPACTION
                         textSubMode = SUBMODE_ALPHA
 
                         //Reset after latch
-                        encodeNumeric(input, p, n, sb)
-                        p += n
+                        encodeNumeric(input, p_, n, sb)
+                        p_ += n
                     } else {
-                        var t: Int64 = determineConsecutiveTextCount(input, p)
+                        var t: Int64 = determineConsecutiveTextCount(input, p_)
                         if (t >= 5 || n == len) {
                             if (encodingMode != TEXT_COMPACTION) {
                                 sb.append(Char(LATCH_TO_TEXT))
@@ -549,14 +549,14 @@ public open class PDF417HighLevelEncoder {
                                 textSubMode = SUBMODE_ALPHA
                                 //start with submode alpha after latch
                             }
-                            textSubMode = encodeText(input, p, t, sb, textSubMode)
-                            p += t
+                            textSubMode = encodeText(input, p_, t, sb, textSubMode)
+                            p_ += t
                         } else {
                             var b: Int64 = 0
                             if (autoECI) {
-                                b = determineConsecutiveBinaryCount(input, p, MyCharset())
+                                b = determineConsecutiveBinaryCount(input, p_, MyCharset())
                             } else {
-                                b = determineConsecutiveBinaryCount(input, p, encoding_)
+                                b = determineConsecutiveBinaryCount(input, p_, encoding_)
                             }
                             if (b == 0) {
                                 b = 1
@@ -566,20 +566,20 @@ public open class PDF417HighLevelEncoder {
                             if (autoECI) {
                                 bytes = Array<UInt8>()
                             } else {
-                                bytes = encoding_.newEncoder().getBytes(input.subSequence(p, p + b))
+                                bytes = encoding_.newEncoder().getBytes(input.subSequence(p_, p_ + b))
                             }
                             if (((bytes.size == 0 && b == 1) || (bytes.size != 0 && bytes.size == 1)) && encodingMode ==
                                 TEXT_COMPACTION) {
-                                //Switch for one byte (instead of latch)
+                                /* Switch for one byte (instead of latch) */
                                 if (autoECI) {
-                                    encodeMultiECIBinary(input, p, 1, TEXT_COMPACTION, sb)
+                                    encodeMultiECIBinary(input, p_, 1, TEXT_COMPACTION, sb)
                                 } else {
                                     encodeBinary(bytes, 0, 1, TEXT_COMPACTION, sb)
                                 }
                             } else {
-                                //Mode latch performed by encodeBinary()
+                                /* Mode latch performed by encodeBinary() */
                                 if (autoECI) {
-                                    encodeMultiECIBinary(input, p, p + b, encodingMode, sb)
+                                    encodeMultiECIBinary(input, p_, p_ + b, encodingMode, sb)
                                 } else {
                                     encodeBinary(bytes, 0, bytes.size, encodingMode, sb)
                                 }
@@ -587,7 +587,7 @@ public open class PDF417HighLevelEncoder {
                                 textSubMode = SUBMODE_ALPHA
                                 //Reset after latch
                             }
-                            p += b
+                            p_ += b
                         }
                     }
                 }
@@ -599,13 +599,13 @@ public open class PDF417HighLevelEncoder {
     /**
      * Encode parts of the message using Text Compaction as described in ISO/IEC 15438:2001(E), chapter 4.4.2.
      *
-     * @param input          the input
-     * @param startpos       the start position within the message
-     * @param count          the number of characters to encode
-     * @param sb             receives the encoded codewords
+     * @param input          the input value
+     * @param startpos       the start position value within the message
+     * @param count          the number value of characters to encode
+     * @param sb             receives the encoded codewords value
      * @param initialSubmode should normally be SUBMODE_ALPHA
      *
-     * @return the text submode in which this method ends
+     * @return the text submode value in which this method ends
      */
     private static func encodeText(
         input: ECIInput,
@@ -732,11 +732,11 @@ public open class PDF417HighLevelEncoder {
     }
 
     /**
-     * Encode all of the message using Byte Compaction as described in ISO/IEC 15438:2001(E)
+     * Encode all of the message value using Byte Compaction as described in ISO/IEC 15438:2001(E)
      *
-     * @param input     the input
-     * @param startpos  the start position within the message
-     * @param count     the number of bytes to encode
+     * @param input     the input value
+     * @param startpos  the start position value within the message
+     * @param count     the number value of bytes to encode
      * @param startmode the mode from which this method starts
      * @param sb        receives the encoded codewords
      */
@@ -901,12 +901,12 @@ public open class PDF417HighLevelEncoder {
      */
     private static func determineConsecutiveDigitCount(input: ECIInput, startpos: Int64): Int64 {
         var count: Int64 = 0
-        let len: Int64 = input.length()
-        var idx: Int64 = startpos
-        if (idx < len) {
-            while (idx < len && !input.isECI(idx) && isDigit(input.charAt(idx))) {
+        let len_: Int64 = input.length()
+        var idx_: Int64 = startpos
+        if (idx_ < len_) {
+            while (idx_ < len_ && !input.isECI(idx_) && isDigit(input.charAt(idx_))) {
                 count++
-                idx++
+                idx_++
             }
         }
         return count
@@ -921,36 +921,36 @@ public open class PDF417HighLevelEncoder {
      */
     private static func determineConsecutiveTextCount(input: ECIInput, startpos: Int64): Int64 {
         let len: Int64 = input.length()
-        var idx: Int64 = startpos
-        while (idx < len) {
+        var idx_: Int64 = startpos
+        while (idx_ < len) {
             var numericCount: Int64 = 0
-            while (numericCount < 13 && idx < len && !input.isECI(idx) && isDigit(input.charAt(idx))) {
+            while (numericCount < 13 && idx_ < len && !input.isECI(idx_) && isDigit(input.charAt(idx_))) {
                 numericCount++
-                idx++
+                idx_++
             }
             if (numericCount >= 13) {
-                return idx - startpos - numericCount
+                return idx_ - startpos - numericCount
             }
             if (numericCount > 0) {
                 continue
             }
 
-            //Check if character is encodable
-            if (input.isECI(idx) || !isText(input.charAt(idx))) {
+            /* Check if character is encodable */
+            if (input.isECI(idx_) || !isText(input.charAt(idx_))) {
                 break
             }
-            idx++
+            idx_++
         }
-        return idx - startpos
+        return idx_ - startpos
     }
 
     /**
      * Determines the number of consecutive characters that are encodable using binary compaction.
      *
-     * @param input    the input
-     * @param startpos the start position within the message
+     * @param input    the input value 
+     * @param startpos the start position value within the message
      * @param encoding the charset used to convert the message to a byte array
-     * @return the requested character count
+     * @return the requested character count value
      */
     private static func determineConsecutiveBinaryCount(input: ECIInput, startpos: Int64, encoding: MyCharset): Int64 {
         var encoder: ?CharsetEncoder = None
@@ -960,35 +960,35 @@ public open class PDF417HighLevelEncoder {
             encoder = encoding.newEncoder()
         }
         var len: Int64 = input.length()
-        var idx: Int64 = startpos
-        while (idx < len) {
+        var idx_: Int64 = startpos
+        while (idx_ < len) {
             var numericCount: Int64 = 0
 
-            var i: Int64 = idx
+            var i: Int64 = idx_
             while (numericCount < 13 && !input.isECI(i) && isDigit(input.charAt(i))) {
                 numericCount++
 
-                //textCount++
-                i = idx + numericCount
+                /* textCount++ */
+                i = idx_ + numericCount
                 if (i >= len) {
                     break
                 }
             }
             if (numericCount >= 13) {
-                return idx - startpos
+                return idx_ - startpos
             }
 
             if (let Some(e) <- encoder) {
-                if (!e.canEncode(input.charAt(idx))) {
+                if (!e.canEncode(input.charAt(idx_))) {
                     @Assert(input is NoECIInput)
 
-                    var ch: Char = input.charAt(idx)
+                    var ch: Char = input.charAt(idx_)
                     throw WriterException("Non-encodable character detected: ${ch} (Unicode: ${ch.hashCode()})")
                 }
             }
-            idx++
+            idx_++
         }
-        return idx - startpos
+        return idx_ - startpos
     }
 
     private static func encodingECI(eci: Int64, sb: ArrayList<Char>) {

@@ -112,29 +112,29 @@ public open class GlobalHistogramBinarizer <: Binarizer {
         }
     }
 
-    static func estimateBlackPoint(buckets: Array<Int64>): Int64 {
-        let numBuckets = buckets.size
+    static func estimateBlackPoint(buckets_: Array<Int64>): Int64 {
+        let numBuckets = buckets_.size
         var maxBucketCount = 0
         var firstPeak = 0
         var firstPeakSize = 0
         for (x in 0..numBuckets) {
-            if (buckets[x] > firstPeakSize) {
+            if (buckets_[x] > firstPeakSize) {
                 firstPeak = x
-                firstPeakSize = buckets[x]
+                firstPeakSize = buckets_[x]
             }
-            if (buckets[x] > maxBucketCount) {
-                maxBucketCount = buckets[x]
+            if (buckets_[x] > maxBucketCount) {
+                maxBucketCount = buckets_[x]
             }
         }
 
         var secondPeak = 0
-        var secondPeakScore = 0
+        var secondPeakScore_ = 0
         for (x in 0..numBuckets) {
             let distanceToBiggest = x - firstPeak
-            let score = buckets[x] * distanceToBiggest * distanceToBiggest
-            if (score > secondPeakScore) {
+            let score = buckets_[x] * distanceToBiggest * distanceToBiggest
+            if (score > secondPeakScore_) {
                 secondPeak = x
-                secondPeakScore = score
+                secondPeakScore_ = score
             }
         }
 
@@ -153,7 +153,7 @@ public open class GlobalHistogramBinarizer <: Binarizer {
         var x = secondPeak - 1
         while (x > firstPeak) {
             let fromFirst = x - firstPeak
-            let score = fromFirst * fromFirst * (secondPeak - x) * (maxBucketCount - buckets[x])
+            let score = fromFirst * fromFirst * (secondPeak - x) * (maxBucketCount - buckets_[x])
             if (score > bestValleyScore) {
                 bestValley = x
                 bestValleyScore = score

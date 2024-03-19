@@ -38,7 +38,7 @@ public class MaskUtil {
      * penalty proportional to (M-1)x(N-1), because this is the number of 2x2 blocks inside such a block.
      */
     public static func applyMaskPenaltyRule2(matrix: ByteMatrix): Int64 {
-        var penalty: Int64 = 0;
+        var penalty_: Int64 = 0;
         var array: Array<Array<UInt8>> = matrix.getArray();
         var width: Int64 = matrix.getWidth();
         var height: Int64 = matrix.getHeight();
@@ -47,17 +47,17 @@ public class MaskUtil {
             for (x in 0..width - 1) {
                 var value: UInt8 = arrayY[x]
                 if (value == arrayY[x + 1] && value == array[y + 1][x] && value == array[y + 1][x + 1]) {
-                    penalty++
+                    penalty_++
                 }
             }
         }
 
-        return N2 * penalty
+        return N2 * penalty_
     }
 
     /**
-     * Apply mask penalty rule 3 and return the penalty. Find consecutive runs of 1:1:3:1:1:4
-     * starting with black, or 4:1:1:3:1:1 starting with white, and give penalty to them.  If we
+     * Apply mask penalty rule 3 and return the penalty. Find consecutive runs of 1:1:3:1:1:4 starting with black
+     * or 4:1:1:3:1:1 starting with white, and give penalty to them.  If we
      * find patterns like 000010111010000, we give penalty once.
      */
     public static func applyMaskPenaltyRule3(matrix: ByteMatrix): Int64 {
@@ -110,20 +110,20 @@ public class MaskUtil {
 
     private static func isWhiteVertical(array: Array<Array<UInt8>>, col: Int64, start: Int64, to: Int64): Bool {
         if (start < 0 || array.size < to) {
-            return false;
+            return false
         }
 
-        for (i in start..to) {
-            if (array[i][col] == 1) {
-                return false;
+        for (i_ in start..to) {
+            if (array[i_][col] == 1) {
+                return false
             }
         }
-        return true;
+        return true
     }
 
     /**
-     * Apply mask penalty rule 4 and return the penalty. Calculate the ratio of dark cells and give
-     * penalty if the ratio is far from 50%. It gives 10 penalty for 5% distance.
+     * Apply mask penalty rule 4 and return the penalty. Calculate the ratio of dark cells and give penalty
+     * if the ratio is far from 50%. It gives 10 penalty for 5% distance.
      */
     public static func applyMaskPenaltyRule4(matrix: ByteMatrix): Int64 {
         var numDarkCells: Int64 = 0;

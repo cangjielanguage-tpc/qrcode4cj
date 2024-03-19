@@ -2855,13 +2855,13 @@ public open class PDF417 {
     }
 
     /**
-     * Calculates the necessary number of rows as described in annex Q of ISO/IEC 15438:2001(E).
+     * Calculates the necessary number value of rows as described in annex Q of ISO/IEC 15438:2001(E).
      *
-     * @param m the number of source codewords prior to the additional of the Symbol Length
-     * Descriptor and any pad codewords
-     * @param k the number of error correction codewords
-     * @param c the number of columns in the symbol in the data region (excluding start, stop and row
-     * indicator codewords)
+     * @param m the number of source codewords prior to the additional of the Symbol Length Descriptor
+     * and any pad codewords
+     * @param k the number value of error correction codewords
+     * @param c the number value of columns in the symbol in the data region (excluding start, stop and row indicator
+     * codewords)
      *
      * @return the number of rows in the symbol (r)
      */
@@ -2896,23 +2896,23 @@ public open class PDF417 {
 
     private static func encodeChar(pattern: Int64, len: Int64, logic: BarcodeRow) {
         var map: Int64 = 1 << len - 1
-        var last: Bool = (pattern & map) != 0
+        var last_: Bool = (pattern & map) != 0
 
         //Initialize to inverse of first bit
         var width: Int64 = 0
         for (i in 0..len) {
             var black: Bool = (pattern & map) != 0
-            if (last == black) {
+            if (last_ == black) {
                 width++
             } else {
-                logic.addBar(last, width)
+                logic.addBar(last_, width)
 
-                last = black
+                last_ = black
                 width = 1
             }
             map >>= 1
         }
-        logic.addBar(last, width)
+        logic.addBar(last_, width)
     }
 
     private func encodeLowLevel(
@@ -2922,40 +2922,40 @@ public open class PDF417 {
         errorCorrectionLevel: Int64,
         logic: BarcodeMatrix
     ) {
-        var idx: Int64 = 0
+        var idx_: Int64 = 0
         for (y in 0..r) {
             var cluster: Int64 = y % 3
             logic.startRow()
             encodeChar(START_PATTERN, 17, logic.getCurrentRow())
 
-            var left: Int64
+            var left_: Int64
             var right: Int64
             if (cluster == 0) {
-                left = (30 * (y / 3)) + ((r - 1) / 3)
+                left_ = (30 * (y / 3)) + ((r - 1) / 3)
                 right = (30 * (y / 3)) + (c - 1)
             } else if (cluster == 1) {
-                left = (30 * (y / 3)) + (errorCorrectionLevel * 3) + ((r - 1) % 3)
+                left_ = (30 * (y / 3)) + (errorCorrectionLevel * 3) + ((r - 1) % 3)
                 right = (30 * (y / 3)) + ((r - 1) / 3)
             } else {
-                left = (30 * (y / 3)) + (c - 1)
+                left_ = (30 * (y / 3)) + (c - 1)
                 right = (30 * (y / 3)) + (errorCorrectionLevel * 3) + ((r - 1) % 3)
             }
 
-            var pattern: Int64 = CODEWORD_TABLE[cluster][left]
-            encodeChar(pattern, 17, logic.getCurrentRow())
+            var pattern_: Int64 = CODEWORD_TABLE[cluster][left_]
+            encodeChar(pattern_, 17, logic.getCurrentRow())
 
             for (x in 0..c) {
-                pattern = CODEWORD_TABLE[cluster][fullCodewords[idx].hashCode()]
-                encodeChar(pattern, 17, logic.getCurrentRow())
-                idx++
+                pattern_ = CODEWORD_TABLE[cluster][fullCodewords[idx_].hashCode()]
+                encodeChar(pattern_, 17, logic.getCurrentRow())
+                idx_++
             }
 
             if (compact) {
                 encodeChar(STOP_PATTERN, 1, logic.getCurrentRow())
                 // encodes stop line for compact pdf417
             } else {
-                pattern = CODEWORD_TABLE[cluster][right]
-                encodeChar(pattern, 17, logic.getCurrentRow())
+                pattern_ = CODEWORD_TABLE[cluster][right]
+                encodeChar(pattern_, 17, logic.getCurrentRow())
 
                 encodeChar(STOP_PATTERN, 18, logic.getCurrentRow())
             }
@@ -2963,8 +2963,8 @@ public open class PDF417 {
     }
 
     /**
-     * @param msg message to encode
-     * @param errorCorrectionLevel PDF417 error correction level to use
+     * @param msg: message to encode
+     * @param errorCorrectionLevel PDF417 error correction level value to use
      *
      * @throws WriterException if the contents cannot be encoded in this format
      */
@@ -3018,11 +3018,11 @@ public open class PDF417 {
     }
 
     /**
-     * Determine optimal nr of columns and rows for the specified number of
-     * codewords.
-     *
-     * @param sourceCodeWords number of code words
+     * Determine optimal nr of columns and rows for the specified number of codewords.
+     * 
+     * @param sourceCodeWords number of code words value
      * @param errorCorrectionCodeWords number of error correction code words
+     *
      * @return dimension object containing cols as width and rows as height
      */
     private func determineDimensions(sourceCodeWords: Int64, errorCorrectionCodeWords: Int64): Array<Int64> {
@@ -3067,22 +3067,22 @@ public open class PDF417 {
     }
 
     /**
-     * Sets max/min row/col values
+     * Sets the smax/min row/col values
      *
-     * @param maxCols maximum allowed columns
-     * @param minCols minimum allowed columns
-     * @param maxRows maximum allowed rows
-     * @param minRows minimum allowed rows
+     * @param maxCols value of maximum allowed columns
+     * @param minCols value of minimum allowed columns
+     * @param maxRows value of maximum allowed rows
+     * @param minRows value of minimum allowed rows
      */
-    public func setDimensions(maxCols: Int64, minCols: Int64, maxRows: Int64, minRows: Int64) {
-        this.maxCols = maxCols
+    public func setDimensions(maxCols_: Int64, minCols: Int64, maxRows: Int64, minRows: Int64) {
+        this.maxCols = maxCols_
         this.minCols = minCols
         this.maxRows = maxRows
         this.minRows = minRows
     }
 
     /**
-     * @param compaction compaction mode to use
+     * @param compaction value of compaction mode to use
      */
     public func setCompaction(compaction: Compaction) {
         this.compaction = compaction

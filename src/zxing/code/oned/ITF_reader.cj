@@ -173,9 +173,11 @@ public open class ITFReader <: OneDReader {
         var endStart: Int64 = skipWhiteSpace(row)
         var startPattern: Array<Int64> = findGuardPattern(row, endStart, START_PATTERN)
 
-        // Determine the width of a narrow line in pixels. We can do this by getting
-        // the width of the start pattern and dividing by 4 because its
-        // made up of 4 narrow lines.
+        /*
+         * Determine the width of a narrow line in pixels. We can do this by getting
+         * the width of the start pattern and dividing by 4 because its
+         * made up of 4 narrow lines.
+         */ 
         this.narrowLineWidth = (startPattern[1] - startPattern[0]) / 4
 
         validateQuietZone(row, startPattern[0])
@@ -184,13 +186,13 @@ public open class ITFReader <: OneDReader {
     }
 
     /**
-     * The start & end patterns must be pre/post fixed by a quiet zone. This
-     * zone must be at least 10 times the width of a narrow line.  Scan back until we
+     * The start & end patterns must be pre/post fixed by a quiet zone. This zone
+     * must be at least 10 times the width of a narrow line.  Scan back until we
      * either get to the start of the barcode or match the necessary number of
      * quiet zone pixels.
      *
-     * Note: Its assumed the row is reversed when using this method to find quiet
-     * zone after the end pattern.
+     * Note: Its assumed the row is reversed when using this method to find quiet zone
+     * after the end pattern.
      *
      * ref: http://www.barcode-1.net/i25code.html
      *
@@ -206,43 +208,42 @@ public open class ITFReader <: OneDReader {
 
         // if there are not so many pixel at all let's try as many as possible
         quietCount = min(quietCount, startPattern)
-        var i: Int64 = startPattern - 1
-        while (i >= 0 && quietCount > 0) {
-            if (row.get(i)) {
+        var i_: Int64 = startPattern - 1
+        while (i_ >= 0 && quietCount > 0) {
+            if (row.get(i_)) {
                 break
             }
-            i--
+            i_--
             quietCount--
         }
         if (quietCount != 0) {
-            // Unable to find the necessary number of quiet zone pixels.
+            /* Unable to find the necessary number of quiet zone pixels. */ 
             throw NotFoundException.getNotFoundInstance()
         }
     }
 
     /**
-     * Skip all whitespace until we get to the first black line.
+     * Skip all the whitespace until we get to the first black line.
      *
      * @param row row of black/white values to search
      * @return index of the first black line.
      * @throws NotFoundException Throws exception if no black lines are found in the row
      */
     private static func skipWhiteSpace(row: BitArray): Int64 {
-        var width: Int64 = row.getSize()
-        var endStart: Int64 = row.getNextSet(0)
-        if (endStart == width) {
+        var width_: Int64 = row.getSize()
+        var endStart_: Int64 = row.getNextSet(0)
+        if (endStart_ == width_) {
             throw NotFoundException.getNotFoundInstance()
         }
 
-        return endStart
+        return endStart_
     }
 
     /**
-     * Identify where the end of the middle / payload section ends.
+     * Identify where the end of middle / payload section ends.
      *
      * @param row row of black/white values to search
-     * @return Array, containing index of start of 'end block' and end of 'end
-     * block'
+     * @return Array, containing index of start of 'end block' and end of 'endblock'
      */
     private func decodeEnd(row: BitArray): Array<Int64> {
         // For convenience, reverse the row and then
@@ -257,36 +258,41 @@ public open class ITFReader <: OneDReader {
                 endPattern = findGuardPattern(row, endStart, END_PATTERN_REVERSED[1])
             }
 
-            // The start & end patterns must be pre/post fixed by a quiet zone. This zone
-            // must be at least 10 times the width of a narrow line.
-            // ref: http://www.barcode-1.net/i25code.html
+            /*
+             * The start & end patterns must be pre/post fixed by a quiet zone. This zone
+             * must be at least 10 times the width of a narrow line.
+             * ref: http://www.barcode-1.net/i25code.html
+             */ 
             validateQuietZone(row, endPattern[0])
 
-            // Now recalculate the indices of where the 'endblock' starts & stops to accommodate
-            // the reversed nature of the search
+            /*
+             * Now recalculate the indices of where the 'endblock' starts & stops to accommodate
+             * the reversed nature of the search
+             */ 
             var temp: Int64 = endPattern[0]
             endPattern[0] = row.getSize() - endPattern[1]
             endPattern[1] = row.getSize() - temp
 
             return endPattern
         } finally {
-            // Put the row back the right way.
+            /* Put the row back the right way. */ 
             row.reverse()
         }
     }
 
     /**
-     * @param row       row of black/white values to search
+     * @param row       row of the black/white values to search
      * @param rowOffset position to start search
-     * @param pattern   pattern of counts of number of black and white pixels that are being
-     * searched for as a pattern
+     * @param pattern   pattern of counts of number of black and white pixels that are being searched
+     * for as a pattern
      *
-     * @return start/end horizontal offset of guard pattern, as an array of two ints
+     * @return start/end horizontal offset of the guard pattern, as an array of two ints
+     *
      * @throws NotFoundException if pattern is not found
      */
     private static func findGuardPattern(row: BitArray, rowOffset: Int64, pattern: Array<Int64>): Array<Int64> {
         var patternLength: Int64 = pattern.size
-        var counters: Array<Int64> = Array<Int64>(patternLength, item: 0)
+        var counters_: Array<Int64> = Array<Int64>(patternLength, item: 0)
         var width: Int64 = row.getSize()
         var isWhite: Bool = false
 
@@ -295,21 +301,21 @@ public open class ITFReader <: OneDReader {
 
         for (x in rowOffset..width) {
             if (row.get(x) != isWhite) {
-                counters[counterPosition] = counters[counterPosition] + 1
+                counters_[counterPosition] = counters_[counterPosition] + 1
             } else {
                 if (counterPosition == patternLength - 1) {
-                    if (patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE) < MAX_AVG_VARIANCE) {
+                    if (patternMatchVariance(counters_, pattern, MAX_INDIVIDUAL_VARIANCE) < MAX_AVG_VARIANCE) {
                         return [patternStart, x]
                     }
-                    patternStart += counters[0] + counters[1]
-                    System.arraycopy(counters, 2, counters, 0, counterPosition - 1)
-                    counters[counterPosition - 1] = 0
-                    counters[counterPosition] = 0
+                    patternStart += counters_[0] + counters_[1]
+                    System.arraycopy(counters_, 2, counters_, 0, counterPosition - 1)
+                    counters_[counterPosition - 1] = 0
+                    counters_[counterPosition] = 0
                     counterPosition--
                 } else {
                     counterPosition++
                 }
-                counters[counterPosition] = 1
+                counters_[counterPosition] = 1
                 isWhite = !isWhite
             }
         }
@@ -327,22 +333,22 @@ public open class ITFReader <: OneDReader {
         var bestVariance: Float32 = MAX_AVG_VARIANCE
 
         // worst variance we'll accept
-        var bestMatch: Int64 = -1
+        var bestMatch_: Int64 = -1
         var max: Int64 = PATTERNS.size
 
         for (i in 0..max) {
-            var pattern: Array<Int64> = PATTERNS[i]
-            var variance: Float32 = patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE)
+            var pattern_: Array<Int64> = PATTERNS[i]
+            var variance: Float32 = patternMatchVariance(counters, pattern_, MAX_INDIVIDUAL_VARIANCE)
             if (variance < bestVariance) {
                 bestVariance = variance
-                bestMatch = i
+                bestMatch_ = i
             } else if (variance == bestVariance) {
                 // if we find a second 'best match' with the same variance, we can not reliably report to have a suitable match
-                bestMatch = -1
+                bestMatch_ = -1
             }
         }
-        if (bestMatch >= 0) {
-            return bestMatch % 10
+        if (bestMatch_ >= 0) {
+            return bestMatch_ % 10
         } else {
             throw NotFoundException.getNotFoundInstance()
         }

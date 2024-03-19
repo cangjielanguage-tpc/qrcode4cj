@@ -57,16 +57,16 @@ public class HighLevelEncoder {
             (5 << 16) + 30 // MIXED -> PUNCT
         ],
         [
-            (5 << 16) + 31, // PUNCT -> UPPER
-            (10 << 16) + (31 << 5) + 28, // PUNCT -> UPPER -> LOWER
-            (10 << 16) + (31 << 5) + 30, // PUNCT -> UPPER -> DIGIT
-            (10 << 16) + (31 << 5) + 29, // PUNCT -> UPPER -> MIXED
+            (5 << 16) + 31, /* PUNCT -> UPPER */ 
+            (10 << 16) + (31 << 5) + 28, /* PUNCT -> UPPER -> LOWER */
+            (10 << 16) + (31 << 5) + 30, /* PUNCT -> UPPER -> DIGIT */ 
+            (10 << 16) + (31 << 5) + 29, /* PUNCT -> UPPER -> MIXED */ 
             0
         ]
     ]
 
-    // A reverse mapping from [mode][char] to the encoding for that character
-    // in that mode.  An entry of 0 indicates no mapping exists.
+    // A reverse mapping from [mode][char] to the encoding for that character in that mode. 
+    // An entry of 0 indicates no mapping exists.
     private static var CHAR_MAP: Array<Array<Int64>> = Array<Array<Int64>>(5, {int: Int64 => Array<Int64>(256, item: 0)}
     )
     private static var mixedTable: Array<Int64> = [
@@ -133,7 +133,7 @@ public class HighLevelEncoder {
         '}'.hashCode()
     ]
 
-    public static var SHIFT_TABLE: Array<Array<Int64>> = Array<Array<Int64>>(6, {int: Int64 => Array<Int64>(6, item: -1)}
+    public static var SHIFT_TABLE_: Array<Array<Int64>> = Array<Array<Int64>>(6, {int: Int64 => Array<Int64>(6, item: -1)}
     )
 
     private func initSomeTables() {
@@ -163,15 +163,15 @@ public class HighLevelEncoder {
 
         // A map showing the available shift codes.  (The shifts to BINARY are not
         // shown
-        SHIFT_TABLE[MODE_UPPER][MODE_PUNCT] = 0
+        SHIFT_TABLE_[MODE_UPPER][MODE_PUNCT] = 0
 
-        SHIFT_TABLE[MODE_LOWER][MODE_PUNCT] = 0
-        SHIFT_TABLE[MODE_LOWER][MODE_UPPER] = 28
+        SHIFT_TABLE_[MODE_LOWER][MODE_PUNCT] = 0
+        SHIFT_TABLE_[MODE_LOWER][MODE_UPPER] = 28
 
-        SHIFT_TABLE[MODE_MIXED][MODE_PUNCT] = 0
+        SHIFT_TABLE_[MODE_MIXED][MODE_PUNCT] = 0
 
-        SHIFT_TABLE[MODE_DIGIT][MODE_PUNCT] = 0
-        SHIFT_TABLE[MODE_DIGIT][MODE_UPPER] = 15
+        SHIFT_TABLE_[MODE_DIGIT][MODE_PUNCT] = 0
+        SHIFT_TABLE_[MODE_DIGIT][MODE_UPPER] = 15
     }
 
     private var text: Array<UInt8> = Array<UInt8>()
@@ -314,7 +314,7 @@ public class HighLevelEncoder {
                 }
 
                 // Try generating the character by switching to its mode.
-                if (!charInCurrentTable && SHIFT_TABLE[state.getMode()][mode] >= 0) {
+                if (!charInCurrentTable && SHIFT_TABLE_[state.getMode()][mode] >= 0) {
                     // It never makes sense to temporarily shift to another mode if the
                     // character exists in the current mode.  That can never save bits.
                     var shiftState: State = stateNoBinary.getOrThrow().shiftAndAppend(mode, charInMode)

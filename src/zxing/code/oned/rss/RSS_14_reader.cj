@@ -233,31 +233,31 @@ public class RSS14Reader <: AbstractRSSReader {
 
         adjustOddEvenCounts(outsideChar, numModules);
 
-        var oddSum: Int64 = 0;
+        var oddSum_: Int64 = 0;
         var oddChecksumPortion: Int64 = 0;
         var i: Int64 = oddCounts.size - 1
         while (i >= 0) {
             oddChecksumPortion *= 9
             oddChecksumPortion += oddCounts[i]
-            oddSum += oddCounts[i]
+            oddSum_ += oddCounts[i]
             i--
         }
         var evenChecksumPortion: Int64 = 0;
-        var evenSum: Int64 = 0;
+        var evenSum_: Int64 = 0;
         var j: Int64 = evenCounts.size - 1
         while (j >= 0) {
             evenChecksumPortion *= 9
             evenChecksumPortion += evenCounts[j]
-            evenSum += evenCounts[j]
+            evenSum_ += evenCounts[j]
             j--
         }
         var checksumPortion: Int64 = oddChecksumPortion + 3 * evenChecksumPortion
 
         if (outsideChar) {
-            if ((oddSum & 0x01) != 0 || oddSum > 12 || oddSum < 4) {
+            if ((oddSum_ & 0x01) != 0 || oddSum_ > 12 || oddSum_ < 4) {
                 throw NotFoundException.getNotFoundInstance();
             }
-            var group: Int64 = (12 - oddSum) / 2
+            var group: Int64 = (12 - oddSum_) / 2
             var oddWidest: Int64 = OUTSIDE_ODD_WIDEST[group]
             var evenWidest: Int64 = 9 - oddWidest
             var vOdd: Int64 = RSSUtils.getRSSvalue(oddCounts, oddWidest, false);
@@ -266,10 +266,10 @@ public class RSS14Reader <: AbstractRSSReader {
             var gSum: Int64 = OUTSIDE_GSUM[group]
             return DataCharacter(vOdd * tEven + vEven + gSum, checksumPortion);
         } else {
-            if ((evenSum & 0x01) != 0 || evenSum > 10 || evenSum < 4) {
+            if ((evenSum_ & 0x01) != 0 || evenSum_ > 10 || evenSum_ < 4) {
                 throw NotFoundException.getNotFoundInstance();
             }
-            var group: Int64 = (10 - evenSum) / 2
+            var group: Int64 = (10 - evenSum_) / 2
             var oddWidest: Int64 = INSIDE_ODD_WIDEST[group]
             var evenWidest: Int64 = 9 - oddWidest
             var vOdd: Int64 = RSSUtils.getRSSvalue(oddCounts, oddWidest, true);
@@ -289,11 +289,11 @@ public class RSS14Reader <: AbstractRSSReader {
     }
 
     private func findFinderPattern(row: BitArray, rightFinderPattern: Bool): Array<Int64> {
-        var counters: Array<Int64> = getDecodeFinderCounters();
-        counters[0] = 0
-        counters[1] = 0
-        counters[2] = 0
-        counters[3] = 0
+        var counters_: Array<Int64> = getDecodeFinderCounters();
+        counters_[0] = 0
+        counters_[1] = 0
+        counters_[2] = 0
+        counters_[3] = 0
 
         var width: Int64 = row.getSize();
         var isWhite: Bool = false;
@@ -311,22 +311,22 @@ public class RSS14Reader <: AbstractRSSReader {
 
         for (x in rowOffset..width) {
             if (row.get(x) != isWhite) {
-                counters[counterPosition] += 1
+                counters_[counterPosition] += 1
             } else {
                 if (counterPosition == 3) {
-                    if (isFinderPattern(counters)) {
+                    if (isFinderPattern(counters_)) {
                         return [patternStart, x]
                     }
-                    patternStart += counters[0] + counters[1]
-                    counters[0] = counters[2]
-                    counters[1] = counters[3]
-                    counters[2] = 0
-                    counters[3] = 0
+                    patternStart += counters_[0] + counters_[1]
+                    counters_[0] = counters_[2]
+                    counters_[1] = counters_[3]
+                    counters_[2] = 0
+                    counters_[3] = 0
                     counterPosition--
                 } else {
                     counterPosition++
                 }
-                counters[counterPosition] = 1
+                counters_[counterPosition] = 1
                 isWhite = !isWhite
             }
         }
@@ -362,107 +362,107 @@ public class RSS14Reader <: AbstractRSSReader {
     }
 
     private func adjustOddEvenCounts(outsideChar: Bool, numModules: Int64) {
-        var oddSum: Int64 = GetArraySum(getOddCounts());
-        var evenSum: Int64 = GetArraySum(getEvenCounts());
+        var oddSum_: Int64 = GetArraySum(getOddCounts());
+        var evenSum_: Int64 = GetArraySum(getEvenCounts());
 
         var incrementOdd: Bool = false;
-        var decrementOdd: Bool = false;
+        var decrementOdd_: Bool = false;
         var incrementEven: Bool = false;
-        var decrementEven: Bool = false;
+        var decrementEven_: Bool = false;
 
         if (outsideChar) {
-            if (oddSum > 12) {
-                decrementOdd = true
-            } else if (oddSum < 4) {
+            if (oddSum_ > 12) {
+                decrementOdd_ = true
+            } else if (oddSum_ < 4) {
                 incrementOdd = true
             }
-            if (evenSum > 12) {
-                decrementEven = true
-            } else if (evenSum < 4) {
+            if (evenSum_ > 12) {
+                decrementEven_ = true
+            } else if (evenSum_ < 4) {
                 incrementEven = true
             }
         } else {
-            if (oddSum > 11) {
-                decrementOdd = true
-            } else if (oddSum < 5) {
+            if (oddSum_ > 11) {
+                decrementOdd_ = true
+            } else if (oddSum_ < 5) {
                 incrementOdd = true
             }
-            if (evenSum > 10) {
-                decrementEven = true
-            } else if (evenSum < 4) {
+            if (evenSum_ > 10) {
+                decrementEven_ = true
+            } else if (evenSum_ < 4) {
                 incrementEven = true
             }
         }
 
-        var mismatch: Int64 = oddSum + evenSum - numModules
-        var oddParityBad: Bool = (oddSum & 0x01) == (if (outsideChar) {
+        var mismatch: Int64 = oddSum_ + evenSum_ - numModules
+        var oddParityBad: Bool = (oddSum_ & 0x01) == (if (outsideChar) {
             1
         } else {
             0
         })
-        var evenParityBad: Bool = (evenSum & 0x01) == 1
+        var evenParityBad_: Bool = (evenSum_ & 0x01) == 1
 
         match (mismatch) {
             case 1 => if (oddParityBad) {
-                if (evenParityBad) {
+                if (evenParityBad_) {
                     throw NotFoundException.getNotFoundInstance();
                 }
-                decrementOdd = true
+                decrementOdd_ = true
             } else {
-                if (!evenParityBad) {
+                if (!evenParityBad_) {
                     throw NotFoundException.getNotFoundInstance();
                 }
-                decrementEven = true
+                decrementEven_ = true
             }
             case -1 => if (oddParityBad) {
-                if (evenParityBad) {
+                if (evenParityBad_) {
                     throw NotFoundException.getNotFoundInstance();
                 }
                 incrementOdd = true
             } else {
-                if (!evenParityBad) {
+                if (!evenParityBad_) {
                     throw NotFoundException.getNotFoundInstance();
                 }
                 incrementEven = true
             }
             case 0 => if (oddParityBad) {
-                if (!evenParityBad) {
+                if (!evenParityBad_) {
                     throw NotFoundException.getNotFoundInstance();
                 }
 
                 // Both bad
-                if (oddSum < evenSum) {
+                if (oddSum_ < evenSum_) {
                     incrementOdd = true
-                    decrementEven = true
+                    decrementEven_ = true
                 } else {
-                    decrementOdd = true
+                    decrementOdd_ = true
                     incrementEven = true
                 }
             } else {
-                if (evenParityBad) {
+                if (evenParityBad_) {
                     throw NotFoundException.getNotFoundInstance();
                 }
-                // Nothing to do!
+                /* Nothing to do! */
             }
             case _ => throw NotFoundException.getNotFoundInstance();
         }
 
         if (incrementOdd) {
-            if (decrementOdd) {
+            if (decrementOdd_) {
                 throw NotFoundException.getNotFoundInstance();
             }
             increment(getOddCounts(), getOddRoundingErrors());
         }
-        if (decrementOdd) {
+        if (decrementOdd_) {
             decrement(getOddCounts(), getOddRoundingErrors());
         }
         if (incrementEven) {
-            if (decrementEven) {
+            if (decrementEven_) {
                 throw NotFoundException.getNotFoundInstance();
             }
             increment(getEvenCounts(), getOddRoundingErrors());
         }
-        if (decrementEven) {
+        if (decrementEven_) {
             decrement(getEvenCounts(), getEvenRoundingErrors());
         }
     }

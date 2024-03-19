@@ -96,7 +96,7 @@ public class State {
         }
 
         // Shifts exist only to UPPER and PUNCT, both with tokens size 5.
-        token = token.add(HighLevelEncoder.SHIFT_TABLE[this.mode][mode], thisModeBitCount)
+        token = token.add(HighLevelEncoder.SHIFT_TABLE_[this.mode][mode], thisModeBitCount)
         token = token.add(value, 5)
         return State(token, this.mode, 0, this.bitCount + thisModeBitCount + 5)
     }

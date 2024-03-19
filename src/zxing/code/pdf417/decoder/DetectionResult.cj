@@ -194,33 +194,33 @@ open class DetectionResult <: ToString {
             nextColumnCodewords = detectionResultColumns[barcodeColumn + 1].getCodewords()
         }
 
-        var otherCodewords: Array<Codeword> = Array<Codeword>(14, item: Codeword())
+        var otherCodewords_: Array<Codeword> = Array<Codeword>(14, item: Codeword())
 
-        otherCodewords[2] = previousColumnCodewords[codewordsRow]
-        otherCodewords[3] = nextColumnCodewords[codewordsRow]
+        otherCodewords_[2] = previousColumnCodewords[codewordsRow]
+        otherCodewords_[3] = nextColumnCodewords[codewordsRow]
 
         if (codewordsRow > 0) {
-            otherCodewords[0] = codewords[codewordsRow - 1]
-            otherCodewords[4] = previousColumnCodewords[codewordsRow - 1]
-            otherCodewords[5] = nextColumnCodewords[codewordsRow - 1]
+            otherCodewords_[0] = codewords[codewordsRow - 1]
+            otherCodewords_[4] = previousColumnCodewords[codewordsRow - 1]
+            otherCodewords_[5] = nextColumnCodewords[codewordsRow - 1]
         }
         if (codewordsRow > 1) {
-            otherCodewords[8] = codewords[codewordsRow - 2]
-            otherCodewords[10] = previousColumnCodewords[codewordsRow - 2]
-            otherCodewords[11] = nextColumnCodewords[codewordsRow - 2]
+            otherCodewords_[8] = codewords[codewordsRow - 2]
+            otherCodewords_[10] = previousColumnCodewords[codewordsRow - 2]
+            otherCodewords_[11] = nextColumnCodewords[codewordsRow - 2]
         }
         if (codewordsRow < codewords.size - 1) {
-            otherCodewords[1] = codewords[codewordsRow + 1]
-            otherCodewords[6] = previousColumnCodewords[codewordsRow + 1]
-            otherCodewords[7] = nextColumnCodewords[codewordsRow + 1]
+            otherCodewords_[1] = codewords[codewordsRow + 1]
+            otherCodewords_[6] = previousColumnCodewords[codewordsRow + 1]
+            otherCodewords_[7] = nextColumnCodewords[codewordsRow + 1]
         }
         if (codewordsRow < codewords.size - 2) {
-            otherCodewords[9] = codewords[codewordsRow + 2]
-            otherCodewords[12] = previousColumnCodewords[codewordsRow + 2]
-            otherCodewords[13] = nextColumnCodewords[codewordsRow + 2]
+            otherCodewords_[9] = codewords[codewordsRow + 2]
+            otherCodewords_[12] = previousColumnCodewords[codewordsRow + 2]
+            otherCodewords_[13] = nextColumnCodewords[codewordsRow + 2]
         }
-        for (i in 0..otherCodewords.size) {
-            if (adjustRowNumber(codeword, otherCodewords[i])) {
+        for (i in 0..otherCodewords_.size) {
+            if (adjustRowNumber(codeword, otherCodewords_[i])) {
                 return;
             }
         }

@@ -12,7 +12,7 @@ import zxing.code.common.*
  */
 public class GeneralAppIdDecoder {
     private var information: BitArray = BitArray();
-    private var current: CurrentParsingState = CurrentParsingState();
+    private var current_: CurrentParsingState = CurrentParsingState();
     private var buffer: ArrayList<Char> = ArrayList<Char>();
 
     init(information: BitArray) {
@@ -103,109 +103,109 @@ public class GeneralAppIdDecoder {
             this.buffer.appendAll(remaining.toRuneArray());
         }
 
-        this.current.setPosition(pos);
+        this.current_.setPosition(pos);
 
         var lastDecoded: DecodedInformation = parseBlocks();
         if (lastDecoded.isRemaining()) {
             return DecodedInformation(
-                this.current.getPosition(),
+                this.current_.getPosition(),
                 String(this.buffer),
                 lastDecoded.getRemainingValue()
             )
         }
-        return DecodedInformation(this.current.getPosition(), String(this.buffer));
+        return DecodedInformation(this.current_.getPosition(), String(this.buffer));
     }
 
     private func parseBlocks(): DecodedInformation {
         var isFinished: Bool = false;
-        var result: BlockParsedResult = BlockParsedResult();
+        var result_: BlockParsedResult = BlockParsedResult();
         do {
-            var initialPosition: Int64 = current.getPosition();
+            var initialPosition: Int64 = current_.getPosition();
 
-            if (current.isAlpha()) {
-                result = parseAlphaBlock()
-                isFinished = result.isFinished()
-            } else if (current.isIsoIec646()) {
-                result = parseIsoIec646Block()
-                isFinished = result.isFinished()
+            if (current_.isAlpha()) {
+                result_ = parseAlphaBlock()
+                isFinished = result_.isFinished()
+            } else if (current_.isIsoIec646()) {
+                result_ = parseIsoIec646Block()
+                isFinished = result_.isFinished()
             } else { // it must be numeric
-                result = parseNumericBlock()
-                isFinished = result.isFinished()
+                result_ = parseNumericBlock()
+                isFinished = result_.isFinished()
             }
 
-            var positionChanged: Bool = initialPosition != current.getPosition()
+            var positionChanged: Bool = initialPosition != current_.getPosition()
             if (!positionChanged && !isFinished) {
                 break
             }
         } while (!isFinished)
 
-        return result.getDecodedInformation();
+        return result_.getDecodedInformation();
     }
 
     private func parseNumericBlock(): BlockParsedResult {
-        while (isStillNumeric(current.getPosition())) {
-            var numeric: DecodedNumeric = decodeNumeric(current.getPosition());
-            current.setPosition(numeric.getNewPosition());
+        while (isStillNumeric(current_.getPosition())) {
+            var numeric: DecodedNumeric = decodeNumeric(current_.getPosition());
+            current_.setPosition(numeric.getNewPosition());
 
             if (numeric.isFirstDigitFNC1()) {
                 var information: DecodedInformation
                 if (numeric.isSecondDigitFNC1()) {
-                    information = DecodedInformation(current.getPosition(), String(buffer))
+                    information = DecodedInformation(current_.getPosition(), String(buffer))
                 } else {
-                    information = DecodedInformation(current.getPosition(), String(buffer), numeric.getSecondDigit())
+                    information = DecodedInformation(current_.getPosition(), String(buffer), numeric.getSecondDigit())
                 }
                 return BlockParsedResult(information, true);
             }
             buffer.appendAll(numeric.getFirstDigit().toString().toRuneArray());
 
             if (numeric.isSecondDigitFNC1()) {
-                var information: DecodedInformation = DecodedInformation(current.getPosition(), String(buffer));
+                var information: DecodedInformation = DecodedInformation(current_.getPosition(), String(buffer));
                 return BlockParsedResult(information, true);
             }
             buffer.appendAll(numeric.getSecondDigit().toString().toRuneArray());
         }
 
-        if (isNumericToAlphaNumericLatch(current.getPosition())) {
-            current.setAlpha();
-            current.incrementPosition(4);
+        if (isNumericToAlphaNumericLatch(current_.getPosition())) {
+            current_.setAlpha();
+            current_.incrementPosition(4);
         }
         return BlockParsedResult();
     }
 
     private func parseIsoIec646Block(): BlockParsedResult {
-        while (isStillIsoIec646(current.getPosition())) {
-            var iso: DecodedChar = decodeIsoIec646(current.getPosition());
-            current.setPosition(iso.getNewPosition());
+        while (isStillIsoIec646(current_.getPosition())) {
+            var iso: DecodedChar = decodeIsoIec646(current_.getPosition());
+            current_.setPosition(iso.getNewPosition());
 
             if (iso.isFNC1()) {
-                var information: DecodedInformation = DecodedInformation(current.getPosition(), String(buffer));
+                var information: DecodedInformation = DecodedInformation(current_.getPosition(), String(buffer));
                 return BlockParsedResult(information, true);
             }
-            buffer.append(iso.getValue());
+            buffer.append(iso.getValue())
         }
 
-        if (isAlphaOr646ToNumericLatch(current.getPosition())) {
-            current.incrementPosition(3);
-            current.setNumeric();
-        } else if (isAlphaTo646ToAlphaLatch(current.getPosition())) {
-            if (current.getPosition() + 5 < this.information.getSize()) {
-                current.incrementPosition(5);
+        if (isAlphaOr646ToNumericLatch(current_.getPosition())) {
+            current_.incrementPosition(3)
+            current_.setNumeric()
+        } else if (isAlphaTo646ToAlphaLatch(current_.getPosition())) {
+            if (current_.getPosition() + 5 < this.information.getSize()) {
+                current_.incrementPosition(5)
             } else {
-                current.setPosition(this.information.getSize());
+                current_.setPosition(this.information.getSize());
             }
 
-            current.setAlpha();
+            current_.setAlpha()
         }
-        return BlockParsedResult();
+        return BlockParsedResult()
     }
 
     private func parseAlphaBlock(): BlockParsedResult {
-        while (isStillAlpha(current.getPosition())) {
-            var alpha: DecodedChar = decodeAlphanumeric(current.getPosition());
-            current.setPosition(alpha.getNewPosition());
+        while (isStillAlpha(current_.getPosition())) {
+            var alpha: DecodedChar = decodeAlphanumeric(current_.getPosition());
+            current_.setPosition(alpha.getNewPosition());
 
             if (alpha.isFNC1()) {
-                var information: DecodedInformation = DecodedInformation(current.getPosition(), String(buffer));
+                var information: DecodedInformation = DecodedInformation(current_.getPosition(), String(buffer));
                 return BlockParsedResult(information, true);
                 //end of the char block
             }
@@ -213,17 +213,17 @@ public class GeneralAppIdDecoder {
             buffer.append(alpha.getValue());
         }
 
-        if (isAlphaOr646ToNumericLatch(current.getPosition())) {
-            current.incrementPosition(3);
-            current.setNumeric();
-        } else if (isAlphaTo646ToAlphaLatch(current.getPosition())) {
-            if (current.getPosition() + 5 < this.information.getSize()) {
-                current.incrementPosition(5);
+        if (isAlphaOr646ToNumericLatch(current_.getPosition())) {
+            current_.incrementPosition(3);
+            current_.setNumeric();
+        } else if (isAlphaTo646ToAlphaLatch(current_.getPosition())) {
+            if (current_.getPosition() + 5 < this.information.getSize()) {
+                current_.incrementPosition(5);
             } else {
-                current.setPosition(this.information.getSize());
+                current_.setPosition(this.information.getSize());
             }
 
-            current.setIsoIec646();
+            current_.setIsoIec646();
         }
         return BlockParsedResult();
     }

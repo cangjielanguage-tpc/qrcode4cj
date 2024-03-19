@@ -197,35 +197,35 @@ public open class Code39Reader <: OneDReader {
         return (decodedChar, lastStart, nextStart_p)
     }
 
-    private static func findAsteriskPattern(row: BitArray, counters: Array<Int64>): Array<Int64> {
+    private static func findAsteriskPattern(row: BitArray, counters_: Array<Int64>): Array<Int64> {
         var width: Int64 = row.getSize()
         var rowOffset: Int64 = row.getNextSet(0)
 
         var counterPosition: Int64 = 0
         var patternStart: Int64 = rowOffset
         var isWhite: Bool = false
-        var patternLength: Int64 = counters.size
+        var patternLength: Int64 = counters_.size
 
         for (i in rowOffset..width) {
             if (row.get(i) != isWhite) {
-                counters[counterPosition] = counters[counterPosition] + 1
+                counters_[counterPosition] = counters_[counterPosition] + 1
             } else {
                 if (counterPosition == patternLength - 1) {
                     // Look for whitespace before start pattern, >= 50% of width of start pattern
-                    if (toNarrowWidePattern(counters) == ASTERISK_ENCODING && row.isRange(
+                    if (toNarrowWidePattern(counters_) == ASTERISK_ENCODING && row.isRange(
                         max(0, patternStart - ((i - patternStart) / 2)), patternStart, false)) {
                         let returnData: Array<Int64> = [patternStart, i]
                         return returnData
                     }
-                    patternStart += counters[0] + counters[1]
-                    System.arraycopy(counters, 2, counters, 0, counterPosition - 1)
-                    counters[counterPosition - 1] = 0
-                    counters[counterPosition] = 0
+                    patternStart += counters_[0] + counters_[1]
+                    System.arraycopy(counters_, 2, counters_, 0, counterPosition - 1)
+                    counters_[counterPosition - 1] = 0
+                    counters_[counterPosition] = 0
                     counterPosition--
                 } else {
                     counterPosition++
                 }
-                counters[counterPosition] = 1
+                counters_[counterPosition] = 1
                 isWhite = !isWhite
             }
         }
@@ -237,7 +237,7 @@ public open class Code39Reader <: OneDReader {
     private static func toNarrowWidePattern(counters: Array<Int64>): Int64 {
         var numCounters: Int64 = counters.size
         var maxNarrowCounter: Int64 = 0
-        var wideCounters: Int64
+        var wideCounters_: Int64
         do {
             var minCounter: Int64 = 0x7fffffff
 
@@ -247,7 +247,7 @@ public open class Code39Reader <: OneDReader {
                 }
             }
             maxNarrowCounter = minCounter
-            wideCounters = 0
+            wideCounters_ = 0
             var totalWideCountersWidth: Int64 = 0
             var pattern: Int64 = 0
 
@@ -255,19 +255,19 @@ public open class Code39Reader <: OneDReader {
                 var counter: Int64 = counters[i]
                 if (counter > maxNarrowCounter) {
                     pattern |= 1 << (numCounters - 1 - i)
-                    wideCounters++
+                    wideCounters_++
                     totalWideCountersWidth += counter
                 }
             }
-            if (wideCounters == 3) {
+            if (wideCounters_ == 3) {
                 // Found 3 wide counters, but are they close enough in width?
                 // We can perform a cheap, conservative check to see if any individual counter
                 // is more than 1.5 times the average:
                 var i = 0
-                while (wideCounters > 0 && i < numCounters) {
+                while (wideCounters_ > 0 && i < numCounters) {
                     var counter: Int64 = counters[i]
                     if (counter > maxNarrowCounter) {
-                        wideCounters--
+                        wideCounters_--
 
                         // totalWideCountersWidth = 3 * average, so this checks if counter >= 3/2 * average
                         if ((counter * 2) >= totalWideCountersWidth) {
@@ -278,7 +278,7 @@ public open class Code39Reader <: OneDReader {
                 }
                 return pattern
             }
-        } while (wideCounters > 3)
+        } while (wideCounters_ > 3)
         return -1
     }
 

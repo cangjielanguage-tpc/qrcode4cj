@@ -39,10 +39,10 @@ public class WhiteRectangleDetector {
     }
 
     /**
-     * @param image barcode image to find a rectangle in
+     * @param image the barcode image to find a rectangle in
      * @param initSize initial size of search area around center
-     * @param x x position of search center
-     * @param y y position of search center
+     * @param x x position value of search center
+     * @param y y position value of search center
      *
      * @throws NotFoundException if image is too small to accommodate {@code initSize}
      */
@@ -77,90 +77,96 @@ public class WhiteRectangleDetector {
      * @throws NotFoundException if no Data Matrix Code can be found
      */
     public func detect(): Array<ResultPoint> {
-        var left = leftInit
-        var right = rightInit
+        var left_ = leftInit
+        var right_ = rightInit
         var up = upInit
-        var down = downInit
+        var down_ = downInit
         var sizeExceeded = false
-        var aBlackPointFoundOnBorder = true
+        var aBlackPointFoundOnBorder_ = true
 
-        var atLeastOneBlackPointFoundOnRight = false
+        var atLeastOneBlackPointFoundOnRight_ = false
         var atLeastOneBlackPointFoundOnBottom = false
         var atLeastOneBlackPointFoundOnLeft = false
         var atLeastOneBlackPointFoundOnTop = false
 
-        while (aBlackPointFoundOnBorder) {
-            aBlackPointFoundOnBorder = false
+        while (aBlackPointFoundOnBorder_) {
+            aBlackPointFoundOnBorder_ = false
 
             // .....
             // .   |
             // .....
             var rightBorderNotWhite = true
-            while ((rightBorderNotWhite || !atLeastOneBlackPointFoundOnRight) && right < width) {
-                rightBorderNotWhite = containsBlackPoint(up, down, right, false)
+            while ((rightBorderNotWhite || !atLeastOneBlackPointFoundOnRight_) && right_ < width) {
+                rightBorderNotWhite = containsBlackPoint(up, down_, right_, false)
                 if (rightBorderNotWhite) {
-                    right++
-                    aBlackPointFoundOnBorder = true
-                    atLeastOneBlackPointFoundOnRight = true
-                } else if (!atLeastOneBlackPointFoundOnRight) {
-                    right++
+                    right_++
+                    aBlackPointFoundOnBorder_ = true
+                    atLeastOneBlackPointFoundOnRight_ = true
+                } else if (!atLeastOneBlackPointFoundOnRight_) {
+                    right_++
                 }
             }
 
-            if (right >= width) {
+            if (right_ >= width) {
                 sizeExceeded = true
                 break
             }
 
-            // .....
-            // .   .
-            // .___.
+            /*
+             * .....
+             * .   .
+             * .___.
+             */ 
             var bottomBorderNotWhite = true
-            while ((bottomBorderNotWhite || !atLeastOneBlackPointFoundOnBottom) && down < height) {
-                bottomBorderNotWhite = containsBlackPoint(left, right, down, true)
+            while ((bottomBorderNotWhite || !atLeastOneBlackPointFoundOnBottom) && down_ < height) {
+                bottomBorderNotWhite = containsBlackPoint(left_, right_, down_, true)
                 if (bottomBorderNotWhite) {
-                    down++
-                    aBlackPointFoundOnBorder = true
+                    down_++
+                    aBlackPointFoundOnBorder_ = true
                     atLeastOneBlackPointFoundOnBottom = true
                 } else if (!atLeastOneBlackPointFoundOnBottom) {
-                    down++
+                    down_++
                 }
             }
 
-            if (down >= height) {
+            if (down_ >= height) {
                 sizeExceeded = true
                 break
             }
 
-            // .....
-            // |   .
-            // .....
-            var leftBorderNotWhite = true
-            while ((leftBorderNotWhite || !atLeastOneBlackPointFoundOnLeft) && left >= 0) {
-                leftBorderNotWhite = containsBlackPoint(up, down, left, false)
-                if (leftBorderNotWhite) {
-                    left--
-                    aBlackPointFoundOnBorder = true
+            /*
+             * .....
+             * |   .
+             * .___.
+             */ 
+            var leftBorderNotWhite_ = true
+            while ((leftBorderNotWhite_ || !atLeastOneBlackPointFoundOnLeft) && left_ >= 0) {
+                leftBorderNotWhite_ = containsBlackPoint(up, down_, left_, false)
+                if (leftBorderNotWhite_) {
+                    left_--
+                    aBlackPointFoundOnBorder_ = true
                     atLeastOneBlackPointFoundOnLeft = true
                 } else if (!atLeastOneBlackPointFoundOnLeft) {
-                    left--
+                    left_--
                 }
             }
 
-            if (left < 0) {
+            if (left_ < 0) {
                 sizeExceeded = true
                 break
             }
 
-            // .___.
-            // .   .
-            // .....
+            /*
+             * .....
+             * .   .
+             * .....
+             */ 
             var topBorderNotWhite = true
             while ((topBorderNotWhite || !atLeastOneBlackPointFoundOnTop) && up >= 0) {
-                topBorderNotWhite = containsBlackPoint(left, right, up, true)
+                topBorderNotWhite = containsBlackPoint(left_, right_, up, true)
                 if (topBorderNotWhite) {
                     up--
-                    aBlackPointFoundOnBorder = true
+                    aBlackPointFoundOnBorder_ = true
                     atLeastOneBlackPointFoundOnTop = true
                 } else if (!atLeastOneBlackPointFoundOnTop) {
                     up--
@@ -174,12 +180,12 @@ public class WhiteRectangleDetector {
         }
 
         if (!sizeExceeded) {
-            let maxSize = right - left
+            let maxSize = right_ - left_
 
             var z: ResultPoint = ResultPoint()
             var i = 1;
             while (i < maxSize && z.flag == false) {
-                z = getBlackPointOnSegment(Float32(left), Float32(down - i), Float32(left + i), Float32(down))
+                z = getBlackPointOnSegment(Float32(left_), Float32(down_ - i), Float32(left_ + i), Float32(down_))
                 i++
             }
 
@@ -189,10 +195,10 @@ public class WhiteRectangleDetector {
 
             var t: ResultPoint = ResultPoint()
 
-            //go down right
+            //go down_ right_
             i = 1
             while (i < maxSize && t.flag == false) {
-                t = getBlackPointOnSegment(Float32(left), Float32(up + i), Float32(left + i), Float32(up))
+                t = getBlackPointOnSegment(Float32(left_), Float32(up + i), Float32(left_ + i), Float32(up))
                 i++
             }
 
@@ -202,10 +208,10 @@ public class WhiteRectangleDetector {
 
             var x: ResultPoint = ResultPoint()
 
-            //go down left
+            //go down_ left_
             i = 1
             while (i < maxSize && x.flag == false) {
-                x = getBlackPointOnSegment(Float32(right), Float32(up + i), Float32(right - i), Float32(up))
+                x = getBlackPointOnSegment(Float32(right_), Float32(up + i), Float32(right_ - i), Float32(up))
                 i++
             }
 
@@ -215,10 +221,10 @@ public class WhiteRectangleDetector {
 
             var y: ResultPoint = ResultPoint()
 
-            //go up left
+            //go up left_
             i = 1
             while (i < maxSize && y.flag == false) {
-                y = getBlackPointOnSegment(Float32(right), Float32(down - i), Float32(right - i), Float32(down))
+                y = getBlackPointOnSegment(Float32(right_), Float32(down_ - i), Float32(right_ - i), Float32(down_))
                 i++
             }
 
@@ -248,12 +254,12 @@ public class WhiteRectangleDetector {
     }
 
     /**
-     * recenters the points of a constant distance towards the center
+     * recenters the points value of a constant distance towards the center
      *
-     * @param y bottom most point
-     * @param z left most point
-     * @param x right most point
-     * @param t top most point
+     * @param y bottom most point value
+     * @param z left most point value
+     * @param x right most point value
+     * @param t top most point value
      *
      * @return ResultPoint[] describing the corners of the rectangular
      * region. The first and last points are opposed on the diagonal, as
@@ -300,14 +306,14 @@ public class WhiteRectangleDetector {
     }
 
     /**
-     * Determines whether a segment contains a black point
+     * Determines whether a segment contains a black point value
      *
      * @param a          min value of the scanned coordinate
      * @param b          max value of the scanned coordinate
-     * @param fixed      value of fixed coordinate
+     * @param fixed      value of the fixed coordinate
      * @param horizontal set to true if scan must be horizontal, false if vertical
      *
-     * @return true if a black point has been found, else false.
+     * @return true if a black point value has been found, else false.
      */
     private func containsBlackPoint(a: Int64, b: Int64, fixed: Int64, horizontal: Bool): Bool {
         if (horizontal) {

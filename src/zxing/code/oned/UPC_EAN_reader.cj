@@ -109,13 +109,13 @@ public abstract class UPCEANReader <: OneDReader {
     }
 
     /**
-     * decodeRow(int, BitArray, Map), but
-     * allows caller to inform method about where the UPC/EAN start pattern is
+     * decodeRow(int, BitArray, Map), but allows caller
+     * to inform method about where the UPC/EAN start pattern is
      * found. This allows this to be computed once and reused across many implementations.</p>
      *
-     * @param rowNumber row index into the image
-     * @param row encoding of the row of the barcode image
-     * @param startGuardRange start/end column where the opening start pattern was found
+     * @param rowNumber the row index into the image
+     * @param row the encoding of the row of the barcode image
+     * @param startGuardRange the start/end column where the opening start pattern was found
      * @param hints optional hints that influence decoding
      *
      * @return Result encapsulating the result of decoding a barcode in the row
@@ -265,12 +265,12 @@ public abstract class UPCEANReader <: OneDReader {
     }
 
     /**
-     * Computes the UPC/EAN checksum on a string of digits, and reports
-     * whether the checksum is correct or not.
+     * Computes the UPC/EAN checksum on a string of digits, and reports whether the
+     * checksum is correct or not.
      *
-     * @param s string of digits to check
+     * @param s the string of digits to check
      *
-     * @return true iff string of digits passes the UPC/EAN checksum algorithm
+     * @return true iff string of the digits passes the UPC/EAN checksum algorithm
      * @throws FormatException if the string does not contain only digits
      */
     static func checkStandardUPCEANChecksum(s: UTF32String): Bool {
@@ -335,7 +335,7 @@ public abstract class UPCEANReader <: OneDReader {
         rowOffsetin: Int64,
         whiteFirst: Bool,
         pattern: Array<Int64>,
-        counters: Array<Int64>
+        counters_: Array<Int64>
     ): Array<Int64> {
         var width: Int64 = row.getSize()
         var rowOffset: Int64 = rowOffsetin
@@ -352,21 +352,21 @@ public abstract class UPCEANReader <: OneDReader {
         var isWhite: Bool = whiteFirst
         for (x in rowOffset..width) {
             if (row.get(x) != isWhite) {
-                counters[counterPosition] = counters[counterPosition] + 1
+                counters_[counterPosition] = counters_[counterPosition] + 1
             } else {
                 if (counterPosition == patternLength - 1) {
-                    if (patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE) < MAX_AVG_VARIANCE) {
+                    if (patternMatchVariance(counters_, pattern, MAX_INDIVIDUAL_VARIANCE) < MAX_AVG_VARIANCE) {
                         return [patternStart, x]
                     }
-                    patternStart += counters[0] + counters[1]
-                    System.arraycopy(counters, 2, counters, 0, counterPosition - 1)
-                    counters[counterPosition - 1] = 0
-                    counters[counterPosition] = 0
+                    patternStart += counters_[0] + counters_[1]
+                    System.arraycopy(counters_, 2, counters_, 0, counterPosition - 1)
+                    counters_[counterPosition - 1] = 0
+                    counters_[counterPosition] = 0
                     counterPosition--
                 } else {
                     counterPosition++
                 }
-                counters[counterPosition] = 1
+                counters_[counterPosition] = 1
                 isWhite = !isWhite
             }
         }
@@ -390,7 +390,7 @@ public abstract class UPCEANReader <: OneDReader {
         var bestVariance: Float32 = MAX_AVG_VARIANCE
 
         // worst variance we'll accept
-        var bestMatch: Int64 = -1
+        var bestMatch_: Int64 = -1
         var max: Int64 = patterns.size
 
         for (i in 0..max) {
@@ -398,18 +398,18 @@ public abstract class UPCEANReader <: OneDReader {
             var variance: Float32 = patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE)
             if (variance < bestVariance) {
                 bestVariance = variance
-                bestMatch = i
+                bestMatch_ = i
             }
         }
-        if (bestMatch >= 0) {
-            return bestMatch
+        if (bestMatch_ >= 0) {
+            return bestMatch_
         } else {
             throw NotFoundException.getNotFoundInstance()
         }
     }
 
     /**
-     * Get the format of this decoder.
+     * Get the format value of this decoder.
      *
      * @return The 1D format.
      */

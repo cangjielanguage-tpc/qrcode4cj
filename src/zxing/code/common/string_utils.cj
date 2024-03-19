@@ -79,8 +79,8 @@ public class StringUtils {
         // which should be by far the most common encodings.
         let length: Int64 = bytes.size;
         var canBeISO88591: Bool = true;
-        var canBeShiftJIS: Bool = true;
-        var canBeUTF8: Bool = true;
+        var canBeShiftJIS_: Bool = true;
+        var canBeUTF8_: Bool = true;
         var utf8BytesLeft: Int64 = 0;
         var utf2BytesChars: Int64 = 0;
         var utf3BytesChars: Int64 = 0;
@@ -96,34 +96,34 @@ public class StringUtils {
         var utf8bom: Bool = bytes.size > 3 && bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF
 
         var i = 0;
-        while (i < length && (canBeISO88591 || canBeShiftJIS || canBeUTF8)) {
-            var value: Int64 = Int64(bytes[i]) & 0xFF
+        while (i < length && (canBeISO88591 || canBeShiftJIS_ || canBeUTF8_)) {
+            var value_: Int64 = Int64(bytes[i]) & 0xFF
 
             // UTF-8 stuff
-            if (canBeUTF8) {
+            if (canBeUTF8_) {
                 if (utf8BytesLeft > 0) {
-                    if ((value & 0x80) == 0) {
-                        canBeUTF8 = false
+                    if ((value_ & 0x80) == 0) {
+                        canBeUTF8_ = false
                     } else {
                         utf8BytesLeft--
                     }
-                } else if ((value & 0x80) != 0) {
-                    if ((value & 0x40) == 0) {
-                        canBeUTF8 = false
+                } else if ((value_ & 0x80) != 0) {
+                    if ((value_ & 0x40) == 0) {
+                        canBeUTF8_ = false
                     } else {
                         utf8BytesLeft++
-                        if ((value & 0x20) == 0) {
+                        if ((value_ & 0x20) == 0) {
                             utf2BytesChars++
                         } else {
                             utf8BytesLeft++
-                            if ((value & 0x10) == 0) {
+                            if ((value_ & 0x10) == 0) {
                                 utf3BytesChars++
                             } else {
                                 utf8BytesLeft++
-                                if ((value & 0x08) == 0) {
+                                if ((value_ & 0x08) == 0) {
                                     utf4BytesChars++
                                 } else {
-                                    canBeUTF8 = false
+                                    canBeUTF8_ = false
                                 }
                             }
                         }
@@ -131,33 +131,33 @@ public class StringUtils {
                 }
             }
 
-            // ISO-8859-1 stuff
+            /* ISO-8859-1 stuff */
             if (canBeISO88591) {
-                if (value > 0x7F && value < 0xA0) {
+                if (value_ > 0x7F && value_ < 0xA0) {
                     canBeISO88591 = false
-                } else if (value > 0x9F && (value < 0xC0 || value == 0xD7 || value == 0xF7)) {
+                } else if (value_ > 0x9F && (value_ < 0xC0 || value_ == 0xD7 || value_ == 0xF7)) {
                     isoHighOther++
                 }
             }
 
-            // Shift_JIS stuff
-            if (canBeShiftJIS) {
+            /* Shift_JIS stuff */
+            if (canBeShiftJIS_) {
                 if (sjisBytesLeft > 0) {
-                    if (value < 0x40 || value == 0x7F || value > 0xFC) {
-                        canBeShiftJIS = false
+                    if (value_ < 0x40 || value_ == 0x7F || value_ > 0xFC) {
+                        canBeShiftJIS_ = false
                     } else {
                         sjisBytesLeft--
                     }
-                } else if (value == 0x80 || value == 0xA0 || value > 0xEF) {
-                    canBeShiftJIS = false
-                } else if (value > 0xA0 && value < 0xE0) {
+                } else if (value_ == 0x80 || value_ == 0xA0 || value_ > 0xEF) {
+                    canBeShiftJIS_ = false
+                } else if (value_ > 0xA0 && value_ < 0xE0) {
                     sjisKatakanaChars++
                     sjisCurDoubleBytesWordLength = 0
                     sjisCurKatakanaWordLength++
                     if (sjisCurKatakanaWordLength > sjisMaxKatakanaWordLength) {
                         sjisMaxKatakanaWordLength = sjisCurKatakanaWordLength
                     }
-                } else if (value > 0x7F) {
+                } else if (value_ > 0x7F) {
                     sjisBytesLeft++
 
                     sjisCurKatakanaWordLength = 0
@@ -173,20 +173,20 @@ public class StringUtils {
             i++
         }
 
-        if (canBeUTF8 && utf8BytesLeft > 0) {
-            canBeUTF8 = false
+        if (canBeUTF8_ && utf8BytesLeft > 0) {
+            canBeUTF8_ = false
         }
-        if (canBeShiftJIS && sjisBytesLeft > 0) {
-            canBeShiftJIS = false
+        if (canBeShiftJIS_ && sjisBytesLeft > 0) {
+            canBeShiftJIS_ = false
         }
 
-        // Easy -- if there is BOM or at least 1 valid not-single byte character (and no evidence it can't be UTF-8), done
-        if (canBeUTF8 && (utf8bom || utf2BytesChars + utf3BytesChars + utf4BytesChars > 0)) {
+        /* Easy -- if there is BOM or at least 1 valid not-single byte character (and no evidence it can't be UTF-8), done */
+        if (canBeUTF8_ && (utf8bom || utf2BytesChars + utf3BytesChars + utf4BytesChars > 0)) {
             return StandardCharsets.UTF_8;
         }
 
         /* Easy -- if assuming Shift_JIS or >= 3 valid consecutive not-ascii characters (and no evidence it can't be), done */
-        if (canBeShiftJIS && (ASSUME_SHIFT_JIS || sjisMaxKatakanaWordLength >= 3 || sjisMaxDoubleBytesWordLength >= 3)) {
+        if (canBeShiftJIS_ && (ASSUME_SHIFT_JIS || sjisMaxKatakanaWordLength >= 3 || sjisMaxDoubleBytesWordLength >= 3)) {
             return SHIFT_JIS_CHARSET
         }
 
@@ -197,7 +197,7 @@ public class StringUtils {
          *   - at least 10% of bytes that could be "upper" not-alphanumeric Latin1,
          * - then we conclude Shift_JIS, else ISO-8859-1
          */
-        if (canBeISO88591 && canBeShiftJIS) {
+        if (canBeISO88591 && canBeShiftJIS_) {
             if ((sjisMaxKatakanaWordLength == 2 && sjisKatakanaChars == 2) || isoHighOther * 10 >= length) {
                 return SHIFT_JIS_CHARSET
             } else {
@@ -205,18 +205,18 @@ public class StringUtils {
             }
         }
 
-        // Otherwise, try in order ISO-8859-1, Shift JIS, UTF-8 and fall back to default platform encoding
+        /* Otherwise, try in order ISO-8859-1, Shift JIS, UTF-8 and fall back to default platform encoding */
         if (canBeISO88591) {
             return StandardCharsets.ISO_8859_1;
         }
-        if (canBeShiftJIS) {
+        if (canBeShiftJIS_) {
             return SHIFT_JIS_CHARSET
         }
-        if (canBeUTF8) {
+        if (canBeUTF8_) {
             return StandardCharsets.UTF_8;
         }
 
-        // Otherwise, we take a wild guess with platform encoding
+        /* Otherwise, we take a wild guess with platform encoding */
         return PLATFORM_DEFAULT_ENCODING
     }
 }

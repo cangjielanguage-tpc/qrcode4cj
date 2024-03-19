@@ -31,10 +31,10 @@ public abstract class LuminanceSource {
 
     /**
      * Fetches luminance data for the underlying bitmap. Values should be fetched using:
-     * {@code int luminance = array[y * width + x] & 0xff}
+     * code int luminance = array[y * width + x] & 0xff
      *
-     * @return A row-major 2D array of luminance values. Do not use result.length as it may be
-     * larger than width * height bytes on some platforms. Do not modify the contents
+     * @return A row-major 2D array of luminance values. Do not use result.length as it may be larger than
+     * width * height bytes on some platforms. Do not modify the contents
      * of the result.
      */
     public open func getMatrix(): Array<UInt8>
@@ -118,17 +118,17 @@ public abstract class LuminanceSource {
             for (x in 0..width) {
                 let luminance: Int64 = Int64(row[x] & 0xFF)
 
-                var c: Char = ' ';
+                var c_: Char = ' ';
                 if (luminance < 0x40) {
-                    c = '#'
+                    c_ = '#'
                 } else if (luminance < 0x80) {
-                    c = '+'
+                    c_ = '+'
                 } else if (luminance < 0xC0) {
-                    c = '.'
+                    c_ = '.'
                 } else {
-                    c = ' '
+                    c_ = ' '
                 }
-                result.append(c)
+                result.append(c_)
             }
             result.append('\n')
         }

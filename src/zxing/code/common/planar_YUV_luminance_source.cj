@@ -100,19 +100,19 @@ public open class PlanarYUVLuminanceSource <: LuminanceSource {
     }
 
     public override func crop(
-        left: Int64,
-        top: Int64,
-        width: Int64,
-        height: Int64
+        left_: Int64,
+        top_: Int64,
+        width_: Int64,
+        height_: Int64
     ): LuminanceSource {
         return PlanarYUVLuminanceSource(
             yuvData,
             dataWidth,
             dataHeight,
-            this.left + left,
-            this.top + top,
-            width,
-            height,
+            this.left + left_,
+            this.top + top_,
+            width_,
+            height_,
             false
         )
     }

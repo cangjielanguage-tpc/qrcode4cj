@@ -82,18 +82,18 @@ public open class VINResultParser <: ResultParser {
         throw IllegalArgumentException();
     }
 
-    private static func vinPositionWeight(position: Int64): Int64 {
-        if (position >= 1 && position <= 7) {
-            return 9 - position
+    private static func vinPositionWeight(position_: Int64): Int64 {
+        if (position_ >= 1 && position_ <= 7) {
+            return 9 - position_
         }
-        if (position == 8) {
+        if (position_ == 8) {
             return 10;
         }
-        if (position == 9) {
+        if (position_ == 9) {
             return 0;
         }
-        if (position >= 10 && position <= 17) {
-            return 19 - position
+        if (position_ >= 10 && position_ <= 17) {
+            return 19 - position_
         }
         throw IllegalArgumentException();
     }

@@ -42,49 +42,49 @@ public open class AddressBookParsedResult <: ParsedResult {
         super(ParsedResultType.ADDRESSBOOK)
     }
     public init(
-        names: Array<String>,
-        nicknames: Array<String>,
-        pronunciation: String,
+        names_: Array<String>,
+        nicknames_: Array<String>,
+        pronunciation_: String,
         phoneNumbers: Array<String>,
         phoneTypes: Array<String>,
         emails: Array<String>,
-        emailTypes: Array<String>,
-        instantMessenger: String,
-        note: String,
+        emailTypes_: Array<String>,
+        instantMessenger_: String,
+        note_: String,
         addresses: Array<String>,
         addressTypes: Array<String>,
-        org: String,
-        birthday: String,
+        org_: String,
+        birthday_: String,
         title: String,
         urls: Array<String>,
-        geo: Array<String>
+        geo_: Array<String>
     ) {
         super(ParsedResultType.ADDRESSBOOK)
         if (!phoneNumbers.isEmpty() && !phoneTypes.isEmpty() && phoneNumbers.size != phoneTypes.size) {
             throw IllegalArgumentException("Phone numbers and types lengths differ")
         }
-        if (!emails.isEmpty() && !emailTypes.isEmpty() && emails.size != emailTypes.size) {
+        if (!emails.isEmpty() && !emailTypes_.isEmpty() && emails.size != emailTypes_.size) {
             throw IllegalArgumentException("Emails and types lengths differ")
         }
         if (!addresses.isEmpty() && !addressTypes.isEmpty() && addresses.size != addressTypes.size) {
             throw IllegalArgumentException("Addresses and types lengths differ")
         }
-        this.names = names
-        this.nicknames = nicknames
-        this.pronunciation = pronunciation
+        this.names = names_
+        this.nicknames = nicknames_
+        this.pronunciation = pronunciation_
         this.phoneNumbers = phoneNumbers
         this.phoneTypes = phoneTypes
         this.emails = emails
-        this.emailTypes = emailTypes
-        this.instantMessenger = instantMessenger
-        this.note = note
+        this.emailTypes = emailTypes_
+        this.instantMessenger = instantMessenger_
+        this.note = note_
         this.addresses = addresses
         this.addressTypes = addressTypes
-        this.org = org
-        this.birthday = birthday
+        this.org = org_
+        this.birthday = birthday_
         this.title = title
         this.urls = urls
-        this.geo = geo
+        this.geo = geo_
         this.flag = true
     }
 
@@ -177,20 +177,20 @@ public open class AddressBookParsedResult <: ParsedResult {
     }
 
     public override func getDisplayResult(): String {
-        var result: ArrayList<Char> = ArrayList<Char>()
-        maybeAppend(names, result)
-        maybeAppend(nicknames, result)
-        maybeAppend(pronunciation, result)
-        maybeAppend(title, result)
-        maybeAppend(org, result)
-        maybeAppend(addresses, result)
-        maybeAppend(phoneNumbers, result)
-        maybeAppend(emails, result)
-        maybeAppend(instantMessenger, result)
-        maybeAppend(urls, result)
-        maybeAppend(birthday, result)
-        maybeAppend(geo, result)
-        maybeAppend(note, result)
-        return String(result)
+        var result_: ArrayList<Char> = ArrayList<Char>()
+        maybeAppend(names, result_)
+        maybeAppend(nicknames, result_)
+        maybeAppend(pronunciation, result_)
+        maybeAppend(title, result_)
+        maybeAppend(org, result_)
+        maybeAppend(addresses, result_)
+        maybeAppend(phoneNumbers, result_)
+        maybeAppend(emails, result_)
+        maybeAppend(instantMessenger, result_)
+        maybeAppend(urls, result_)
+        maybeAppend(birthday, result_)
+        maybeAppend(geo, result_)
+        maybeAppend(note, result_)
+        return String(result_)
     }
 }

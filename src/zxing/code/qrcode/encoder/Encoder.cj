@@ -133,9 +133,9 @@ public class Encoder {
     /**
      * @param content text to encode
      * @param ecLevel error correction level to use
-     * @return {@link QRCode} representing the encoded QR code
-     * @throws WriterException if encoding can't succeed, because of for example invalid content
-     * or configuration
+     * @return QRCode representing the encoded QR code
+     * @throws WriterException if encoding can't succeed, because of for example invalid content or
+     * configuration
      */
     public static func encode(content: String, ecLevel: ErrorCorrectionLevel): QRCode {
         return encode(content, ecLevel, HashMap<EncodeHintType, Any>());
@@ -270,7 +270,7 @@ public class Encoder {
         }
         qrCode.setMaskPattern(maskPattern);
 
-        // Build the matrix and set it to "qrCode".
+        /* Build the matrix and set it to "qrCode". */
         MatrixUtil.buildMatrix(finalBits, ecLevel, version, maskPattern, matrix);
         qrCode.setMatrix(matrix);
 
@@ -278,9 +278,9 @@ public class Encoder {
     }
 
     /**
-     * Decides the smallest version of QR code that will contain all of the provided data.
+     * Decides the smallest version value of QR code that will contain all of the provided data.
      *
-     * @throws WriterException if the data cannot fit in any version
+     * @throws WriterException if the data cannot fit in any version value
      */
     private static func recommendVersion(
         ecLevel: ErrorCorrectionLevel,
@@ -476,7 +476,7 @@ public class Encoder {
 
     /**
      * Get number of data bytes and number of error correction bytes for block id "blockID". Store
-     * the result in "numDataBytesInBlock", and "numECBytesInBlock". See table 12 in 8.5.1 of
+     * the result in "numDataBytesInBlock", and "numECBytesInBlock_". See table 12 in 8.5.1 of
      * JISX0510:2004 (p.30)
      */
     public static func getNumDataBytesAndNumECBytesForBlockID(
@@ -485,7 +485,7 @@ public class Encoder {
         numRSBlocks: Int64,
         blockID: Int64,
         numDataBytesInBlock: Array<Int64>,
-        numECBytesInBlock: Array<Int64>
+        numECBytesInBlock_: Array<Int64>
     ) {
         if (blockID >= numRSBlocks) {
             throw WriterException("Block ID too large");
@@ -534,16 +534,16 @@ public class Encoder {
 
         if (blockID < numRsBlocksInGroup1) {
             numDataBytesInBlock[0] = numDataBytesInGroup1
-            numECBytesInBlock[0] = numEcBytesInGroup1
+            numECBytesInBlock_[0] = numEcBytesInGroup1
         } else {
             numDataBytesInBlock[0] = numDataBytesInGroup2
-            numECBytesInBlock[0] = numEcBytesInGroup2
+            numECBytesInBlock_[0] = numEcBytesInGroup2
         }
     }
 
     /**
-     * Interleave "bits" with corresponding error correction bytes. On success, store the result in
-     * "result". The interleave rule is complicated. See 8.6 of JISX0510:2004 (p.37) for details.
+     * Interleave "bits" with corresponding error correction bytes. On success, store the result in "result".
+     * The interleave rule is complicated. See 8.6 of JISX0510:2004 (p.37) for details.
      */
     public static func interleaveWithECBytes(bits: BitArray, numTotalBytes: Int64, numDataBytes: Int64,
         numRSBlocks: Int64): BitArray {
@@ -674,11 +674,11 @@ public class Encoder {
                 i += 3
             } else if (i + 1 < length) {
                 // Encode two numeric letters in seven bits.
-                var num2: Int64 = content[i + 1].hashCode() - '0'.hashCode()
-                bits.appendBits(num1 * 10 + num2, 7);
+                var num2_: Int64 = content[i + 1].hashCode() - '0'.hashCode()
+                bits.appendBits(num1 * 10 + num2_, 7);
                 i += 2
             } else {
-                // Encode one numeric letter in four bits.
+                /* Encode one numeric letter in four bits. */
                 bits.appendBits(num1, 4);
                 i++
             }
@@ -699,11 +699,11 @@ public class Encoder {
                     throw WriterException();
                 }
 
-                // Encode two alphanumeric letters in 11 bits.
+                /* Encode two alphanumeric letters in 11 bits. */
                 bits.appendBits(code1 * 45 + code2, 11);
                 i += 2
             } else {
-                // Encode one alphanumeric letter in six bits.
+                /* Encode one alphanumeric letter in six bits. */
                 bits.appendBits(code1, 6);
                 i++
             }
