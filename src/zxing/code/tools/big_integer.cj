@@ -1,4 +1,7 @@
-// 来自https://e.gitee.com/HW-PLLab-pro/dashboard?issue=I66L17&issue_detail_tab=attachment
+/*
+ * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
+ */
+
 package zxing.code.tools
 
 from std import math.*

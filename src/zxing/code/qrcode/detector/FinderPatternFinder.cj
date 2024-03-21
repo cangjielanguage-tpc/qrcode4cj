@@ -73,7 +73,7 @@ public open class FinderPatternFinder {
 
             var j: Int64 = 0;
             while (j < maxJ) {
-                currentState = exfind3(currentState, done, i, j, stateCount, maxJ)
+                currentState = exfind3(currentState, i, j, stateCount)
                 if (!image.get(j, i)) { // White pixel
                     if ((currentState & 1) == 0) { // Counting black pixels
                         if (currentState == 4) { // A winner?
@@ -163,7 +163,7 @@ public open class FinderPatternFinder {
         return (iSkip_p, done_p)
     }
 
-    private func exfind3(currentState: Int64, done: Bool, i: Int64, j: Int64, stateCount: Array<Int64>, maxJ: Int64): Int64 {
+    private func exfind3(currentState: Int64, i: Int64, j: Int64, stateCount: Array<Int64>): Int64 {
         var currentState_p = currentState
         if (image.get(j, i)) {
             // Black pixel
@@ -578,7 +578,7 @@ public open class FinderPatternFinder {
      * @deprecated only exists for backwards compatibility
      * @see #handlePossibleCenter(int[], int, int)
      */
-    protected func handlePossibleCenter(stateCount: Array<Int64>, i: Int64, j: Int64, pureBarcode: Bool): Bool {
+    protected func handlePossibleCenter(stateCount: Array<Int64>, i: Int64, j: Int64, _: Bool): Bool {
         return handlePossibleCenter(stateCount, i, j);
     }
 

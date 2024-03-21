@@ -7,8 +7,6 @@ import zxing.code.oned.UPCEReader
 
 /**
  * Parses strings of digits that represent a UPC code.
- *
- * @author dswitkin@google.com (Daniel Switkin)
  */
 public open class ProductResultParser <: ResultParser {
     // Treat all UPC and EAN variants as UPCs, in the sense that they are all product barcodes.

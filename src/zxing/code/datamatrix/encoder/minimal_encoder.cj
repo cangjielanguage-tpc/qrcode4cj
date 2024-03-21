@@ -277,13 +277,13 @@ public class Edge {
             }
             var lastASCII: Int64 = getLastASCII();
 
-            // see 5.2.8.2 EDIFACT encodation Rules
+            // see EDIFACT encodation Rules
             if (lastASCII > 0 && getCodewordsRemaining(cachedTotalSize + lastASCII) <= 2 - lastASCII) {
                 return Mode.ASCII;
             }
         }
         if (mode == Mode.C40 || mode == Mode.TEXT || mode == Mode.X12) {
-            // see 5.2.5.2 C40 encodation rules and 5.2.7.2 ANSI X12 encodation rules
+            // see C40 encodation rules and ANSI X12 encodation rules
             if (fromPosition + characterLength >= input.length() && getCodewordsRemaining(cachedTotalSize) == 0) {
                 return Mode.ASCII;
             }

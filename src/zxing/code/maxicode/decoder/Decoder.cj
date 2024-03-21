@@ -14,10 +14,8 @@ from std import collection.*
 //import java.util.Map;
 
 /**
- * <p>The main class which implements MaxiCode decoding -- as opposed to locating and extracting
- * the MaxiCode from an image.</p>
- *
- * @author Manuel Kasten
+ * The main class which implements MaxiCode decoding -- as opposed to locating and extracting
+ * the MaxiCode from an image.
  */
 public class Decoder {
     private static var ALL: Int64 = 0
@@ -34,7 +32,7 @@ public class Decoder {
         return decode(bits, HashMap<DecodeHintType, Any>())
     }
 
-    public func decode(bits: BitMatrix, hints: HashMap<DecodeHintType, Any>): DecoderResult {
+    public func decode(bits: BitMatrix, _: HashMap<DecodeHintType, Any>): DecoderResult {
         var parser: BitMatrixParser = BitMatrixParser(bits)
         var codewords: Array<UInt8> = parser.readCodewords()
 

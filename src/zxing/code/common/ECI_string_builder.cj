@@ -13,7 +13,7 @@ public class ECIStringBuilder <: ToString {
         currentBytes = ArrayList<Char>()
         result = ArrayList<Char>()
     }
-    public init(initialCapacity: Int64) {
+    public init(_: Int64) {
         currentBytes = ArrayList<Char>()
         result = ArrayList<Char>()
     }

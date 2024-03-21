@@ -54,8 +54,6 @@ public class ECB {
 /**
  * The Version object encapsulates attributes about a particular
  * size Data Matrix Code.
- *
- * @author bbrown@google.com (Brian Brown)
  */
 public class Version {
     private static let VERSIONS: Array<Version> = buildVersions();

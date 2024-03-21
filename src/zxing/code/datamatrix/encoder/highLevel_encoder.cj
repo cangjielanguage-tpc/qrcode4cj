@@ -514,7 +514,7 @@ public class HighLevelEncoder {
         return ch >= ' ' && ch <= '^'
     }
 
-    private static func isSpecialB256(ch: Char): Bool {
+    private static func isSpecialB256(_: Char): Bool {
         return false; //TODO NOT IMPLEMENTED YET!!!
     }
 

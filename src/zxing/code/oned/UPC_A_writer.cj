@@ -5,9 +5,7 @@
 package zxing.code.oned
 
 /**
- * This object renders a UPC-A code as a {@link BitMatrix}.
- *
- * @author qwandor@google.com (Andrew Walbran)
+ * This object renders a UPC-A code as a BitMatrix.
  */
 public open class UPCAWriter <: Writer {
     private let subWriter: EAN13Writer = EAN13Writer();

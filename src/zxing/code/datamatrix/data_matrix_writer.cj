@@ -24,9 +24,6 @@ from std import math.*
 
 /**
  * This object renders a Data Matrix code as a BitMatrix 2D array of greyscale values.
- *
- * @author dswitkin@google.com (Daniel Switkin)
- * @author Guillaume Le Biller Added to zxing lib.
  */
 public class DataMatrixWriter <: Writer {
     public func encode(contents: String, format: BarcodeFormat, width: Int64, height: Int64): BitMatrix {

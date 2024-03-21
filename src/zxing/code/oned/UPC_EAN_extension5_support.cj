@@ -133,7 +133,6 @@ open class UPCEANExtension5Support {
             case '5' => currency = "$"
 
             case '9' =>
-                // Reference: http://www.jollytech.com
                 if (raw == "90000") {
                     // No suggested retail price
                     return "";

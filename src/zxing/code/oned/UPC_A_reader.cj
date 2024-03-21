@@ -5,10 +5,7 @@
 package zxing.code.oned
 
 /**
- * <p>Implements decoding of the UPC-A format.</p>
- *
- * @author dswitkin@google.com (Daniel Switkin)
- * @author Sean Owen
+ * Implements decoding of the UPC-A format.
  */
 public open class UPCAReader <: UPCEANReader {
     private let ean13Reader: UPCEANReader = EAN13Reader();

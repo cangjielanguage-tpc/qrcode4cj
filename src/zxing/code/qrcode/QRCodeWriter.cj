@@ -20,8 +20,6 @@ from std import math.*
 
 /**
  * This object renders a QR Code as a BitMatrix 2D array of greyscale values.
- *
- * @author dswitkin@google.com (Daniel Switkin)
  */
 public class QRCodeWriter <: Writer {
     private static var QUIET_ZONE_SIZE: Int64 = 4;

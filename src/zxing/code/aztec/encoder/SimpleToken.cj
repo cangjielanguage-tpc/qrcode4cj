@@ -14,7 +14,7 @@ public class SimpleToken <: Token {
         this.bitCount = bitCount
     }
 
-    public override func appendTo(bitArray: BitArray, text: Array<UInt8>) {
+    public override func appendTo(bitArray: BitArray, _: Array<UInt8>) {
         bitArray.appendBits(value, bitCount)
     }
 

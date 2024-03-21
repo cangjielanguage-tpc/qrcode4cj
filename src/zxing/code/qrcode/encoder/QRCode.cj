@@ -8,10 +8,6 @@ import zxing.code.qrcode.decoder.ErrorCorrectionLevel
 import zxing.code.qrcode.decoder.Mode
 import zxing.code.qrcode.decoder.Version
 
-/**
- * @author satorux@google.com (Satoru Takabayashi) - creator
- * @author dswitkin@google.com (Daniel Switkin) - ported from C++
- */
 public class QRCode {
     public static let NUM_MASK_PATTERNS: Int64 = 8;
 

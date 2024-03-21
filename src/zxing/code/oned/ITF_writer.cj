@@ -6,8 +6,6 @@ package zxing.code.oned
 
 /**
  * This object renders a ITF code as a {@link BitMatrix}.
- *
- * @author erik.barbara@gmail.com (Erik Barbara)
  */
 public open class ITFWriter <: OneDimensionalCodeWriter {
     private static let START_PATTERN: Array<Int64> = [1, 1, 1, 1]

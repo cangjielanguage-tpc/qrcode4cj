@@ -6,8 +6,6 @@ package zxing.code.pdf417.encoder
 
 /**
  * Data object to specify the minimum and maximum number of rows and columns for a PDF417 barcode.
- *
- * @author qwandor@google.com (Andrew Walbran)
  */
 public open class Dimensions {
     private let minCols: Int64

@@ -4,10 +4,6 @@
 
 package zxing.code.oned
 
-/**
- * @author dswitkin@google.com (Daniel Switkin)
- * @author Sean Owen
- */
 public open class MultiFormatOneDReader <: OneDReader {
     private static let EMPTY_ONED_ARRAY: Array<OneDReader> = Array<OneDReader>()
 

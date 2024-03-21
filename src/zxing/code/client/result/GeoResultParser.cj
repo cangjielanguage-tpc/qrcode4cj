@@ -9,11 +9,7 @@ from std import format.*
 
 /**
  * Parses a "geo:" URI result, which specifies a location on the surface of
- * the Earth as well as an optional altitude above the surface. See
- * <a href="http://tools.ietf.org/html/draft-mayrhofer-geo-uri-00">
- * http://tools.ietf.org/html/draft-mayrhofer-geo-uri-00</a>.
- *
- * @author Sean Owen
+ * the Earth as well as an optional altitude above the surface
  */
 public open class GeoResultParser <: ResultParser {
     private static let GEO_URL_PATTERN: Regex = Regex(

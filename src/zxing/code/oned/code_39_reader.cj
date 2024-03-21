@@ -106,7 +106,7 @@ public open class Code39Reader <: OneDReader {
         counters = Array<Int64>(9, item: 0)
     }
 
-    public override func decodeRow(rowNumber: Int64, row: BitArray, hints: HashMap<DecodeHintType, Any>): Result {
+    public override func decodeRow(rowNumber: Int64, row: BitArray, _: HashMap<DecodeHintType, Any>): Result {
         counters = Array<Int64>(9, item: 0)
         decodeRowResult = ArrayList<Char>()
         var theCounters: Array<Int64> = counters

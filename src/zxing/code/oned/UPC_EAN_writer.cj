@@ -5,14 +5,11 @@
 package zxing.code.oned
 
 /**
- * <p>Encapsulates functionality and implementation that is common to UPC and EAN families
- * of one-dimensional barcodes.</p>
- *
- * @author aripollak@gmail.com (Ari Pollak)
- * @author dsbnatut@gmail.com (Kazuki Nishiura)
+ * Encapsulates functionality and implementation that is common to UPC and EAN families
+ * of one-dimensional barcodes.
  */
 public open class UPCEANWriter <: OneDimensionalCodeWriter {
-    public open func encode(contents: String): Array<Bool> {
+    public open func encode(_: String): Array<Bool> {
         Array<Bool>()
     }
 

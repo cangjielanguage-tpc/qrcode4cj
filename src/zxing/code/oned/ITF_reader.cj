@@ -194,7 +194,6 @@ public open class ITFReader <: OneDReader {
      * Note: Its assumed the row is reversed when using this method to find quiet zone
      * after the end pattern.
      *
-     * ref: http://www.barcode-1.net/i25code.html
      *
      * @param row bit array representing the scanned barcode.
      * @param startPattern index into row of the start or end pattern.
@@ -261,7 +260,6 @@ public open class ITFReader <: OneDReader {
             /*
              * The start & end patterns must be pre/post fixed by a quiet zone. This zone
              * must be at least 10 times the width of a narrow line.
-             * ref: http://www.barcode-1.net/i25code.html
              */ 
             validateQuietZone(row, endPattern[0])
 

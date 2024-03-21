@@ -5,9 +5,7 @@
 package zxing.code.oned
 
 /**
- * This object renders an EAN8 code as a {@link BitMatrix}.
- *
- * @author aripollak@gmail.com (Ari Pollak)
+ * This object renders an EAN8 code as a BitMatrix.
  */
 public open class EAN8Writer <: UPCEANWriter {
     private static let CODE_WIDTH: Int64 = 3 + // start guard

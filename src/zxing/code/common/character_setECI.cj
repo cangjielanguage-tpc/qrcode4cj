@@ -10,10 +10,8 @@ from charset import charset.tools.*
 from charset import charset.encoding.*
 
 /**
- * Encapsulates a Character Set ECI, according to "Extended Channel Interpretations" 5.3.1.1
+ * Encapsulates a Character Set ECI, according to "Extended Channel Interpretations
  * of ISO 18004.
- *
- * @author Sean Owen
  */
 public open class StandardCharsets {
     public var flag: Bool = false

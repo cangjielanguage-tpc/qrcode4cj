@@ -522,7 +522,7 @@ public open class PDF417HighLevelEncoder {
             case _ =>
                 var encodingMode: Int64 = TEXT_COMPACTION
 
-                //Default mode, see 4.4.2.1
+                //Default mode
                 while (p_ < len) {
                     while (p_ < len && input.isECI(p_)) {
                         encodingECI(input.getECIValue(p_), sb)
@@ -1023,11 +1023,11 @@ class NoECIInput <: ECIInput {
         return input[index]
     }
 
-    public func isECI(index: Int64): Bool {
+    public func isECI(_: Int64): Bool {
         return false
     }
 
-    public func getECIValue(index: Int64): Int64 {
+    public func getECIValue(_: Int64): Int64 {
         return -1
     }
 

@@ -111,7 +111,7 @@ public class RSSExpandedReader <: AbstractRSSReader {
     private var startEnd: Array<Int64> = Array<Int64>(2, item: 0)
     private var startFromEven: Bool = false;
 
-    public func decodeRow(rowNumber: Int64, row: BitArray, hints: HashMap<DecodeHintType, Any>): Result {
+    public func decodeRow(rowNumber: Int64, row: BitArray, _: HashMap<DecodeHintType, Any>): Result {
         // Rows can start with even pattern in case in prev rows there where odd number of patters. So
         // lets try twice
         this.pairs.clear();

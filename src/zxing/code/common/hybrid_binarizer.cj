@@ -129,8 +129,7 @@ public class HybridBinarizer <: GlobalHistogramBinarizer {
 
     /**
      * Calculates a single black point for each block of pixels and saves it away.
-     * See the following thread for a discussion of this algorithm:
-     * http://groups.google.com/group/zxing/browse_thread/thread/d06efa2c35a7ddc0
+     * See the following thread for a discussion of this algorithm
      */
     static func calculateBlackPoints(luminances: Array<UInt8>, subWidth: Int64, subHeight: Int64, width: Int64,
         height: Int64): Array<Array<Int64>> {

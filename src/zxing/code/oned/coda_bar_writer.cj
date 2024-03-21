@@ -7,9 +7,7 @@ package zxing.code.oned
 from charset import charset.tools.UTF32String
 
 /**
- * This class renders CodaBar as {@code boolean[]}.
- *
- * @author dsbnatut@gmail.com (Kazuki Nishiura)
+ * This class renders CodaBar as Array<Bool>.
  */
 public open class CodaBarWriter <: OneDimensionalCodeWriter {
     private static let START_END_CHARS: Array<Char> = ['A', 'B', 'C', 'D']

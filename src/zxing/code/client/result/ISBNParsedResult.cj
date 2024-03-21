@@ -6,8 +6,6 @@ package zxing.code.client.result
 
 /**
  * Represents a parsed result that encodes a product ISBN number.
- *
- * @author jbreiden@google.com (Jeff Breidenbach)
  */
 public open class ISBNParsedResult <: ParsedResult {
     private var isbn: String = String()
