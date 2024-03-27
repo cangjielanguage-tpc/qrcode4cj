@@ -295,7 +295,6 @@ public open class Detector {
      */
     private func sizeOfBlackWhiteBlackRun(fromX: Int64, fromY: Int64, toX: Int64, toY: Int64): Float64 {
         // Mild variant of Bresenham's algorithm;
-        // see http://en.wikipedia.org/wiki/Bresenham's_line_algorithm
         var fromX_: Int64 = fromX
         var fromY_: Int64 = fromY
         var toX_: Int64 = toX

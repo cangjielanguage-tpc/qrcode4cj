@@ -16,10 +16,6 @@ import zxing.code.pdf417.encoder.PDF417
 import zxing.code.qrcode.decoder.ErrorCorrectionLevel
 from charset import charset.tools.UTF32String
 
-/**
- * @author Jacob Haynes
- * @author qwandor@google.com (Andrew Walbran)
- */
 public open class PDF417Writer <: Writer {
     /**
      * default white space (margin) around the code

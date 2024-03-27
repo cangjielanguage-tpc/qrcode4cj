@@ -35,7 +35,7 @@ public open class ModulusGF {
         }
     }
 
-    public func SetZeroOne(modulusGF: ModulusGF) {
+    public func SetZeroOne(_: ModulusGF) {
         zero = ModulusPoly(this, [0])
         one = ModulusPoly(this, [1])
     }

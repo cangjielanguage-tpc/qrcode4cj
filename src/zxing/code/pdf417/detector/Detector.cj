@@ -57,7 +57,7 @@ public open class Detector {
      */
     public static func detect(
         image: BinaryBitmap,
-        hints: HashMap<DecodeHintType, Any>,
+        _: HashMap<DecodeHintType, Any>,
         multiple: Bool,
         flagReadSecond: Int64
     ): PDF417DetectorResult {

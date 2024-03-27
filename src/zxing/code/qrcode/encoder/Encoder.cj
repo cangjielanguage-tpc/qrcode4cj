@@ -13,10 +13,6 @@ import zxing.code.common.StandardCharsets
 import zxing.code.qrcode.decoder.ECBlocks
 from std import convert.*
 
-/**
- * @author satorux@google.com (Satoru Takabayashi) - creator
- * @author dswitkin@google.com (Daniel Switkin) - ported from C++
- */
 public class Encoder {
     // The original table is defined in the table 5 of JISX0510:2004 (p.19).
     private static let ALPHANUMERIC_TABLE: Array<Int64> = [
@@ -710,7 +706,7 @@ public class Encoder {
         }
     }
 
-    public static func append8BitBytes(content: UTF32String, bits: BitArray, encoding: MyCharset) {
+    public static func append8BitBytes(content: UTF32String, bits: BitArray, _: MyCharset) {
         for (i in 0..content.size) {
             bits.appendBits(content[i].hashCode(), 8);
         }

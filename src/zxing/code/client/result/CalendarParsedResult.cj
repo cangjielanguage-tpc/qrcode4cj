@@ -203,8 +203,7 @@ public open class CalendarParsedResult <: ParsedResult {
             var test = DateTime.of(year: 1970, month: 1, dayOfMonth: 1)
 
             // For dates without a time, for purposes of interacting with Android, the resulting timestamp
-            // needs to be midnight of that day in GMT. See:
-            // http://code.google.com/p/android/issues/detail?id=8330
+            // needs to be midnight of that day in GMT
             return (format - test).toMilliseconds()
         }
 

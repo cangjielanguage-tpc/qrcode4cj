@@ -71,7 +71,7 @@ public abstract class LuminanceSource {
      *
      * @return A cropped version of this object.
      */
-    public open func crop(left: Int64, top: Int64, width: Int64, height: Int64): LuminanceSource {
+    public open func crop(_: Int64, _: Int64, _: Int64, _: Int64): LuminanceSource {
         throw Exception("This luminance source does not support cropping.")
     }
 

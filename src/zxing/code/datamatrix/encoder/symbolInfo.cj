@@ -226,11 +226,11 @@ public open class SymbolInfo {
         return errorCodewords
     }
 
-    public open func getDataLengthForInterleavedBlock(index: Int64): Int64 {
+    public open func getDataLengthForInterleavedBlock(_: Int64): Int64 {
         return rsBlockData
     }
 
-    public func getErrorLengthForInterleavedBlock(index: Int64): Int64 {
+    public func getErrorLengthForInterleavedBlock(_: Int64): Int64 {
         return rsBlockError
     }
 

@@ -9,9 +9,7 @@ from std import sync.*
 /**
  * Records EAN prefix to GS1 Member Organization, where the member organization
  * correlates strongly with a country. This is an imperfect means of identifying
- * a country of origin by EAN-13 barcode value. See
- * "http://en.wikipedia.org/wiki/List_of_GS1_country_codes"
- * "http://en.wikipedia.org/wiki/List_of_GS1_country_codes".
+ * a country of origin by EAN-13 barcode value.
  */
 public open class EANManufacturerOrgSupport {
     private let ranges: ArrayList<Array<Int64>> = ArrayList<Array<Int64>>()

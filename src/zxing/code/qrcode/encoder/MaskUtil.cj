@@ -6,13 +6,7 @@ package zxing.code.qrcode.encoder
 
 from std import math.*
 
-/**
- * @author Satoru Takabayashi
- * @author Daniel Switkin
- * @author Sean Owen
- */
 public class MaskUtil {
-    // Penalty weights from section 6.8.2.1
     private static let N1: Int64 = 3;
     private static let N2: Int64 = 3;
     private static let N3: Int64 = 40;

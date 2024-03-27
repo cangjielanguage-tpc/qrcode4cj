@@ -8,9 +8,7 @@ package zxing.code.oned
 from std import regex.*
 
 /**
- * <p>Encapsulates functionality and implementation that is common to one-dimensional barcodes.</p>
- *
- * @author dsbnatut@gmail.com (Kazuki Nishiura)
+ * Encapsulates functionality and implementation that is common to one-dimensional barcodes.
  */
 public abstract class OneDimensionalCodeWriter <: Writer {
     private static let NUMERIC: Regex = Regex("[0-9]+")
@@ -30,7 +28,7 @@ public abstract class OneDimensionalCodeWriter <: Writer {
      * @param hints encoding hints
      * @return a {@code boolean[]} of horizontal pixels (false = white, true = black)
      */
-    public open func encode(contents: String, hints: HashMap<EncodeHintType, Any>): Array<Bool> {
+    public open func encode(contents: String, _: HashMap<EncodeHintType, Any>): Array<Bool> {
         return encode(contents)
     }
 

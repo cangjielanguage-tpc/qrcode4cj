@@ -5,8 +5,6 @@ package zxing.code.client.result
 
 /**
  * Represents a parsed result that encodes a product by an identifier of some kind.
- *
- * @author dswitkin@google.com (Daniel Switkin)
  */
 public open class ProductParsedResult <: ParsedResult {
     private var productID: String = String()

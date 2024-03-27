@@ -70,7 +70,7 @@ public class Code93Writer <: OneDimensionalCodeWriter {
      * @return 9
      * @deprecated without replacement; intended as an internal-only method
      */
-    protected static func appendPattern(targetin: Array<Bool>, posin: Int64, pattern: Array<Int64>, startColor: Bool): Int64 {
+    protected static func appendPattern(targetin: Array<Bool>, posin: Int64, pattern: Array<Int64>, _: Bool): Int64 {
         var target: Array<Bool> = targetin
         var pos: Int64 = posin
         for (i in 0..pattern.size) {

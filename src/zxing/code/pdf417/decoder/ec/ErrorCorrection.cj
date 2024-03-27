@@ -7,13 +7,7 @@ package zxing.code.pdf417.decoder.ec
 import zxing.code.common.ChecksumException
 
 /**
- * <p>PDF417 error correction implementation.</p>
- *
- * <p>This <a href="http://en.wikipedia.org/wiki/Reed%E2%80%93Solomon_error_correction#Example">example</a>
- * is quite useful in understanding the algorithm.</p>
- *
- * @author Sean Owen
- * @see com.google.zxing.common.reedsolomon.ReedSolomonDecoder
+ * PDF417 error correction implementation.
  */
 public open class ErrorCorrection {
     private let field: ModulusGF

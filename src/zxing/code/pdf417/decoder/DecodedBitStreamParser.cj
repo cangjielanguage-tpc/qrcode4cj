@@ -254,7 +254,7 @@ public open class DecodedBitStreamParser {
     }
 
     /**
-     * Text Compaction mode (see 5.4.1.5) permits all printable ASCII characters to be
+     * Text Compaction mode permits all printable ASCII characters to be
      * encoded, i.e. values 32 - 126 inclusive in accordance with ISO/IEC 646 (IRV), as well as
      * selected control characters.
      *
@@ -578,7 +578,7 @@ public open class DecodedBitStreamParser {
             if ((count % MAX_NUMERIC_CODEWORDS == 0 || code == NUMERIC_COMPACTION_MODE_LATCH || end) && count > 0) {
                 // Re-invoking Numeric Compaction mode (by using codeword 902
                 // while in Numeric Compaction mode) serves  to terminate the current
-                // Numeric Compaction mode grouping as described in 5.4.4.2,
+                // Numeric Compaction mode grouping as described,
                 // and then to start a new one grouping.
                 result.append(decodeBase900toBase10(numericCodewords, count))
                 count = 0

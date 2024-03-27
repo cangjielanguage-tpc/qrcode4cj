@@ -4,15 +4,12 @@
 
 package zxing.code.oned.rss.expanded.decoders
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- */
 class AI013103decoder <: AI013x0xDecoder {
     init(information: BitArray) {
         super(information);
     }
 
-    protected func addWeightCode(buf: ArrayList<Char>, weight: Int64): Unit {
+    protected func addWeightCode(buf: ArrayList<Char>, _: Int64): Unit {
         buf.appendAll("(3103)".toRuneArray());
     }
 

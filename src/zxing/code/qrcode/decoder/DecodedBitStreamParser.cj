@@ -326,7 +326,6 @@ public class DecodedBitStreamParser {
             result.append(toAlphaNumericChar(bits.readBits(6)));
         }
 
-        /* See section 6.4.8.1, 6.4.8.2 */
         if (fc1InEffect) {
             /* We need to massage the result a bit if in an FNC1 mode: */ 
             for (i in start..result.size) {

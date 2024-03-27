@@ -7,12 +7,10 @@ import zxing.code.common.BarcodeFormat
 
 /**
  * Parses strings of digits that represent a ISBN.
- *
- * @author jbreiden@google.com (Jeff Breidenbach)
  */
 public open class ISBNResultParser <: ResultParser {
     /**
-     * See <a href="http://www.bisg.org/isbn-13/for.dummies.html">ISBN-13 For Dummies</a>
+     * See ISBN-13 For Dummies
      */
     public func parse(result: Result): ?ParsedResult {
         var format: BarcodeFormat = result.getBarcodeFormat();

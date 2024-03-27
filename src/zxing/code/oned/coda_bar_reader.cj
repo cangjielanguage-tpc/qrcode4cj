@@ -58,7 +58,6 @@ public open class CodaBarReader <: OneDReader {
     // character. This will cause lots of false positives!
 
     // some industries use a checksum standard but this is not part of the original Codabar standard
-    // for more information see : http://www.mecsw.com/specs/codabar.html
 
     // Keep some instance variables to avoid reallocations
     private var decodeRowResult: ArrayList<Char> = ArrayList<Char>()

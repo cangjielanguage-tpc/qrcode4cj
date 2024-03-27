@@ -75,7 +75,7 @@ public open class Code93Reader <: OneDReader {
     public init() {
     }
 
-    public override func decodeRow(rowNumber: Int64, row: BitArray, hints: HashMap<DecodeHintType, Any>): Result {
+    public override func decodeRow(rowNumber: Int64, row: BitArray, _: HashMap<DecodeHintType, Any>): Result {
         var start: Array<Int64> = findAsteriskPattern(row);
 
         // Read off white space

@@ -15,10 +15,7 @@ import zxing.code.common.StandardCharsets
  * <p>Data Matrix Codes can encode text as bits in one of several modes, and can use multiple modes
  * in one Data Matrix Code. This class decodes the bits back into text.</p>
  *
- * <p>See ISO 16022:2006, 5.2.1 - 5.2.9.2</p>
- *
- * @author bbrown@google.com (Brian Brown)
- * @author Sean Owen
+ * See ISO 16022:2006
  */
 enum Mode <: Equatable<Mode> {
     | PAD_ENCODE // Not really a mode
@@ -673,8 +670,7 @@ public class DecodedBitStreamParser {
         var bytes: Array<UInt8> = Array<UInt8>(count, item: 0)
 
         for (i in 0..count) {
-            // Have seen this particular error in the wild, such as at
-            // http://www.bcgen.com/demo/IDAutomationStreamingDataMatrix.aspx?MODE=3&D=Fred&PFMT=3&PT=F&X=0.3&O=0&LM=0.2
+            // Have seen this particular error in the wild
             if (bits.available() < 8) {
                 throw FormatException.getFormatInstance();
             }

@@ -5,18 +5,14 @@
 package zxing.code.oned
 
 /**
- * <p>Implements decoding of the EAN-13 format.</p>
- *
- * @author dswitkin@google.com (Daniel Switkin)
- * @author Sean Owen
- * @author alasdair@google.com (Alasdair Mackintosh)
+ * Implements decoding of the EAN-13 format.
  */
 public open class EAN13Reader <: UPCEANReader {
     // For an EAN-13 barcode, the first digit is represented by the parities used
     // to encode the next six digits, according to the table below. For example,
     // if the barcode is 5 123456 789012 then the value of the first digit is
     // signified by using odd for '1', even for '2', even for '3', odd for '4',
-    // odd for '5', and even for '6'. See http://en.wikipedia.org/wiki/EAN-13
+    // odd for '5', and even for '6'.
     //
     //                Parity of next 6 digits
     //    Digit   0     1     2     3     4     5

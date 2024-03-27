@@ -51,7 +51,7 @@ public open class PlanarYUVLuminanceSource <: LuminanceSource {
         }
     }
 
-    public override func getRow(y: Int64, rowIn: Array<UInt8>): Array<UInt8> {
+    public override func getRow(y: Int64, _: Array<UInt8>): Array<UInt8> {
         if (y < 0 || y >= getHeight()) {
             throw IllegalArgumentException("Requested row is outside the image: " + y.toString())
         }

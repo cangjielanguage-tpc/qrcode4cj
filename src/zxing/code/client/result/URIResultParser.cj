@@ -7,14 +7,11 @@ from std import unicode.*
 
 /**
  * Tries to parse results that are a URI of some kind.
- *
- * @author Sean Owen
  */
 public open class URIResultParser <: ResultParser {
     private static let ALLOWED_URI_CHARS_PATTERN: Regex = Regex("[-._~:/?#\\[\\]@!$&'()*+,;=%A-Za-z0-9]+");
     private static let USER_IN_HOST: Regex = Regex(":/*([^/@]+)@[^/]+");
 
-    // See http://www.ietf.org/rfc/rfc2396.txt
     private static let URL_WITH_PROTOCOL_PATTERN: Regex = Regex("[a-zA-Z][a-zA-Z0-9+-.]+:");
     private static let URL_WITHOUT_PROTOCOL_PATTERN: Regex = Regex(
         "([a-zA-Z0-9\\-]+\\.){1,6}[a-zA-Z]{2,}" + // host name elements; allow up to say 6 domain elements

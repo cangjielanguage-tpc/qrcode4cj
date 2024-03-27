@@ -53,7 +53,7 @@ class EdifactEncoder <: Encoder {
                     context.getCodewordCount()
                 var remaining: Int64 = context.getRemainingCharacters();
 
-                // The following two lines are a hack inspired by the 'fix' from https://sourceforge.net/p/barcode4j/svn/221/
+                // The following two lines are a hack inspired by the 'fix'
                 if (remaining > available) {
                     context.updateSymbolInfo(context.getCodewordCount() + 1);
                     available = context.getSymbolInfo().getOrThrow().getDataCapacity() - context.getCodewordCount()
