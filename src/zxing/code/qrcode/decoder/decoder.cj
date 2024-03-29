@@ -3,10 +3,10 @@
  */
 package zxing.code.qrcode.decoder
 
-import zxing.code.common.ChecksumException
+import zxing.code.common.Qrcoder4cjChecksumException
 import zxing.code.common.reedsolomon.GenericGF
 import zxing.code.common.reedsolomon.ReedSolomonDecoder
-import zxing.code.common.reedsolomon.ReedSolomonException
+import zxing.code.common.reedsolomon.Qrcoder4cjReedSolomonException
 
 /**
  * <p>The main class which implements QR Code decoding -- as opposed to locating and extracting
@@ -32,8 +32,8 @@ public class Decoder {
      * @param image booleans representing white/black QR Code modules
      * @param hints decoding hints that should be used to influence decoding
      * @return text and bytes encoded within the QR Code
-     * @throws FormatException if the QR Code cannot be decoded
-     * @throws ChecksumException if error correction fails
+     * @throws Qrcoder4cjFormatException if the QR Code cannot be decoded
+     * @throws Qrcoder4cjChecksumException if error correction fails
      */
     public func decode(image: Array<Array<Bool>>, hints: HashMap<DecodeHintType, Any>): DecoderResult {
         return decode(BitMatrix.parse(image), hints);
@@ -49,19 +49,19 @@ public class Decoder {
      * @param bits booleans representing white/black QR Code modules
      * @param hints decoding hints that should be used to influence decoding
      * @return text and bytes encoded within the QR Code
-     * @throws FormatException if the QR Code cannot be decoded
-     * @throws ChecksumException if error correction fails
+     * @throws Qrcoder4cjFormatException if the QR Code cannot be decoded
+     * @throws Qrcoder4cjChecksumException if error correction fails
      */
     public func decode(bits: BitMatrix, hints: HashMap<DecodeHintType, Any>): DecoderResult {
         // Construct a parser and read version, error-correction level
         var parser: BitMatrixParser = BitMatrixParser(bits);
-        var fe: Option<FormatException> = None
-        var ce: Option<ChecksumException> = None
+        var fe: Option<Qrcoder4cjFormatException> = None
+        var ce: Option<Qrcoder4cjChecksumException> = None
         try {
             return decode(parser, hints);
-        } catch (e: FormatException) {
+        } catch (e: Qrcoder4cjFormatException) {
             fe = e
-        } catch (e: ChecksumException) {
+        } catch (e: Qrcoder4cjChecksumException) {
             ce = e
         }
 
@@ -92,7 +92,7 @@ public class Decoder {
             // Success! Notify the caller that the code was mirrored.
             result.setOther(QRCodeDecoderMetaData(true));
             return result
-        } catch (e: FormatException | ChecksumException) {
+        } catch (e: Qrcoder4cjFormatException | Qrcoder4cjChecksumException) {
             // Throw the exception from the original reading
             if (let Some(f) <- fe) {
                 throw f
@@ -141,7 +141,7 @@ public class Decoder {
      *
      * @param codewordBytes data and error correction codewords
      * @param numDataCodewords number of codewords that are data bytes
-     * @throws ChecksumException if error correction fails
+     * @throws Qrcoder4cjChecksumException if error correction fails
      */
     private func correctErrors(codewordBytes: Array<Byte>, numDataCodewords: Int64) {
         var codewordBytes_ = codewordBytes
@@ -154,8 +154,8 @@ public class Decoder {
         }
         try {
             rsDecoder.decode(codewordsInts, codewordBytes_.size - numDataCodewords);
-        } catch (ignored: ReedSolomonException) {
-            throw ChecksumException.getChecksumInstance();
+        } catch (ignored: Qrcoder4cjReedSolomonException) {
+            throw Qrcoder4cjChecksumException.getChecksumInstance();
         }
 
         // Copy back into array of bytes -- only need to worry about the bytes that were data

@@ -75,7 +75,7 @@ public class RSSExpandedStackedInternalTestCase {
         var firstRow: BitArray = binaryMap.getBlackRow(firstRowNumber, BitArray())
         try {
             rssExpandedReader.decodeRow2pairs(firstRowNumber, firstRow)
-        } catch (nfe: NotFoundException) {
+        } catch (nfe: Qrcoder4cjNotFoundException) {
             // ok
         }
 

@@ -17,7 +17,7 @@ abstract class AI013x0xDecoder <: AI01weightDecoder {
 
     public func parseInformation(): String {
         if (this.getInformation().getSize() != HEADER_SIZE + GTIN_SIZE + WEIGHT_SIZE) {
-            throw NotFoundException()
+            throw Qrcoder4cjNotFoundException()
         }
 
         var buf: ArrayList<Char> = ArrayList<Char>();

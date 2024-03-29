@@ -309,7 +309,7 @@ public class Decoder {
                     decodedBytes = ByteArrayStream()
                     match (n) {
                         case 0 => result.append(Char(UInt32(29))) // translate FNC1 as ASCII 29 
-                        case 7 => throw FormatException.getFormatInstance() // FLG(7) is reserved and illegal
+                        case 7 => throw Qrcoder4cjFormatException.getFormatInstance() // FLG(7) is reserved and illegal
                         case _ =>
                             // ECI is decimal integer encoded as 1-6 codes in DIGIT mode
                             var eci: Int64 = 0
@@ -365,7 +365,7 @@ public class Decoder {
             var nextDigit: Int64 = readCode(correctedBits, index_p, 4)
             index_p += 4
             if (nextDigit < 2 || nextDigit > 11) {
-                throw FormatException.getFormatInstance() // Not a decimal digit
+                throw Qrcoder4cjFormatException.getFormatInstance() // Not a decimal digit
             }
             eci_p = eci_p * 10 + (nextDigit - 2)
         }
@@ -409,7 +409,7 @@ public class Decoder {
      * <p>Performs RS error correction on an array of bits.</p>
      *
      * @return the corrected array
-     * @throws FormatException if the input contains too many errors
+     * @throws Qrcoder4cjFormatException if the input contains too many errors
      */
     private func correctBits(rawbits: Array<Bool>): CorrectedBitsResult {
         var gf: GenericGF
@@ -432,7 +432,7 @@ public class Decoder {
         var numDataCodewords: Int64 = ddata.getOrThrow().getNbDatablocks()
         var numCodewords: Int64 = rawbits.size / codewordSize
         if (numCodewords < numDataCodewords) {
-            throw FormatException.getFormatInstance()
+            throw Qrcoder4cjFormatException.getFormatInstance()
         }
         var offset: Int64 = rawbits.size % codewordSize
 
@@ -446,7 +446,7 @@ public class Decoder {
             var rsDecoder: ReedSolomonDecoder = ReedSolomonDecoder(gf)
             rsDecoder.decode(dataWords, numCodewords - numDataCodewords)
         } catch (ex: Exception) {
-            throw FormatException.getFormatInstance(ex)
+            throw Qrcoder4cjFormatException.getFormatInstance(ex)
         }
 
         // Now perform the unstuffing operation.
@@ -456,7 +456,7 @@ public class Decoder {
         for (i in 0..numDataCodewords) {
             var dataWord: Int64 = dataWords[i]
             if (dataWord == 0 || dataWord == mask) {
-                throw FormatException.getFormatInstance()
+                throw Qrcoder4cjFormatException.getFormatInstance()
             } else if (dataWord == 1 || dataWord == mask - 1) {
                 stuffedBits++
             }

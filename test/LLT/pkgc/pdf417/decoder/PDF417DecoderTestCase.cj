@@ -18,8 +18,8 @@
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 
-from QRCode4cj import zxing.code.common.FormatException
-from QRCode4cj import zxing.code.common.WriterException
+from QRCode4cj import zxing.code.common.Qrcoder4cjFormatException
+from QRCode4cj import zxing.code.common.Qrcoder4cjWriterException
 from QRCode4cj import zxing.code.pdf417.common.PDF417ResultMetadata
 from QRCode4cj import zxing.code.common.DecoderResult
 from QRCode4cj import zxing.code.pdf417.encoder.Compaction
@@ -304,7 +304,7 @@ public class PDF417DecoderTestCase {
             var resultMetadata: PDF417ResultMetadata = PDF417ResultMetadata();
             DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 2, resultMetadata);
             @Assert(false)
-        } catch (f: FormatException) {}
+        } catch (f: Qrcoder4cjFormatException) {}
     }
 
     @TestCase
@@ -314,7 +314,7 @@ public class PDF417DecoderTestCase {
             var resultMetadata: PDF417ResultMetadata = PDF417ResultMetadata();
             DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 2, resultMetadata);
             @Assert(false)
-        } catch (f: FormatException) {}
+        } catch (f: Qrcoder4cjFormatException) {}
     }
 
     @TestCase
@@ -323,7 +323,7 @@ public class PDF417DecoderTestCase {
             var sampleCodes: Array<Int64> = [3, 899, 899, 0]
             DecodedBitStreamParser.decode(sampleCodes, "0");
             @Assert(false)
-        } catch (f: FormatException) {}
+        } catch (f: Qrcoder4cjFormatException) {}
     }
 
     @TestCase

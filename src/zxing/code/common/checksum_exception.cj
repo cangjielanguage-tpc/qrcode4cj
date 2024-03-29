@@ -10,16 +10,16 @@ package zxing.code.common
  *
  * @author Sean Owen
  */
-public open class ChecksumException <: ReaderException {
+public open class Qrcoder4cjChecksumException <: Qrcoder4cjReaderException {
     private init() {
-        super("ChecksumException")
+        super("Qrcoder4cjChecksumException")
     }
 
     private init(msg: String) {
-        super("ChecksumException: ${msg}")
+        super("Qrcoder4cjChecksumException: ${msg}")
     }
 
-    public static func getChecksumInstance(): ChecksumException {
-        return ChecksumException()
+    public static func getChecksumInstance(): Qrcoder4cjChecksumException {
+        return Qrcoder4cjChecksumException()
     }
 }

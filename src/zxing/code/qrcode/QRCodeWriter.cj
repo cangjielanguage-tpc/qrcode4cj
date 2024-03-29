@@ -8,7 +8,7 @@ from std import convert.*
 import zxing.code.common.BarcodeFormat
 import zxing.code.common.EncodeHintType
 import zxing.code.common.Writer
-import zxing.code.common.WriterException
+import zxing.code.common.Qrcoder4cjWriterException
 import zxing.code.common.BitMatrix
 import zxing.code.common.DecodeHintType
 import zxing.code.qrcode.encoder.ByteMatrix

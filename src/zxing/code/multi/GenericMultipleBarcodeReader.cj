@@ -1,6 +1,6 @@
 package zxing.code.multi
 
-import zxing.code.common.ReaderException
+import zxing.code.common.Qrcoder4cjReaderException
 
 public class GenericMultipleBarcodeReader <: MultipleBarcodeReader {
     private static var MIN_DIMENSION_TO_RECUR: Int64 = 100
@@ -22,7 +22,7 @@ public class GenericMultipleBarcodeReader <: MultipleBarcodeReader {
         var results: ArrayList<Result> = ArrayList<Result>()
         doDecodeMultiple(image, hints, results, 0, 0, 0)
         if (results.size == 0) {
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
         return results.toArray()
     }
@@ -42,7 +42,7 @@ public class GenericMultipleBarcodeReader <: MultipleBarcodeReader {
         var result: Result
         try {
             result = delegate.decode(image, hints)
-        } catch (ignored: ReaderException) {
+        } catch (ignored: Qrcoder4cjReaderException) {
             return
         }
         var alreadyFound: Bool = false

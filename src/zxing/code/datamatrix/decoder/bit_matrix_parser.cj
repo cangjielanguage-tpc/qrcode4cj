@@ -12,12 +12,12 @@ class BitMatrixParser {
 
     /**
      * @param bitMatrix BitMatrix}  to parse
-     * @throws FormatException if dimension is < 8 or > 144 or not 0 mod 2
+     * @throws Qrcoder4cjFormatException if dimension is < 8 or > 144 or not 0 mod 2
      */
     init(bitMatrix: BitMatrix) {
         var dimension: Int64 = bitMatrix.getHeight()
         if (dimension < 8 || dimension > 144 || (dimension & 0x01) != 0) {
-            throw FormatException.getFormatInstance()
+            throw Qrcoder4cjFormatException.getFormatInstance()
         }
 
         version = readVersion(bitMatrix)
@@ -39,7 +39,7 @@ class BitMatrixParser {
      * @param bitMatrix Original {@link BitMatrix} including alignment patterns
      *
      * @returnVersion encapsulating the Data Matrix Code's "version"
-     * @throws FormatException if the dimensions of the mapping matrix are not valid
+     * @throws Qrcoder4cjFormatException if the dimensions of the mapping matrix are not valid
      * Data Matrix dimensions.
      */
     private static func readVersion(bitMatrix: BitMatrix): Version {
@@ -54,7 +54,7 @@ class BitMatrixParser {
      * Data Matrix Code.
      *
      * @return bytes encoded within the Data Matrix Code
-     * @throws FormatException if the exact number of bytes expected is not read
+     * @throws Qrcoder4cjFormatException if the exact number of bytes expected is not read
      */
     func readCodewords(): Array<UInt8> {
         var result = Array<Byte>(version.getTotalCodewords(), item: 0)
@@ -109,7 +109,7 @@ class BitMatrixParser {
         } while ((row_ < numRows) || (column < numColumns))
 
         if (resultOffset != version.getTotalCodewords()) {
-            throw FormatException.getFormatInstance()
+            throw Qrcoder4cjFormatException.getFormatInstance()
         }
 
         return result

@@ -80,7 +80,7 @@ public abstract class GridSampler {
         while (offset >= 0 && nudged) {
             let (x, y) = xY(points, offset)
             if (x < -1 || x > width || y < -1 || y > height) {
-                throw NotFoundException()
+                throw Qrcoder4cjNotFoundException()
             }
             nudged = false
             if (x == -1) {
@@ -106,7 +106,7 @@ public abstract class GridSampler {
         let x = Int64(points[offset])
         let y = Int64(points[offset + 1])
         if (x < -1 || x > width || y < -1 || y > height) {
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
         return (x, y)
     }

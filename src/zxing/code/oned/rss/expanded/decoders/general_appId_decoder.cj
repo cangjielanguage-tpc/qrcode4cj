@@ -299,7 +299,7 @@ public class GeneralAppIdDecoder {
             case 250 => c = '?'
             case 251 => c = '_'
             case 252 => c = ' '
-            case _ => throw FormatException.getFormatInstance();
+            case _ => throw Qrcoder4cjFormatException.getFormatInstance();
         }
         return DecodedChar(pos + 8, c);
     }

@@ -29,7 +29,7 @@ public open class UPCEWriter <: UPCEANWriter {
                 var check: Int64 = 0
                 try {
                     check = UPCEANReader.getStandardUPCEANChecksum(UPCEReader.convertUPCEtoUPCA(contents))
-                } catch (fe: FormatException) {
+                } catch (fe: Qrcoder4cjFormatException) {
                     throw IllegalArgumentException(fe.toString());
                 }
                 contents += UTF32String(check.toString())
@@ -37,7 +37,7 @@ public open class UPCEWriter <: UPCEANWriter {
                 if (!UPCEANReader.checkStandardUPCEANChecksum(UPCEReader.convertUPCEtoUPCA(contents))) {
                     throw IllegalArgumentException("Contents do not pass checksum");
                 }
-            } catch (ignored: FormatException) {
+            } catch (ignored: Qrcoder4cjFormatException) {
                 throw IllegalArgumentException("Illegal contents");
             }
             case _ => throw IllegalArgumentException(

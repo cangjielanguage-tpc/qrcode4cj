@@ -3,8 +3,8 @@
  */
 package zxing.code.common.reedsolomon
 
-public class ReedSolomonException <: Exception {
-    public ReedSolomonException(message: String) {
+public class Qrcoder4cjReedSolomonException <: Exception {
+    public Qrcoder4cjReedSolomonException(message: String) {
         super(message)
     }
 }

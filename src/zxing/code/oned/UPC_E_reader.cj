@@ -78,7 +78,7 @@ public open class UPCEReader <: UPCEANReader {
                 }
             }
         }
-        throw NotFoundException.getNotFoundInstance();
+        throw Qrcoder4cjNotFoundException.getNotFoundInstance();
     }
 
     public func getBarcodeFormat(): BarcodeFormat {

@@ -26,7 +26,7 @@ from QRCode4cj import zxing.code.common.BarcodeFormat
 from QRCode4cj import zxing.code.common.reader.MultiFormatReader
 from QRCode4cj import zxing.code.common.EncodeHintType
 from QRCode4cj import zxing.code.common.Writer
-from QRCode4cj import zxing.code.common.WriterException
+from QRCode4cj import zxing.code.common.Qrcoder4cjWriterException
 from QRCode4cj import zxing.code.common.BitMatrix
 from QRCode4cj import zxing.code.qrcode.decoder.ErrorCorrectionLevel
 from QRCode4cj import zxing.code.qrcode.QRCodeWriter

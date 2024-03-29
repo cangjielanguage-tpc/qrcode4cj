@@ -6,7 +6,7 @@ package zxing.code.qrcode.encoder
 
 import zxing.code.common.BitArray
 import zxing.code.common.ECIEncoderSet
-import zxing.code.common.WriterException
+import zxing.code.common.Qrcoder4cjWriterException
 import zxing.code.common.MyCharset
 from charset import charset.tools.UTF32String
 
@@ -477,7 +477,7 @@ public class MinimalEncoder {
             case Some(ver) =>
                 var result: ResultList = encodeSpecificVersion(ver);
                 if (!Encoder.willFit(result.getSize(), getVersion(getVersionSize(result.getVersion())), ecLevel)) {
-                    throw WriterException("Data too big for version" + ver.toString());
+                    throw Qrcoder4cjWriterException("Data too big for version" + ver.toString());
                 }
                 return result
 
@@ -503,7 +503,7 @@ public class MinimalEncoder {
                     }
                 }
                 if (smallestResult < 0) {
-                    throw WriterException("Data too big for any version");
+                    throw Qrcoder4cjWriterException("Data too big for any version");
                 }
                 return results[smallestResult]
         }
@@ -786,7 +786,7 @@ public class MinimalEncoder {
             }
         }
         if (minimalJ < 0) {
-            throw WriterException("Internal error: failed to encode \"" + stringToEncode.toString() + "\"");
+            throw Qrcoder4cjWriterException("Internal error: failed to encode \"" + stringToEncode.toString() + "\"");
         }
         return ResultList(version, edges[inputLength][minimalJ][minimalK], encoders, stringToEncode, ecLevel);
     }

@@ -7,7 +7,7 @@ package zxing.code.pdf417
 from std import convert.*
 import zxing.code.common.EncodeHintType
 import zxing.code.common.Writer
-import zxing.code.common.WriterException
+import zxing.code.common.Qrcoder4cjWriterException
 import zxing.code.common.BitMatrix
 import zxing.code.common.MyCharset
 import zxing.code.pdf417.encoder.Compaction

@@ -107,8 +107,8 @@ public class RSSExpandedInternalTestCase {
         try {
             rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber);
             //   the previous was the last pair
-            // fail(NotFoundException.class.getName() + " expected");
-        } catch (nfe: NotFoundException) {
+            // fail(Qrcoder4cjNotFoundException.class.getName() + " expected");
+        } catch (nfe: Qrcoder4cjNotFoundException) {
             // ok
         }
     }

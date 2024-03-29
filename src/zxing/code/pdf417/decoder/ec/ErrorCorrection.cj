@@ -4,7 +4,7 @@
 
 package zxing.code.pdf417.decoder.ec
 
-import zxing.code.common.ChecksumException
+import zxing.code.common.Qrcoder4cjChecksumException
 
 /**
  * PDF417 error correction implementation.
@@ -22,7 +22,7 @@ public open class ErrorCorrection {
      * @param numECCodewords number of those codewords used for EC
      * @param erasures location of erasures
      * @return number of errors
-     * @throws ChecksumException if errors cannot be corrected, maybe because of too many errors
+     * @throws Qrcoder4cjChecksumException if errors cannot be corrected, maybe because of too many errors
      */
     public func decode(
         received: Array<Int64>,
@@ -72,7 +72,7 @@ public open class ErrorCorrection {
         for (i in 0..errorLocations.size) {
             var position: Int64 = received.size - 1 - field.log(errorLocations[i])
             if (position < 0) {
-                throw ChecksumException.getChecksumInstance()
+                throw Qrcoder4cjChecksumException.getChecksumInstance()
             }
             received[position] = field.subtract(received[position], errorMagnitudes[i])
         }
@@ -105,7 +105,7 @@ public open class ErrorCorrection {
             // Divide rLastLast by rLast, with quotient in q and remainder in r
             if (rLast.isZero()) {
                 // Oops, Euclidean algorithm already terminated?
-                throw ChecksumException.getChecksumInstance()
+                throw Qrcoder4cjChecksumException.getChecksumInstance()
             }
             r = rLastLast
             var q: ModulusPoly = field.getZero()
@@ -123,7 +123,7 @@ public open class ErrorCorrection {
 
         var sigmaTildeAtZero: Int64 = t.getCoefficient(0)
         if (sigmaTildeAtZero == 0) {
-            throw ChecksumException.getChecksumInstance()
+            throw Qrcoder4cjChecksumException.getChecksumInstance()
         }
 
         var inverse: Int64 = field.inverse(sigmaTildeAtZero)
@@ -146,7 +146,7 @@ public open class ErrorCorrection {
             i++
         }
         if (e != numErrors) {
-            throw ChecksumException.getChecksumInstance()
+            throw Qrcoder4cjChecksumException.getChecksumInstance()
         }
         return result
     }

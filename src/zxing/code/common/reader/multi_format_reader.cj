@@ -33,7 +33,7 @@ public open class MultiFormatReader <: Reader {
      *
      * @param image The pixel data to decode
      * @return The contents of the image
-     * @throws NotFoundException Any errors which occurred
+     * @throws Qrcoder4cjNotFoundException Any errors which occurred
      */
     @OverflowThrowing
     public func decode(image: BinaryBitmap): Result {
@@ -47,7 +47,7 @@ public open class MultiFormatReader <: Reader {
      * @param image The pixel data to decode
      * @param hints The hints to use, clearing the previous state.
      * @return The contents of the image
-     * @throws NotFoundException Any errors which occurred
+     * @throws Qrcoder4cjNotFoundException Any errors which occurred
      */
     @OverflowThrowing
     public func decode(image: BinaryBitmap, hints: HashMap<DecodeHintType, Any>): Result {
@@ -62,7 +62,7 @@ public open class MultiFormatReader <: Reader {
      *
      * @param image The pixel data to decode
      * @return The contents of the image
-     * @throws NotFoundException Any errors which occurred
+     * @throws Qrcoder4cjNotFoundException Any errors which occurred
      */
     @OverflowThrowing
     public func decodeWithState(image: BinaryBitmap): Result {
@@ -173,7 +173,7 @@ public open class MultiFormatReader <: Reader {
                 try {
                     let returndata = readers[i].decode(image, hints)
                     return returndata
-                } catch (re: ReaderException) {
+                } catch (re: Qrcoder4cjReaderException) {
                     // continue
                 }
             }
@@ -184,12 +184,12 @@ public open class MultiFormatReader <: Reader {
                     try {
                         let returndata = readers[j].decode(image, hints)
                         return returndata
-                    } catch (re: ReaderException) {
+                    } catch (re: Qrcoder4cjReaderException) {
                         // continue
                     }
                 }
             }
         }
-        throw NotFoundException.getNotFoundInstance()
+        throw Qrcoder4cjNotFoundException.getNotFoundInstance()
     }
 }

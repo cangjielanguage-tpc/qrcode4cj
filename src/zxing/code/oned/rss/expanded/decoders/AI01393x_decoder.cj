@@ -18,7 +18,7 @@ class AI01393xDecoder <: AI01decoder {
 
     public func parseInformation(): String {
         if (this.getInformation().getSize() < HEADER_SIZE + GTIN_SIZE) {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
 
         var buf: ArrayList<Char> = ArrayList<Char>();

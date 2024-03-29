@@ -4,13 +4,13 @@
 
 package zxing.code.common
 
-public open class WriterException <: Exception {
+public open class Qrcoder4cjWriterException <: Exception {
     public init() {
-        super("NotFoundException")
+        super("Qrcoder4cjWriterException")
     }
 
     public init(message: String) {
-        super("WriterException: ${message}");
+        super("Qrcoder4cjWriterException: ${message}");
     }
 
     public init(cause: Exception) {

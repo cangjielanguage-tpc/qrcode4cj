@@ -67,7 +67,7 @@ public class RSS14Reader <: AbstractRSSReader {
             }
         }
 
-        throw NotFoundException.getNotFoundInstance();
+        throw Qrcoder4cjNotFoundException.getNotFoundInstance();
     }
 
     private static func addOrTally(possiblePairs: ArrayList<Pair>, pair: Pair) {
@@ -174,7 +174,7 @@ public class RSS14Reader <: AbstractRSSReader {
                 outside.getChecksumPortion() + 4 * inside.getChecksumPortion(),
                 pattern
             );
-        } catch (ignored: NotFoundException) {
+        } catch (ignored: Qrcoder4cjNotFoundException) {
             return None
         }
     }
@@ -255,7 +255,7 @@ public class RSS14Reader <: AbstractRSSReader {
 
         if (outsideChar) {
             if ((oddSum_ & 0x01) != 0 || oddSum_ > 12 || oddSum_ < 4) {
-                throw NotFoundException.getNotFoundInstance();
+                throw Qrcoder4cjNotFoundException.getNotFoundInstance();
             }
             var group: Int64 = (12 - oddSum_) / 2
             var oddWidest: Int64 = OUTSIDE_ODD_WIDEST[group]
@@ -267,7 +267,7 @@ public class RSS14Reader <: AbstractRSSReader {
             return DataCharacter(vOdd * tEven + vEven + gSum, checksumPortion);
         } else {
             if ((evenSum_ & 0x01) != 0 || evenSum_ > 10 || evenSum_ < 4) {
-                throw NotFoundException.getNotFoundInstance();
+                throw Qrcoder4cjNotFoundException.getNotFoundInstance();
             }
             var group: Int64 = (10 - evenSum_) / 2
             var oddWidest: Int64 = INSIDE_ODD_WIDEST[group]
@@ -331,7 +331,7 @@ public class RSS14Reader <: AbstractRSSReader {
             }
         }
 
-        throw NotFoundException.getNotFoundInstance();
+        throw Qrcoder4cjNotFoundException.getNotFoundInstance();
     }
 
     private func parseFoundFinderPattern(row: BitArray, rowNumber: Int64, right: Bool, startEnd: Array<Int64>): FinderPattern {
@@ -405,29 +405,29 @@ public class RSS14Reader <: AbstractRSSReader {
         match (mismatch) {
             case 1 => if (oddParityBad) {
                 if (evenParityBad_) {
-                    throw NotFoundException.getNotFoundInstance();
+                    throw Qrcoder4cjNotFoundException.getNotFoundInstance();
                 }
                 decrementOdd_ = true
             } else {
                 if (!evenParityBad_) {
-                    throw NotFoundException.getNotFoundInstance();
+                    throw Qrcoder4cjNotFoundException.getNotFoundInstance();
                 }
                 decrementEven_ = true
             }
             case -1 => if (oddParityBad) {
                 if (evenParityBad_) {
-                    throw NotFoundException.getNotFoundInstance();
+                    throw Qrcoder4cjNotFoundException.getNotFoundInstance();
                 }
                 incrementOdd = true
             } else {
                 if (!evenParityBad_) {
-                    throw NotFoundException.getNotFoundInstance();
+                    throw Qrcoder4cjNotFoundException.getNotFoundInstance();
                 }
                 incrementEven = true
             }
             case 0 => if (oddParityBad) {
                 if (!evenParityBad_) {
-                    throw NotFoundException.getNotFoundInstance();
+                    throw Qrcoder4cjNotFoundException.getNotFoundInstance();
                 }
 
                 // Both bad
@@ -440,16 +440,16 @@ public class RSS14Reader <: AbstractRSSReader {
                 }
             } else {
                 if (evenParityBad_) {
-                    throw NotFoundException.getNotFoundInstance();
+                    throw Qrcoder4cjNotFoundException.getNotFoundInstance();
                 }
                 /* Nothing to do! */
             }
-            case _ => throw NotFoundException.getNotFoundInstance();
+            case _ => throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
 
         if (incrementOdd) {
             if (decrementOdd_) {
-                throw NotFoundException.getNotFoundInstance();
+                throw Qrcoder4cjNotFoundException.getNotFoundInstance();
             }
             increment(getOddCounts(), getOddRoundingErrors());
         }
@@ -458,7 +458,7 @@ public class RSS14Reader <: AbstractRSSReader {
         }
         if (incrementEven) {
             if (decrementEven_) {
-                throw NotFoundException.getNotFoundInstance();
+                throw Qrcoder4cjNotFoundException.getNotFoundInstance();
             }
             increment(getEvenCounts(), getOddRoundingErrors());
         }

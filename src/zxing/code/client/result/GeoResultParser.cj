@@ -51,7 +51,7 @@ public open class GeoResultParser <: ResultParser {
                     return None
                 }
             }
-        } catch (ignored: FormatException) {
+        } catch (ignored: Qrcoder4cjFormatException) {
             return None
         }
         return GeoParsedResult(latitude, longitude, altitude, query);

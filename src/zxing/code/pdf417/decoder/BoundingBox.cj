@@ -4,7 +4,7 @@
 
 package zxing.code.pdf417.decoder
 
-import zxing.code.common.NotFoundException
+import zxing.code.common.Qrcoder4cjNotFoundException
 import zxing.code.common.ResultPoint
 import zxing.code.common.BitMatrix
 from std import math.*
@@ -37,7 +37,7 @@ open class BoundingBox {
         var leftUnspecified: Bool = !topLeft_.flag || !bottomLeft_.flag
         var rightUnspecified: Bool = !topRight_.flag || !bottomRight_.flag
         if (leftUnspecified && rightUnspecified) {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
         if (leftUnspecified) {
             topLeft_ = ResultPoint(0.0, topRight.getY())

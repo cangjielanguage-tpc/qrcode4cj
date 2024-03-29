@@ -6,10 +6,10 @@ package zxing.code.pdf417
 
 import zxing.code.common.BarcodeFormat
 import zxing.code.common.BinaryBitmap
-import zxing.code.common.ChecksumException
+import zxing.code.common.Qrcoder4cjChecksumException
 import zxing.code.common.DecodeHintType
-import zxing.code.common.FormatException
-import zxing.code.common.NotFoundException
+import zxing.code.common.Qrcoder4cjFormatException
+import zxing.code.common.Qrcoder4cjNotFoundException
 import zxing.code.common.Reader
 import zxing.code.common.Result
 import zxing.code.common.ResultMetadataType
@@ -42,8 +42,8 @@ public open class PDF417Reader <: Reader & MultipleBarcodeReader {
      * Locates and decodes a PDF417 code in an image.
      *
      * @return a String representing the content encoded by the PDF417 code
-     * @throws NotFoundException if a PDF417 code cannot be found,
-     * @throws FormatException if a PDF417 cannot be decoded
+     * @throws Qrcoder4cjNotFoundException if a PDF417 code cannot be found,
+     * @throws Qrcoder4cjFormatException if a PDF417 cannot be decoded
      */
     public func decode(image: BinaryBitmap): Result {
         return decode(image, HashMap<DecodeHintType, Any>());
@@ -52,7 +52,7 @@ public open class PDF417Reader <: Reader & MultipleBarcodeReader {
     public func decode(image: BinaryBitmap, hints: HashMap<DecodeHintType, Any>): Result {
         let result: Array<Result> = Decode(image, hints, false, flagReadSecond);
         if (result.size == 0 || result[0].flag == false) {
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
         return result[0]
     }
@@ -64,8 +64,8 @@ public open class PDF417Reader <: Reader & MultipleBarcodeReader {
     public func decodeMultiple(image: BinaryBitmap, hints: HashMap<DecodeHintType, Any>): Array<Result> {
         try {
             return Decode(image, hints, true, flagReadSecond);
-        } catch (ignored: FormatException | ChecksumException) {
-            throw NotFoundException.getNotFoundInstance();
+        } catch (ignored: Qrcoder4cjFormatException | Qrcoder4cjChecksumException) {
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
     }
 

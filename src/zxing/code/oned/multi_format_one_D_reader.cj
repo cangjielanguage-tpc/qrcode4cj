@@ -73,13 +73,13 @@ public open class MultiFormatOneDReader <: OneDReader {
             try {
                 var result = readers[i].decodeRow(rowNumber, row, hints);
                 return result
-            } catch (re: ReaderException) {
+            } catch (re: Qrcoder4cjReaderException) {
                 if (Thread.currentThread.hasPendingCancellation) {
                     return Result()
                 }
             }
         }
-        throw NotFoundException.getNotFoundInstance();
+        throw Qrcoder4cjNotFoundException.getNotFoundInstance();
     }
 
     public override func reset() {

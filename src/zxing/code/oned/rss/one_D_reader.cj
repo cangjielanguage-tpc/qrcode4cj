@@ -19,7 +19,7 @@ public abstract class OneDReader <: Reader {
     public open override func decode(image: BinaryBitmap, hints: HashMap<DecodeHintType, Any>): Result {
         try {
             return doDecode(image, hints)
-        } catch (nfe: NotFoundException) {
+        } catch (nfe: Qrcoder4cjNotFoundException) {
             var tryHarder: Bool = hints.size != 0 && hints.contains(DecodeHintType.TRY_HARDER)
             if (tryHarder && image.isRotateSupported()) {
                 var rotatedImage: BinaryBitmap = image.rotateCounterClockwise()
@@ -48,7 +48,7 @@ public abstract class OneDReader <: Reader {
                 return result
             } else {
                 //throw nfe
-                throw NotFoundException();
+                throw Qrcoder4cjNotFoundException();
             }
         }
     }
@@ -70,7 +70,7 @@ public abstract class OneDReader <: Reader {
      * @param hints Any hints that were requested
      *
      * @return The contents of the decoded barcode
-     * @throws NotFoundException Any spontaneous errors which occur
+     * @throws Qrcoder4cjNotFoundException Any spontaneous errors which occur
      */
     private func doDecode(image: BinaryBitmap, hints: HashMap<DecodeHintType, Any>): Result {
         var width: Int64 = image.getWidth()
@@ -108,7 +108,7 @@ public abstract class OneDReader <: Reader {
             // Estimate black point for this row and load it:
             try {
                 row = image.getBlackRow(rowNumber, row)
-            } catch (ignored: NotFoundException) {
+            } catch (ignored: Qrcoder4cjNotFoundException) {
                 continue
             }
 
@@ -132,13 +132,13 @@ public abstract class OneDReader <: Reader {
                 }
                 try {
                     return getdoDecodeResult(rowNumber, row, hintsuse, width, attempt)
-                } catch (re: ReaderException) {
+                } catch (re: Qrcoder4cjReaderException) {
                     // continue -- just couldn't decode this row
                 }
             }
         }
 
-        throw NotFoundException.getNotFoundInstance()
+        throw Qrcoder4cjNotFoundException.getNotFoundInstance()
     }
 
     private func getrowNumber(isAbove: Bool, middle: Int64, rowStep: Int64, rowStepsAboveOrBelow: Int64) {
@@ -179,7 +179,7 @@ public abstract class OneDReader <: Reader {
      * @param start offset into row to start at
      * @param counters the array into which to record counts
      *
-     * @throws NotFoundException if counters cannot be filled entirely from row before running out of pixels
+     * @throws Qrcoder4cjNotFoundException if counters cannot be filled entirely from row before running out of pixels
      */
     protected static func recordPattern(row: BitArray, start: Int64, counters: Array<Int64>) {
         var numCounters: Int64 = counters.size
@@ -191,7 +191,7 @@ public abstract class OneDReader <: Reader {
         }
 
         if (start >= end) {
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
         var isWhite: Bool = !row.get(start)
         var counterPosition_: Int64 = 0
@@ -214,7 +214,7 @@ public abstract class OneDReader <: Reader {
         /* If we read fully the last section of pixels and filled up our counters -- or filled */ 
         /* the last counter but ran off the side of the image, OK. Otherwise, a problem. */ 
         if (!(counterPosition_ == numCounters || (counterPosition_ == numCounters - 1 && i == end))) {
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
     }
 
@@ -232,7 +232,7 @@ public abstract class OneDReader <: Reader {
             }
         }
         if (numTransitionsLeft >= 0) {
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
         recordPattern(row, startuse + 1, counters)
     }
@@ -305,9 +305,9 @@ public abstract class OneDReader <: Reader {
      *
      * @return Result containing encoded string and start/end of barcode
      *
-     * @throws NotFoundException if no the potential barcode is found
-     * @throws ChecksumException if a potential barcode is found but does not pass its checksum
-     * @throws FormatException if a potential barcode is found but format is invalid
+     * @throws Qrcoder4cjNotFoundException if no the potential barcode is found
+     * @throws Qrcoder4cjChecksumException if a potential barcode is found but does not pass its checksum
+     * @throws Qrcoder4cjFormatException if a potential barcode is found but format is invalid
      */
     public func decodeRow(rowNumber: Int64, row: BitArray, hints: HashMap<DecodeHintType, Any>): Result
 }

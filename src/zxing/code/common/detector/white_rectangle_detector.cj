@@ -31,10 +31,10 @@ public class WhiteRectangleDetector {
             upInit = yy - halfsize
             downInit = yy + halfsize
             if (upInit < 0 || leftInit < 0 || downInit >= height || rightInit >= width) {
-                throw NotFoundException.getNotFoundInstance()
+                throw Qrcoder4cjNotFoundException.getNotFoundInstance()
             }
         } catch (e: Exception) {
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
     }
 
@@ -44,7 +44,7 @@ public class WhiteRectangleDetector {
      * @param x x position value of search center
      * @param y y position value of search center
      *
-     * @throws NotFoundException if image is too small to accommodate {@code initSize}
+     * @throws Qrcoder4cjNotFoundException if image is too small to accommodate {@code initSize}
      */
     public init(image: BitMatrix, initSize: Int64, x: Int64, y: Int64) {
         try {
@@ -57,10 +57,10 @@ public class WhiteRectangleDetector {
             upInit = y - halfsize
             downInit = y + halfsize
             if (upInit < 0 || leftInit < 0 || downInit >= height || rightInit >= width) {
-                throw NotFoundException.getNotFoundInstance()
+                throw Qrcoder4cjNotFoundException.getNotFoundInstance()
             }
         } catch (e: Exception) {
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
     }
 
@@ -74,7 +74,7 @@ public class WhiteRectangleDetector {
      * are the second and third. The first point will be the topmost point
      * and the last, the bottommost. The second point will be
      * leftmost and the third, the rightmost
-     * @throws NotFoundException if no Data Matrix Code can be found
+     * @throws Qrcoder4cjNotFoundException if no Data Matrix Code can be found
      */
     public func detect(): Array<ResultPoint> {
         var left_ = leftInit
@@ -190,7 +190,7 @@ public class WhiteRectangleDetector {
             }
 
             if (z.flag == false) {
-                throw NotFoundException.getNotFoundInstance()
+                throw Qrcoder4cjNotFoundException.getNotFoundInstance()
             }
 
             var t: ResultPoint = ResultPoint()
@@ -203,7 +203,7 @@ public class WhiteRectangleDetector {
             }
 
             if (t.flag == false) {
-                throw NotFoundException.getNotFoundInstance()
+                throw Qrcoder4cjNotFoundException.getNotFoundInstance()
             }
 
             var x: ResultPoint = ResultPoint()
@@ -216,7 +216,7 @@ public class WhiteRectangleDetector {
             }
 
             if (x.flag == false) {
-                throw NotFoundException.getNotFoundInstance()
+                throw Qrcoder4cjNotFoundException.getNotFoundInstance()
             }
 
             var y: ResultPoint = ResultPoint()
@@ -229,12 +229,12 @@ public class WhiteRectangleDetector {
             }
 
             if (y.flag == false) {
-                throw NotFoundException.getNotFoundInstance()
+                throw Qrcoder4cjNotFoundException.getNotFoundInstance()
             }
 
             return centerEdges(y, z, x, t)
         } else {
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
     }
 

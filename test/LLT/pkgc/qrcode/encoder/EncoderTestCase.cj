@@ -142,7 +142,7 @@ public class EncoderTestCase {
             hints.put(EncodeHintType.QR_VERSION, 3);
             Encoder.encode("THISMESSAGEISTOOLONGFORAQRCODEVERSION3", ErrorCorrectionLevel.H(0x02), hints);
             @Assert(false)
-        } catch (e: WriterException) {}
+        } catch (e: Qrcoder4cjWriterException) {}
     }
 
     @TestCase
@@ -339,7 +339,7 @@ public class EncoderTestCase {
                 Encoder.DEFAULT_BYTE_MODE_ENCODING
             );
             @Assert(false)
-        } catch (we: WriterException) {
+        } catch (we: Qrcoder4cjWriterException) {
             // good
         }
 
@@ -765,7 +765,7 @@ public class EncoderTestCase {
         // Invalid data.
         try {
             Encoder.appendAlphanumericBytes(UTF32String("abc"), BitArray());
-        } catch (we: WriterException) {
+        } catch (we: Qrcoder4cjWriterException) {
             // good
         }
     }

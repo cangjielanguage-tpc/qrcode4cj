@@ -4,7 +4,7 @@
 
 package zxing.code.pdf417.decoder
 
-import zxing.code.common.ChecksumException
+import zxing.code.common.Qrcoder4cjChecksumException
 import zxing.code.pdf417.decoder.ec.ErrorCorrection
 from std import time.*
 
@@ -86,7 +86,7 @@ public open class PDF417ScanningDecoder {
                     firstPass = false
                 }
             } else {
-                throw NotFoundException.getNotFoundInstance();
+                throw Qrcoder4cjNotFoundException.getNotFoundInstance();
             }
         }
 
@@ -352,7 +352,7 @@ public open class PDF417ScanningDecoder {
             detectionResult.getBarcodeRowCount() - getNumberOfECCodeWords(detectionResult.getBarcodeECLevel())
         if (numberOfCodewords.size == 0) {
             if (calculatedNumberOfCodewords < 1 || calculatedNumberOfCodewords > PDF417Common.MAX_CODEWORDS_IN_BARCODE) {
-                throw NotFoundException.getNotFoundInstance();
+                throw Qrcoder4cjNotFoundException.getNotFoundInstance();
             }
             barcodeMatrix01.setValue(calculatedNumberOfCodewords);
         } else if (numberOfCodewords[0] != calculatedNumberOfCodewords && calculatedNumberOfCodewords >= 1 &&
@@ -431,11 +431,11 @@ public open class PDF417ScanningDecoder {
             }
             try {
                 return decodeCodewords(codewords, ecLevel, erasureArray);
-            } catch (ignored: ChecksumException) {
+            } catch (ignored: Qrcoder4cjChecksumException) {
                 //
             }
             if (ambiguousIndexCount.size == 0) {
-                throw ChecksumException.getChecksumInstance();
+                throw Qrcoder4cjChecksumException.getChecksumInstance();
             }
 
             for (i in 0..ambiguousIndexCount.size) {
@@ -445,13 +445,13 @@ public open class PDF417ScanningDecoder {
                 } else {
                     ambiguousIndexCount[i] = 0
                     if (i == ambiguousIndexCount.size - 1) {
-                        throw ChecksumException.getChecksumInstance();
+                        throw Qrcoder4cjChecksumException.getChecksumInstance();
                     }
                 }
             }
             tries--
         }
-        throw ChecksumException.getChecksumInstance();
+        throw Qrcoder4cjChecksumException.getChecksumInstance();
     }
 
     static func createBarcodeMatrix(detectionResult: DetectionResult): Array<Array<BarcodeValue>> {
@@ -727,7 +727,7 @@ public open class PDF417ScanningDecoder {
 
     static func decodeCodewords(codewords: Array<Int64>, ecLevel: Int64, erasures: Array<Int64>): DecoderResult {
         if (codewords.size == 0) {
-            throw FormatException.getFormatInstance();
+            throw Qrcoder4cjFormatException.getFormatInstance();
         }
 
         var numECCodewords: Int64 = 1 << (ecLevel + 1)
@@ -748,12 +748,12 @@ public open class PDF417ScanningDecoder {
      * @param codewords   data and error correction codewords
      * @param erasures positions of any known erasures
      * @param numECCodewords number of error correction codewords that are available in codewords
-     * @throws ChecksumException if error correction fails
+     * @throws Qrcoder4cjChecksumException if error correction fails
      */
     static func correctErrors(codewords: Array<Int64>, erasures: Array<Int64>, numECCodewords: Int64): Int64 {
         if (erasures.size > numECCodewords / 2 + MAX_ERRORS || numECCodewords < 0 || numECCodewords > MAX_EC_CODEWORDS) {
             // Too many errors or EC Codewords is corrupted
-            throw ChecksumException.getChecksumInstance();
+            throw Qrcoder4cjChecksumException.getChecksumInstance();
         }
         return errorCorrection.decode(codewords, numECCodewords, erasures);
     }
@@ -765,7 +765,7 @@ public open class PDF417ScanningDecoder {
         if (codewords.size < 4) {
             // Codeword array size should be at least 4 allowing for
             // Count CW, At least one Data CW, Error Correction CW, Error Correction CW
-            throw FormatException.getFormatInstance();
+            throw Qrcoder4cjFormatException.getFormatInstance();
         }
 
         // The first codeword, the Symbol Length Descriptor, shall always encode the total number of data
@@ -773,14 +773,14 @@ public open class PDF417ScanningDecoder {
         // codewords, but excluding the number of error correction codewords.
         var numberOfCodewords: Int64 = codewords[0]
         if (numberOfCodewords > codewords.size) {
-            throw FormatException.getFormatInstance();
+            throw Qrcoder4cjFormatException.getFormatInstance();
         }
         if (numberOfCodewords == 0) {
             // Reset to the length of the array - 8 (Allow for at least level 3 Error Correction (8 Error Codewords)
             if (numECCodewords < codewords.size) {
                 codewords[0] = codewords.size - numECCodewords
             } else {
-                throw FormatException.getFormatInstance();
+                throw Qrcoder4cjFormatException.getFormatInstance();
             }
         }
     }

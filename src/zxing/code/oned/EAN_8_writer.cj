@@ -34,7 +34,7 @@ public open class EAN8Writer <: UPCEANWriter {
                 var check: Int64
                 try {
                     check = UPCEANReader.getStandardUPCEANChecksum(contents)
-                } catch (fe: FormatException) {
+                } catch (fe: Qrcoder4cjFormatException) {
                     throw IllegalArgumentException(fe.toString());
                 }
                 contents = contents + UTF32String(check.toString())
@@ -43,7 +43,7 @@ public open class EAN8Writer <: UPCEANWriter {
                 if (!UPCEANReader.checkStandardUPCEANChecksum(contents)) {
                     throw IllegalArgumentException("Contents do not pass checksum");
                 }
-            } catch (ignored: FormatException) {
+            } catch (ignored: Qrcoder4cjFormatException) {
                 throw IllegalArgumentException("Illegal contents");
             }
             case _ => throw IllegalArgumentException(

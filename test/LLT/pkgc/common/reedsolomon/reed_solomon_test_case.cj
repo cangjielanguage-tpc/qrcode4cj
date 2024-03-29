@@ -2702,7 +2702,7 @@ public class ReedSolomonTestCase {
                 corrupt(message, i, random, field.getSize(), filename);
                 try {
                     decoder.decode(message, ecWords.size);
-                } catch (e: ReedSolomonException) {
+                } catch (e: Qrcoder4cjReedSolomonException) {
                     // fail only if maxErrors exceeded
                     assertTrue(
                         "Decode in " + field.toString() + " (" + dataWords.size.toString() + "," +

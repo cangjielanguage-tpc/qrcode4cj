@@ -12,7 +12,7 @@ public interface Writer {
      * @param width The preferred width in pixels
      * @param height The preferred height in pixels
      * @return {@link BitMatrix} representing encoded barcode image
-     * @throws WriterException if contents cannot be encoded legally in a format
+     * @throws Qrcoder4cjWriterException if contents cannot be encoded legally in a format
      */
     func encode(contents: String, format: BarcodeFormat, width: Int64, height: Int64): BitMatrix
 
@@ -23,7 +23,7 @@ public interface Writer {
      * @param height The preferred height in pixels
      * @param hints Additional parameters to supply to the encoder
      * @return {@link BitMatrix} representing encoded barcode image
-     * @throws WriterException if contents cannot be encoded legally in a format
+     * @throws Qrcoder4cjWriterException if contents cannot be encoded legally in a format
      */
     func encode(
         contents: String,

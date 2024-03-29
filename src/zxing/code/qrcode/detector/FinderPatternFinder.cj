@@ -692,7 +692,7 @@ public open class FinderPatternFinder {
     /**
      * @return the 3 best FinderPattern from our list of candidates. The "best" are
      * those have similar module size and form a shape closer to a isosceles right triangle.
-     * @throws NotFoundException if 3 such finder patterns do not exist
+     * @throws Qrcoder4cjNotFoundException if 3 such finder patterns do not exist
      */
     func moduleSizeComparator(p1: FinderPattern, p2: FinderPattern): Ordering {
         if (p1.estimatedModuleSize < p2.estimatedModuleSize) {
@@ -708,7 +708,7 @@ public open class FinderPatternFinder {
         let startSize: Int64 = possibleCenters.size;
         if (startSize < 3) {
             // Couldn't find enough finder patterns
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
 
         var itemnum: Int64 = 0;
@@ -738,7 +738,7 @@ public open class FinderPatternFinder {
         }
 
         if (distortion == Float32.Max) {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
 
         return bestPatterns

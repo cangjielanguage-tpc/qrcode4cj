@@ -109,7 +109,7 @@ public class RSSExpandedImage2resultTestCase {
         try {
             var rssExpandedReader: RSSExpandedReader = RSSExpandedReader();
             theResult = rssExpandedReader.decodeRow(rowNumber, row, HashMap<DecodeHintType, Any>())
-        } catch (re: ReaderException) {
+        } catch (re: Qrcoder4cjReaderException) {
             return;
         }
 

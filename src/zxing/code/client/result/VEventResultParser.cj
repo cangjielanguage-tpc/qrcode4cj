@@ -4,7 +4,7 @@
 
 package zxing.code.client.result
 
-import zxing.code.common.FormatException
+import zxing.code.common.Qrcoder4cjFormatException
 from std import convert.*
 
 public open class VEventResultParser <: ResultParser {
@@ -49,7 +49,7 @@ public open class VEventResultParser <: ResultParser {
             try {
                 latitude = Float64.parse(geoString.substring(0, semicolon).toString())
                 longitude = Float64.parse(geoString.substring(semicolon + 1).toString())
-            } catch (ignored: FormatException) {
+            } catch (ignored: Qrcoder4cjFormatException) {
                 return None
             }
         }

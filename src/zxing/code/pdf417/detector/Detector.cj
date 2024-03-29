@@ -6,7 +6,7 @@ package zxing.code.pdf417.detector
 
 import zxing.code.common.BinaryBitmap
 import zxing.code.common.DecodeHintType
-import zxing.code.common.NotFoundException
+import zxing.code.common.Qrcoder4cjNotFoundException
 import zxing.code.common.EncodeHintType
 import zxing.code.tools.System
 from std import math.*
@@ -53,7 +53,7 @@ public open class Detector {
      * and returned
      *
      * @return PDF417DetectorResult encapsulating results of detecting a PDF417 code
-     * @throws NotFoundException if no PDF417 Code can be found
+     * @throws Qrcoder4cjNotFoundException if no PDF417 Code can be found
      */
     public static func detect(
         image: BinaryBitmap,

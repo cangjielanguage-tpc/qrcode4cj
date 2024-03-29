@@ -2,10 +2,10 @@ package zxing.code.maxicode
 
 import zxing.code.common.BarcodeFormat
 import zxing.code.common.BinaryBitmap
-import zxing.code.common.ChecksumException
+import zxing.code.common.Qrcoder4cjChecksumException
 import zxing.code.common.DecodeHintType
-import zxing.code.common.FormatException
-import zxing.code.common.NotFoundException
+import zxing.code.common.Qrcoder4cjFormatException
+import zxing.code.common.Qrcoder4cjNotFoundException
 import zxing.code.common.Reader
 import zxing.code.common.Result
 import zxing.code.common.ResultMetadataType
@@ -31,9 +31,9 @@ public class MaxiCodeReader <: Reader {
      * Locates and decodes a MaxiCode in an image.
      *
      * @return a String representing the content encoded by the MaxiCode
-     * @throws NotFoundException if a MaxiCode cannot be found
-     * @throws FormatException if a MaxiCode cannot be decoded
-     * @throws ChecksumException if error correction fails
+     * @throws Qrcoder4cjNotFoundException if a MaxiCode cannot be found
+     * @throws Qrcoder4cjFormatException if a MaxiCode cannot be decoded
+     * @throws Qrcoder4cjChecksumException if error correction fails
      */
     public func decode(image: BinaryBitmap): Result {
         return decode(image, HashMap<DecodeHintType, Any>())
@@ -71,7 +71,7 @@ public class MaxiCodeReader <: Reader {
     private static func extractPureBits(image: BitMatrix): BitMatrix {
         var enclosingRectangle: Array<Int64> = (image.getEnclosingRectangle())
         if (enclosingRectangle.size == 0) {
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
 
         var left: Int64 = enclosingRectangle[0]

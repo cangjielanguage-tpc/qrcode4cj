@@ -119,9 +119,9 @@ public abstract class UPCEANReader <: OneDReader {
      * @param hints optional hints that influence decoding
      *
      * @return Result encapsulating the result of decoding a barcode in the row
-     * @throws NotFoundException if no potential barcode is found
-     * @throws ChecksumException if a potential barcode is found but does not pass its checksum
-     * @throws FormatException if a potential barcode is found but format is invalid
+     * @throws Qrcoder4cjNotFoundException if no potential barcode is found
+     * @throws Qrcoder4cjChecksumException if a potential barcode is found but does not pass its checksum
+     * @throws Qrcoder4cjFormatException if a potential barcode is found but format is invalid
      */
     public open func decodeRow(
         rowNumber: Int64,
@@ -168,17 +168,17 @@ public abstract class UPCEANReader <: OneDReader {
         var end: Int64 = endRange[1]
         var quietEnd: Int64 = end + (end - endRange[0])
         if (quietEnd >= row.getSize() || !row.isRange(end, quietEnd, false)) {
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
 
         var resultString: UTF32String = UTF32String(result)
 
         // UPC/EAN should never be less than 8 chars anyway
         if (resultString.charSize < 8) {
-            throw FormatException.getFormatInstance()
+            throw Qrcoder4cjFormatException.getFormatInstance()
         }
         if (!checkChecksum(resultString)) {
-            throw ChecksumException.getChecksumInstance()
+            throw Qrcoder4cjChecksumException.getChecksumInstance()
         }
 
         var left: Float32 = Float32(startGuardRange[1] + startGuardRange[0]) / 2.0
@@ -206,7 +206,7 @@ public abstract class UPCEANReader <: OneDReader {
                 decodeResult.addResultPoints(extensionResult.getResultPoints())
                 extensionLength = extensionResult.getText().toRuneArray().size
             }
-        } catch (re: ReaderException) {
+        } catch (re: Qrcoder4cjReaderException) {
             // continue
         }
         exdecoderow(hints, extensionLength)
@@ -250,7 +250,7 @@ public abstract class UPCEANReader <: OneDReader {
                 }
             }
             if (!valid) {
-                throw NotFoundException.getNotFoundInstance()
+                throw Qrcoder4cjNotFoundException.getNotFoundInstance()
             }
         }
     }
@@ -258,7 +258,7 @@ public abstract class UPCEANReader <: OneDReader {
     /**
      * @param s string of digits to check
      * @return checkStandardUPCEANChecksum(String)
-     * @throws FormatException if the string does not contain only digits
+     * @throws Qrcoder4cjFormatException if the string does not contain only digits
      */
     protected open func checkChecksum(s: UTF32String): Bool {
         return checkStandardUPCEANChecksum(s)
@@ -271,7 +271,7 @@ public abstract class UPCEANReader <: OneDReader {
      * @param s the string of digits to check
      *
      * @return true iff string of the digits passes the UPC/EAN checksum algorithm
-     * @throws FormatException if the string does not contain only digits
+     * @throws Qrcoder4cjFormatException if the string does not contain only digits
      */
     static func checkStandardUPCEANChecksum(s: UTF32String): Bool {
         var length: Int64 = s.charSize
@@ -292,7 +292,7 @@ public abstract class UPCEANReader <: OneDReader {
         while (i >= 0) {
             var digit: Int64 = s.get(i).hashCode() - '0'.hashCode()
             if (digit < 0 || digit > 9) {
-                throw FormatException.getFormatInstance()
+                throw Qrcoder4cjFormatException.getFormatInstance()
             }
             sum += digit
             i -= 2
@@ -302,7 +302,7 @@ public abstract class UPCEANReader <: OneDReader {
         while (i >= 0) {
             var digit: Int64 = s.get(i).hashCode() - '0'.hashCode()
             if (digit < 0 || digit > 9) {
-                throw FormatException.getFormatInstance()
+                throw Qrcoder4cjFormatException.getFormatInstance()
             }
             sum += digit
             i -= 2
@@ -328,7 +328,7 @@ public abstract class UPCEANReader <: OneDReader {
      * @param counters array of counters, as long as pattern, to re-use
      *
      * @return start/end horizontal offset of guard pattern, as an array of two ints
-     * @throws NotFoundException if pattern is not found
+     * @throws Qrcoder4cjNotFoundException if pattern is not found
      */
     private static func findGuardPattern(
         row: BitArray,
@@ -370,7 +370,7 @@ public abstract class UPCEANReader <: OneDReader {
                 isWhite = !isWhite
             }
         }
-        throw NotFoundException.getNotFoundInstance()
+        throw Qrcoder4cjNotFoundException.getNotFoundInstance()
     }
 
     /**
@@ -383,7 +383,7 @@ public abstract class UPCEANReader <: OneDReader {
      * the digits 0-9 are used, and this indicates the encodings for 0 to 9 that should be used
      *
      * @return horizontal offset of first pixel beyond the decoded digit
-     * @throws NotFoundException if digit cannot be decoded
+     * @throws Qrcoder4cjNotFoundException if digit cannot be decoded
      */
     static func decodeDigit(row: BitArray, counters: Array<Int64>, rowOffset: Int64, patterns: Array<Array<Int64>>): Int64 {
         recordPattern(row, rowOffset, counters)
@@ -404,7 +404,7 @@ public abstract class UPCEANReader <: OneDReader {
         if (bestMatch_ >= 0) {
             return bestMatch_
         } else {
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
     }
 
@@ -424,7 +424,7 @@ public abstract class UPCEANReader <: OneDReader {
      * @param resultString {@link StringBuilder} to append decoded chars to
      *
      * @return horizontal offset of first pixel after the "middle" that was decoded
-     * @throws NotFoundException if decoding could not complete successfully
+     * @throws Qrcoder4cjNotFoundException if decoding could not complete successfully
      */
     protected func decodeMiddle(
         row: BitArray,

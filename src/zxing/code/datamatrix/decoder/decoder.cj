@@ -3,10 +3,10 @@
  */
 package zxing.code.datamatrix.decoder
 
-import zxing.code.common.ChecksumException
+import zxing.code.common.Qrcoder4cjChecksumException
 import zxing.code.common.reedsolomon.GenericGF
 import zxing.code.common.reedsolomon.ReedSolomonDecoder
-import zxing.code.common.reedsolomon.ReedSolomonException
+import zxing.code.common.reedsolomon.Qrcoder4cjReedSolomonException
 
 /**
  * The main class which implements Data Matrix Code decoding -- as opposed to locating and extracting
@@ -25,8 +25,8 @@ public class Decoder {
      *
      * @param image booleans representing white/black Data Matrix Code modules
      * @return text and bytes encoded within the Data Matrix Code
-     * @throws FormatException if the Data Matrix Code cannot be decoded
-     * @throws ChecksumException if error correction fails
+     * @throws Qrcoder4cjFormatException if the Data Matrix Code cannot be decoded
+     * @throws Qrcoder4cjChecksumException if error correction fails
      */
     public func decode(image: Array<Bool>): DecoderResult {
         return decode(BitMatrix.parse(image));
@@ -38,8 +38,8 @@ public class Decoder {
      *
      * @param bits booleans representing white/black Data Matrix Code modules
      * @return text and bytes encoded within the Data Matrix Code
-     * @throws FormatException if the Data Matrix Code cannot be decoded
-     * @throws ChecksumException if error correction fails
+     * @throws Qrcoder4cjFormatException if the Data Matrix Code cannot be decoded
+     * @throws Qrcoder4cjChecksumException if error correction fails
      */
     public func decode(bits: BitMatrix): DecoderResult {
         // Construct a parser and read version, error-correction level
@@ -85,7 +85,7 @@ public class Decoder {
      *
      * @param codewordBytes data and error correction codewords
      * @param numDataCodewords number of codewords that are data bytes
-     * @throws ChecksumException if error correction fails
+     * @throws Qrcoder4cjChecksumException if error correction fails
      */
     private func correctErrors(codewordBytes: Array<UInt8>, numDataCodewords: Int64) {
         let numCodewords: Int64 = codewordBytes.size;
@@ -98,8 +98,8 @@ public class Decoder {
         }
         try {
             rsDecoder.decode(codewordsInts, codewordBytes.size - numDataCodewords);
-        } catch (ignored: ReedSolomonException) {
-            throw ChecksumException.getChecksumInstance();
+        } catch (ignored: Qrcoder4cjReedSolomonException) {
+            throw Qrcoder4cjChecksumException.getChecksumInstance();
         }
 
         // Copy back into array of bytes -- only need to worry about the bytes that were data

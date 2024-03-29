@@ -38,7 +38,7 @@ public class BinaryBitmap {
      * @param row An optional preallocated array. If null or too small, it will be ignored.
      * If used, the Binarizer will call BitArray.clear(). Always use the returned object.
      * @return The array of bits for this row (true means black).
-     * @throws NotFoundException if row can't be binarized
+     * @throws Qrcoder4cjNotFoundException if row can't be binarized
      */
     @OverflowThrowing
     public func getBlackRow(y: Int64, row: BitArray): BitArray {
@@ -52,7 +52,7 @@ public class BinaryBitmap {
      * fetched using getBlackRow(), so don't mix and match between them.
      *
      * @return The 2D array of bits for the image (true means black).
-     * @throws NotFoundException if image can't be binarized to make a matrix
+     * @throws Qrcoder4cjNotFoundException if image can't be binarized to make a matrix
      */
     @OverflowThrowing
     public func getBlackMatrix(): BitMatrix {

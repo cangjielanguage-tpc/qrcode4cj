@@ -3,7 +3,7 @@
  */
 package zxing.code.qrcode.decoder
 
-import zxing.code.common.FormatException
+import zxing.code.common.Qrcoder4cjFormatException
 import zxing.code.common.BitMatrix
 
 public class ECB {
@@ -156,16 +156,16 @@ public class Version <: ToString {
      *
      * @param dimension dimension in modules
      * @return Version for a QR Code of that dimension
-     * @throws FormatException if dimension is not 1 mod 4
+     * @throws Qrcoder4cjFormatException if dimension is not 1 mod 4
      */
     public static func getProvisionalVersionForDimension(dimension: Int64): Version {
         if (dimension % 4 != 1) {
-            throw FormatException.getFormatInstance();
+            throw Qrcoder4cjFormatException.getFormatInstance();
         }
         try {
             return getVersionForNumber((dimension - 17) / 4);
         } catch (ignored: IllegalArgumentException) {
-            throw FormatException.getFormatInstance();
+            throw Qrcoder4cjFormatException.getFormatInstance();
         }
     }
 

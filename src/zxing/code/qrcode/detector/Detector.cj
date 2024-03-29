@@ -3,7 +3,7 @@
  */
 package zxing.code.qrcode.detector
 
-import zxing.code.common.FormatException
+import zxing.code.common.Qrcoder4cjFormatException
 import zxing.code.common.DetectorResult
 import zxing.code.common.GridSampler
 import zxing.code.common.PerspectiveTransform
@@ -37,8 +37,8 @@ public open class Detector {
      * <p>Detects a QR Code in an image.</p>
      *
      * @return {@link DetectorResult} encapsulating results of detecting a QR Code
-     * @throws NotFoundException if QR Code cannot be found
-     * @throws FormatException if a QR Code cannot be decoded
+     * @throws Qrcoder4cjNotFoundException if QR Code cannot be found
+     * @throws Qrcoder4cjFormatException if a QR Code cannot be decoded
      */
     public func detect(): DetectorResult {
         return detect(HashMap<DecodeHintType, Any>());
@@ -49,8 +49,8 @@ public open class Detector {
      *
      * @param hints optional hints to detector
      * @return {@link DetectorResult} encapsulating results of detecting a QR Code
-     * @throws NotFoundException if QR Code cannot be found
-     * @throws FormatException if a QR Code cannot be decoded
+     * @throws Qrcoder4cjNotFoundException if QR Code cannot be found
+     * @throws Qrcoder4cjFormatException if a QR Code cannot be decoded
      */
     public func detect(hints: HashMap<DecodeHintType, Any>): DetectorResult {
         resultPointCallback = hints.get(DecodeHintType.NEED_RESULT_POINT_CALLBACK) as ResultPointCallback
@@ -66,7 +66,7 @@ public open class Detector {
 
         let moduleSize: Float64 = calculateModuleSize(topLeft, topRight, bottomLeft);
         if (moduleSize < 1.0f64) {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
         let dimension: Int64 = computeDimension(topLeft, topRight, bottomLeft, moduleSize);
         let provisionalVersion: Version = Version.getProvisionalVersionForDimension(dimension);
@@ -99,7 +99,7 @@ public open class Detector {
                         Float64(i)
                     )
                     break
-                } catch (re: NotFoundException) {
+                } catch (re: Qrcoder4cjNotFoundException) {
                     // try next round
                 }
                 i <<= 1
@@ -195,7 +195,7 @@ public open class Detector {
 
             // 1? do nothing
             case 2 => dimension--
-            case 3 => throw NotFoundException.getNotFoundInstance();
+            case 3 => throw Qrcoder4cjNotFoundException.getNotFoundInstance();
             case _ => ()
         }
         return dimension
@@ -402,7 +402,7 @@ public open class Detector {
      * @param estAlignmentY y coordinate of above
      * @param allowanceFactor number of pixels in all directions to search from the center
      * @return {@link AlignmentPattern} if found, or null otherwise
-     * @throws NotFoundException if an unexpected error occurs during detection
+     * @throws Qrcoder4cjNotFoundException if an unexpected error occurs during detection
      */
     private func findAlignmentInRegion(
         overallEstModuleSize: Float64,
@@ -416,13 +416,13 @@ public open class Detector {
         let alignmentAreaLeftX: Int64 = max(0, estAlignmentX - allowance);
         let alignmentAreaRightX: Int64 = min(image.getWidth() - 1, estAlignmentX + allowance);
         if (alignmentAreaRightX - alignmentAreaLeftX < Int64(overallEstModuleSize * 3.0f64)) {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
 
         let alignmentAreaTopY: Int64 = max(0, estAlignmentY - allowance);
         let alignmentAreaBottomY: Int64 = min(image.getHeight() - 1, estAlignmentY + allowance);
         if (alignmentAreaBottomY - alignmentAreaTopY < Int64(overallEstModuleSize * 3.0f64)) {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
         var alignmentFinder: AlignmentPatternFinder = AlignmentPatternFinder(
             image,

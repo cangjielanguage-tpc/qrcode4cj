@@ -9,16 +9,16 @@ package zxing.code.common
  *
  * @author Sean Owen
  */
-public open class NotFoundException <: ReaderException {
+public open class Qrcoder4cjNotFoundException <: Qrcoder4cjReaderException {
     public init() {
-        super("NotFoundException")
+        super("Qrcoder4cjNotFoundException")
     }
 
     public init(msg: String) {
-        super("NotFoundException: ${msg}")
+        super("Qrcoder4cjNotFoundException: ${msg}")
     }
 
-    public static func getNotFoundInstance(): NotFoundException {
-        return NotFoundException()
+    public static func getNotFoundInstance(): Qrcoder4cjNotFoundException {
+        return Qrcoder4cjNotFoundException()
     }
 }

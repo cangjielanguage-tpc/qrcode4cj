@@ -26,7 +26,7 @@ from QRCode4cj import zxing.code.common.BarcodeFormat
 from QRCode4cj import zxing.code.common.BinaryBitmap
 from QRCode4cj import zxing.code.common.DecodeHintType
 from QRCode4cj import zxing.code.common.LuminanceSource
-from QRCode4cj import zxing.code.common.ReaderException
+from QRCode4cj import zxing.code.common.Qrcoder4cjReaderException
 from QRCode4cj import zxing.code.common.Result
 from QRCode4cj import zxing.code.common.ResultMetadataType
 from QRCode4cj import zxing.code.common.HybridBinarizer
@@ -125,7 +125,7 @@ public open class PDF417BlackBox4TestCase {
 
                     try {
                         results.appendAll(decode(bitmap, false));
-                    } catch (ignored: ReaderException) {
+                    } catch (ignored: Qrcoder4cjReaderException) {
                         // ignore
                     }
                 }

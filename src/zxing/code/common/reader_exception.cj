@@ -5,7 +5,7 @@ package zxing.code.common
 
 from std import os.*
 
-public open class ReaderException <: Exception {
+public open class Qrcoder4cjReaderException <: Exception {
     public init() {
         super()
     }

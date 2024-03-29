@@ -141,7 +141,7 @@ public class AbstractNegativeBlackBoxTestCase <: AbstractBlackBoxTestCase {
                 "Found false positive: '${result.getText()}' with format '${result.getBarcodeFormat()}' (rotation: ${Int64(rotationInDegrees)})"
             )
             return false;
-        } catch (re: ReaderException) {
+        } catch (re: Qrcoder4cjReaderException) {
             // continue
         }
 
@@ -154,7 +154,7 @@ public class AbstractNegativeBlackBoxTestCase <: AbstractBlackBoxTestCase {
                 "Try harder found false positive: '${result.getText()}' with format '${result.getBarcodeFormat()}' (rotation: ${Int64(rotationInDegrees)})"
             )
             return false;
-        } catch (re: ReaderException) {
+        } catch (re: Qrcoder4cjReaderException) {
             // continue
         }
         return true;

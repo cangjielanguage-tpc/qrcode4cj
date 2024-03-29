@@ -188,7 +188,7 @@ public open class Code128Reader <: OneDReader {
                 isWhite = !isWhite
             }
         }
-        throw NotFoundException.getNotFoundInstance()
+        throw Qrcoder4cjNotFoundException.getNotFoundInstance()
     }
 
     private static func decodeCode(row: BitArray, counters: Array<Int64>, rowOffset: Int64): Int64 {
@@ -211,7 +211,7 @@ public open class Code128Reader <: OneDReader {
         if (bestMatch_ >= 0) {
             return bestMatch_
         } else {
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
     }
 
@@ -233,7 +233,7 @@ public open class Code128Reader <: OneDReader {
         } else if (startCode == CODE_START_C) {
             codeSet = CODE_CODE_C
         } else {
-            throw FormatException.getFormatInstance()
+            throw Qrcoder4cjFormatException.getFormatInstance()
         }
 
         var done: Bool = false
@@ -285,7 +285,7 @@ public open class Code128Reader <: OneDReader {
 
             // Take care of illegal start codes
             if (code == CODE_START_A || code == CODE_START_B || code == CODE_START_C) {
-                throw FormatException.getFormatInstance()
+                throw Qrcoder4cjFormatException.getFormatInstance()
             }
 
             if (codeSet == CODE_CODE_A) {
@@ -459,7 +459,7 @@ public open class Code128Reader <: OneDReader {
             min(row.getSize(), nextStart + (nextStart - lastStart) / 2),
             false
         )) {
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
 
         /* Pull out from sum the value of the penultimate check code */
@@ -467,14 +467,14 @@ public open class Code128Reader <: OneDReader {
 
         /* lastCode is the checksum then: */ 
         if (checksumTotal % 103 != lastCode) {
-            throw ChecksumException.getChecksumInstance()
+            throw Qrcoder4cjChecksumException.getChecksumInstance()
         }
 
         /* Need to pull out the check digits from string */
         var resultLength: Int64 = result.size
         if (resultLength == 0) {
             // false positive
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
 
         // Only bother if the result had at least one character, and if the checksum digit happened to be

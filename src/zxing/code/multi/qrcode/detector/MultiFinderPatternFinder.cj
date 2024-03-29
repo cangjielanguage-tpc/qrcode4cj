@@ -1,7 +1,7 @@
 package zxing.code.multi.qrcode.detector
 
 import zxing.code.common.DecodeHintType
-import zxing.code.common.NotFoundException
+import zxing.code.common.Qrcoder4cjNotFoundException
 import zxing.code.common.ResultPoint
 import zxing.code.common.ResultPointCallback
 import zxing.code.common.BitMatrix
@@ -56,7 +56,7 @@ public class MultiFinderPatternFinder <: FinderPatternFinder {
      * @return the 3 best {@link FinderPattern}s from our list of candidates. The "best" are those
      * that have been detected at least 2 times, and whose module
      * size differs from the average among those patterns the least
-     * @throws NotFoundException if 3 such finder patterns do not exist
+     * @throws Qrcoder4cjNotFoundException if 3 such finder patterns do not exist
      */
     private func selectMultipleBestPatterns(): Array<Array<FinderPattern>> {
         var possibleCenters: ArrayList<FinderPattern> = ArrayList<FinderPattern>()
@@ -71,7 +71,7 @@ public class MultiFinderPatternFinder <: FinderPatternFinder {
 
         if (size < 3) {
             // Couldn't find enough finder patterns
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
 
         /*
@@ -106,7 +106,7 @@ public class MultiFinderPatternFinder <: FinderPatternFinder {
         }
 
         // Nothing found!
-        throw NotFoundException.getNotFoundInstance()
+        throw Qrcoder4cjNotFoundException.getNotFoundInstance()
     }
 
     private func exselectMultipleBestPatterns(size: Int64, possibleCenters: ArrayList<FinderPattern>,

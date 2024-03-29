@@ -7,7 +7,7 @@ package zxing.code.datamatrix.decoder
 import zxing.code.common.BitSource
 import zxing.code.common.DecoderResult
 import zxing.code.common.ECIStringBuilder
-import zxing.code.common.ReaderException
+import zxing.code.common.Qrcoder4cjReaderException
 import zxing.code.common.MyCharset
 import zxing.code.common.StandardCharsets
 
@@ -248,7 +248,7 @@ public class DecodedBitStreamParser {
                         isECIencoded = true
 
                     // ECI detection only, atm continue decoding as ASCII
-                    case _ => throw FormatException.getFormatInstance();
+                    case _ => throw Qrcoder4cjFormatException.getFormatInstance();
                 }
                 mode = Mode.ASCII_ENCODE
             }
@@ -297,7 +297,7 @@ public class DecodedBitStreamParser {
         do {
             var oneByte: Int64 = bits.readBits(8);
             if (oneByte == 0) {
-                throw FormatException.getFormatInstance();
+                throw Qrcoder4cjFormatException.getFormatInstance();
             } else if (oneByte <= 128) { // ASCII data (ASCII value + 1)
                 if (upperShift) {
                     oneByte += 128
@@ -343,7 +343,7 @@ public class DecodedBitStreamParser {
                         // Not to be used in ASCII encodation
                         // but work around encoders that end with 254, latch back to ASCII
                         if (oneByte != 254 || bits.available() != 0) {
-                            throw FormatException.getFormatInstance();
+                            throw Qrcoder4cjFormatException.getFormatInstance();
                         }
                         break
                 }
@@ -400,7 +400,7 @@ public class DecodedBitStreamParser {
                             result.append(c40char);
                         }
                     } else {
-                        throw FormatException.getFormatInstance();
+                        throw Qrcoder4cjFormatException.getFormatInstance();
                     }
                     case 1 =>
                         if (upperShift) {
@@ -412,7 +412,7 @@ public class DecodedBitStreamParser {
                         shift = 0
                     case 2 => (upperShift, shift) = exdecodeC40Segment2(upperShift, result, cValue, fnc1positions)
                     case 3 => (upperShift, shift) = exdecodeC40Segment3(upperShift, result, cValue)
-                    case _ => throw FormatException.getFormatInstance();
+                    case _ => throw Qrcoder4cjFormatException.getFormatInstance();
                 }
             }
         } while (bits.available() > 0)
@@ -437,7 +437,7 @@ public class DecodedBitStreamParser {
                     result.append(Char(29)) // translate as ASCII 29
                 case 30 => // Upper Shift
                     upperShift_p = true
-                case _ => throw FormatException.getFormatInstance();
+                case _ => throw Qrcoder4cjFormatException.getFormatInstance();
             }
         }
         return (upperShift_p, 0)
@@ -493,7 +493,7 @@ public class DecodedBitStreamParser {
                             result.append(textChar);
                         }
                     } else {
-                        throw FormatException.getFormatInstance();
+                        throw Qrcoder4cjFormatException.getFormatInstance();
                     }
                     case 1 =>
                         if (upperShift) {
@@ -505,7 +505,7 @@ public class DecodedBitStreamParser {
                         shift = 0
                     case 2 => (upperShift, shift) = exdecodeTextSegment2(upperShift, result, cValue, fnc1positions)
                     case 3 => (upperShift, shift) = exdecodeTextSegment3(upperShift, result, cValue)
-                    case _ => throw FormatException.getFormatInstance();
+                    case _ => throw Qrcoder4cjFormatException.getFormatInstance();
                 }
             }
         } while (bits.available() > 0)
@@ -531,7 +531,7 @@ public class DecodedBitStreamParser {
                     result.append(Char(29)) // translate as ASCII 29
                 case 30 => // Upper Shift
                     upperShift_p = true
-                case _ => throw FormatException.getFormatInstance();
+                case _ => throw Qrcoder4cjFormatException.getFormatInstance();
             }
         }
         return (upperShift_p, 0)
@@ -549,7 +549,7 @@ public class DecodedBitStreamParser {
             }
             return (upperShift_p, 0)
         } else {
-            throw FormatException.getFormatInstance();
+            throw Qrcoder4cjFormatException.getFormatInstance();
         }
     }
 
@@ -588,7 +588,7 @@ public class DecodedBitStreamParser {
                     } else if (cValue < 40) { // A - Z
                         result.append(Char(cValue + 51));
                     } else {
-                        throw FormatException.getFormatInstance();
+                        throw Qrcoder4cjFormatException.getFormatInstance();
                     }
                 }
             }
@@ -664,7 +664,7 @@ public class DecodedBitStreamParser {
 
         // We're seeing NegativeArraySizeException errors from users.
         if (count < 0) {
-            throw FormatException.getFormatInstance();
+            throw Qrcoder4cjFormatException.getFormatInstance();
         }
 
         var bytes: Array<UInt8> = Array<UInt8>(count, item: 0)
@@ -672,7 +672,7 @@ public class DecodedBitStreamParser {
         for (i in 0..count) {
             // Have seen this particular error in the wild
             if (bits.available() < 8) {
-                throw FormatException.getFormatInstance();
+                throw Qrcoder4cjFormatException.getFormatInstance();
             }
             bytes[i] = UInt8(unrandomize255State(bits.readBits(8), codewordPosition))
             codewordPosition++
@@ -686,7 +686,7 @@ public class DecodedBitStreamParser {
      */
     private static func decodeECISegment(bits: BitSource, result: ECIStringBuilder) {
         if (bits.available() < 8) {
-            throw FormatException.getFormatInstance();
+            throw Qrcoder4cjFormatException.getFormatInstance();
         }
         var c1: Int64 = bits.readBits(8);
         if (c1 <= 127) {

@@ -79,7 +79,7 @@ public open class CodaBarReader <: OneDReader {
         do {
             var charOffset: Int64 = toNarrowWidePattern(nextStart);
             if (charOffset == -1) {
-                throw NotFoundException.getNotFoundInstance();
+                throw Qrcoder4cjNotFoundException.getNotFoundInstance();
             }
 
             // Hack: We store the position in the alphabet table into a
@@ -110,7 +110,7 @@ public open class CodaBarReader <: OneDReader {
          * at the end of the row. (I.e. the barcode barely fits.)
          */ 
         if (nextStart < counterLength && trailingWhitespace < lastPatternSize / 2) {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
         validatePattern(startOffset);
 
@@ -147,18 +147,18 @@ public open class CodaBarReader <: OneDReader {
     private func extdecodeRow(decodeRowResult: ArrayList<Char>, hints: HashMap<DecodeHintType, Any>) {
         var startchar: Char = decodeRowResult.get(0).getOrThrow()
         if (!arrayContains(STARTEND_ENCODING, startchar)) {
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
 
         var endchar: Char = decodeRowResult.get(decodeRowResult.size - 1).getOrThrow()
         if (!arrayContains(STARTEND_ENCODING, endchar)) {
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
 
         // remove stop/start characters character and check if a long enough string is contained
         if (decodeRowResult.size <= MIN_CHARACTER_LENGTH) {
             // Almost surely a false positive ( start + stop + at least 1 character)
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
 
         if (hints.size == 0 || !hints.contains(DecodeHintType.RETURN_CODABAR_START_END)) {
@@ -222,7 +222,7 @@ public open class CodaBarReader <: OneDReader {
                 var category: Int64 = (j_ & 1) + (pattern & 1) * 2
                 var size: Float32 = Float32(counters[pos + j_])
                 if (size < mins[category] || size > maxes[category]) {
-                    throw NotFoundException.getNotFoundInstance();
+                    throw Qrcoder4cjNotFoundException.getNotFoundInstance();
                 }
                 pattern >>= 1
                 j_--
@@ -245,7 +245,7 @@ public open class CodaBarReader <: OneDReader {
         var i: Int64 = row.getNextUnset(0);
         var end_: Int64 = row.getSize();
         if (i >= end_) {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
         var isWhite_: Bool = true;
         var count: Int64 = 0;
@@ -289,7 +289,7 @@ public open class CodaBarReader <: OneDReader {
             }
             i = i + 2
         }
-        throw NotFoundException.getNotFoundInstance();
+        throw Qrcoder4cjNotFoundException.getNotFoundInstance();
     }
 
     static func arrayContains(array: Array<Char>, key: Char): Bool {

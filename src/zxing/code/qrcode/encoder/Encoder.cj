@@ -130,7 +130,7 @@ public class Encoder {
      * @param content text to encode
      * @param ecLevel error correction level to use
      * @return QRCode representing the encoded QR code
-     * @throws WriterException if encoding can't succeed, because of for example invalid content or
+     * @throws Qrcoder4cjWriterException if encoding can't succeed, because of for example invalid content or
      * configuration
      */
     public static func encode(content: String, ecLevel: ErrorCorrectionLevel): QRCode {
@@ -204,7 +204,7 @@ public class Encoder {
                 version = Version.getVersionForNumber(versionNumber)
                 var bitsNeeded: Int64 = calculateBitsNeeded(mode, headerBits, dataBits, version);
                 if (!willFit(bitsNeeded, version, ecLevel)) {
-                    throw WriterException("Data too big for requested version");
+                    throw Qrcoder4cjWriterException("Data too big for requested version");
                 }
             } else {
                 version = recommendVersion(ecLevel, mode, headerBits, dataBits)
@@ -276,7 +276,7 @@ public class Encoder {
     /**
      * Decides the smallest version value of QR code that will contain all of the provided data.
      *
-     * @throws WriterException if the data cannot fit in any version value
+     * @throws Qrcoder4cjWriterException if the data cannot fit in any version value
      */
     private static func recommendVersion(
         ecLevel: ErrorCorrectionLevel,
@@ -404,7 +404,7 @@ public class Encoder {
                 return version
             }
         }
-        throw WriterException("Data too big");
+        throw Qrcoder4cjWriterException("Data too big");
     }
 
     /**
@@ -432,7 +432,7 @@ public class Encoder {
     public static func terminateBits(numDataBytes: Int64, bits: BitArray) {
         var capacity: Int64 = numDataBytes * 8
         if (bits.getSize() > capacity) {
-            throw WriterException(
+            throw Qrcoder4cjWriterException(
                 "data bits cannot fit in the QR Code" + bits.getSize().toString() + " > " + capacity.toString());
         }
 
@@ -466,7 +466,7 @@ public class Encoder {
             );
         }
         if (bits.getSize() != capacity) {
-            throw WriterException("Bits size does not equal capacity");
+            throw Qrcoder4cjWriterException("Bits size does not equal capacity");
         }
     }
 
@@ -484,7 +484,7 @@ public class Encoder {
         numECBytesInBlock_: Array<Int64>
     ) {
         if (blockID >= numRSBlocks) {
-            throw WriterException("Block ID too large");
+            throw Qrcoder4cjWriterException("Block ID too large");
         }
 
         // numRsBlocksInGroup2 = 196 % 5 = 1
@@ -514,18 +514,18 @@ public class Encoder {
         // Sanity checks.
         // 26 = 26
         if (numEcBytesInGroup1 != numEcBytesInGroup2) {
-            throw WriterException("EC bytes mismatch");
+            throw Qrcoder4cjWriterException("EC bytes mismatch");
         }
 
         // 5 = 4 + 1.
         if (numRSBlocks != numRsBlocksInGroup1 + numRsBlocksInGroup2) {
-            throw WriterException("RS blocks mismatch");
+            throw Qrcoder4cjWriterException("RS blocks mismatch");
         }
 
         // 196 = (13 + 26) * 4 + (14 + 26) * 1
         if (numTotalBytes != ((numDataBytesInGroup1 + numEcBytesInGroup1) * numRsBlocksInGroup1) + ((numDataBytesInGroup2 +
             numEcBytesInGroup2) * numRsBlocksInGroup2)) {
-            throw WriterException("Total bytes mismatch");
+            throw Qrcoder4cjWriterException("Total bytes mismatch");
         }
 
         if (blockID < numRsBlocksInGroup1) {
@@ -546,7 +546,7 @@ public class Encoder {
 
         // "bits" must have "getNumDataBytes" bytes of data.
         if (bits.getSizeInBytes() != numDataBytes) {
-            throw WriterException("Number of bits and data bytes does not match");
+            throw Qrcoder4cjWriterException("Number of bits and data bytes does not match");
         }
 
         // Step 1.  Divide data bytes into blocks and generate error correction bytes for them. We'll
@@ -575,7 +575,7 @@ public class Encoder {
             dataBytesOffset += numDataBytesInBlock[0]
         }
         if (numDataBytes != dataBytesOffset) {
-            throw WriterException("Data bytes does not match offset");
+            throw Qrcoder4cjWriterException("Data bytes does not match offset");
         }
 
         var result: BitArray = BitArray();
@@ -600,7 +600,7 @@ public class Encoder {
             }
         }
         if (numTotalBytes != result.getSizeInBytes()) { // Should be same.
-            throw WriterException(
+            throw Qrcoder4cjWriterException(
                 "Interleaving error: " + numTotalBytes.toString() + " and " + result.getSizeInBytes().toString() +
                 " differ.");
         }
@@ -638,7 +638,7 @@ public class Encoder {
     public static func appendLengthInfo(numLetters: Int64, version: Version, mode: Mode, bits: BitArray) {
         var numBits: Int64 = mode.getCharacterCountBits(version);
         if (numLetters >= (1 << numBits)) {
-            throw WriterException(numLetters.toString() + " is bigger than " + ((1 << numBits) - 1).toString());
+            throw Qrcoder4cjWriterException(numLetters.toString() + " is bigger than " + ((1 << numBits) - 1).toString());
         }
         bits.appendBits(numLetters, numBits);
     }
@@ -652,7 +652,7 @@ public class Encoder {
             case ALPHANUMERIC(x, y) => appendAlphanumericBytes(content, bits);
             case BYTE(x, y) => append8BitBytes(content, bits, encoding);
             case KANJI(x, y) => appendKanjiBytes(content, bits);
-            case _ => throw WriterException("Invalid mode: " + mode.toString());
+            case _ => throw Qrcoder4cjWriterException("Invalid mode: " + mode.toString());
         }
     }
 
@@ -687,12 +687,12 @@ public class Encoder {
         while (i < length) {
             var code1: Int64 = getAlphanumericCode(content[i].hashCode());
             if (code1 == -1) {
-                throw WriterException();
+                throw Qrcoder4cjWriterException();
             }
             if (i + 1 < length) {
                 var code2: Int64 = getAlphanumericCode(content[i + 1].hashCode());
                 if (code2 == -1) {
-                    throw WriterException();
+                    throw Qrcoder4cjWriterException();
                 }
 
                 /* Encode two alphanumeric letters in 11 bits. */
@@ -717,7 +717,7 @@ public class Encoder {
 
         /*StringUtils.SHIFT_JIS_CHARSET*/
         if (bytes.size % 2 != 0) {
-            throw WriterException("Kanji byte size not even");
+            throw Qrcoder4cjWriterException("Kanji byte size not even");
         }
         var maxI: Int64 = bytes.size - 1
 
@@ -733,7 +733,7 @@ public class Encoder {
                 subtracted = code - 0xc140
             }
             if (subtracted == -1) {
-                throw WriterException("Invalid byte sequence");
+                throw Qrcoder4cjWriterException("Invalid byte sequence");
             }
             var encoded: Int64 = ((subtracted >> 8) * 0xc0) + (subtracted & 0xff)
             bits.appendBits(encoded, 13);

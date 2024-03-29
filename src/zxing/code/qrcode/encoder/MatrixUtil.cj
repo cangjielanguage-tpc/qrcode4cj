@@ -261,7 +261,7 @@ public class MatrixUtil {
 
         // All bits should be consumed.
         if (bitIndex != dataBits.getSize()) {
-            throw WriterException("Not all bits consumed: " + bitIndex.toString() + "/" + dataBits.getSize().toString());
+            throw Qrcoder4cjWriterException("Not all bits consumed: " + bitIndex.toString() + "/" + dataBits.getSize().toString());
         }
     }
 
@@ -325,7 +325,7 @@ public class MatrixUtil {
     // JISX0510:2004 (p.45) for details.
     public static func makeTypeInfoBits(ecLevel: ErrorCorrectionLevel, maskPattern: Int64, bits: BitArray) {
         if (!QRCode.isValidMaskPattern(maskPattern)) {
-            throw WriterException("Invalid mask pattern");
+            throw Qrcoder4cjWriterException("Invalid mask pattern");
         }
         var typeInfo: Int64 = (Int64(ecLevel.getBits()) << 3) | maskPattern
         bits.appendBits(typeInfo, 5);
@@ -338,7 +338,7 @@ public class MatrixUtil {
         bits.xor(maskBits);
 
         if (bits.getSize() != 15) { // Just in case.
-            throw WriterException("should not happen but we got: " + bits.getSize().toString());
+            throw Qrcoder4cjWriterException("should not happen but we got: " + bits.getSize().toString());
         }
     }
 
@@ -350,7 +350,7 @@ public class MatrixUtil {
         bits.appendBits(bchCode, 12);
 
         if (bits.getSize() != 18) { // Just in case.
-            throw WriterException("should not happen but we got: " + bits.getSize().toString());
+            throw Qrcoder4cjWriterException("should not happen but we got: " + bits.getSize().toString());
         }
     }
 
@@ -381,7 +381,7 @@ public class MatrixUtil {
     // Embed the lonely dark dot at left bottom corner. JISX0510:2004 (p.46)
     private static func embedDarkDotAtLeftBottomCorner(matrix: ByteMatrix) {
         if (matrix.get(8, matrix.getHeight() - 8) == 0) {
-            throw WriterException();
+            throw Qrcoder4cjWriterException();
         }
         matrix.set(8, matrix.getHeight() - 8, 1);
     }
@@ -389,7 +389,7 @@ public class MatrixUtil {
     private static func embedHorizontalSeparationPattern(xStart: Int64, yStart: Int64, matrix: ByteMatrix) {
         for (x in 0..8) {
             if (!isEmpty(Int64(matrix.get(xStart + x, yStart)))) {
-                throw WriterException();
+                throw Qrcoder4cjWriterException();
             }
             matrix.set(xStart + x, yStart, 0);
         }
@@ -398,7 +398,7 @@ public class MatrixUtil {
     private static func embedVerticalSeparationPattern(xStart: Int64, yStart: Int64, matrix: ByteMatrix) {
         for (y in 0..7) {
             if (!isEmpty(Int64(matrix.get(xStart, yStart + y)))) {
-                throw WriterException();
+                throw Qrcoder4cjWriterException();
             }
             matrix.set(xStart, yStart + y, 0);
         }

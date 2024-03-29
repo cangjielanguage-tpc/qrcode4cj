@@ -181,7 +181,7 @@ public class FieldParser {
 
         // Processing 2-digit AIs
         if (rawInformation.size < 2) {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
 
         if (TWO_DIGIT_DATA_LENGTH.contains(rawInformation.substring(0, 2))) {
@@ -193,7 +193,7 @@ public class FieldParser {
         }
 
         if (rawInformation.size < 3) {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
 
         var firstThreeDigits: UTF32String = rawInformation.substring(0, 3);
@@ -206,7 +206,7 @@ public class FieldParser {
         }
 
         if (rawInformation.size < 4) {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
 
         if (THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH.contains(firstThreeDigits)) {
@@ -225,18 +225,18 @@ public class FieldParser {
             return processFixedAI(4, firstFourDigitLength.length, rawInformation);
         }
 
-        throw NotFoundException.getNotFoundInstance();
+        throw Qrcoder4cjNotFoundException.getNotFoundInstance();
     }
 
     private static func processFixedAI(aiSize: Int64, fieldSize: Int64, rawInformation: UTF32String): UTF32String {
         if (rawInformation.size < aiSize) {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
 
         var ai: UTF32String = rawInformation.substring(0, aiSize);
 
         if (rawInformation.size < aiSize + fieldSize) {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
 
         var field: UTF32String = rawInformation.substring(aiSize, fieldSize);

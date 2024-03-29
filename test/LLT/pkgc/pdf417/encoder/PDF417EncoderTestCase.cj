@@ -17,7 +17,7 @@
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 
-from QRCode4cj import zxing.code.common.WriterException
+from QRCode4cj import zxing.code.common.Qrcoder4cjWriterException
 from QRCode4cj import zxing.code.common.StandardCharsets
 from QRCode4cj import zxing.code.pdf417.encoder.*
 from QRCode4cj import zxing.code.pdf417.decoder.*
@@ -111,6 +111,6 @@ public open class PDF417EncoderTestCase {
         try {
             PDF417HighLevelEncoder.encodeHighLevel(UTF32String(""), Compaction.AUTO, MyCharset(), false);
             @Assert(false)
-        } catch (name: WriterException) {}
+        } catch (name: Qrcoder4cjWriterException) {}
     }
 }

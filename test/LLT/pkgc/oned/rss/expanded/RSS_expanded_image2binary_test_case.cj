@@ -230,7 +230,7 @@ public class RSSExpandedImage2binaryTestCase {
         try {
             var rssExpandedReader: RSSExpandedReader = RSSExpandedReader();
             pairs = rssExpandedReader.decodeRow2pairs(rowNumber, row)
-        } catch (re: ReaderException) {
+        } catch (re: Qrcoder4cjReaderException) {
             return;
         }
         var binary: BitArray = BitArrayBuilder.buildBitArray(pairs);

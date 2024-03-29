@@ -19,7 +19,7 @@
 
 from QRCode4cj import zxing.code.common.EncodeHintType
 from QRCode4cj import zxing.code.common.BarcodeFormat
-from QRCode4cj import zxing.code.common.FormatException
+from QRCode4cj import zxing.code.common.Qrcoder4cjFormatException
 from QRCode4cj import zxing.code.common.ResultPoint
 from QRCode4cj import zxing.code.aztec.common.AztecDetectorResult
 from QRCode4cj import zxing.code.aztec.AztecWriter
@@ -786,8 +786,8 @@ public class EncoderTest {
                     "Ygh6utAIgLl1aBVM4EOTQtMQQYH9M2Z3Dp4qnA/fwWuQ+M8L3V8U=",
                 823
             )
-        } catch (e: FormatException) {
-            throw FormatException()
+        } catch (e: Qrcoder4cjFormatException) {
+            throw Qrcoder4cjFormatException()
         }
     }
 
@@ -928,8 +928,8 @@ public class EncoderTest {
 
             // expect B/S(64)
             testHighLevelEncodeString(String(sb), 21 + 64 * 8)
-        } catch (e: FormatException) {
-            throw FormatException()
+        } catch (e: Qrcoder4cjFormatException) {
+            throw Qrcoder4cjFormatException()
         }
     }
 
@@ -963,8 +963,8 @@ public class EncoderTest {
                 // 'A'  B/S    =2    \200      "."     " "     \200
                 "...X. XXXXX ..X.. X....... ..X.XXX. ..X..... X......."
             )
-        } catch (e: FormatException) {
-            throw FormatException()
+        } catch (e: Qrcoder4cjFormatException) {
+            throw Qrcoder4cjFormatException()
         }
     }
 
@@ -1213,8 +1213,8 @@ public class EncoderTest {
             var result: String = stripSpace(expectedBits)
             @Assert(stripSpace(expectedBits), receivedBits)
             @Assert(s, Decoder.highLevelDecode(toBooleanArray(bits)))
-        } catch (e: FormatException) {
-            throw FormatException()
+        } catch (e: Qrcoder4cjFormatException) {
+            throw Qrcoder4cjFormatException()
         }
     }
 
@@ -1228,8 +1228,8 @@ public class EncoderTest {
                 receivedBitCount
             )
             @Assert(s, Decoder.highLevelDecode(toBooleanArray(bits)))
-        } catch (e: FormatException) {
-            throw FormatException()
+        } catch (e: Qrcoder4cjFormatException) {
+            throw Qrcoder4cjFormatException()
         }
     }
 

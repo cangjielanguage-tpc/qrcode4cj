@@ -3,8 +3,8 @@ package zxing.code.multi.qrcode
 import zxing.code.common.BarcodeFormat
 import zxing.code.common.BinaryBitmap
 import zxing.code.common.DecodeHintType
-import zxing.code.common.NotFoundException
-import zxing.code.common.ReaderException
+import zxing.code.common.Qrcoder4cjNotFoundException
+import zxing.code.common.Qrcoder4cjReaderException
 import zxing.code.common.Result
 import zxing.code.common.ResultMetadataType
 import zxing.code.common.ResultPoint
@@ -130,7 +130,7 @@ public class QRCodeMultiReader <: QRCodeReader & MultipleBarcodeReader {
                     )
                 }
                 results.append(result)
-            } catch (re: ReaderException) {
+            } catch (re: Qrcoder4cjReaderException) {
                 // ignore and continue
             }
         }

@@ -139,7 +139,7 @@ public open class Code39Reader <: OneDReader {
         // If 50% of last pattern size, following last pattern, is not whitespace, fail
         // (but if it's whitespace to the very end of the image, that's OK)
         if (nextStart != end && (whiteSpaceAfterEnd * 2) < lastPatternSize) {
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
 
         if (usingCheckDigit) {
@@ -150,13 +150,13 @@ public open class Code39Reader <: OneDReader {
                 total += ALPHABET_STRING.indexOf(UInt8(decodeRowResult.get(i).getOrThrow().hashCode())).getOrThrow()
             }
             if (result.get(max).getOrThrow() != Char(ALPHABET_STRING[total % 43])) {
-                throw ChecksumException.getChecksumInstance()
+                throw Qrcoder4cjChecksumException.getChecksumInstance()
             }
         }
 
         if (result.size == 0) {
             // false positive
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
 
         var resultString: String
@@ -183,7 +183,7 @@ public open class Code39Reader <: OneDReader {
         var pattern: Int64 = toNarrowWidePattern(theCounters)
 
         if (pattern < 0) {
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
         var decodedChar = patternToChar(pattern)
         result.append(decodedChar)
@@ -229,7 +229,7 @@ public open class Code39Reader <: OneDReader {
                 isWhite = !isWhite
             }
         }
-        throw NotFoundException.getNotFoundInstance()
+        throw Qrcoder4cjNotFoundException.getNotFoundInstance()
     }
 
     // For efficiency, returns -1 on failure. Not throwing here saved as many as 700 exceptions per
@@ -291,7 +291,7 @@ public open class Code39Reader <: OneDReader {
         if (pattern == ASTERISK_ENCODING) {
             return '*'
         }
-        throw NotFoundException.getNotFoundInstance()
+        throw Qrcoder4cjNotFoundException.getNotFoundInstance()
     }
 
     private static func decodeExtended(encoded: UTF32String): String {
@@ -310,14 +310,14 @@ public open class Code39Reader <: OneDReader {
                         if (next >= 'A' && next <= 'Z') {
                         decodedChar = Char(next.hashCode() + 32)
                     } else {
-                        throw FormatException.getFormatInstance()
+                        throw Qrcoder4cjFormatException.getFormatInstance()
                     }
                     case '$' =>
                         /* $A to $Z map to control codes SH to SB */
                         if (next >= 'A' && next <= 'Z') {
                         decodedChar = Char(next.hashCode() - 64)
                     } else {
-                        throw FormatException.getFormatInstance()
+                        throw Qrcoder4cjFormatException.getFormatInstance()
                     }
                     case '%' => decodedChar = getDecodedChar(next)
                     case '/' =>
@@ -327,7 +327,7 @@ public open class Code39Reader <: OneDReader {
                     } else if (next == 'Z') {
                         decodedChar = ':'
                     } else {
-                        throw FormatException.getFormatInstance()
+                        throw Qrcoder4cjFormatException.getFormatInstance()
                     }
                     case _ => ""
                 }
@@ -362,7 +362,7 @@ public open class Code39Reader <: OneDReader {
         } else if (next == 'X' || next == 'Y' || next == 'Z') {
             decodedChar = Char(127)
         } else {
-            throw FormatException.getFormatInstance()
+            throw Qrcoder4cjFormatException.getFormatInstance()
         }
         return decodedChar
     }
