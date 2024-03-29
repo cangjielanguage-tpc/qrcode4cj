@@ -104,9 +104,11 @@ public open class CodaBarReader <: OneDReader {
             lastPatternSize += counters[nextStart + i]
         }
 
-        // We need to see whitespace equal to 50% of the last pattern size,
-        // otherwise this is probably a false positive. The exception is if we are
-        // at the end of the row. (I.e. the barcode barely fits.)
+        /*
+         * We need to see whitespace equal to 50% of the last pattern size, otherwise
+         * this is probably a false positive. The exception is if we are
+         * at the end of the row. (I.e. the barcode barely fits.)
+         */ 
         if (nextStart < counterLength && trailingWhitespace < lastPatternSize / 2) {
             throw NotFoundException.getNotFoundInstance();
         }
@@ -213,26 +215,27 @@ public open class CodaBarReader <: OneDReader {
         for (i in 0..end + 1) {
             var pattern: Int64 = CHARACTER_ENCODINGS[decodeRowResult.get(i).getOrThrow().hashCode()]
 
-            var j: Int64 = 6
-            while (j >= 0) {
-                // Even j = bars, while odd j = spaces. Categories 2 and 3 are for
+            var j_: Int64 = 6
+            while (j_ >= 0) {
+                // Even j_ = bars, while odd j_ = spaces. Categories 2 and 3 are for
                 // long stripes, while 0 and 1 are for short stripes.
-                var category: Int64 = (j & 1) + (pattern & 1) * 2
-                var size: Float32 = Float32(counters[pos + j])
+                var category: Int64 = (j_ & 1) + (pattern & 1) * 2
+                var size: Float32 = Float32(counters[pos + j_])
                 if (size < mins[category] || size > maxes[category]) {
                     throw NotFoundException.getNotFoundInstance();
                 }
                 pattern >>= 1
-                j--
+                j_--
             }
             pos += 8
         }
     }
 
     /**
-     * Records the size of all runs of white and black pixels, starting with white.
-     * This is just like recordPattern, except it records all the counters, and
+     * Records the size of all runs of white and black pixels, starting with white. This is
+     * just like recordPattern, except it records all the counters, and
      * uses our builtin "counters" member for storage.
+     *
      * @param row row to count from
      */
     private func setCounters(row: BitArray) {
@@ -240,19 +243,19 @@ public open class CodaBarReader <: OneDReader {
 
         // Start from the first white bit.
         var i: Int64 = row.getNextUnset(0);
-        var end: Int64 = row.getSize();
-        if (i >= end) {
+        var end_: Int64 = row.getSize();
+        if (i >= end_) {
             throw NotFoundException.getNotFoundInstance();
         }
-        var isWhite: Bool = true;
+        var isWhite_: Bool = true;
         var count: Int64 = 0;
-        while (i < end) {
-            if (row.get(i) != isWhite) {
+        while (i < end_) {
+            if (row.get(i) != isWhite_) {
                 count++
             } else {
                 counterAppend(count);
                 count = 1
-                isWhite = !isWhite
+                isWhite_ = !isWhite_
             }
             i++
         }
