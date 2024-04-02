@@ -1,10 +1,10 @@
 package zxing.code.multi
 
 import zxing.code.common.BinaryBitmap
-import zxing.code.common.ChecksumException
+import zxing.code.common.Qrcoder4cjChecksumException
 import zxing.code.common.DecodeHintType
-import zxing.code.common.FormatException
-import zxing.code.common.NotFoundException
+import zxing.code.common.Qrcoder4cjFormatException
+import zxing.code.common.Qrcoder4cjNotFoundException
 import zxing.code.common.Reader
 import zxing.code.common.Result
 import zxing.code.common.ResultPoint
@@ -28,7 +28,7 @@ public class ByQuadrantReader <: Reader {
         try {
             // No need to call makeAbsolute as results will be relative to original top left here
             return delegate.decode(image.crop(0, 0, halfWidth, halfHeight), hints)
-        } catch (re: NotFoundException) {
+        } catch (re: Qrcoder4cjNotFoundException) {
             // continue
         }
 
@@ -36,7 +36,7 @@ public class ByQuadrantReader <: Reader {
             var result: Result = delegate.decode(image.crop(halfWidth, 0, halfWidth, halfHeight), hints)
             makeAbsolute(result.getResultPoints(), halfWidth, 0)
             return result
-        } catch (re: NotFoundException) {
+        } catch (re: Qrcoder4cjNotFoundException) {
             // continue
         }
 
@@ -44,7 +44,7 @@ public class ByQuadrantReader <: Reader {
             var result: Result = delegate.decode(image.crop(0, halfHeight, halfWidth, halfHeight), hints)
             makeAbsolute(result.getResultPoints(), 0, halfHeight)
             return result
-        } catch (re: NotFoundException) {
+        } catch (re: Qrcoder4cjNotFoundException) {
             // continue
         }
 
@@ -52,7 +52,7 @@ public class ByQuadrantReader <: Reader {
             var result: Result = delegate.decode(image.crop(halfWidth, halfHeight, halfWidth, halfHeight), hints)
             makeAbsolute(result.getResultPoints(), halfWidth, halfHeight)
             return result
-        } catch (re: NotFoundException) {
+        } catch (re: Qrcoder4cjNotFoundException) {
             // continue
         }
 

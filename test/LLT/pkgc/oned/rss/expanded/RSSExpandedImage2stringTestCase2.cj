@@ -216,7 +216,7 @@ public class RSSExpandedImage2stringTestCase2 {
         try {
             var rssExpandedReader: RSSExpandedReader = RSSExpandedReader();
             result = rssExpandedReader.decodeRow(rowNumber, row, HashMap<DecodeHintType, Any>())
-        } catch (re: ReaderException) {
+        } catch (re: Qrcoder4cjReaderException) {
             return;
         }
 

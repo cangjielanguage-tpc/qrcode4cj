@@ -98,7 +98,7 @@ public open class ITFReader <: OneDReader {
             lengthOK = true
         }
         if (!lengthOK) {
-            throw FormatException.getFormatInstance()
+            throw Qrcoder4cjFormatException.getFormatInstance()
         }
 
         var resultObject: Result = Result(
@@ -121,7 +121,7 @@ public open class ITFReader <: OneDReader {
      * @param row          row of black/white values to search
      * @param payloadStart offset of start pattern
      * @param resultString {@link StringBuilder} to append decoded chars to
-     * @throws NotFoundException if decoding could not complete successfully
+     * @throws Qrcoder4cjNotFoundException if decoding could not complete successfully
      */
     private static func decodeMiddle(
         row: BitArray,
@@ -198,7 +198,7 @@ public open class ITFReader <: OneDReader {
      * @param row bit array representing the scanned barcode.
      * @param startPattern index into row of the start or end pattern.
      *
-     * @throws NotFoundException if the quiet zone cannot be found
+     * @throws Qrcoder4cjNotFoundException if the quiet zone cannot be found
      */
     private func validateQuietZone(row: BitArray, startPattern: Int64) {
         var quietCount: Int64 = this.narrowLineWidth * 10
@@ -217,7 +217,7 @@ public open class ITFReader <: OneDReader {
         }
         if (quietCount != 0) {
             /* Unable to find the necessary number of quiet zone pixels. */ 
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
     }
 
@@ -226,13 +226,13 @@ public open class ITFReader <: OneDReader {
      *
      * @param row row of black/white values to search
      * @return index of the first black line.
-     * @throws NotFoundException Throws exception if no black lines are found in the row
+     * @throws Qrcoder4cjNotFoundException Throws exception if no black lines are found in the row
      */
     private static func skipWhiteSpace(row: BitArray): Int64 {
         var width_: Int64 = row.getSize()
         var endStart_: Int64 = row.getNextSet(0)
         if (endStart_ == width_) {
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
 
         return endStart_
@@ -253,7 +253,7 @@ public open class ITFReader <: OneDReader {
             var endPattern: Array<Int64>
             try {
                 endPattern = findGuardPattern(row, endStart, END_PATTERN_REVERSED[0])
-            } catch (nfe: NotFoundException) {
+            } catch (nfe: Qrcoder4cjNotFoundException) {
                 endPattern = findGuardPattern(row, endStart, END_PATTERN_REVERSED[1])
             }
 
@@ -286,7 +286,7 @@ public open class ITFReader <: OneDReader {
      *
      * @return start/end horizontal offset of the guard pattern, as an array of two ints
      *
-     * @throws NotFoundException if pattern is not found
+     * @throws Qrcoder4cjNotFoundException if pattern is not found
      */
     private static func findGuardPattern(row: BitArray, rowOffset: Int64, pattern: Array<Int64>): Array<Int64> {
         var patternLength: Int64 = pattern.size
@@ -317,7 +317,7 @@ public open class ITFReader <: OneDReader {
                 isWhite = !isWhite
             }
         }
-        throw NotFoundException.getNotFoundInstance()
+        throw Qrcoder4cjNotFoundException.getNotFoundInstance()
     }
 
     /**
@@ -325,7 +325,7 @@ public open class ITFReader <: OneDReader {
      *
      * @param counters the counts of runs of observed black/white/black/... values
      * @return The decoded digit
-     * @throws NotFoundException if digit cannot be decoded
+     * @throws Qrcoder4cjNotFoundException if digit cannot be decoded
      */
     private static func decodeDigit(counters: Array<Int64>): Int64 {
         var bestVariance: Float32 = MAX_AVG_VARIANCE
@@ -348,7 +348,7 @@ public open class ITFReader <: OneDReader {
         if (bestMatch_ >= 0) {
             return bestMatch_ % 10
         } else {
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
     }
 }

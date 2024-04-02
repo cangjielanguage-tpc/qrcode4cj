@@ -17,7 +17,7 @@ public class ReedSolomonDecoder {
      *
      * @param received data and error-correction codewords
      * @param twoS number of error-correction codewords available
-     * @throws ReedSolomonException if decoding fails for any reason
+     * @throws Qrcoder4cjReedSolomonException if decoding fails for any reason
      */
     public func decode(received: Array<Int64>, twoS: Int64) {
         let poly: GenericGFPoly = GenericGFPoly(field, received)
@@ -42,7 +42,7 @@ public class ReedSolomonDecoder {
         for (i in 0..errorLocations.size) {
             var position: Int64 = received.size - 1 - field.log(errorLocations[i])
             if (position < 0) {
-                throw ReedSolomonException("Bad error location")
+                throw Qrcoder4cjReedSolomonException("Bad error location")
             }
             received[position] = GenericGF.addOrSubtract(received[position], errorMagnitudes[i])
         }
@@ -72,7 +72,7 @@ public class ReedSolomonDecoder {
             // Divide rLastLast by rLast, with quotient in q and remainder in r
             if (rLast.isZero()) {
                 // Oops, Euclidean algorithm already terminated?
-                throw ReedSolomonException("r_{i-1} was zero")
+                throw Qrcoder4cjReedSolomonException("r_{i-1} was zero")
             }
             r = rLastLast
             var q: GenericGFPoly = field.getZero()
@@ -88,7 +88,7 @@ public class ReedSolomonDecoder {
             t = q.multiply(tLast).addOrSubtract(tLastLast)
 
             if (r.getDegree() >= rLast.getDegree()) {
-                throw ReedSolomonException(
+                throw Qrcoder4cjReedSolomonException(
                     "Division algorithm failed to reduce polynomial? r: ${ r.toString() }, rLast: ${ rLast.toString() }"
                 )
             }
@@ -96,7 +96,7 @@ public class ReedSolomonDecoder {
 
         let sigmaTildeAtZero: Int64 = t.getCoefficient(0)
         if (sigmaTildeAtZero == 0) {
-            throw ReedSolomonException("sigmaTilde(0) was zero")
+            throw Qrcoder4cjReedSolomonException("sigmaTilde(0) was zero")
         }
 
         let inverse = field.inverse(sigmaTildeAtZero)
@@ -123,7 +123,7 @@ public class ReedSolomonDecoder {
             i++;
         }
         if (e != numErrors) {
-            throw ReedSolomonException("Error locator degree does not match number of roots")
+            throw Qrcoder4cjReedSolomonException("Error locator degree does not match number of roots")
         }
         return result
     }

@@ -72,7 +72,7 @@ public class DecodedBitStreamParser {
 
                     case STRUCTURED_APPEND(x, y) =>
                         if (bits.available() < 16) {
-                            throw FormatException.getFormatInstance();
+                            throw Qrcoder4cjFormatException.getFormatInstance();
                         }
 
                         /*
@@ -89,7 +89,7 @@ public class DecodedBitStreamParser {
 
                         if (let Some(c) <- currentCharacterSetECI) {}
                         else {
-                            throw FormatException.getFormatInstance();
+                            throw Qrcoder4cjFormatException.getFormatInstance();
                         }
                     case HANZI(x, y) =>
                         // First handle Hanzi mode which does not start with character count
@@ -119,14 +119,14 @@ public class DecodedBitStreamParser {
 
                             case KANJI(x, y) => decodeKanjiSegment(bits, result, count);
 
-                            case _ => throw FormatException.getFormatInstance();
+                            case _ => throw Qrcoder4cjFormatException.getFormatInstance();
                         }
                 }
             } while (mode != Mode.TERMINATOR([0, 0, 0], 0x00))
             symbologyModifier = exdecode(currentCharacterSetECI, hasFNC1first, hasFNC1second)
         } catch (iae: IllegalArgumentException) {
             // from readBits() calls
-            throw FormatException.getFormatInstance();
+            throw Qrcoder4cjFormatException.getFormatInstance();
         }
 
         return DecoderResult(
@@ -183,12 +183,12 @@ public class DecodedBitStreamParser {
 
         if (StringUtils.GB2312_CHARSET == MyCharset()) {
             // Not supported without charset support
-            throw FormatException.getFormatInstance();
+            throw Qrcoder4cjFormatException.getFormatInstance();
         }
 
         // Don't crash trying to read more bits than we have available.
         if (count_ * 13 > bits.available()) {
-            throw FormatException.getFormatInstance();
+            throw Qrcoder4cjFormatException.getFormatInstance();
         }
 
         // Each character will require 2 bytes. Read the characters as 2-byte pairs
@@ -226,7 +226,7 @@ public class DecodedBitStreamParser {
 
         // Don't crash trying to read more bits than we have available.
         if ((count_ * 13) > bits.available()) {
-            throw FormatException.getFormatInstance();
+            throw Qrcoder4cjFormatException.getFormatInstance();
         }
 
         // Each character will require 2 bytes. Read the characters as 2-byte pairs
@@ -265,7 +265,7 @@ public class DecodedBitStreamParser {
 
         // Don't crash trying to read more bits than we have available.
         if ((Int64(8) * count) > bits.available()) {
-            throw FormatException.getFormatInstance();
+            throw Qrcoder4cjFormatException.getFormatInstance();
         }
 
         var readBytes: Array<Byte> = Array<Byte>(count, item: 0);
@@ -293,7 +293,7 @@ public class DecodedBitStreamParser {
     private static func toAlphaNumericChar(value: Int64): Char {
         let arraySize: Int64 = ALPHANUMERIC_CHARS.size;
         if (value >= arraySize) {
-            throw FormatException.getFormatInstance();
+            throw Qrcoder4cjFormatException.getFormatInstance();
         }
         return ALPHANUMERIC_CHARS[value]
     }
@@ -310,7 +310,7 @@ public class DecodedBitStreamParser {
         let start: Int64 = result.size;
         while (count_ > 1) {
             if (bits.available() < 11) {
-                throw FormatException.getFormatInstance();
+                throw Qrcoder4cjFormatException.getFormatInstance();
             }
 
             let nextTwoCharsBits: Int64 = bits.readBits(11);
@@ -321,7 +321,7 @@ public class DecodedBitStreamParser {
         if (count_ == 1) {
             /* special case: one character left */ 
             if (bits.available() < 6) {
-                throw FormatException.getFormatInstance();
+                throw Qrcoder4cjFormatException.getFormatInstance();
             }
             result.append(toAlphaNumericChar(bits.readBits(6)));
         }
@@ -354,11 +354,11 @@ public class DecodedBitStreamParser {
         while (count_ >= 3) {
             // Each 10 bits encodes three digits
             if (bits.available() < 10) {
-                throw FormatException.getFormatInstance();
+                throw Qrcoder4cjFormatException.getFormatInstance();
             }
             let threeDigitsBits: Int64 = bits.readBits(10);
             if (threeDigitsBits >= 1000) {
-                throw FormatException.getFormatInstance();
+                throw Qrcoder4cjFormatException.getFormatInstance();
             }
             result.append(toAlphaNumericChar(threeDigitsBits / 100));
             result.append(toAlphaNumericChar((threeDigitsBits / 10) % 10));
@@ -368,22 +368,22 @@ public class DecodedBitStreamParser {
         if (count_ == 2) {
             // Two digits left over to read, encoded in 7 bits
             if (bits.available() < 7) {
-                throw FormatException.getFormatInstance();
+                throw Qrcoder4cjFormatException.getFormatInstance();
             }
             let twoDigitsBits: Int64 = bits.readBits(7);
             if (twoDigitsBits >= 100) {
-                throw FormatException.getFormatInstance();
+                throw Qrcoder4cjFormatException.getFormatInstance();
             }
             result.append(toAlphaNumericChar(twoDigitsBits / 10));
             result.append(toAlphaNumericChar(twoDigitsBits % 10));
         } else if (count_ == 1) {
             // One digit left over to read
             if (bits.available() < 4) {
-                throw FormatException.getFormatInstance();
+                throw Qrcoder4cjFormatException.getFormatInstance();
             }
             let digitBits: Int64 = bits.readBits(4);
             if (digitBits >= 10) {
-                throw FormatException.getFormatInstance();
+                throw Qrcoder4cjFormatException.getFormatInstance();
             }
             result.append(toAlphaNumericChar(digitBits));
         }
@@ -409,6 +409,6 @@ public class DecodedBitStreamParser {
             return ((firstByte & 0x1F) << 16) | secondThirdBytes
         }
 
-        throw FormatException.getFormatInstance();
+        throw Qrcoder4cjFormatException.getFormatInstance();
     }
 }

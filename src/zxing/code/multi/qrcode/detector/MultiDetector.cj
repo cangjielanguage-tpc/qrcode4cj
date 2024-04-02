@@ -1,6 +1,6 @@
 package zxing.code.multi.qrcode.detector
 
-import zxing.code.common.ReaderException
+import zxing.code.common.Qrcoder4cjReaderException
 import zxing.code.common.DetectorResult
 import zxing.code.qrcode.detector.Detector
 
@@ -27,14 +27,14 @@ public class MultiDetector <: Detector {
         var infos: Array<FinderPatternInfo> = finder.findMulti(hints)
 
         if (infos.size == 0) {
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
 
         var result: ArrayList<DetectorResult> = ArrayList<DetectorResult>()
         for (i in 0..infos.size) {
             try {
                 result.append(processFinderPatternInfo(infos[i]))
-            } catch (e: ReaderException) {
+            } catch (e: Qrcoder4cjReaderException) {
                 // ignore
             }
         }

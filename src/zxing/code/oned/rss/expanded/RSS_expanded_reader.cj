@@ -118,7 +118,7 @@ public class RSSExpandedReader <: AbstractRSSReader {
         this.startFromEven = false
         try {
             return constructResult(decodeRow2pairs(rowNumber, row));
-        } catch (e: NotFoundException) {
+        } catch (e: Qrcoder4cjNotFoundException) {
             // OK
         }
         this.pairs.clear();
@@ -169,7 +169,7 @@ public class RSSExpandedReader <: AbstractRSSReader {
             }
         }
 
-        throw NotFoundException.getNotFoundInstance();
+        throw Qrcoder4cjNotFoundException.getNotFoundInstance();
     }
 
     private func checkRows(reverse: Bool): ArrayList<ExpandedPair> {
@@ -192,7 +192,7 @@ public class RSSExpandedReader <: AbstractRSSReader {
         var ps: ArrayList<ExpandedPair> = ArrayList<ExpandedPair>();
         try {
             ps = checkRows(ArrayList<ExpandedRow>(), 0)
-        } catch (e: NotFoundException) {
+        } catch (e: Qrcoder4cjNotFoundException) {
             // OK
         }
         if (reverse) {
@@ -224,13 +224,13 @@ public class RSSExpandedReader <: AbstractRSSReader {
                 try {
                     // Recursion: try to add more rows
                     return checkRows(rs, i + 1);
-                } catch (e: NotFoundException) {
+                } catch (e: Qrcoder4cjNotFoundException) {
                     // We failed, try the next candidate
                 }
             }
         }
 
-        throw NotFoundException.getNotFoundInstance();
+        throw Qrcoder4cjNotFoundException.getNotFoundInstance();
     }
 
     // Whether the pairs form a valid find pattern sequence,
@@ -448,13 +448,13 @@ public class RSSExpandedReader <: AbstractRSSReader {
         var leftChar: DataCharacter = this.decodeDataCharacter(row, pattern.getOrThrow(), isOddPattern, true);
 
         if (!previousPairs.isEmpty() && previousPairs.get(previousPairs.size - 1).getOrThrow().mustBeLast()) {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
 
         var rightChar: ?DataCharacter = None
         try {
             rightChar = this.decodeDataCharacter(row, pattern.getOrThrow(), isOddPattern, false)
-        } catch (ignored: NotFoundException) {
+        } catch (ignored: Qrcoder4cjNotFoundException) {
             // rightChar = null;
         }
         return ExpandedPair(leftChar, rightChar, pattern);
@@ -513,7 +513,7 @@ public class RSSExpandedReader <: AbstractRSSReader {
                 isWhite = !isWhite
             }
         }
-        throw NotFoundException.getNotFoundInstance();
+        throw Qrcoder4cjNotFoundException.getNotFoundInstance();
     }
 
     private func exfindNextPair2(rowOffset: Int64, isWhite: Bool, width: Int64, row: BitArray): (Int64, Bool) {
@@ -586,7 +586,7 @@ public class RSSExpandedReader <: AbstractRSSReader {
         var value: Int64
         try {
             value = parseFinderValue(counters, FINDER_PATTERNS)
-        } catch (ignored: NotFoundException) {
+        } catch (ignored: Qrcoder4cjNotFoundException) {
             return None
         }
         return FinderPattern(value, [start, end], start, end, rowNumber);
@@ -605,7 +605,7 @@ public class RSSExpandedReader <: AbstractRSSReader {
         // Sanity check: element width for pattern and the character should match
         var expectedElementWidth: Float32 = Float32(pattern.getStartEnd()[1] - pattern.getStartEnd()[0]) / 15.0f32
         if (abs(elementWidth - expectedElementWidth) / expectedElementWidth > 0.3f32) {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
 
         var oddCounts: Array<Int64> = this.getOddCounts();
@@ -620,12 +620,12 @@ public class RSSExpandedReader <: AbstractRSSReader {
             // Round
             if (count < 1) {
                 if (value < 0.3f32) {
-                    throw NotFoundException.getNotFoundInstance();
+                    throw Qrcoder4cjNotFoundException.getNotFoundInstance();
                 }
                 count = 1
             } else if (count > 8) {
                 if (value > 8.7f32) {
-                    throw NotFoundException.getNotFoundInstance();
+                    throw Qrcoder4cjNotFoundException.getNotFoundInstance();
                 }
                 count = 8
             }
@@ -674,7 +674,7 @@ public class RSSExpandedReader <: AbstractRSSReader {
         var checksumPortion: Int64 = oddChecksumPortion + evenChecksumPortion
 
         if ((oddSum & 0x01) != 0 || oddSum > 13 || oddSum < 4) {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
 
         var group: Int64 = (13 - oddSum) / 2
@@ -746,7 +746,7 @@ public class RSSExpandedReader <: AbstractRSSReader {
 
         if (incrementOdd) {
             if (decrementOdd) {
-                throw NotFoundException.getNotFoundInstance();
+                throw Qrcoder4cjNotFoundException.getNotFoundInstance();
             }
             increment(this.getOddCounts(), this.getOddRoundingErrors());
         }
@@ -755,7 +755,7 @@ public class RSSExpandedReader <: AbstractRSSReader {
         }
         if (incrementEven) {
             if (decrementEven) {
-                throw NotFoundException.getNotFoundInstance();
+                throw Qrcoder4cjNotFoundException.getNotFoundInstance();
             }
             increment(this.getEvenCounts(), this.getOddRoundingErrors());
         }
@@ -774,29 +774,29 @@ public class RSSExpandedReader <: AbstractRSSReader {
         match (mismatch) {
             case 1 => if (oddParityBad) {
                 if (evenParityBad) {
-                    throw NotFoundException.getNotFoundInstance();
+                    throw Qrcoder4cjNotFoundException.getNotFoundInstance();
                 }
                 decrementOdd_p = true
             } else {
                 if (!evenParityBad) {
-                    throw NotFoundException.getNotFoundInstance();
+                    throw Qrcoder4cjNotFoundException.getNotFoundInstance();
                 }
                 decrementEven_p = true
             }
             case -1 => if (oddParityBad) {
                 if (evenParityBad) {
-                    throw NotFoundException.getNotFoundInstance();
+                    throw Qrcoder4cjNotFoundException.getNotFoundInstance();
                 }
                 incrementOdd_p = true
             } else {
                 if (!evenParityBad) {
-                    throw NotFoundException.getNotFoundInstance();
+                    throw Qrcoder4cjNotFoundException.getNotFoundInstance();
                 }
                 incrementEven_p = true
             }
             case 0 => if (oddParityBad) {
                 if (!evenParityBad) {
-                    throw NotFoundException.getNotFoundInstance();
+                    throw Qrcoder4cjNotFoundException.getNotFoundInstance();
                 }
 
                 // Both bad
@@ -809,11 +809,11 @@ public class RSSExpandedReader <: AbstractRSSReader {
                 }
             } else {
                 if (evenParityBad) {
-                    throw NotFoundException.getNotFoundInstance();
+                    throw Qrcoder4cjNotFoundException.getNotFoundInstance();
                 }
                 // Nothing to do!
             }
-            case _ => throw NotFoundException.getNotFoundInstance();
+            case _ => throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
         return (decrementOdd_p, decrementEven_p, incrementOdd_p, incrementEven_p)
     }

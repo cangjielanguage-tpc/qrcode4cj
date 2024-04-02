@@ -53,7 +53,7 @@ public open class UPCAReader <: UPCEANReader {
             }
             return upcaResult
         } else {
-            throw FormatException.getFormatInstance();
+            throw Qrcoder4cjFormatException.getFormatInstance();
         }
     }
 }

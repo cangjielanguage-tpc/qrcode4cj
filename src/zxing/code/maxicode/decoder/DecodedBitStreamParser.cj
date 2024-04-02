@@ -109,7 +109,7 @@ public class DecodedBitStreamParser {
                     var pc: Int64 = getPostCode2(bytes)
                     var ps2Length: Int64 = getPostCode2Length(bytes)
                     if (ps2Length > 10) {
-                        throw FormatException.getFormatInstance()
+                        throw Qrcoder4cjFormatException.getFormatInstance()
                     }
                     postcode = pc.format(ps2Length.toString())
                 } else {

@@ -3,7 +3,7 @@
  */
 package zxing.code.datamatrix.decoder
 
-import zxing.code.common.FormatException
+import zxing.code.common.Qrcoder4cjFormatException
 
 public class ECBlocks {
     private let ecCodewords: Int64
@@ -126,11 +126,11 @@ public class Version {
      * @param numRows Number of rows in modules
      * @param numColumns Number of columns in modules
      * @return Version for a Data Matrix Code of those dimensions
-     * @throws FormatException if dimensions do correspond to a valid Data Matrix size
+     * @throws Qrcoder4cjFormatException if dimensions do correspond to a valid Data Matrix size
      */
     public static func getVersionForDimensions(numRows: Int64, numColumns: Int64): Version {
         if ((numRows & 0x01) != 0 || (numColumns & 0x01) != 0) {
-            throw FormatException.getFormatInstance();
+            throw Qrcoder4cjFormatException.getFormatInstance();
         }
 
         for (i in 0..VERSIONS.size) {
@@ -139,7 +139,7 @@ public class Version {
             }
         }
 
-        throw FormatException.getFormatInstance();
+        throw Qrcoder4cjFormatException.getFormatInstance();
     }
 
     /**

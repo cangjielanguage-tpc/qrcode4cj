@@ -13,12 +13,12 @@ public class BitMatrixParser {
 
     /**
      * @param bitMatrix BitMatrix to parse
-     * @throws FormatException if dimension is not >= 21 and 1 mod 4
+     * @throws Qrcoder4cjFormatException if dimension is not >= 21 and 1 mod 4
      */
     public init(bitMatrix: BitMatrix) {
         let dimension: Int64 = bitMatrix.getHeight();
         if (dimension < 21 || (dimension & 0x03) != 1) {
-            throw FormatException.getFormatInstance();
+            throw Qrcoder4cjFormatException.getFormatInstance();
         }
         this.bitMatrix = bitMatrix
     }
@@ -27,7 +27,7 @@ public class BitMatrixParser {
      * Reads format information from one of its two locations within the QR Code.
      *
      * @return FormatInformation encapsulating the QR Code's format info
-     * @throws FormatException if both format information locations cannot be parsed as
+     * @throws Qrcoder4cjFormatException if both format information locations cannot be parsed as
      * the valid encoding of format information
      */
     public func readFormatInformation(): FormatInformation {
@@ -71,14 +71,14 @@ public class BitMatrixParser {
             return parse
         }
 
-        throw FormatException.getFormatInstance();
+        throw Qrcoder4cjFormatException.getFormatInstance();
     }
 
     /**
      * Reads version information from one of its two locations within the QR Code.
      *
      * @return Version encapsulating the QR Code's version
-     * @throws FormatException if both version information locations cannot be parsed as
+     * @throws Qrcoder4cjFormatException if both version information locations cannot be parsed as
      * the valid encoding of version information
      */
     public func readVersion(): Version {
@@ -123,7 +123,7 @@ public class BitMatrixParser {
                 return t
             }
         }
-        throw FormatException.getFormatInstance();
+        throw Qrcoder4cjFormatException.getFormatInstance();
     }
 
     public func copyBit(i: Int64, j: Int64, versionBits: Int64): Int64 {
@@ -145,7 +145,7 @@ public class BitMatrixParser {
      * QR Code.
      *
      * @return bytes encoded within the QR Code
-     * @throws FormatException if the exact number of bytes expected is not read
+     * @throws Qrcoder4cjFormatException if the exact number of bytes expected is not read
      */
     public func readCodewords(): Array<UInt8> {
         let formatInfo: FormatInformation = readFormatInformation();
@@ -209,7 +209,7 @@ public class BitMatrixParser {
         }
 
         if (resultOffset != version.getTotalCodewords()) {
-            throw FormatException.getFormatInstance();
+            throw Qrcoder4cjFormatException.getFormatInstance();
         }
 
         return result

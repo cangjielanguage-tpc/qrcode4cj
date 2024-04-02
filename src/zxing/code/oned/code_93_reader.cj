@@ -90,7 +90,7 @@ public open class Code93Reader <: OneDReader {
             recordPattern(row, nextStart, theCounters);
             var pattern: Int64 = toPattern(theCounters);
             if (pattern < 0) {
-                throw NotFoundException.getNotFoundInstance();
+                throw Qrcoder4cjNotFoundException.getNotFoundInstance();
             }
             decodedChar = patternToChar(pattern)
             result.append(decodedChar);
@@ -114,12 +114,12 @@ public open class Code93Reader <: OneDReader {
 
         // Should be at least one more black module
         if (nextStart == end || !row.get(nextStart)) {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
 
         if (result.size < 2) {
             // false positive -- need at least 2 checksum digits
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
 
         checkChecksums(UTF32String(result));
@@ -171,7 +171,7 @@ public open class Code93Reader <: OneDReader {
                 isWhite = !isWhite
             }
         }
-        throw NotFoundException.getNotFoundInstance();
+        throw Qrcoder4cjNotFoundException.getNotFoundInstance();
     }
 
     private static func toPattern(counters: Array<Int64>): Int64 {
@@ -215,7 +215,7 @@ public open class Code93Reader <: OneDReader {
                 return ALPHABET_STRING[i]
             }
         }
-        throw NotFoundException.getNotFoundInstance();
+        throw Qrcoder4cjNotFoundException.getNotFoundInstance();
     }
 
     private static func decodeExtended(encoded: UTF32String): String {
@@ -228,7 +228,7 @@ public open class Code93Reader <: OneDReader {
 
             if (c >= 'a' && c <= 'd') {
                 if (i >= length - 1) {
-                    throw FormatException.getFormatInstance();
+                    throw Qrcoder4cjFormatException.getFormatInstance();
                 }
                 var next: Char = encoded.get(i + 1);
                 var decodedChar: Char = '\0';
@@ -237,14 +237,14 @@ public open class Code93Reader <: OneDReader {
                     if (next >= 'A' && next <= 'Z') {
                         decodedChar = Char(next.hashCode() + 32)
                     } else {
-                        throw FormatException.getFormatInstance();
+                        throw Qrcoder4cjFormatException.getFormatInstance();
                     }
                 } else if (c == 'a') {
                     // $A to $Z map to control codes SH to SB
                     if (next >= 'A' && next <= 'Z') {
                         decodedChar = Char(next.hashCode() - 64)
                     } else {
-                        throw FormatException.getFormatInstance();
+                        throw Qrcoder4cjFormatException.getFormatInstance();
                     }
                 } else if (c == 'b') {
                     decodedChar = getDecoded93Char(next)
@@ -255,7 +255,7 @@ public open class Code93Reader <: OneDReader {
                     } else if (next == 'Z') {
                         decodedChar = ':'
                     } else {
-                        throw FormatException.getFormatInstance();
+                        throw Qrcoder4cjFormatException.getFormatInstance();
                     }
                 }
                 decoded.append(decodedChar);
@@ -297,7 +297,7 @@ public open class Code93Reader <: OneDReader {
             /* %X to %Z all map to DEL (127) */
             decodedChar = Char(127)
         } else {
-            throw FormatException.getFormatInstance();
+            throw Qrcoder4cjFormatException.getFormatInstance();
         }
         return decodedChar
     }
@@ -322,7 +322,7 @@ public open class Code93Reader <: OneDReader {
             i--
         }
         if (result.get(checkPosition) != ALPHABET_STRING[total % 47]) {
-            throw ChecksumException.getChecksumInstance();
+            throw Qrcoder4cjChecksumException.getChecksumInstance();
         }
     }
 }

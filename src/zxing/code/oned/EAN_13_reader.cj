@@ -101,7 +101,7 @@ public open class EAN13Reader <: UPCEANReader {
      * @param resultString string to insert decoded first digit into
      * @param lgPatternFound int whose bits indicates the pattern of odd/even L/G patterns used to
      * encode digits
-     * @throws NotFoundException if first digit cannot be determined
+     * @throws Qrcoder4cjNotFoundException if first digit cannot be determined
      */
     private static func determineFirstDigit(resultString: ArrayList<Char>, lgPatternFound: Int64) {
         for (d in 0..10) {
@@ -110,6 +110,6 @@ public open class EAN13Reader <: UPCEANReader {
                 return;
             }
         }
-        throw NotFoundException.getNotFoundInstance();
+        throw Qrcoder4cjNotFoundException.getNotFoundInstance();
     }
 }

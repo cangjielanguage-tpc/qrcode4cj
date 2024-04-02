@@ -17,7 +17,7 @@
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 
-from QRCode4cj import zxing.code.common.FormatException
+from QRCode4cj import zxing.code.common.Qrcoder4cjFormatException
 from QRCode4cj import zxing.code.common.ResultPoint
 from QRCode4cj import zxing.code.aztec.common.AztecDetectorResult
 from QRCode4cj import zxing.code.common.BitArray
@@ -230,7 +230,7 @@ public class DecoderTest {
             );
             var aztecResult: AztecDetectorResult = AztecDetectorResult(matrix, NO_POINTS, true, 16, 4)
             Decoder().decode(aztecResult)
-        } catch (e: FormatException) {}
+        } catch (e: Qrcoder4cjFormatException) {}
     }
 
     @TestCase
@@ -271,7 +271,7 @@ public class DecoderTest {
             )
             var aztecResult: AztecDetectorResult = AztecDetectorResult(matrix, NO_POINTS, true, 16, 4)
             Decoder().decode(aztecResult)
-        } catch (e: FormatException) {}
+        } catch (e: Qrcoder4cjFormatException) {}
     }
 
     @TestCase

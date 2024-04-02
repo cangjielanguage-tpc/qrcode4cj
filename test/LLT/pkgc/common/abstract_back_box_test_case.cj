@@ -235,7 +235,7 @@ public open class AbstractBlackBoxTestCase {
 
             pureHints.put(DecodeHintType.PURE_BARCODE, true)
             result = barcodeReader.decode(source, pureHints)
-        } catch (re: ReaderException) {
+        } catch (re: Qrcoder4cjReaderException) {
             // continue
         }
 
@@ -377,7 +377,7 @@ public open class AbstractBlackBoxTestCase {
                     } else {
                         misreadCounts[x] = misreadCounts[x] + 1
                     }
-                } catch (ignored: ReaderException) {
+                } catch (ignored: Qrcoder4cjReaderException) {
                     log.info("could not read at rotation ${rotation}");
                 }
                 try {
@@ -386,7 +386,7 @@ public open class AbstractBlackBoxTestCase {
                     } else {
                         tryHarderMisreadCounts[x] = tryHarderMisreadCounts[x] + 1
                     }
-                } catch (ignored: ReaderException) {
+                } catch (ignored: Qrcoder4cjReaderException) {
                     log.info("could not read at rotation ${rotation} w/TH");
                 }
             }

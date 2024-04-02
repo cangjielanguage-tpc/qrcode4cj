@@ -4,9 +4,9 @@
 package zxing.code.qrcode
 
 import zxing.code.common.BinaryBitmap
-import zxing.code.common.ChecksumException
-import zxing.code.common.FormatException
-import zxing.code.common.NotFoundException
+import zxing.code.common.Qrcoder4cjChecksumException
+import zxing.code.common.Qrcoder4cjFormatException
+import zxing.code.common.Qrcoder4cjNotFoundException
 import zxing.code.common.Reader
 import zxing.code.common.Result
 import zxing.code.common.ResultMetadataType
@@ -33,9 +33,9 @@ public open class QRCodeReader <: Reader {
      *
      * @return a String representing the content encoded by the QR code
      *
-     * @throws NotFoundException if a QR code cannot be found
-     * @throws FormatException if a QR code cannot be decoded
-     * @throws ChecksumException if error correction fails
+     * @throws Qrcoder4cjNotFoundException if a QR code cannot be found
+     * @throws Qrcoder4cjFormatException if a QR code cannot be decoded
+     * @throws Qrcoder4cjChecksumException if error correction fails
      */
     public func decode(image: BinaryBitmap): Result {
         return decode(image, HashMap<DecodeHintType, Any>());
@@ -98,7 +98,7 @@ public open class QRCodeReader <: Reader {
         let leftTopBlack: Array<Int64> = image.getTopLeftOnBit();
         let rightBottomBlack: Array<Int64> = image.getBottomRightOnBit();
         if (leftTopBlack.size == 0 || rightBottomBlack.size == 0) {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
 
         let modulesize: Float32 = moduleSize(leftTopBlack, image);
@@ -110,7 +110,7 @@ public open class QRCodeReader <: Reader {
 
         // Sanity check!
         if (left >= right || top >= bottom) {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
 
         if (bottom - top != right - left) {
@@ -119,7 +119,7 @@ public open class QRCodeReader <: Reader {
             right = left + (bottom - top)
             if (right >= image.getWidth()) {
                 // Abort if that would not make sense -- off image
-                throw NotFoundException.getNotFoundInstance();
+                throw Qrcoder4cjNotFoundException.getNotFoundInstance();
             }
         }
 
@@ -138,7 +138,7 @@ public open class QRCodeReader <: Reader {
         var nudgedTooFarRight: Int64 = left + Int64((matrixWidth - 1) * Int64(modulesize)) - right
         if (nudgedTooFarRight > 0) {
             if (nudgedTooFarRight > nudge) {
-                throw NotFoundException.getNotFoundInstance();
+                throw Qrcoder4cjNotFoundException.getNotFoundInstance();
             }
             left -= nudgedTooFarRight
         }
@@ -148,7 +148,7 @@ public open class QRCodeReader <: Reader {
         if (nudgedTooFarDown > 0) {
             if (nudgedTooFarDown > nudge) {
                 /* Neither way fits; abort */ 
-                throw NotFoundException.getNotFoundInstance();
+                throw Qrcoder4cjNotFoundException.getNotFoundInstance();
             }
             top -= nudgedTooFarDown
         }
@@ -190,11 +190,11 @@ public open class QRCodeReader <: Reader {
         var matrixHeight: Int64 = Int64(pointy_o)
 
         if (matrixWidth <= 0 || matrixHeight <= 0) {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
         if (matrixHeight != matrixWidth) {
             // Only possibly decode square regions
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
         return (matrixWidth, matrixHeight)
     }
@@ -218,7 +218,7 @@ public open class QRCodeReader <: Reader {
             y++
         }
         if (x_ == width || y == height) {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
         return Float32(x_ - leftTopBlack[0]) / 7.0f32
     }

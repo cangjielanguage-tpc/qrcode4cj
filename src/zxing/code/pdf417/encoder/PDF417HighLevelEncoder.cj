@@ -471,13 +471,13 @@ public open class PDF417HighLevelEncoder {
     public static func encodeHighLevel(msg: UTF32String, compaction: Compaction, encoding: MyCharset, autoECI: Bool): UTF32String {
         var encoding_ = encoding
         if (msg.isEmpty()) {
-            throw WriterException("Empty message not allowed")
+            throw Qrcoder4cjWriterException("Empty message not allowed")
         }
 
         if (encoding_.flag == false && !autoECI) {
             for (i in 0..msg.charSize) {
                 if (msg[i].hashCode() > 255) {
-                    throw WriterException(
+                    throw Qrcoder4cjWriterException(
                         "Non-encodable character detected: ${msg.toRuneArray()[i]} (Unicode: ${msg.toRuneArray()[i].hashCode()}). Consider specifying EncodeHintType.PDF417_AUTO_ECI and/or EncodeTypeHint.CHARACTER_SET."
                     )
                 }
@@ -983,7 +983,7 @@ public open class PDF417HighLevelEncoder {
                     @Assert(input is NoECIInput)
 
                     var ch: Char = input.charAt(idx_)
-                    throw WriterException("Non-encodable character detected: ${ch} (Unicode: ${ch.hashCode()})")
+                    throw Qrcoder4cjWriterException("Non-encodable character detected: ${ch} (Unicode: ${ch.hashCode()})")
                 }
             }
             idx_++
@@ -1003,7 +1003,7 @@ public open class PDF417HighLevelEncoder {
             sb.append(Char(ECI_USER_DEFINED))
             sb.append(Char(810900 - eci))
         } else {
-            throw WriterException("ECI number not in valid range from 0..811799, but was " + eci.toString())
+            throw Qrcoder4cjWriterException("ECI number not in valid range from 0..811799, but was " + eci.toString())
         }
     }
 }

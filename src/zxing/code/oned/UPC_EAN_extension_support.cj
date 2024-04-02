@@ -21,10 +21,10 @@ open class UPCEANExtensionSupport {
 
             try {
                 return fiveSupport.decodeRow(rowNumber, row, extensionStartRange);
-            } catch (ignored: ReaderException) {
+            } catch (ignored: Qrcoder4cjReaderException) {
                 return twoSupport.decodeRow(rowNumber, row, extensionStartRange);
             }
-        } catch (ignored: ReaderException) {
+        } catch (ignored: Qrcoder4cjReaderException) {
             return None
         }
     }

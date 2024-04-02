@@ -9,7 +9,7 @@
 package zxing.code.pdf417.encoder
 
 from std import collection.*
-import zxing.code.common.WriterException
+import zxing.code.common.Qrcoder4cjWriterException
 
 /**
  * PDF417 error correction code following the algorithm described in ISO/IEC 15438:2001(E) in
@@ -1077,7 +1077,7 @@ open class PDF417ErrorCorrection {
         if (n_ <= 863) {
             return 5
         }
-        throw WriterException("No recommendation possible")
+        throw Qrcoder4cjWriterException("No recommendation possible")
     }
 
     /**

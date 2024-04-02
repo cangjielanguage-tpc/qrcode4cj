@@ -5,7 +5,7 @@
 package zxing.code.datamatrix.detector
 
 from std import math.*
-import zxing.code.common.NotFoundException
+import zxing.code.common.Qrcoder4cjNotFoundException
 import zxing.code.common.ResultPoint
 import zxing.code.common.BitMatrix
 import zxing.code.common.DetectorResult
@@ -31,7 +31,7 @@ public class Detector {
      * <p>Detects a Data Matrix Code in an image.</p>
      *
      * @return {@link DetectorResult} encapsulating results of detecting a Data Matrix Code
-     * @throws NotFoundException if no Data Matrix Code can be found
+     * @throws Qrcoder4cjNotFoundException if no Data Matrix Code can be found
      */
     public func detect(): DetectorResult {
         let cornerPoints: Array<ResultPoint> = rectangleDetector.detect();
@@ -42,10 +42,10 @@ public class Detector {
         let v: Option<ResultPoint> = points[3]
         if (let Some(a) <- v) {
             if (!a.flag) {
-                throw NotFoundException.getNotFoundInstance();
+                throw Qrcoder4cjNotFoundException.getNotFoundInstance();
             }
         } else {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
         points = shiftToModuleCenter(points)
 

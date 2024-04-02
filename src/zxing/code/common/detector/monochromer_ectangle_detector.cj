@@ -54,7 +54,7 @@ public class MonochromeRectangleDetector {
             let tempArray: Array<ResultPoint> = [pointA, pointB, pointC, pointD]
             return tempArray
         } catch (e: Exception) {
-            throw NotFoundException()
+            throw Qrcoder4cjNotFoundException()
         }
     }
 
@@ -76,7 +76,7 @@ public class MonochromeRectangleDetector {
                 }
                 if (range == []) {
                     if (lastRange == []) {
-                        throw NotFoundException.getNotFoundInstance();
+                        throw Qrcoder4cjNotFoundException.getNotFoundInstance();
                     }
 
                     // lastRange was found
@@ -105,9 +105,9 @@ public class MonochromeRectangleDetector {
                 y += deltaY
                 x += deltaX
             }
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         } catch (e: Exception) {
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
     }
 

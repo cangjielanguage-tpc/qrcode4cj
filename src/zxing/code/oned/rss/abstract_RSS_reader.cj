@@ -63,7 +63,7 @@ public abstract class AbstractRSSReader <: OneDReader {
                 return value
             }
         }
-        throw NotFoundException.getNotFoundInstance();
+        throw Qrcoder4cjNotFoundException.getNotFoundInstance();
     }
 
     /**

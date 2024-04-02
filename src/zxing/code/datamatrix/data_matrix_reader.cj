@@ -4,10 +4,10 @@
 package zxing.code.datamatrix
 
 import zxing.code.common.BinaryBitmap
-import zxing.code.common.ChecksumException
+import zxing.code.common.Qrcoder4cjChecksumException
 import zxing.code.common.DecodeHintType
-import zxing.code.common.FormatException
-import zxing.code.common.NotFoundException
+import zxing.code.common.Qrcoder4cjFormatException
+import zxing.code.common.Qrcoder4cjNotFoundException
 import zxing.code.common.Reader
 import zxing.code.common.Result
 import zxing.code.common.ResultMetadataType
@@ -29,9 +29,9 @@ public class DataMatrixReader <: Reader {
      * Locates and decodes a Data Matrix code in an image.
      *
      * @return a String representing the content encoded by the Data Matrix code
-     * @throws NotFoundException if a Data Matrix code cannot be found
-     * @throws FormatException if a Data Matrix code cannot be decoded
-     * @throws ChecksumException if error correction fails
+     * @throws Qrcoder4cjNotFoundException if a Data Matrix code cannot be found
+     * @throws Qrcoder4cjFormatException if a Data Matrix code cannot be decoded
+     * @throws Qrcoder4cjChecksumException if error correction fails
      */
     public func decode(image: BinaryBitmap): Result {
         return decode(image, HashMap<DecodeHintType, Any>());
@@ -84,7 +84,7 @@ public class DataMatrixReader <: Reader {
         var leftTopBlack: Array<Int64> = image.getTopLeftOnBit();
         var rightBottomBlack: Array<Int64> = image.getBottomRightOnBit();
         if (leftTopBlack.size == 0 || rightBottomBlack.size == 0) {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
 
         var moduleSize: Int64 = moduleSize(leftTopBlack, image);
@@ -97,7 +97,7 @@ public class DataMatrixReader <: Reader {
         var matrixWidth: Int64 = (right - left + 1) / moduleSize
         var matrixHeight: Int64 = (bottom - top + 1) / moduleSize
         if (matrixWidth <= 0 || matrixHeight <= 0) {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
 
         // Push in the "border" by half the module width so that we start
@@ -130,12 +130,12 @@ public class DataMatrixReader <: Reader {
             x++
         }
         if (x == width) {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
 
         var moduleSize: Int64 = x - leftTopBlack[0]
         if (moduleSize == 0) {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
         return moduleSize
     }

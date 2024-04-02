@@ -19,7 +19,7 @@
 
 from QRCode4cj import zxing.code.common.BarcodeFormat
 from QRCode4cj import zxing.code.common.EncodeHintType
-from QRCode4cj import zxing.code.common.WriterException
+from QRCode4cj import zxing.code.common.Qrcoder4cjWriterException
 from QRCode4cj import zxing.code.common.BitMatrix
 from QRCode4cj import zxing.code.pdf417.PDF417Writer
 from std import unittest.* //testfame

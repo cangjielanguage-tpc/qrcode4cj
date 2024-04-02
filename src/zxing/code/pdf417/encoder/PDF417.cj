@@ -2966,7 +2966,7 @@ public open class PDF417 {
      * @param msg: message to encode
      * @param errorCorrectionLevel PDF417 error correction level value to use
      *
-     * @throws WriterException if the contents cannot be encoded in this format
+     * @throws Qrcoder4cjWriterException if the contents cannot be encoded in this format
      */
     public func generateBarcodeLogic(msg: UTF32String, errorCorrectionLevel: Int64) {
         generateBarcodeLogic(msg, errorCorrectionLevel, false)
@@ -2977,7 +2977,7 @@ public open class PDF417 {
      * @param errorCorrectionLevel PDF417 error correction level to use
      * @param autoECI automatically insert ECIs if needed
      *
-     * @throws WriterException if the contents cannot be encoded in this format
+     * @throws Qrcoder4cjWriterException if the contents cannot be encoded in this format
      */
     public func generateBarcodeLogic(msg: UTF32String, errorCorrectionLevel: Int64, autoECI: Bool) {
         //1. step: High-level encoding
@@ -2996,7 +2996,7 @@ public open class PDF417 {
 
         //2. step: construct data codewords
         if (sourceCodeWords + errorCorrectionCodeWords + 1 > 929) { // +1 for symbol length CW
-            throw WriterException(
+            throw Qrcoder4cjWriterException(
                 "Encoded message contains too many code words, message too big (" + msg.charSize.toString() + " bytes)")
         }
         var n: Int64 = sourceCodeWords + pad + 1
@@ -3060,7 +3060,7 @@ public open class PDF417 {
         }
 
         if (dimension.size == 0) {
-            throw WriterException("Unable to fit message in columns")
+            throw Qrcoder4cjWriterException("Unable to fit message in columns")
         }
 
         return dimension

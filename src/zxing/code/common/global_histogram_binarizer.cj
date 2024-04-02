@@ -145,7 +145,7 @@ public open class GlobalHistogramBinarizer <: Binarizer {
         }
 
         if (secondPeak - firstPeak <= numBuckets / 16) {
-            throw NotFoundException()
+            throw Qrcoder4cjNotFoundException()
         }
 
         var bestValley = secondPeak - 1

@@ -17,7 +17,7 @@
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 
-from QRCode4cj import zxing.code.common.NotFoundException
+from QRCode4cj import zxing.code.common.Qrcoder4cjNotFoundException
 from QRCode4cj import zxing.code.aztec.common.AztecDetectorResult
 from QRCode4cj import zxing.code.aztec.decoder.Decoder
 from QRCode4cj import zxing.code.aztec.detector.Point
@@ -550,7 +550,7 @@ public class DetectorTest {
                     }
                     try {
                         Detector(makeLarger(copy, 3)).detect(false)
-                    } catch (expected: NotFoundException) {
+                    } catch (expected: Qrcoder4cjNotFoundException) {
                         // continue
                     }
                 }

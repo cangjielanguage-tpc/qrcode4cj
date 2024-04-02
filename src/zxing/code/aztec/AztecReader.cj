@@ -2,8 +2,8 @@ package zxing.code.aztec
 
 import zxing.code.common.BinaryBitmap
 import zxing.code.common.DecodeHintType
-import zxing.code.common.FormatException
-import zxing.code.common.NotFoundException
+import zxing.code.common.Qrcoder4cjFormatException
+import zxing.code.common.Qrcoder4cjNotFoundException
 import zxing.code.common.Reader
 import zxing.code.common.Result
 import zxing.code.common.ResultMetadataType
@@ -22,8 +22,8 @@ public class AztecReader <: Reader {
     }
 
     public override func decode(image: BinaryBitmap, hints: HashMap<DecodeHintType, Any>): Result {
-        var notFoundException: ?NotFoundException = None
-        var formatException: ?FormatException = None
+        var notFoundException: ?Qrcoder4cjNotFoundException = None
+        var formatException: ?Qrcoder4cjFormatException = None
         var detector: Detector = Detector(image.getBlackMatrix())
         var points: Array<ResultPoint> = Array<ResultPoint>()
         var decoderResult: ?DecoderResult = None
@@ -31,9 +31,9 @@ public class AztecReader <: Reader {
             var detectorResult: AztecDetectorResult = detector.detect(false)
             points = detectorResult.getPoints()
             decoderResult = Decoder().decode(detectorResult)
-        } catch (e: NotFoundException) {
+        } catch (e: Qrcoder4cjNotFoundException) {
             notFoundException = e
-        } catch (e: FormatException) {
+        } catch (e: Qrcoder4cjFormatException) {
             formatException = e
         }
         if (let Some(d) <- decoderResult) {}
@@ -42,7 +42,7 @@ public class AztecReader <: Reader {
                 var detectorResult: AztecDetectorResult = detector.detect(true)
                 points = detectorResult.getPoints()
                 decoderResult = Decoder().decode(detectorResult)
-            } catch (e: NotFoundException | FormatException) {
+            } catch (e: Qrcoder4cjNotFoundException | Qrcoder4cjFormatException) {
                 throwdecode(e, notFoundException, formatException)
             }
         }
@@ -74,12 +74,12 @@ public class AztecReader <: Reader {
         return result
     }
 
-    private func throwdecode(e: Exception, notFoundException: ?NotFoundException, formatException: ?FormatException) {
+    private func throwdecode(e: Exception, notFoundException: ?Qrcoder4cjNotFoundException, formatException: ?Qrcoder4cjFormatException) {
         if (let Some(n) <- notFoundException) {
-            throw NotFoundException()
+            throw Qrcoder4cjNotFoundException()
         }
         if (let Some(n) <- formatException) {
-            throw FormatException()
+            throw Qrcoder4cjFormatException()
         }
         throw e
     }

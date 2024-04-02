@@ -9,9 +9,9 @@ public interface Reader {
      *
      * @param image image of barcode to decode
      * @return String which the barcode encodes
-     * @throws NotFoundException if no potential barcode is found
-     * @throws ChecksumException if a potential barcode is found but does not pass its checksum
-     * @throws FormatException if a potential barcode is found but format is invalid
+     * @throws Qrcoder4cjNotFoundException if no potential barcode is found
+     * @throws Qrcoder4cjChecksumException if a potential barcode is found but does not pass its checksum
+     * @throws Qrcoder4cjFormatException if a potential barcode is found but format is invalid
      */
     func decode(image: BinaryBitmap): Result
 
@@ -25,9 +25,9 @@ public interface Reader {
      * meaning of the data depends upon the hint type. The implementation may or may not do
      * anything with these hints.
      * @return String which the barcode encodes
-     * @throws NotFoundException if no potential barcode is found
-     * @throws ChecksumException if a potential barcode is found but does not pass its checksum
-     * @throws FormatException if a potential barcode is found but format is invalid
+     * @throws Qrcoder4cjNotFoundException if no potential barcode is found
+     * @throws Qrcoder4cjChecksumException if a potential barcode is found but does not pass its checksum
+     * @throws Qrcoder4cjFormatException if a potential barcode is found but format is invalid
      */
     func decode(image: BinaryBitmap, hints: HashMap<DecodeHintType, Any>): Result
 

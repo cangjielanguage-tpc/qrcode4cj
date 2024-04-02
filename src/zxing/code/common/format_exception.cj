@@ -11,20 +11,20 @@ package zxing.code.common
  *
  * @author Sean Owen
  */
-public open class FormatException <: ReaderException {
+public open class Qrcoder4cjFormatException <: Qrcoder4cjReaderException {
     public init() {
-        super("FormatException")
+        super("Qrcoder4cjFormatException")
     }
 
     public init(msg: String) {
-        super("FormatException: ${msg}")
+        super("Qrcoder4cjFormatException: ${msg}")
     }
 
-    public static func getFormatInstance(): FormatException {
-        return FormatException()
+    public static func getFormatInstance(): Qrcoder4cjFormatException {
+        return Qrcoder4cjFormatException()
     }
 
-    public static func getFormatInstance(ex: Exception): FormatException {
-        return FormatException(ex.toString())
+    public static func getFormatInstance(ex: Exception): Qrcoder4cjFormatException {
+        return Qrcoder4cjFormatException(ex.toString())
     }
 }

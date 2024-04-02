@@ -6,7 +6,7 @@ package zxing.code.pdf417.decoder
 
 from std import convert.*
 from std import format.*
-import zxing.code.common.FormatException
+import zxing.code.common.Qrcoder4cjFormatException
 import zxing.code.common.ECIStringBuilder
 import zxing.code.common.DecoderResult
 import zxing.code.pdf417.common.PDF417ResultMetadata
@@ -119,16 +119,16 @@ public open class DecodedBitStreamParser {
                     resultMetadata
                 )
             } else if (code == BEGIN_MACRO_PDF417_OPTIONAL_FIELD) {
-                throw FormatException.getFormatInstance()
+                throw Qrcoder4cjFormatException.getFormatInstance()
             } else if (code == MACRO_PDF417_TERMINATOR) {
-                throw FormatException.getFormatInstance()
+                throw Qrcoder4cjFormatException.getFormatInstance()
             } else {
                 codeIndex--
                 codeIndex = textCompaction(codewords, codeIndex, result)
             }
         }
         if (result.isEmpty() && resultMetadata.getFileId().isEmpty()) {
-            throw FormatException.getFormatInstance()
+            throw Qrcoder4cjFormatException.getFormatInstance()
         }
         var decoderResult: DecoderResult = DecoderResult(Array<UInt8>(), result.toString(), ArrayList<Array<UInt8>>(),
             ecLevel)
@@ -140,7 +140,7 @@ public open class DecodedBitStreamParser {
         var codeIndex_ = codeIndex
         if (codeIndex_ + NUMBER_OF_SEQUENCE_CODEWORDS > codewords[0]) {
             // we must have at least two bytes left for the segment index
-            throw FormatException.getFormatInstance()
+            throw Qrcoder4cjFormatException.getFormatInstance()
         }
         var segmentIndexArray: Array<Int64> = Array<Int64>(NUMBER_OF_SEQUENCE_CODEWORDS, item: 0)
         for (i in 0..NUMBER_OF_SEQUENCE_CODEWORDS) {
@@ -165,7 +165,7 @@ public open class DecodedBitStreamParser {
         }
         if (fileId.size == 0) {
             // at least one fileId codeword is required (Annex H.2)
-            throw FormatException.getFormatInstance()
+            throw Qrcoder4cjFormatException.getFormatInstance()
         }
         resultMetadata.setFileId(String(fileId))
 
@@ -195,7 +195,7 @@ public open class DecodedBitStreamParser {
                     try {
                         resultMetadata.setSegmentCount(Int64.parse(segmentCount.toString()))
                     } catch (nfe: IllegalArgumentException) {
-                        throw FormatException.getFormatInstance()
+                        throw Qrcoder4cjFormatException.getFormatInstance()
                     }
                 } else if (codewords[codeIndex_] == MACRO_PDF417_OPTIONAL_FIELD_TIME_STAMP) {
                     var timestamp: ECIStringBuilder = ECIStringBuilder()
@@ -203,7 +203,7 @@ public open class DecodedBitStreamParser {
                     try {
                         resultMetadata.setTimestamp(Int64.parse(timestamp.toString()))
                     } catch (nfe: IllegalArgumentException) {
-                        throw FormatException.getFormatInstance()
+                        throw Qrcoder4cjFormatException.getFormatInstance()
                     }
                 } else if (codewords[codeIndex_] == MACRO_PDF417_OPTIONAL_FIELD_CHECKSUM) {
                     var checksum: ECIStringBuilder = ECIStringBuilder()
@@ -211,7 +211,7 @@ public open class DecodedBitStreamParser {
                     try {
                         resultMetadata.setChecksum(Int64.parse(checksum.toString()))
                     } catch (nfe: IllegalArgumentException) {
-                        throw FormatException.getFormatInstance()
+                        throw Qrcoder4cjFormatException.getFormatInstance()
                     }
                 } else if (codewords[codeIndex_] == MACRO_PDF417_OPTIONAL_FIELD_FILE_SIZE) {
                     var fileSize: ECIStringBuilder = ECIStringBuilder()
@@ -219,16 +219,16 @@ public open class DecodedBitStreamParser {
                     try {
                         resultMetadata.setFileSize(Int64.parse(fileSize.toString()))
                     } catch (nfe: IllegalArgumentException) {
-                        throw FormatException.getFormatInstance()
+                        throw Qrcoder4cjFormatException.getFormatInstance()
                     }
                 } else {
-                    throw FormatException.getFormatInstance()
+                    throw Qrcoder4cjFormatException.getFormatInstance()
                 }
             } else if (codewords[codeIndex_] == MACRO_PDF417_TERMINATOR) {
                 codeIndex_++
                 resultMetadata.setLastSegment(true)
             } else {
-                throw FormatException.getFormatInstance()
+                throw Qrcoder4cjFormatException.getFormatInstance()
             }
         }
 
@@ -303,7 +303,7 @@ public open class DecodedBitStreamParser {
                     result.appendECI(codewords[codeIndex_])
                     codeIndex_++
                     if (codeIndex_ > codewords[0]) {
-                        throw FormatException.getFormatInstance()
+                        throw Qrcoder4cjFormatException.getFormatInstance()
                     }
                     textCompactionData = Array<Int64>((codewords[0] - codeIndex_) * 2, item: 0)
                     byteCompactionData = Array<Int64>((codewords[0] - codeIndex_) * 2, item: 0)
@@ -640,7 +640,7 @@ public open class DecodedBitStreamParser {
         }
         var resultString: String = result.toString()
         if (Char(resultString[0]) != '1') {
-            throw FormatException.getFormatInstance()
+            throw Qrcoder4cjFormatException.getFormatInstance()
         }
         return resultString[Range<Int64>(1, resultString.size, 1, true, true, false)]
     }

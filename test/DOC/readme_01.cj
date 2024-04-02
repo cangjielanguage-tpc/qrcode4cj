@@ -1,7 +1,7 @@
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 
-from QRCode4cj import zxing.code.common.FormatException
+from QRCode4cj import zxing.code.common.Qrcoder4cjFormatException
 from QRCode4cj import zxing.code.common.ResultPoint
 from QRCode4cj import zxing.code.aztec.common.AztecDetectorResult
 from QRCode4cj import zxing.code.common.BitArray

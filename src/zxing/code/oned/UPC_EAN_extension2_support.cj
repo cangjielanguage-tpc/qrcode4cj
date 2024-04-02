@@ -69,11 +69,11 @@ open class UPCEANExtension2Support {
         }
 
         if (resultString.size != 2) {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
 
         if (Int64.parse(String(resultString)) % 4 != checkParity) {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
 
         return rowOffset

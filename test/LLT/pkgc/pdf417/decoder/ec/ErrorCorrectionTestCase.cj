@@ -18,7 +18,7 @@
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 
-from QRCode4cj import zxing.code.common.ChecksumException
+from QRCode4cj import zxing.code.common.Qrcoder4cjChecksumException
 from QRCode4cj import zxing.code.pdf417.decoder.ec.*
 from std import random.*
 from std import collection.*
@@ -258,7 +258,7 @@ public class ErrorCorrectionTestCase {
         try {
             checkDecode(received);
             @Assert(false)
-        } catch (ce: ChecksumException) {
+        } catch (ce: Qrcoder4cjChecksumException) {
             // good
         }
     }

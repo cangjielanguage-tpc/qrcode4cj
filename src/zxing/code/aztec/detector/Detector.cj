@@ -1,6 +1,6 @@
 package zxing.code.aztec.detector
 
-import zxing.code.common.NotFoundException
+import zxing.code.common.Qrcoder4cjNotFoundException
 import zxing.code.common.ResultPoint
 import zxing.code.aztec.common.AztecDetectorResult
 import zxing.code.common.BitMatrix
@@ -9,7 +9,7 @@ import zxing.code.common.detector.MathUtils
 import zxing.code.common.detector.WhiteRectangleDetector
 import zxing.code.common.reedsolomon.GenericGF
 import zxing.code.common.reedsolomon.ReedSolomonDecoder
-import zxing.code.common.reedsolomon.ReedSolomonException
+import zxing.code.common.reedsolomon.Qrcoder4cjReedSolomonException
 from std import math.*
 
 /**
@@ -76,7 +76,7 @@ public class Detector {
      *
      * @param isMirror if true, image is a mirror-image of original
      * @return AztecDetectorResult encapsulating results of detecting an Aztec Code
-     * @throws NotFoundException if no Aztec Code can be found
+     * @throws Qrcoder4cjNotFoundException if no Aztec Code can be found
      */
     public func detect(isMirror: Bool): AztecDetectorResult {
 
@@ -115,12 +115,12 @@ public class Detector {
      * Extracts the number of data layers and data blocks from the layer around the bull's eye.
      *
      * @param bullsEyeCorners the array of bull's eye corners
-     * @throws NotFoundException in case of too many errors or invalid parameters
+     * @throws Qrcoder4cjNotFoundException in case of too many errors or invalid parameters
      */
     private func extractParameters(bullsEyeCorners: Array<ResultPoint>) {
         if (!isValid(bullsEyeCorners[0]) || !isValid(bullsEyeCorners[1]) || !isValid(bullsEyeCorners[2]) ||
             !isValid(bullsEyeCorners[3])) {
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
         var length_: Int64 = 2 * nbCenterLayers
 
@@ -201,7 +201,7 @@ public class Detector {
                 return shift_
             }
         }
-        throw NotFoundException.getNotFoundInstance()
+        throw Qrcoder4cjNotFoundException.getNotFoundInstance()
     }
 
     /**
@@ -209,7 +209,7 @@ public class Detector {
      *
      * @param parameterData parameter bits
      * @param compact true if this is a compact Aztec code value
-     * @throws NotFoundException if the array contains too many errors
+     * @throws Qrcoder4cjNotFoundException if the array contains too many errors
      */
     private static func getCorrectedParameterData(parameterData: Int64, compact: Bool): Int64 {
         var parameterDataItem = parameterData
@@ -236,8 +236,8 @@ public class Detector {
         try {
             var rsDecoder: ReedSolomonDecoder = ReedSolomonDecoder(GenericGF.AZTEC_PARAM)
             rsDecoder.decode(parameterWords, numECCodewords)
-        } catch (ignored: ReedSolomonException) {
-            throw NotFoundException.getNotFoundInstance()
+        } catch (ignored: Qrcoder4cjReedSolomonException) {
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
 
         // Toss the error correction.  Just return the data as an integer
@@ -255,7 +255,7 @@ public class Detector {
      *
      * @param pCenter Center point value
      * @return The corners of the bull-eye
-     * @throws NotFoundException If no valid bull-eye can be found
+     * @throws Qrcoder4cjNotFoundException If no valid bull-eye can be found
      */
     private func getBullsEyeCorners(pCenter: Point): Array<ResultPoint> {
         var pina: Point = pCenter
@@ -293,7 +293,7 @@ public class Detector {
         }
 
         if (nbCenterLayers != 5 && nbCenterLayers != 7) {
-            throw NotFoundException.getNotFoundInstance()
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
 
         compact = nbCenterLayers == 5
@@ -332,7 +332,7 @@ public class Detector {
             pointB = cornerPoints[1]
             pointC = cornerPoints[2]
             pointD = cornerPoints[3]
-        } catch (e: NotFoundException) {
+        } catch (e: Qrcoder4cjNotFoundException) {
             // This exception can be in case the initial rectangle is white
             // In that case, surely in the bull's eye, we try to expand the rectangle.
             var cx: Int64 = image.getWidth() / 2
@@ -375,7 +375,7 @@ public class Detector {
             pointB = cornerPoints[1]
             pointC = cornerPoints[2]
             pointD = cornerPoints[3]
-        } catch (e: NotFoundException) {
+        } catch (e: Qrcoder4cjNotFoundException) {
             // This exception can be in case the initial rectangle is white
             // In that case we try to expand the rectangle.
             pointA = getFirstDifferent(Point(cx + 7, cy - 7), false, 1, -1).toResultPoint()

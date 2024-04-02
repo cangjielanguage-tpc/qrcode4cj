@@ -100,12 +100,12 @@ public open class MultiFormatUPCEANReader <: OneDReader {
                     return resultUPCA
                 }
                 return result
-            } catch (ignored: ReaderException) {
+            } catch (ignored: Qrcoder4cjReaderException) {
                 // continue
             }
         }
 
-        throw NotFoundException.getNotFoundInstance();
+        throw Qrcoder4cjNotFoundException.getNotFoundInstance();
     }
 
     public override func reset() {

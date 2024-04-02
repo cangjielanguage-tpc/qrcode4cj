@@ -54,7 +54,7 @@ public class DefaultGridSampler <: GridSampler {
         transform: PerspectiveTransform
     ): BitMatrix {
         if (dimensionX <= 0 || dimensionY <= 0) {
-            throw NotFoundException()
+            throw Qrcoder4cjNotFoundException()
         }
         let bits = BitMatrix(dimensionX, dimensionY)
         let points: Array<Float64> = Array<Float64>(2 * dimensionX, item: 0.0)
@@ -83,7 +83,7 @@ public class DefaultGridSampler <: GridSampler {
                 // This results in an ugly runtime exception despite our clever checks above -- can't have
                 // that. We could check each point's coordinates but that feels duplicative. We settle for
                 // catching and wrapping ArrayIndexOutOfBoundsException.
-                throw NotFoundException.getNotFoundInstance()
+                throw Qrcoder4cjNotFoundException.getNotFoundInstance()
             }
         }
 

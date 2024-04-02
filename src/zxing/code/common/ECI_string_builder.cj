@@ -58,13 +58,13 @@ public class ECIStringBuilder <: ToString {
      * Appends ECI value to output.
      *
      * @param value ECI value to append, as an int
-     * @throws FormatException on invalid ECI value
+     * @throws Qrcoder4cjFormatException on invalid ECI value
      */
     public func appendECI(value: Int64) {
         encodeCurrentBytesIfAny();
         var characterSetECI: CharacterSetECI = CharacterSetECI.getCharacterSetECIByValue(value);
         if (!characterSetECI.flag) {
-            throw FormatException.getFormatInstance();
+            throw Qrcoder4cjFormatException.getFormatInstance();
         }
         currentCharset = characterSetECI.getCharset()
     }

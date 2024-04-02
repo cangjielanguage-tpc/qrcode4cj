@@ -1,13 +1,13 @@
 package zxing.code.maxicode.decoder
 
-import zxing.code.common.ChecksumException
+import zxing.code.common.Qrcoder4cjChecksumException
 import zxing.code.common.DecodeHintType
-import zxing.code.common.FormatException
+import zxing.code.common.Qrcoder4cjFormatException
 import zxing.code.common.BitMatrix
 import zxing.code.common.DecoderResult
 import zxing.code.common.reedsolomon.GenericGF
 import zxing.code.common.reedsolomon.ReedSolomonDecoder
-import zxing.code.common.reedsolomon.ReedSolomonException
+import zxing.code.common.reedsolomon.Qrcoder4cjReedSolomonException
 import zxing.code.tools.System
 from std import collection.*
 
@@ -48,7 +48,7 @@ public class Decoder {
                 correctErrors(codewords, 20, 68, 56, EVEN)
                 correctErrors(codewords, 20, 68, 56, ODD)
                 datawords = Array<UInt8>(78, item: 0)
-            case _ => throw FormatException.getFormatInstance()
+            case _ => throw Qrcoder4cjFormatException.getFormatInstance()
         }
         System.arraycopy(codewords, 0, datawords, 0, 10)
         System.arraycopy(codewords, 20, datawords, 10, datawords.size - 10)
@@ -80,8 +80,8 @@ public class Decoder {
         }
         try {
             rsDecoder.decode(codewordsInts, ecCodewords / divisor)
-        } catch (ignored: ReedSolomonException) {
-            throw ChecksumException.getChecksumInstance()
+        } catch (ignored: Qrcoder4cjReedSolomonException) {
+            throw Qrcoder4cjChecksumException.getChecksumInstance()
         }
 
         // Copy back into array of bytes -- only need to worry about the bytes that were data

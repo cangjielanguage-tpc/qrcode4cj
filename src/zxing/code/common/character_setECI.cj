@@ -370,7 +370,7 @@ public open class CharacterSetECI {
     public func GetCharacterSetECIByValue(result: CharacterSetECI): MyCharset {
         this.flag = true
         if (value < 0 || value >= 900) {
-            throw FormatException.getFormatInstance();
+            throw Qrcoder4cjFormatException.getFormatInstance();
         }
 
         match (result.value) {
@@ -458,7 +458,7 @@ public open class CharacterSetECI {
      * @param value character set ECI value
      * @return {@code CharacterSetECI} representing ECI of given value, or null if it is legal but
      * unsupported
-     * @throws FormatException if ECI value is invalid
+     * @throws Qrcoder4cjFormatException if ECI value is invalid
      */
     public static func getCharacterSetECIByValue(result: Int64): CharacterSetECI {
         return CharacterSetECI(result)

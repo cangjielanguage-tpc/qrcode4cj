@@ -4,7 +4,7 @@
 
 package zxing.code.oned.rss.expanded.decoders
 
-// import zxing.code.common.FormatException
+// import zxing.code.common.Qrcoder4cjFormatException
 
 /**
  * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
@@ -20,7 +20,7 @@ class DecodedNumeric <: DecodedObject {
         super(newPosition);
 
         if (firstDigit < 0 || firstDigit > 10 || secondDigit < 0 || secondDigit > 10) {
-            throw FormatException.getFormatInstance();
+            throw Qrcoder4cjFormatException.getFormatInstance();
         }
 
         this.firstDigit = firstDigit

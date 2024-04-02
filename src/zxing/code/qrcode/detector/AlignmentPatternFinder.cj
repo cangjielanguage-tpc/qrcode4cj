@@ -3,7 +3,7 @@
  */
 package zxing.code.qrcode.detector
 
-import zxing.code.common.NotFoundException
+import zxing.code.common.Qrcoder4cjNotFoundException
 import zxing.code.common.ResultPointCallback
 import zxing.code.common.BitMatrix
 from std import collection.*
@@ -54,7 +54,7 @@ public class AlignmentPatternFinder {
      * it's pretty performance-critical and so is written to be fast foremost.</p>
      *
      * @return {@link AlignmentPattern} if found
-     * @throws NotFoundException if not found
+     * @throws Qrcoder4cjNotFoundException if not found
      */
     func find(): AlignmentPattern {
         let startX: Int64 = this.startX;
@@ -117,7 +117,7 @@ public class AlignmentPatternFinder {
             return possibleCenters[0]
         }
 
-        throw NotFoundException.getNotFoundInstance();
+        throw Qrcoder4cjNotFoundException.getNotFoundInstance();
     }
 
     func exfind(currentState: Int64, stateCount: Array<Int64>, i: Int64, j: Int64): (Int64, Option<AlignmentPattern>) {

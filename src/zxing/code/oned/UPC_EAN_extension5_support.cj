@@ -69,12 +69,12 @@ open class UPCEANExtension5Support {
         }
 
         if (resultString.size != 5) {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
 
         var checkDigit: Int64 = determineCheckDigit(lgPatternFound);
         if (extensionChecksum(UTF32String(resultString)) != checkDigit) {
-            throw NotFoundException.getNotFoundInstance();
+            throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
 
         return rowOffset
@@ -104,7 +104,7 @@ open class UPCEANExtension5Support {
                 return d
             }
         }
-        throw NotFoundException.getNotFoundInstance();
+        throw Qrcoder4cjNotFoundException.getNotFoundInstance();
     }
 
     /**
