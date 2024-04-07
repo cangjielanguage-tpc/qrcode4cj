@@ -50,7 +50,7 @@ main(): Int64 {
  * @author Sean Owen
  */
 @Test
-public open class RSS14BlackBox2TestCase {
+public class RSS14BlackBox2TestCase {
     @TestCase
     public func dotest(): Unit {
         var abs: AbstractBlackBoxTestCase = AbstractBlackBoxTestCase(

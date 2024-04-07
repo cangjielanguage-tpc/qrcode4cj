@@ -41,7 +41,7 @@ main(): Int64 {
  * @author Sean Owen
  */
 @Test
-public open class URIParsedResultTestCase {
+public class URIParsedResultTestCase {
     @TestCase
     public func testBookmarkDocomo(): Unit {
         doTest("MEBKM:URL:google.com;;", "http://google.com", "");

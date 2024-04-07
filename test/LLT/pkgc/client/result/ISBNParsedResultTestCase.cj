@@ -41,7 +41,7 @@ main(): Int64 {
  * @author Sean Owen
  */
 @Test
-public open class ISBNParsedResultTestCase {
+public class ISBNParsedResultTestCase {
     @TestCase
     public func testISBN(): Unit {
         doTest("9784567890123");

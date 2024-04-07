@@ -38,7 +38,7 @@ main(): Int64 {
  * @author Daisuke Makiuchi
  */
 @Test
-public open class Code93ReaderTestCase {
+public class Code93ReaderTestCase {
     @TestCase
     public func testDecode(): Unit {
         doTest(

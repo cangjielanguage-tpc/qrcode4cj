@@ -39,7 +39,7 @@ main(): Int64 {
  * @author Sean Owen
  */
 @Test
-public class QRCodeBlackBox2TestCase <: AbstractBlackBoxTestCase {
+public class QRCodeBlackBox2TestCase {
     @TestCase
     public func dotest(): Unit {
         var abs: AbstractBlackBoxTestCase = AbstractBlackBoxTestCase(

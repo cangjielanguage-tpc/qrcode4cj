@@ -34,7 +34,7 @@ main(): Int64 {
  * Tests {@link RGBLuminanceSource}.
  */
 @Test
-public open class RGBLuminanceSourceTestCase {
+public class RGBLuminanceSourceTestCase {
     static let slurceData: Array<Int64> = [
         0x000000,
         0x7F7F7F,

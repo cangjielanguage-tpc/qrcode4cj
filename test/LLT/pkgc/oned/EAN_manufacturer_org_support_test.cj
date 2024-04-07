@@ -40,7 +40,7 @@ main(): Int64 {
  * @author Sean Owen
  */
 @Test
-public open class EANManufacturerOrgSupportTest {
+public class EANManufacturerOrgSupportTest {
     @TestCase
     public func testLookup(): Unit {
         var support: EANManufacturerOrgSupport = EANManufacturerOrgSupport()

@@ -39,7 +39,7 @@ main(): Int64 {
  * Tests {@link VINParsedResult}.
  */
 @Test
-public open class VINParsedResultTestCase {
+public class VINParsedResultTestCase {
     @TestCase
     public func testNotVIN(): Unit {
         var fakeResult: Result = Result(

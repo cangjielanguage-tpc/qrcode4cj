@@ -722,7 +722,7 @@ public open class FinderPatternFinder {
             itemnum++
         }
 
-        possibleCenters.sortBy(moduleSizeComparator, stable: true)
+        possibleCenters.sortBy(stable: true, comparator: moduleSizeComparator)
         var distortion: Float32 = Float32.Max;
         var bestPatterns: Array<FinderPattern> = Array<FinderPattern>(3, item: FinderPattern(0.0, 0.0, 0.0));
 

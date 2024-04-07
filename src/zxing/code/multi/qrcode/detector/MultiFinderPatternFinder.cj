@@ -82,7 +82,7 @@ public class MultiFinderPatternFinder <: FinderPatternFinder {
         }
 
         // Sort by estimated module size to speed up the upcoming checks
-        possibleCenters.sortBy(this.ModuleSizeComparator, stable: true)
+        possibleCenters.sortBy(stable: true, comparator: this.ModuleSizeComparator)
 
         /*
          * Now lets start: build a list of tuples of three finder locations that

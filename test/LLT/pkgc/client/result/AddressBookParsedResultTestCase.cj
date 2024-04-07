@@ -37,7 +37,7 @@ main(): Int64 {
  * @author Sean Owen
  */
 @Test
-public open class AddressBookParsedResultTestCase {
+public class AddressBookParsedResultTestCase {
     @TestCase
     public func testAddressBookDocomo(): Unit {
         doTest(

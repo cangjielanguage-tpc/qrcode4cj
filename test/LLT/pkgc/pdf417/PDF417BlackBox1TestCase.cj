@@ -40,7 +40,7 @@ main(): Int64 {
  * @author SITA Lab (kevin.osullivan@sita.aero)
  */
 @Test
-public open class PDF417BlackBox1TestCase <: AbstractBlackBoxTestCase {
+public class PDF417BlackBox1TestCase {
     @TestCase
     public func dotest(): Unit {
         var abs: AbstractBlackBoxTestCase = AbstractBlackBoxTestCase(

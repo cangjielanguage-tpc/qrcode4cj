@@ -49,7 +49,7 @@ main(): Int64 {
  * @author Agustín Delgado, Servinform, S.A.
  */
 @Test
-public open class ExpandedProductParsedResultTestCase {
+public class ExpandedProductParsedResultTestCase {
     @TestCase
     public func testRSSExpanded(): Unit {
         var uncommonAIs: HashMap<String, String> = HashMap<String, String>();

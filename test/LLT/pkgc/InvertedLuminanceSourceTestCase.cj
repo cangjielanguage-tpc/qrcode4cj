@@ -37,7 +37,7 @@ main(): Int64 {
  * Tests {@link InvertedLuminanceSource}.
  */
 @Test
-public open class InvertedLuminanceSourceTestCase {
+public class InvertedLuminanceSourceTestCase {
     @TestCase
     public func testInverted(): Unit {
         var image: RGBA_p = RGBA_p(Rectangle_p(Point(0, 0), Point(2, 1)))
