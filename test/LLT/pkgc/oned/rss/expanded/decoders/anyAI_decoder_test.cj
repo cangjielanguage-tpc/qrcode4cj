@@ -62,7 +62,7 @@ main(): Int64 {
  * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
  */
 @Test
-public class AnyAIDecoderTest <: AbstractDecoderTest {
+public class AnyAIDecoderTest {
     private static let header: String = ".....";
 
     @TestCase

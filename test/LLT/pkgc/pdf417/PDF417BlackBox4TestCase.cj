@@ -55,7 +55,7 @@ main(): Int64 {
  * @author Guenther Grau
  */
 @Test
-public open class PDF417BlackBox4TestCase {
+public class PDF417BlackBox4TestCase {
     public var log: SimpleLogger = SimpleLogger()
 
     private let barcodeReader: MultipleBarcodeReader = PDF417Reader(2);
@@ -131,8 +131,8 @@ public open class PDF417BlackBox4TestCase {
                 }
 
                 results.sortBy(
-                    {a: Result, b: Result => getMeta(a).getSegmentIndex().compare(getMeta(b).getSegmentIndex())},
-                    stable: true
+                    stable: true,
+                    comparator: {a: Result, b: Result => getMeta(a).getSegmentIndex().compare(getMeta(b).getSegmentIndex())}
                 )
                 var resultText: ArrayList<Char> = ArrayList<Char>();
                 var fileId: String = "";

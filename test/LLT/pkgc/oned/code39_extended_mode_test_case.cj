@@ -38,7 +38,7 @@ main(): Int64 {
  * @author Michael Jahn
  */
 @Test
-public open class Code39ExtendedModeTestCase {
+public class Code39ExtendedModeTestCase {
     @TestCase
     public func testDecodeExtendedMode(): Unit {
         doTest(

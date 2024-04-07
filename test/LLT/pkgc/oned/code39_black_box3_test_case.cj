@@ -41,7 +41,7 @@ main(): Int64 {
  * @author dswitkin@google.com (Daniel Switkin)
  */
 @Test
-public open class Code39BlackBox3TestCase {
+public class Code39BlackBox3TestCase {
     @TestCase
     public func dotest(): Unit {
         var abs: AbstractBlackBoxTestCase = AbstractBlackBoxTestCase(

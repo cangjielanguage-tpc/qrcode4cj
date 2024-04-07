@@ -42,7 +42,7 @@ main(): Int64 {
  * @author dswitkin@google.com (Daniel Switkin)
  */
 @Test
-public open class ParsedReaderResultTestCase {
+public class ParsedReaderResultTestCase {
     @TestCase
     public func testTextType(): Unit {
         doTestResult("", "", ParsedResultType.TEXT);

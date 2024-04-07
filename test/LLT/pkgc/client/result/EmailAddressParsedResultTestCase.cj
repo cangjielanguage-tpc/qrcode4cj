@@ -39,7 +39,7 @@ main(): Int64 {
  * @author Sean Owen
  */
 @Test
-public open class EmailAddressParsedResultTestCase {
+public class EmailAddressParsedResultTestCase {
     @TestCase
     public func testEmailAddress(): Unit {
         doTest("srowen@example.org", "srowen@example.org", "", "");

@@ -40,7 +40,7 @@ main(): Int64 {
  * @author gitlost
  */
 @Test
-public class DataMatrixBlackBox3TestCase <: AbstractBlackBoxTestCase {
+public class DataMatrixBlackBox3TestCase {
     @TestCase
     public func dotest(): Unit {
         var abs: AbstractBlackBoxTestCase = AbstractBlackBoxTestCase(

@@ -42,7 +42,7 @@ main(): Int64 {
  * @author Sean Owen
  */
 @Test
-public open class ProductParsedResultTestCase {
+public class ProductParsedResultTestCase {
     @TestCase
     public func testProduct(): Unit {
         doTest("123456789012", "123456789012", BarcodeFormat.UPC_A);

@@ -39,7 +39,7 @@ main(): Int64 {
  * @author Sean Owen
  */
 @Test
-public open class CalendarParsedResultTestCase {
+public class CalendarParsedResultTestCase {
     private static let EPSILON: Float64 = 1.0E-10;
 
     @TestCase

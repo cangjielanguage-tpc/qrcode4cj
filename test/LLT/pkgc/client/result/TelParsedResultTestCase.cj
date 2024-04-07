@@ -41,7 +41,7 @@ main(): Int64 {
  * @author Sean Owen
  */
 @Test
-public open class TelParsedResultTestCase {
+public class TelParsedResultTestCase {
     @TestCase
     public func testTel(): Unit {
         doTest("tel:+15551212", "+15551212", "");

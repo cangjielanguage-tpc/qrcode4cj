@@ -109,7 +109,7 @@ public class BitMatrixTestCase {
  * @author dswitkin@google.com (Daniel Switkin)
  */
 @Test
-public open class BitMatrixTestCaseT {
+public class BitMatrixTestCaseT {
     @TestCase
     public func testGetSet(): Unit {
         var matrix: BitMatrix = BitMatrix(33);

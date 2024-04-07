@@ -38,7 +38,7 @@ main(): Int64 {
  * @author Ari Pollak
  */
 @Test
-public open class EAN13WriterTestCase {
+public class EAN13WriterTestCase {
     @TestCase
     public func testEncode(): Unit {
         var testStr: String = "00001010001011010011101100110010011011110100111010101011001101101100100001010111001001110100010010100000";

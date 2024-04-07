@@ -37,7 +37,7 @@ main(): Int64 {
  * Tests {@link PDF417Writer}.
  */
 @Test
-public open class PDF417WriterTestCase {
+public class PDF417WriterTestCase {
     @TestCase
     public func testDataMatrixImageWriter(): Unit {
         var hints: HashMap<EncodeHintType, Any> = HashMap<EncodeHintType, Any>();

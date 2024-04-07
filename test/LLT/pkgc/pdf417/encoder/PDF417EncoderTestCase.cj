@@ -43,7 +43,7 @@ main(): Int64 {
  * Tests {@link PDF417HighLevelEncoder}.
  */
 @Test
-public open class PDF417EncoderTestCase {
+public class PDF417EncoderTestCase {
     @TestCase
     public func testEncodeAuto(): Unit {
         let encoded: String = PDF417HighLevelEncoder.encodeHighLevel(

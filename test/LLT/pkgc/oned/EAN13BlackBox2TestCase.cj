@@ -43,7 +43,7 @@ main(): Int64 {
  * @author dswitkin@google.com (Daniel Switkin)
  */
 @Test
-public open class EAN13BlackBox2TestCase {
+public class EAN13BlackBox2TestCase {
     @TestCase
     public func dotest(): Unit {
         var abs: AbstractBlackBoxTestCase = AbstractBlackBoxTestCase(

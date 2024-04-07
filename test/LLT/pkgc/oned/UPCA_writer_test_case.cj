@@ -38,7 +38,7 @@ main(): Int64 {
  * @author qwandor@google.com (Andrew Walbran)
  */
 @Test
-public open class UPCAWriterTestCase {
+public class UPCAWriterTestCase {
     @TestCase
     public func testEncode(): Unit {
         var testStr: String = "00001010100011011011101100010001011010111101111010101011100101110100100111011001101101100101110010100000";

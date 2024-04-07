@@ -34,7 +34,7 @@ main(): Int64 {
  * Tests {@link PlanarYUVLuminanceSource}.
  */
 @Test
-public open class PlanarYUVLuminanceSourceTestCase {
+public class PlanarYUVLuminanceSourceTestCase {
     private static let YUV: Array<UInt8> = ([
         0,
         1,

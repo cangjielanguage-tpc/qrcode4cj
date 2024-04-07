@@ -40,7 +40,7 @@ main(): Int64 {
  * @author dswitkin@google.com (Daniel Switkin)
  */
 @Test
-public open class PDF417BlackBox2TestCase <: AbstractBlackBoxTestCase {
+public class PDF417BlackBox2TestCase {
     @TestCase
     public func dotest(): Unit {
         var abs: AbstractBlackBoxTestCase = AbstractBlackBoxTestCase(

@@ -40,7 +40,7 @@ main(): Int64 {
  * rotation, which was a weak spot.
  */
 @Test
-public class QRCodeBlackBox6TestCase <: AbstractBlackBoxTestCase {
+public class QRCodeBlackBox6TestCase {
     @TestCase
     public func dotest(): Unit {
         var abs: AbstractBlackBoxTestCase = AbstractBlackBoxTestCase(

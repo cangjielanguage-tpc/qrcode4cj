@@ -38,7 +38,7 @@ main(): Int64 {
  * Tests {@link ITFWriter}.
  */
 @Test
-public open class ITFWriterTestCase {
+public class ITFWriterTestCase {
     @TestCase
     public func testEncode(): Unit {
         doTest(

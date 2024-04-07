@@ -41,7 +41,7 @@ main(): Int64 {
  * @author Sean Owen
  */
 @Test
-public open class SMSMMSParsedResultTestCase {
+public class SMSMMSParsedResultTestCase {
     @TestCase
     public func testSMS(): Unit {
         doTest("sms:+15551212", "+15551212", "", "", "", "sms:+15551212");

@@ -41,7 +41,7 @@ main(): Int64 {
  * @author Sean Owen
  */
 @Test
-public open class GeoParsedResultTestCase {
+public class GeoParsedResultTestCase {
     private static let EPSILON: Float64 = 1.0E-10;
 
     @TestCase

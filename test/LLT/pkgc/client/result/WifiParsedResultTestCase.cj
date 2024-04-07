@@ -41,7 +41,7 @@ main(): Int64 {
  * @author Vikram Aggarwal
  */
 @Test
-public open class WifiParsedResultTestCase {
+public class WifiParsedResultTestCase {
     @TestCase
     public func testNoPassword(): Unit {
         doTest("WIFI:S:NoPassword;P:;T:;;", "NoPassword", "", "nopass");

@@ -38,7 +38,7 @@ main(): Int64 {
  * Tests {@link PDF417Reader} against more sample images.
  */
 @Test
-public open class PDF417BlackBox3TestCase <: AbstractBlackBoxTestCase {
+public class PDF417BlackBox3TestCase {
     @TestCase
     public func dotest(): Unit {
         var abs: AbstractBlackBoxTestCase = AbstractBlackBoxTestCase(

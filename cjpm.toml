@@ -1,0 +1,21 @@
+[dependencies]
+  charset = {branch = "qrcode_lib", git = "https://gitee.com/HW-PLLab/charset.git", version = "0.0.2"}
+  image = {branch = "qrcode_lib", git = "https://gitee.com/HW-PLLab/image.git", version = "0.0.1"}
+
+[package]
+  cjc-version = "0.50.3"
+  compile-option = "-O2 --int-overflow=wrapping --warn-off all"
+  description = "CangjieUI Application"
+  link-option = ""
+  name = "QRCode4cj"
+  output-type = "dynamic"
+  src-dir = "src"
+  target-dir = ""
+  version = "0.0.1"
+  package-configuration = {}
+  scripts = {}
+
+[profile]
+  build = {incremental = false, lto = ""}
+  customized-option = {debug = "-g", release = "--fast-math -O2"}
+  test = {}
