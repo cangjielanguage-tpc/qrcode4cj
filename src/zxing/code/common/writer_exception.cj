@@ -6,14 +6,18 @@ package zxing.code.common
 
 public open class Qrcoder4cjWriterException <: Exception {
     public init() {
-        super("Qrcoder4cjWriterException")
+        super()
     }
 
     public init(message: String) {
-        super("Qrcoder4cjWriterException: ${message}");
+        super(message);
     }
 
     public init(cause: Exception) {
         super(cause.toString())
+    }
+
+    public func toString(): String {
+        return "Qrcoder4cjWriterException: " + message
     }
 }

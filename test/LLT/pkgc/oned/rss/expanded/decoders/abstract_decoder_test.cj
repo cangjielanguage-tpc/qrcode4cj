@@ -87,7 +87,7 @@ abstract class AbstractDecoderTest {
             var result: String = decoder.parseInformation();
             @Expect(expectedNumber, result)
         } catch (re: Qrcoder4cjNotFoundException) {
-            @Expect("Exception: Qrcoder4cjNotFoundException", re.toString())
+            @Expect("Qrcoder4cjNotFoundException: ", re.toString())
         }
     }
 }

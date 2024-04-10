@@ -13,11 +13,11 @@ package zxing.code.common
  */
 public open class Qrcoder4cjFormatException <: Qrcoder4cjReaderException {
     public init() {
-        super("Qrcoder4cjFormatException")
+        super()
     }
 
     public init(msg: String) {
-        super("Qrcoder4cjFormatException: ${msg}")
+        super(msg)
     }
 
     public static func getFormatInstance(): Qrcoder4cjFormatException {
@@ -26,5 +26,9 @@ public open class Qrcoder4cjFormatException <: Qrcoder4cjReaderException {
 
     public static func getFormatInstance(ex: Exception): Qrcoder4cjFormatException {
         return Qrcoder4cjFormatException(ex.toString())
+    }
+
+    public func toString(): String {
+        return "Qrcoder4cjFormatException: " + message
     }
 }

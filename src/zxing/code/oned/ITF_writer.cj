@@ -40,7 +40,7 @@ public open class ITFWriter <: OneDimensionalCodeWriter {
         var length: Int64 = contestsutf32.charSize;
 
         if (length % 2 != 0) {
-            throw IllegalArgumentException("The length of the input should be even");
+            throw IllegalArgumentException("The length of the input should be even number");
         }
         if (length > 80) {
             throw IllegalArgumentException("Requested contents should be less than 80 digits long, but got ${length}");
