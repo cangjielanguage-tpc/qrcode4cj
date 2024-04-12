@@ -14,7 +14,7 @@ import zxing.code.pdf417.encoder.Compaction
 import zxing.code.pdf417.encoder.Dimensions
 import zxing.code.pdf417.encoder.PDF417
 import zxing.code.qrcode.decoder.ErrorCorrectionLevel
-from charset import charset.tools.UTF32String
+import zxing.code.tools.UTF32String
 
 public open class PDF417Writer <: Writer {
     /**

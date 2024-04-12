@@ -23,7 +23,7 @@ from std import unittest.testmacro.* //macro_Defintion
 from std import io.*
 from std import format.*
 from std import collection.*
-from charset import charset.tools.UTF32String
+from QRCode4cj import zxing.code.tools.UTF32String
 from std import random.*
 from std import collection.*
 

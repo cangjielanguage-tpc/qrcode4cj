@@ -16,7 +16,7 @@ import zxing.code.common.MyCharset
 import zxing.code.common.CharsetEncoder
 import zxing.code.common.StandardCharsets
 import zxing.code.tools.BigInteger
-from charset import charset.tools.UTF32String
+import zxing.code.tools.UTF32String
 from std import unittest.* //testfame
 from std import unittest.testmacro.* //macro_Defintion
 from std import math.*

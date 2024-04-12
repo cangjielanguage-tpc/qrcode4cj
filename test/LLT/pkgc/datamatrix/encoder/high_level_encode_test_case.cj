@@ -24,7 +24,7 @@ from QRCode4cj import zxing.code.common.*
 from std import unittest.*
 from std import unittest.testmacro.*
 from std import collection.*
-from charset import charset.tools.UTF32String
+from QRCode4cj import zxing.code.tools.UTF32String
 
 main(): Int64 {
     let tester = HighLevelEncodeTestCase()

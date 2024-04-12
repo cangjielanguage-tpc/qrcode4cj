@@ -38,7 +38,7 @@ from std import collection.*
 from std import unicode.*
 from std import regex.*
 from std import random.*
-from charset import charset.tools.UTF32String
+from QRCode4cj import zxing.code.tools.UTF32String
 
 main(): Int64 {
     let tester = EncoderTest()

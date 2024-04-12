@@ -707,8 +707,8 @@ public class Encoder {
     }
 
     public static func append8BitBytes(content: UTF32String, bits: BitArray, _: MyCharset) {
-        for (i in 0..content.size) {
-            bits.appendBits(content[i].hashCode(), 8);
+        for (i in content.toString().toArray()) {
+            bits.appendBits(Int64(i), 8);
         }
     }
 

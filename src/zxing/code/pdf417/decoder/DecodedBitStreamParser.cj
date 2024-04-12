@@ -11,7 +11,7 @@ import zxing.code.common.ECIStringBuilder
 import zxing.code.common.DecoderResult
 import zxing.code.pdf417.common.PDF417ResultMetadata
 import zxing.code.tools.BigInteger
-from charset import charset.tools.UTF32String
+import zxing.code.tools.UTF32String
 
 enum Mode {
     | ALPHA

@@ -4,7 +4,7 @@
 
 package zxing.code.oned
 
-from charset import charset.tools.UTF32String
+import zxing.code.tools.UTF32String
 
 /**
  * This class renders CodaBar as Array<Bool>.

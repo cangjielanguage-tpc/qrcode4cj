@@ -14,7 +14,7 @@ import zxing.code.aztec.decoder.Decoder
 import zxing.code.aztec.detector.Detector
 import zxing.code.aztec.common.AztecDetectorResult
 import zxing.code.common.DecoderResult
-from charset import charset.tools.UTF32String
+import zxing.code.tools.UTF32String
 
 public class AztecReader <: Reader {
     public override func decode(image: BinaryBitmap): Result {

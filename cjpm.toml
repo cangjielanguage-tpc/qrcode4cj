@@ -1,5 +1,5 @@
 [dependencies]
-  charset = {branch = "qrcode_lib", git = "https://gitee.com/HW-PLLab/charset.git", version = "0.0.2"}
+  charset = {branch = "develop", git = "https://gitee.com/HW-PLLab/charset.git", version = "0.0.2"}
   image = {branch = "qrcode_lib", git = "https://gitee.com/HW-PLLab/image.git", version = "0.0.1"}
 
 [package]

@@ -27,7 +27,7 @@ from QRCode4cj import zxing.code.pdf417.encoder.PDF417HighLevelEncoderTestAdapte
 from QRCode4cj import zxing.code.common.MyCharset
 from QRCode4cj import zxing.code.pdf417.decoder.*
 from QRCode4cj import zxing.code.common.StandardCharsets
-from charset import charset.tools.UTF32String
+from QRCode4cj import zxing.code.tools.UTF32String
 from std import unittest.* //testfame
 from std import unittest.testmacro.* //macro_Defintion
 from std import fs.*

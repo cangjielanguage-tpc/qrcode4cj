@@ -6,8 +6,9 @@ package zxing.code.common
 
 from std import io.*
 from charset import charset.*
-from charset import charset.tools.*
+import zxing.code.tools.UTF32String
 from charset import charset.encoding.*
+from charset import charset.exception.*
 
 /**
  * Encapsulates a Character Set ECI, according to "Extended Channel Interpretations
@@ -41,6 +42,7 @@ public open class CharsetDecoder {
         return this.mycharset
     }
     public func decode(src: Array<UInt8>): String {
+        // charset不支持ISO-8859-1，使用WINDOWS_1252代替，此处过滤无法编码部分数据
         var diff = HashMap<Int64, UInt8>();
         if (this.mycharset.realName == "ISO-8859-1") {
             for (i in 0..src.size) {
@@ -77,34 +79,36 @@ public open class CharsetEncoder {
         return this.mycharset
     }
     public func canEncode(c: Char): Bool {
-        var result = this.encode.encode(UTF32String(c));
-        if (result.size > 0) {
-            if (this.mycharset.name() == "EUC_JP" || this.mycharset.name() == "Shift_JIS" || this.mycharset.name() ==
-                "EUC_KR" || this.mycharset.name() == "GB18030" || this.mycharset.name() == "Big5") {
-                return result[0] != 0x3F
-            } else if (this.mycharset.name() == "ISO-8859-1" || this.mycharset.realName == "ISO-8859-1") {
-                return c.hashCode() <= 0xff
-            } else {
-                return result[0] != 0x1A
+        try {
+            var result = this.encode.encode(c.toString());
+            return true
+        }
+        catch (e:EncoderException) {
+            // charset不支持ISO-8859-1，使用WINDOWS_1252代替，此处做解码判断补充
+            if (this.mycharset.realName == "ISO-8859-1")
+            {
+                if(c.hashCode() < 255)
+                {
+                    return true
+                }
             }
-        } else {
-            return false;
+            return false
         }
     }
 
     @OverflowWrapping
     public func getBytes(c: UTF32String): Array<UInt8> {
-        var result = this.encode.encode(c);
-        var fail_0x3f = this.mycharset.name() == "EUC_JP" || this.mycharset.name() == "Shift_JIS" ||
-            this.mycharset.name() == "EUC_KR" || this.mycharset.name() == "GB18030" || this.mycharset.name() == "Big5"
-        for (i in 0..result.size) {
-            if (fail_0x3f && result[i] == 0x3F) {
-                result[i] = UInt8(c[i].hashCode())
-            } else if (result[i] == 0x1A) {
+        try {
+            var result = this.encode.encode(c.toString());
+            return result
+        }
+        catch (e:EncoderException) {
+            var result = Array<UInt8>(c.size,item:0)
+            for (i in 0..c.size) {
                 result[i] = UInt8(c[i].hashCode())
             }
+            return result
         }
-        return result
     }
 }
 

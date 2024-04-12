@@ -3,7 +3,7 @@
  */
 package zxing.code.oned.rss.expanded.decoders
 
-from charset import charset.tools.UTF32String
+import zxing.code.tools.UTF32String
 
 /**
  * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
