@@ -11,14 +11,18 @@ package zxing.code.common
  */
 public open class Qrcoder4cjNotFoundException <: Qrcoder4cjReaderException {
     public init() {
-        super("Qrcoder4cjNotFoundException")
+        super()
     }
 
     public init(msg: String) {
-        super("Qrcoder4cjNotFoundException: ${msg}")
+        super(msg)
     }
 
     public static func getNotFoundInstance(): Qrcoder4cjNotFoundException {
         return Qrcoder4cjNotFoundException()
+    }
+
+    public func toString(): String {
+        return "Qrcoder4cjNotFoundException: " + message
     }
 }

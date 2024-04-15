@@ -12,4 +12,8 @@ public open class Qrcoder4cjReaderException <: Exception {
     public init(msg: String) {
         super(msg)
     }
+
+    public open func toString(): String {
+        return "Qrcoder4cjReaderException: " + message
+    }
 }

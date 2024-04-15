@@ -12,14 +12,18 @@ package zxing.code.common
  */
 public open class Qrcoder4cjChecksumException <: Qrcoder4cjReaderException {
     private init() {
-        super("Qrcoder4cjChecksumException")
+        super()
     }
 
     private init(msg: String) {
-        super("Qrcoder4cjChecksumException: ${msg}")
+        super(msg)
     }
 
     public static func getChecksumInstance(): Qrcoder4cjChecksumException {
         return Qrcoder4cjChecksumException()
+    }
+
+    public func toString(): String {
+        return "Qrcoder4cjChecksumException: " + message
     }
 }

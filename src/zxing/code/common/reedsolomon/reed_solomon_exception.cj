@@ -7,4 +7,8 @@ public class Qrcoder4cjReedSolomonException <: Exception {
     public Qrcoder4cjReedSolomonException(message: String) {
         super(message)
     }
+
+    public func toString(): String {
+        return "Qrcoder4cjReedSolomonException: " + message
+    }
 }
