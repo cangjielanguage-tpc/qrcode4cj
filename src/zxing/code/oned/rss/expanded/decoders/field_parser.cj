@@ -6,7 +6,7 @@ package zxing.code.oned.rss.expanded.decoders
 
 from std import collection.*
 from std import math.*
-from charset import charset.tools.UTF32String
+import zxing.code.tools.UTF32String
 
 class DataLength {
     var variable: Bool = false;

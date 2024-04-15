@@ -45,7 +45,7 @@ from std import convert.*
 from std import fs.*
 from std import log.*
 from std import os.posix.*
-from charset import charset.tools.UTF32String
+from QRCode4cj import zxing.code.tools.UTF32String
 from std import unittest.*
 from std import unittest.testmacro.*
 

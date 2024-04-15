@@ -8,7 +8,7 @@ import zxing.code.common.BitArray
 import zxing.code.common.ECIEncoderSet
 import zxing.code.common.Qrcoder4cjWriterException
 import zxing.code.common.MyCharset
-from charset import charset.tools.UTF32String
+import zxing.code.tools.UTF32String
 
 enum VersionSize {
     | SMALL(String) //("version 1-9")

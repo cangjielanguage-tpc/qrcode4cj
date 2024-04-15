@@ -21,7 +21,7 @@ from QRCode4cj import zxing.code.tools.*
 from QRCode4cj import zxing.code.common.*
 from QRCode4cj import zxing.code.common.reader.*
 from QRCode4cj import zxing.code.oned.*
-from charset import charset.tools.UTF32String
+from QRCode4cj import zxing.code.tools.UTF32String
 from std import unittest.* //testfame
 from std import unittest.testmacro.* //macro_Defintion
 from std import collection.*

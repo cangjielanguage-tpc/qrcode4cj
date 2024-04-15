@@ -14,7 +14,7 @@ import zxing.code.multi.MultipleBarcodeReader
 import zxing.code.multi.qrcode.detector.MultiDetector
 import zxing.code.qrcode.QRCodeReader
 import zxing.code.qrcode.decoder.QRCodeDecoderMetaData
-from charset import charset.tools.UTF32String
+import zxing.code.tools.UTF32String
 from std import math.*
 from std import collection.*
 from std import io.*

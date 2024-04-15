@@ -4,7 +4,7 @@
 
 package zxing.code.client.result
 
-from charset import charset.tools.UTF32String
+import zxing.code.tools.UTF32String
 
 public open class AddressBookAUResultParser <: ResultParser {
     public func parse(result: Result): ?ParsedResult {

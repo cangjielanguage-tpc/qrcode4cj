@@ -22,7 +22,7 @@ from QRCode4cj import zxing.code.qrcode.encoder.*
 from QRCode4cj import zxing.code.qrcode.decoder.Mode
 from QRCode4cj import zxing.code.qrcode.*
 from QRCode4cj import zxing.code.qrcode.decoder.ErrorCorrectionLevel
-from charset import charset.tools.UTF32String
+from QRCode4cj import zxing.code.tools.UTF32String
 from QRCode4cj import zxing.code.qrcode.decoder.Version
 from std import unittest.*
 from std import unittest.testmacro.*

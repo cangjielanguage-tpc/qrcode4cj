@@ -25,7 +25,7 @@
 
 from std import unittest.*
 from std import unittest.testmacro.*
-from charset import charset.tools.UTF32String
+from QRCode4cj import zxing.code.tools.UTF32String
 from std import collection.*
 from QRCode4cj import zxing.code.multi.qrcode.QRCodeMultiReader
 from QRCode4cj import zxing.code.multi.*

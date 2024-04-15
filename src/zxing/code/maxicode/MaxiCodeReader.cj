@@ -15,7 +15,7 @@ import zxing.code.common.DecoderResult
 import zxing.code.maxicode.decoder.Decoder
 from std import math.*
 from std import collection.*
-from charset import charset.tools.UTF32String
+import zxing.code.tools.UTF32String
 
 /**
  * This implementation can detect and decode a MaxiCode in an image.

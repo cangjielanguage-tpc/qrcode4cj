@@ -24,7 +24,7 @@ from QRCode4cj import zxing.code.common.BitArray
 from QRCode4cj import zxing.code.common.BitMatrix
 from QRCode4cj import zxing.code.common.DecoderResult
 from QRCode4cj import zxing.code.aztec.decoder.Decoder
-from charset import charset.tools.UTF32String
+from QRCode4cj import zxing.code.tools.UTF32String
 from std import unittest.*
 from std import unittest.testmacro.*
 from std import collection.*

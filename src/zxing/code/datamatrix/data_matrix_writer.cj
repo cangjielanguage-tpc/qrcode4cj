@@ -18,7 +18,7 @@ import zxing.code.datamatrix.encoder.MinimalEncoder
 import zxing.code.datamatrix.encoder.SymbolInfo
 import zxing.code.datamatrix.encoder.SymbolShapeHint
 import zxing.code.qrcode.encoder.ByteMatrix
-from charset import charset.tools.UTF32String
+import zxing.code.tools.UTF32String
 from std import collection.*
 from std import math.*
 

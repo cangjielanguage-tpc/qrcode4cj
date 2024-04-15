@@ -19,7 +19,7 @@
 
 from QRCode4cj import zxing.code.common.*
 from QRCode4cj import zxing.code.qrcode.decoder.*
-from charset import charset.tools.UTF32String
+from QRCode4cj import zxing.code.tools.UTF32String
 from std import unittest.*
 from std import unittest.testmacro.*
 from std import collection.*

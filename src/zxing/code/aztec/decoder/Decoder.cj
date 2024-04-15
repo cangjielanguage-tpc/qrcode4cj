@@ -5,7 +5,7 @@ from std import io.*
 import zxing.code.aztec.common.AztecDetectorResult
 import zxing.code.common.*
 import zxing.code.common.reedsolomon.*
-from charset import charset.tools.UTF32String
+import zxing.code.tools.UTF32String
 
 enum DecoderTable {
     | UPPER

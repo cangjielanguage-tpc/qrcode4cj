@@ -3,7 +3,7 @@
  */
 package zxing.code.client.result
 
-from charset import charset.tools.UTF32String
+import zxing.code.tools.UTF32String
 
 /**
  * Represents a parsed result that encodes an SMS message, including recipients, subject

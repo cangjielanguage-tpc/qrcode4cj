@@ -5,7 +5,7 @@
 package zxing.code.pdf417.decoder.ec
 
 import zxing.code.tools.System
-from charset import charset.tools.UTF32String
+import zxing.code.tools.UTF32String
 from std import collection.*
 
 /**

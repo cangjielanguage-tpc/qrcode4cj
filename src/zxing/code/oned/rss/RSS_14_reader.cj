@@ -6,7 +6,7 @@ package zxing.code.oned.rss
 
 from std import collection.*
 from std import convert.*
-from charset import charset.tools.UTF32String
+import zxing.code.tools.UTF32String
 
 /**
  * Decodes RSS-14, including truncated and stacked variants. See ISO/IEC 24724:2006.

@@ -21,7 +21,7 @@ from std import collection.*
 from std import random.*
 from std import log.*
 from std import io.*
-from charset import charset.tools.UTF32String
+from QRCode4cj import zxing.code.tools.UTF32String
 
 /**
  * This abstract class looks for negative results, i.e. it only allows a certain number of false

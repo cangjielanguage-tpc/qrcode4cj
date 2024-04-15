@@ -1002,7 +1002,7 @@ public class ErrorCorrection {
             if (m != 0 && poly[0] != 0) {
                 ecc[0] = Char(ALOG[(LOG[m] + LOG[poly[0]]) % 255])
             } else {
-                ecc[0] = '0'
+                ecc[0] = Char(0)
             }
         }
         var eccReversed: Array<Char> = Array<Char>(numECWords, item: ' ')

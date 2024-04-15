@@ -1,7 +1,7 @@
 package zxing.code.aztec.encoder
 
 from std import format.*
-from charset import charset.tools.UTF32String
+import zxing.code.tools.UTF32String
 
 public class SimpleToken <: Token {
     // For normal words, indicates value and bitCount

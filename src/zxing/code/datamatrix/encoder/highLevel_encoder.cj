@@ -6,7 +6,7 @@ package zxing.code.datamatrix.encoder
 
 from std import math.*
 from std import format.*
-from charset import charset.tools.UTF32String
+import zxing.code.tools.UTF32String
 
 /**
  * DataMatrix ECC 200 data encoder following the algorithm described in ISO/IEC 16022:200(E) in
