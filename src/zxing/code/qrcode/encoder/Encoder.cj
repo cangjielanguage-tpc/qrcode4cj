@@ -398,7 +398,7 @@ public class Encoder {
     }
 
     private static func chooseVersion(numInputBits: Int64, ecLevel: ErrorCorrectionLevel): Version {
-        for (versionNum in 1..40) {
+        for (versionNum in 1..=40) {
             var version: Version = Version.getVersionForNumber(versionNum);
             if (willFit(numInputBits, version, ecLevel)) {
                 return version
