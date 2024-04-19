@@ -64,14 +64,14 @@ cjpm build
 示例代码如下：
 
 ```cangjie
-from QRCode4cj import zxing.code.common.FormatException
-from QRCode4cj import zxing.code.common.ResultPoint
-from QRCode4cj import zxing.code.aztec.common.AztecDetectorResult
-from QRCode4cj import zxing.code.common.BitArray
-from QRCode4cj import zxing.code.common.BitMatrix
-from QRCode4cj import zxing.code.common.DecoderResult
-from QRCode4cj import zxing.code.aztec.decoder.Decoder
-from charset import charset.tools.UTF32String
+from QRCode4cj import common.Qrcoder4cjFormatException
+from QRCode4cj import common.ResultPoint
+from QRCode4cj import aztec.common.AztecDetectorResult
+from QRCode4cj import common.BitArray
+from QRCode4cj import common.BitMatrix
+from QRCode4cj import common.DecoderResult
+from QRCode4cj import aztec.decoder.Decoder
+from QRCode4cj import tools.UTF32String
 from std import unittest.*
 from std import unittest.testmacro.*
 
@@ -121,8 +121,8 @@ public class DecoderTestCase {
 示例代码如下：
 
 ```cangjie
-from QRCode4cj import zxing.code.common.*
-from QRCode4cj import zxing.code.qrcode.*
+from QRCode4cj import common.*
+from QRCode4cj import qrcode.*
 from std import unittest.*
 from std import unittest.testmacro.*
 
@@ -136,7 +136,7 @@ main(): Int64 {
 @Test
 public class EncoderTestCase {
     @TestCase
-    public func testEncode2(): Unit {
+    public func testEncode(): Unit {
         var res = QRCodeWriter().encode("ABCDEF", BarcodeFormat.QR_CODE, 21, 21)
         var expected = """
                                                           

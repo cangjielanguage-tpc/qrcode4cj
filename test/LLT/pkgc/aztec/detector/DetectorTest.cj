@@ -17,15 +17,15 @@
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 
-from QRCode4cj import zxing.code.common.Qrcoder4cjNotFoundException
-from QRCode4cj import zxing.code.aztec.common.AztecDetectorResult
-from QRCode4cj import zxing.code.aztec.decoder.Decoder
-from QRCode4cj import zxing.code.aztec.detector.Point
-from QRCode4cj import zxing.code.aztec.detector.Detector
-from QRCode4cj import zxing.code.aztec.encoder.AztecCode
-from QRCode4cj import zxing.code.aztec.encoder.Encoder
-from QRCode4cj import zxing.code.common.BitMatrix
-from QRCode4cj import zxing.code.common.DecoderResult
+from QRCode4cj import common.Qrcoder4cjNotFoundException
+from QRCode4cj import aztec.common.AztecDetectorResult
+from QRCode4cj import aztec.decoder.Decoder
+from QRCode4cj import aztec.detector.Point
+from QRCode4cj import aztec.detector.Detector
+from QRCode4cj import aztec.encoder.AztecCode
+from QRCode4cj import aztec.encoder.Encoder
+from QRCode4cj import common.BitMatrix
+from QRCode4cj import common.DecoderResult
 from std import unittest.*
 from std import unittest.testmacro.*
 from std import collection.*

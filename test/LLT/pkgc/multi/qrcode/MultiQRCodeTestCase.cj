@@ -21,8 +21,8 @@
 // EXEC: cjc %import-path %L %l %f ./abstract_back_box_test_case.cj ./test_result.cj ./test_common.cj
 // EXEC: ./main
 
-from QRCode4cj import zxing.code.multi.qrcode.QRCodeMultiReader
-from QRCode4cj import zxing.code.multi.*
+from QRCode4cj import multi.qrcode.QRCodeMultiReader
+from QRCode4cj import multi.*
 from std import fs.*
 from std import unittest.*
 from std import unittest.testmacro.*

@@ -17,7 +17,7 @@
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 
-from QRCode4cj import zxing.code.common.reedsolomon.*
+from QRCode4cj import common.reedsolomon.*
 from std import unittest.* //testfame
 from std import unittest.testmacro.* //macro_Defintion
 

@@ -22,7 +22,7 @@
 
 from std import unittest.* //testfame
 from std import unittest.testmacro.* //macro_Defintion
-from QRCode4cj import zxing.code.common.*
+from QRCode4cj import common.*
 
 main(): Int64 {
     let tester = InvertedLuminanceSourceTestCase()

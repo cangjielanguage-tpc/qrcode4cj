@@ -21,10 +21,10 @@ from std import math.*
 from std import time.*
 from std import unittest.*
 from std import unittest.testmacro.*
-from QRCode4cj import zxing.code.common.BarcodeFormat
-from QRCode4cj import zxing.code.common.Result
-from QRCode4cj import zxing.code.common.ResultPoint
-from QRCode4cj import zxing.code.client.result.*
+from QRCode4cj import common.BarcodeFormat
+from QRCode4cj import common.Result
+from QRCode4cj import common.ResultPoint
+from QRCode4cj import client.result.*
 
 main(): Int64 {
     let tester = CalendarParsedResultTestCase()

@@ -1,8 +1,8 @@
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 
-from QRCode4cj import zxing.code.common.*
-from QRCode4cj import zxing.code.qrcode.*
+from QRCode4cj import common.*
+from QRCode4cj import qrcode.*
 from std import unittest.*
 from std import unittest.testmacro.*
 

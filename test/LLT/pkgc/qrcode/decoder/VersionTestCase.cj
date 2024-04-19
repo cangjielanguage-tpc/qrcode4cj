@@ -18,9 +18,9 @@
 // EXEC: cjc %import-path %L %l %f ./bit_source_builder.cj
 // EXEC: ./main
 
-from QRCode4cj import zxing.code.common.*
-from QRCode4cj import zxing.code.qrcode.decoder.*
-from QRCode4cj import zxing.code.tools.UTF32String
+from QRCode4cj import common.*
+from QRCode4cj import qrcode.decoder.*
+from QRCode4cj import tools.UTF32String
 from std import unittest.*
 from std import unittest.testmacro.*
 from std import collection.*

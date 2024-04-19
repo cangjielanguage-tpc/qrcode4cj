@@ -19,12 +19,12 @@ package pkgc.datamatrix.encoder
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 
-from QRCode4cj import zxing.code.datamatrix.encoder.*
-from QRCode4cj import zxing.code.common.*
+from QRCode4cj import datamatrix.encoder.*
+from QRCode4cj import common.*
 from std import unittest.*
 from std import unittest.testmacro.*
 from std import collection.*
-from QRCode4cj import zxing.code.tools.UTF32String
+from QRCode4cj import tools.UTF32String
 
 main(): Int64 {
     let tester = HighLevelEncodeTestCase()

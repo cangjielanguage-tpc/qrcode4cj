@@ -28,14 +28,14 @@
 // EXEC: cjc %import-path %L %l %f binary_util.cj
 // EXEC: ./main
 
-from QRCode4cj import zxing.code.tools.*
-from QRCode4cj import zxing.code.common.*
-from QRCode4cj import zxing.code.oned.*
-from QRCode4cj import zxing.code.oned.rss.*
-from QRCode4cj import zxing.code.oned.rss.expanded.*
-from QRCode4cj import zxing.code.oned.rss.expanded.decoders.*
-from QRCode4cj import zxing.code.client.result.*
-from QRCode4cj import zxing.code.common.reader.*
+from QRCode4cj import tools.*
+from QRCode4cj import common.*
+from QRCode4cj import oned.*
+from QRCode4cj import oned.rss.*
+from QRCode4cj import oned.rss.expanded.*
+from QRCode4cj import oned.rss.expanded.decoders.*
+from QRCode4cj import client.result.*
+from QRCode4cj import common.reader.*
 from std import unittest.* //testfame
 from std import unittest.testmacro.* //macro_Defintion
 from std import regex.*
@@ -44,7 +44,7 @@ from std import convert.*
 from std import fs.*
 from std import log.*
 from std import os.posix.*
-from QRCode4cj import zxing.code.tools.UTF32String
+from QRCode4cj import tools.UTF32String
 from std import unittest.*
 from std import unittest.testmacro.*
 

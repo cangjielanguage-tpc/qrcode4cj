@@ -17,28 +17,28 @@
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 
-from QRCode4cj import zxing.code.common.EncodeHintType
-from QRCode4cj import zxing.code.common.BarcodeFormat
-from QRCode4cj import zxing.code.common.Qrcoder4cjFormatException
-from QRCode4cj import zxing.code.common.ResultPoint
-from QRCode4cj import zxing.code.aztec.common.AztecDetectorResult
-from QRCode4cj import zxing.code.aztec.AztecWriter
-from QRCode4cj import zxing.code.aztec.decoder.Decoder
-from QRCode4cj import zxing.code.aztec.encoder.AztecCode
-from QRCode4cj import zxing.code.aztec.encoder.Encoder
-from QRCode4cj import zxing.code.aztec.encoder.HighLevelEncoder
-from QRCode4cj import zxing.code.common.BitArray
-from QRCode4cj import zxing.code.common.BitMatrix
-from QRCode4cj import zxing.code.common.MyCharset
-from QRCode4cj import zxing.code.common.DecoderResult
-from QRCode4cj import zxing.code.common.StandardCharsets
+from QRCode4cj import common.EncodeHintType
+from QRCode4cj import common.BarcodeFormat
+from QRCode4cj import common.Qrcoder4cjFormatException
+from QRCode4cj import common.ResultPoint
+from QRCode4cj import aztec.common.AztecDetectorResult
+from QRCode4cj import aztec.AztecWriter
+from QRCode4cj import aztec.decoder.Decoder
+from QRCode4cj import aztec.encoder.AztecCode
+from QRCode4cj import aztec.encoder.Encoder
+from QRCode4cj import aztec.encoder.HighLevelEncoder
+from QRCode4cj import common.BitArray
+from QRCode4cj import common.BitMatrix
+from QRCode4cj import common.MyCharset
+from QRCode4cj import common.DecoderResult
+from QRCode4cj import common.StandardCharsets
 from std import unittest.*
 from std import unittest.testmacro.*
 from std import collection.*
 from std import unicode.*
 from std import regex.*
 from std import random.*
-from QRCode4cj import zxing.code.tools.UTF32String
+from QRCode4cj import tools.UTF32String
 
 main(): Int64 {
     let tester = EncoderTest()

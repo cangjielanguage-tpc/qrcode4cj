@@ -22,8 +22,8 @@
 // EXEC: ./main
 
 
-from QRCode4cj import zxing.code.common.BarcodeFormat
-from QRCode4cj import zxing.code.common.reader.MultiFormatReader
+from QRCode4cj import common.BarcodeFormat
+from QRCode4cj import common.reader.MultiFormatReader
 from std import unittest.* //testfame
 from std import unittest.testmacro.* //macro_Defintion
 
