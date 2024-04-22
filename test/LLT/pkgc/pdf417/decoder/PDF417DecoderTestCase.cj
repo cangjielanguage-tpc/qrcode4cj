@@ -18,16 +18,16 @@
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 
-from QRCode4cj import zxing.code.common.Qrcoder4cjFormatException
-from QRCode4cj import zxing.code.common.Qrcoder4cjWriterException
-from QRCode4cj import zxing.code.pdf417.common.PDF417ResultMetadata
-from QRCode4cj import zxing.code.common.DecoderResult
-from QRCode4cj import zxing.code.pdf417.encoder.Compaction
-from QRCode4cj import zxing.code.pdf417.encoder.PDF417HighLevelEncoderTestAdapter
-from QRCode4cj import zxing.code.common.MyCharset
-from QRCode4cj import zxing.code.pdf417.decoder.*
-from QRCode4cj import zxing.code.common.StandardCharsets
-from QRCode4cj import zxing.code.tools.UTF32String
+from QRCode4cj import common.Qrcoder4cjFormatException
+from QRCode4cj import common.Qrcoder4cjWriterException
+from QRCode4cj import pdf417.common.PDF417ResultMetadata
+from QRCode4cj import common.DecoderResult
+from QRCode4cj import pdf417.encoder.Compaction
+from QRCode4cj import pdf417.encoder.PDF417HighLevelEncoderTestAdapter
+from QRCode4cj import common.MyCharset
+from QRCode4cj import pdf417.decoder.*
+from QRCode4cj import common.StandardCharsets
+from QRCode4cj import tools.UTF32String
 from std import unittest.* //testfame
 from std import unittest.testmacro.* //macro_Defintion
 from std import fs.*

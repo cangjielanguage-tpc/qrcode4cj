@@ -17,11 +17,11 @@
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 
-from QRCode4cj import zxing.code.common.BarcodeFormat
-from QRCode4cj import zxing.code.common.EncodeHintType
-from QRCode4cj import zxing.code.common.Qrcoder4cjWriterException
-from QRCode4cj import zxing.code.common.BitMatrix
-from QRCode4cj import zxing.code.pdf417.PDF417Writer
+from QRCode4cj import common.BarcodeFormat
+from QRCode4cj import common.EncodeHintType
+from QRCode4cj import common.Qrcoder4cjWriterException
+from QRCode4cj import common.BitMatrix
+from QRCode4cj import pdf417.PDF417Writer
 from std import unittest.* //testfame
 from std import unittest.testmacro.* //macro_Defintion
 from std import collection.*

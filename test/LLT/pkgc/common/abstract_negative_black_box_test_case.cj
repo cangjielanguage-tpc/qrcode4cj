@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-from QRCode4cj import zxing.code.common.reader.*
+from QRCode4cj import common.reader.*
 from std import convert.*
 from std import fs.*
 from std import collection.*
 from std import random.*
 from std import log.*
 from std import io.*
-from QRCode4cj import zxing.code.tools.UTF32String
+from QRCode4cj import tools.UTF32String
 
 /**
  * This abstract class looks for negative results, i.e. it only allows a certain number of false
@@ -51,12 +51,12 @@ public class AbstractNegativeBlackBoxTestCase <: AbstractBlackBoxTestCase {
     //private static var log: SimpleLogger = SimpleLogger()
     private var testAResults: ArrayList<ATestResult> = ArrayList<ATestResult>()
 
-    //private let barcodeReader: zxing.code.common.Reader
+    //private let barcodeReader: common.Reader
     public init(testBasePathSuffix: String) {
         super(testBasePathSuffix, MultiFormatReader(), BarcodeFormat.NONE);
     }
 
-    public init(testBasePathSuffix: String, barcodeReader: zxing.code.common.Reader, expectedFormat: BarcodeFormat) {
+    public init(testBasePathSuffix: String, barcodeReader: common.Reader, expectedFormat: BarcodeFormat) {
         super(testBasePathSuffix, barcodeReader, expectedFormat);
     }
 

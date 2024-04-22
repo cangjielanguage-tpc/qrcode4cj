@@ -18,7 +18,7 @@
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 
-from QRCode4cj import zxing.code.common.reedsolomon.*
+from QRCode4cj import common.reedsolomon.*
 from std import random.*
 from std import collection.*
 from std import convert.*

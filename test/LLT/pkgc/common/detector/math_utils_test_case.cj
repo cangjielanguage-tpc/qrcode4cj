@@ -17,7 +17,7 @@
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 
-from QRCode4cj import zxing.code.common.detector.*
+from QRCode4cj import common.detector.*
 from std import unittest.* //testfame
 from std import unittest.testmacro.* //macro_Defintion
 from std import math.*

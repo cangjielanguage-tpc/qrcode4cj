@@ -21,9 +21,9 @@
 // EXEC: cjc %import-path %L %l %f ./abstract_back_box_test_case.cj ./test_result.cj ./test_common.cj
 // EXEC: ./main
 
-from QRCode4cj import zxing.code.common.BarcodeFormat
-from QRCode4cj import zxing.code.common.DecodeHintType
-from QRCode4cj import zxing.code.common.reader.*
+from QRCode4cj import common.BarcodeFormat
+from QRCode4cj import common.DecodeHintType
+from QRCode4cj import common.reader.*
 from std import unittest.*
 from std import unittest.testmacro.*
 from std import collection.*

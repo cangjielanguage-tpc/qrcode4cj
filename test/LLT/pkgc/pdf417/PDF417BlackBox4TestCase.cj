@@ -22,22 +22,22 @@
 // EXEC: ./main
 
 
-from QRCode4cj import zxing.code.common.BarcodeFormat
-from QRCode4cj import zxing.code.common.BinaryBitmap
-from QRCode4cj import zxing.code.common.DecodeHintType
-from QRCode4cj import zxing.code.common.LuminanceSource
-from QRCode4cj import zxing.code.common.Qrcoder4cjReaderException
-from QRCode4cj import zxing.code.common.Result
-from QRCode4cj import zxing.code.common.ResultMetadataType
-from QRCode4cj import zxing.code.common.HybridBinarizer
-from QRCode4cj import zxing.code.multi.MultipleBarcodeReader
-from QRCode4cj import zxing.code.pdf417.common.PDF417ResultMetadata
-from QRCode4cj import zxing.code.common.*
-from QRCode4cj import zxing.code.pdf417.PDF417Reader
+from QRCode4cj import common.BarcodeFormat
+from QRCode4cj import common.BinaryBitmap
+from QRCode4cj import common.DecodeHintType
+from QRCode4cj import common.LuminanceSource
+from QRCode4cj import common.Qrcoder4cjReaderException
+from QRCode4cj import common.Result
+from QRCode4cj import common.ResultMetadataType
+from QRCode4cj import common.HybridBinarizer
+from QRCode4cj import multi.MultipleBarcodeReader
+from QRCode4cj import pdf417.common.PDF417ResultMetadata
+from QRCode4cj import common.*
+from QRCode4cj import pdf417.PDF417Reader
 from std import fs.*
 from std import log.*
 from std import collection.*
-from QRCode4cj import zxing.code.tools.UTF32String
+from QRCode4cj import tools.UTF32String
 from std import unittest.* //testfame
 from std import unittest.testmacro.* //macro_Defintion
 

@@ -18,8 +18,8 @@
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 
-from QRCode4cj import zxing.code.common.Qrcoder4cjChecksumException
-from QRCode4cj import zxing.code.pdf417.decoder.ec.*
+from QRCode4cj import common.Qrcoder4cjChecksumException
+from QRCode4cj import pdf417.decoder.ec.*
 from std import random.*
 from std import collection.*
 from std import convert.*

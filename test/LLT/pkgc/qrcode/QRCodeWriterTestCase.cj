@@ -22,14 +22,14 @@
 // EXEC: cjc %import-path %L %l %f ./abstract_back_box_test_case.cj ./test_result.cj ./test_common.cj
 // EXEC: ./main
 
-from QRCode4cj import zxing.code.common.BarcodeFormat
-from QRCode4cj import zxing.code.common.reader.MultiFormatReader
-from QRCode4cj import zxing.code.common.EncodeHintType
-from QRCode4cj import zxing.code.common.Writer
-from QRCode4cj import zxing.code.common.Qrcoder4cjWriterException
-from QRCode4cj import zxing.code.common.BitMatrix
-from QRCode4cj import zxing.code.qrcode.decoder.ErrorCorrectionLevel
-from QRCode4cj import zxing.code.qrcode.QRCodeWriter
+from QRCode4cj import common.BarcodeFormat
+from QRCode4cj import common.reader.MultiFormatReader
+from QRCode4cj import common.EncodeHintType
+from QRCode4cj import common.Writer
+from QRCode4cj import common.Qrcoder4cjWriterException
+from QRCode4cj import common.BitMatrix
+from QRCode4cj import qrcode.decoder.ErrorCorrectionLevel
+from QRCode4cj import qrcode.QRCodeWriter
 from std import unittest.*
 from std import unittest.testmacro.*
 from std import collection.*

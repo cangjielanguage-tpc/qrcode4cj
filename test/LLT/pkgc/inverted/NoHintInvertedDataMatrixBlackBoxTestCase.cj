@@ -22,13 +22,13 @@
 // EXEC: cjc %import-path %L %l %f ./abstract_negative_black_box_test_case.cj ./test_result.cj ./test_common.cj ./abstract_back_box_test_case.cj
 // EXEC: ./main
 
-from QRCode4cj import zxing.code.common.reader.*
-from QRCode4cj import zxing.code.common.*
-from QRCode4cj import zxing.code.datamatrix.encoder.SymbolShapeHint
-from QRCode4cj import zxing.code.datamatrix.*
+from QRCode4cj import common.reader.*
+from QRCode4cj import common.*
+from QRCode4cj import datamatrix.encoder.SymbolShapeHint
+from QRCode4cj import datamatrix.*
 from std import unittest.*
 from std import unittest.testmacro.*
-from QRCode4cj import zxing.code.tools.UTF32String
+from QRCode4cj import tools.UTF32String
 from std import collection.*
 
 

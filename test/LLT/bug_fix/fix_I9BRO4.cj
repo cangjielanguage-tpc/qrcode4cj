@@ -3,13 +3,13 @@
 
 from std import unittest.*
 from std import unittest.testmacro.*
-from QRCode4cj import zxing.code.common.Qrcoder4cjChecksumException
-from QRCode4cj import zxing.code.common.Qrcoder4cjFormatException
-from QRCode4cj import zxing.code.common.Qrcoder4cjNotFoundException
-from QRCode4cj import zxing.code.common.Qrcoder4cjReaderException
-from QRCode4cj import zxing.code.common.Qrcoder4cjWriterException
-from QRCode4cj import zxing.code.common.Qrcoder4cjNotFoundException
-from QRCode4cj import zxing.code.common.reedsolomon.Qrcoder4cjReedSolomonException
+from QRCode4cj import common.Qrcoder4cjChecksumException
+from QRCode4cj import common.Qrcoder4cjFormatException
+from QRCode4cj import common.Qrcoder4cjNotFoundException
+from QRCode4cj import common.Qrcoder4cjReaderException
+from QRCode4cj import common.Qrcoder4cjWriterException
+from QRCode4cj import common.Qrcoder4cjNotFoundException
+from QRCode4cj import common.reedsolomon.Qrcoder4cjReedSolomonException
 
 main(): Int64 {
     let tester = Tester()

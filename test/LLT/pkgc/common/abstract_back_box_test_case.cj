@@ -21,7 +21,7 @@ from std import fs.*
 from std import log.*
 from std import os.posix.*
 
-from QRCode4cj import zxing.code.common.*
+from QRCode4cj import common.*
 
 /**
  * @author Sean Owen
@@ -32,7 +32,7 @@ public open class AbstractBlackBoxTestCase {
     public var log: SimpleLogger = SimpleLogger()
 
     public let testBase: Path
-    public let barcodeReader: zxing.code.common.Reader
+    public let barcodeReader: common.Reader
     public let expectedFormat: BarcodeFormat
     public let namesuffix: Array<String> = [".jpg", ".jpeg", ".gif", ".png", ".JPG", ".JPEG", ".GIF", ".PNG"]
     public var testResults: ArrayList<TestResult>
@@ -48,7 +48,7 @@ public open class AbstractBlackBoxTestCase {
         return testBase
     }
 
-    public init(testBasePathSuffix: String, barcodeReader: zxing.code.common.Reader, expectedFormat: BarcodeFormat) {
+    public init(testBasePathSuffix: String, barcodeReader: common.Reader, expectedFormat: BarcodeFormat) {
         this.testBase = buildTestBase(testBasePathSuffix)
         this.barcodeReader = barcodeReader
         this.expectedFormat = expectedFormat
@@ -107,7 +107,7 @@ public open class AbstractBlackBoxTestCase {
         return paths
     }
 
-    public func getReader(): zxing.code.common.Reader {
+    public func getReader(): common.Reader {
         return barcodeReader
     }
 

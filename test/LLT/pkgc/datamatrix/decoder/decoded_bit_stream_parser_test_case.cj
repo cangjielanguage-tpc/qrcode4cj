@@ -16,7 +16,7 @@
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 
-from QRCode4cj import zxing.code.datamatrix.decoder.*
+from QRCode4cj import datamatrix.decoder.*
 from std import unittest.*
 from std import unittest.testmacro.*
 

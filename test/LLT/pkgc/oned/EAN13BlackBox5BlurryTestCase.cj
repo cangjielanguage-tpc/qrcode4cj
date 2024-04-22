@@ -21,10 +21,10 @@
 // EXEC: cjc %import-path %L %l %f ./abstract_back_box_test_case.cj ./test_result.cj ./test_common.cj
 // EXEC: ./main
 
-from QRCode4cj import zxing.code.tools.*
-from QRCode4cj import zxing.code.common.*
-from QRCode4cj import zxing.code.common.reader.*
-from QRCode4cj import zxing.code.oned.*
+from QRCode4cj import tools.*
+from QRCode4cj import common.*
+from QRCode4cj import common.reader.*
+from QRCode4cj import oned.*
 from std import unittest.* //testfame
 from std import unittest.testmacro.* //macro_Defintion
 from std import collection.*
