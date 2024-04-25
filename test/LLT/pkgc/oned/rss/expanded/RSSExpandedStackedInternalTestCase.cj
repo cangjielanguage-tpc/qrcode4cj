@@ -82,6 +82,9 @@ public class RSSExpandedStackedInternalTestCase {
         @Assert(1, rssExpandedReader.getRows().size)
         var firstExpandedRow: ExpandedRow = rssExpandedReader.getRows().get(0).getOrThrow()
         @Assert(firstRowNumber, firstExpandedRow.getRowNumber())
+        firstExpandedRow.hashCode()
+        firstExpandedRow.equals(firstExpandedRow)
+        @Assert("{ [ [ 913 ( 0 ) , 989 ( 883 ) : 0 ] ][ [ 3702 ( 1822 ) , 3207 ( 1919 ) : 2 ] ] }", firstExpandedRow.toString())
 
         @Assert(2, firstExpandedRow.getPairs().size)
 
