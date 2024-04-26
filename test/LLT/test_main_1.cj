@@ -20,6 +20,14 @@ public class Tester {
     @TestCase
     func t1(): Unit {
         var res = decode("./aztec-1.png", 1);
+        var image: Image
+        var opencvUtils: CvImageForZxing = CvImageForZxing()
+        image = opencvUtils.opencvReadImg("./aztec-1.png")
+        var imageiop = image as ImageI
+        var imagei: ImageI = imageiop.getOrThrow()
+        var source: LuminanceSource = BufferedImageLuminanceSource(imagei);
+        var bitmap: BinaryBitmap = BinaryBitmap(HybridBinarizer(source));
+        bitmap.toString()
         @Assert("Code 2D!",res)
     }
 }
