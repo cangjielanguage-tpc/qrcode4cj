@@ -13,6 +13,23 @@
 ## 介绍
 
 一个解析/生成一维码/二维码的库。
+支持的格式如下：
+- 生成、解析 QRCode
+- 生成、解析 Data Matrix
+- 生成、解析 PDF417 barcode
+- 生成、解析 Aztec barcode
+- 生成、解析 codeBar
+- 生成、解析 code128
+- 生成、解析 code39
+- 生成、解析 code93
+- 生成、解析 EAN13
+- 生成、解析 EAN8
+- 生成、解析 ITF
+- 生成、解析 UPC-A 
+- 生成、解析 UPC-E 
+- 解析 UPC/EAN
+- 解析 MaxiCode
+- 解析 RSS barcode(RSS-14、RSS-Expanded)
 
 ### 特性
 
@@ -31,8 +48,6 @@
 ├── README.md
 ├── doc
 ├── src
-│   └── zxing
-│       └── code
 └── test   
     ├── HLT
     ├── LLT
