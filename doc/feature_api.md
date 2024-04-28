@@ -30,7 +30,7 @@ public open class CodaBarReader <: OneDReader {
      * 解码单行图像中的一维条形码
      * 参数 rowNumber - 行号
      * 参数 row - 该行的黑/白像素 BitArray 数据
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Result - 解码结果
      */
     public override func decodeRow(rowNumber: Int64, row: BitArray, hints: HashMap<DecodeHintType, Any>): Result
@@ -55,7 +55,7 @@ public open class Code128Reader <: OneDReader {
      * 解码单行图像中的一维条形码
      * 参数 rowNumber - 行号
      * 参数 row - 该行的黑/白像素 BitArray 数据
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Result - 解码结果
      */
     public override func decodeRow(rowNumber: Int64, row: BitArray, hints: HashMap<DecodeHintType, Any>): Result
@@ -72,7 +72,7 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
     /*
      * 将内容编码为一维条形码的布尔数组
      * 参数 contentsin - 要编码的字符串
-     * 参数 hints - 编码提示
+     * 参数 hints - 编码参数配置
      * 返回值 Array<Bool> - 编码结果
      */
     public func encode(contents: String, hints: HashMap<EncodeHintType, Any>): Array<Bool>
@@ -106,7 +106,7 @@ public open class Code39Reader <: OneDReader {
      * 解码单行图像中的一维条形码
      * 参数 rowNumber - 行号
      * 参数 row - 该行的黑/白像素 BitArray 数据
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Result - 解码结果
      */
     public override func decodeRow(rowNumber: Int64, row: BitArray, hints: HashMap<DecodeHintType, Any>): Result
@@ -136,7 +136,7 @@ public open class Code93Reader <: OneDReader {
      * 解码单行图像中的一维条形码
      * 参数 rowNumber - 行号
      * 参数 row - 该行的黑/白像素 BitArray 数据
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Result - 解码结果
      */
     public override func decodeRow(rowNumber: Int64, row: BitArray, hints: HashMap<DecodeHintType, Any>): Result
@@ -167,6 +167,25 @@ public open class EAN13Reader <: UPCEANReader {
      * 返回值 BarcodeFormat - 解码器格式
      */
     public override func getBarcodeFormat(): BarcodeFormat
+
+    /*
+     * 解码单行图像中的一维条形码
+     * 参数 rowNumber - 行号
+     * 参数 row - 该行的黑/白像素 BitArray 数据
+     * 参数 hints - 解码参数配置
+     * 返回值 Result - 解码结果
+     */
+    public open override func decodeRow(rowNumber: Int64, row: BitArray, hints: HashMap<DecodeHintType, Any>): Result
+
+    /*
+     * 解码单行图像中的一维条形码
+     * 参数 rowNumber - 行号
+     * 参数 row - 该行的黑/白像素 BitArray 数据
+     * 参数 startGuardRange - 起始标记数据
+     * 参数 hints - 解码参数配置
+     * 返回值 Result - 解码结果
+     */
+    public override func decodeRow(rowNumber: Int64, row: BitArray, startGuardRange: Array<Int64>, hints: HashMap<DecodeHintType, Any>): Result
 }
 
 public open class EAN13Writer <: UPCEANWriter {
@@ -194,6 +213,25 @@ public open class EAN8Reader <: UPCEANReader {
      * 返回值 BarcodeFormat - 解码器格式
      */
     public func getBarcodeFormat(): BarcodeFormat
+
+    /*
+     * 解码单行图像中的一维条形码
+     * 参数 rowNumber - 行号
+     * 参数 row - 该行的黑/白像素 BitArray 数据
+     * 参数 hints - 解码参数配置
+     * 返回值 Result - 解码结果
+     */
+    public open override func decodeRow(rowNumber: Int64, row: BitArray, hints: HashMap<DecodeHintType, Any>): Result
+
+    /*
+     * 解码单行图像中的一维条形码
+     * 参数 rowNumber - 行号
+     * 参数 row - 该行的黑/白像素 BitArray 数据
+     * 参数 startGuardRange - 起始标记数据
+     * 参数 hints - 解码参数配置
+     * 返回值 Result - 解码结果
+     */
+    public override func decodeRow(rowNumber: Int64, row: BitArray, startGuardRange: Array<Int64>, hints: HashMap<DecodeHintType, Any>): Result
 }
 
 public open class EAN8Writer <: UPCEANWriter {
@@ -220,7 +258,7 @@ public open class ITFReader <: OneDReader {
      * 解码单行图像中的一维条形码
      * 参数 rowNumber - 行号
      * 参数 row - 该行的黑/白像素 BitArray 数据
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Result - 解码结果
      */
     public override func decodeRow(rowNumber: Int64, row: BitArray, hints: HashMap<DecodeHintType, Any>): Result {
@@ -246,7 +284,7 @@ public open class UPCAReader <: UPCEANReader {
      * 参数 rowNumber - 行号
      * 参数 row - 该行的黑/白像素 BitArray 数据
      * 参数 startGuardRange - 起始标记数据
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Result - 解码结果
      */
     public override func decodeRow(rowNumber: Int64, row: BitArray, startGuardRange: Array<Int64>, hints: HashMap<DecodeHintType, Any>): Result
@@ -255,7 +293,7 @@ public open class UPCAReader <: UPCEANReader {
      * 解码单行图像中的一维条形码
      * 参数 rowNumber - 行号
      * 参数 row - 该行的黑/白像素 BitArray 数据
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Result - 解码结果
      */
     public override func decodeRow(rowNumber: Int64, row: BitArray, hints: HashMap<DecodeHintType, Any>): Result
@@ -270,7 +308,7 @@ public open class UPCAReader <: UPCEANReader {
     /*
      * 在图像中定位并解码 UPC-A 条形码
      * 参数 image - BinaryBitmap 图像
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Result - 解码结果
      */
     public override func decode(image: BinaryBitmap, hints: HashMap<DecodeHintType, Any>): Result
@@ -299,7 +337,7 @@ public open class UPCAWriter <: Writer {
      * 参数 format - 要生成的条形码格式，如果格式不是 BarcodeFormat.UPC_A 则抛 IllegalArgumentException 异常
      * 参数 width - 图像宽度
      * 参数 height - 图像高度
-     * 参数 hints - 编码提示
+     * 参数 hints - 编码参数配置
      * 返回值 BitMatrix - 编码完成的 BitMatrix 图像
      */
     public func encode(contents: String, format: BarcodeFormat, width: Int64, height: Int64, hints: HashMap<EncodeHintType, Any>): BitMatrix
@@ -347,14 +385,14 @@ public open class UPCAWriter <: Writer {
      * 参数 format - 要生成的条形码格式，如果格式不是 BarcodeFormat.UPC_A 则抛 IllegalArgumentException 异常
      * 参数 width - 图像宽度
      * 参数 height - 图像高度
-     * 参数 hints - 编码提示
+     * 参数 hints - 编码参数配置
      * 返回值 BitMatrix - 编码完成的 BitMatrix 图像
      */
     public func encode(contents: String, format: BarcodeFormat, width: Int64, height: Int64, hints: HashMap<EncodeHintType, Any>): BitMatrix
 }
 ```
 
-#### 1.10 生成、解析  UPC/EAN
+#### 1.10 解析  UPC/EAN
 
 ##### 1.10.1 主要接口
 ```cangjie
@@ -363,7 +401,7 @@ public abstract class UPCEANReader <: OneDReader {
      * 解码单行图像中的一维条形码
      * 参数 rowNumber - 行号
      * 参数 row - 该行的黑/白像素 BitArray 数据
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Result - 解码结果
      */
     public open override func decodeRow(rowNumber: Int64, row: BitArray, hints: HashMap<DecodeHintType, Any>): Result
@@ -373,7 +411,7 @@ public abstract class UPCEANReader <: OneDReader {
      * 参数 rowNumber - 行号
      * 参数 row - 该行的黑/白像素 BitArray 数据
      * 参数 startGuardRange - 起始标记数据
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Result - 解码结果
      */
     public override func decodeRow(rowNumber: Int64, row: BitArray, startGuardRange: Array<Int64>, hints: HashMap<DecodeHintType, Any>): Result
@@ -383,21 +421,6 @@ public abstract class UPCEANReader <: OneDReader {
      * 返回值 BarcodeFormat - 解码器格式
      */
     public func getBarcodeFormat(): BarcodeFormat
-}
-
-public open class UPCEANWriter <: OneDimensionalCodeWriter {
-    /*
-     * 将内容编码为一维条形码的布尔数组
-     * 参数 contentsin - 要编码的字符串
-     * 返回值 Array<Bool> - 编码结果, 固定返回一个空数组
-     */
-    public open func encode(contents: String): Array<Bool> 
-
-    /*
-     * 获取默认边距
-     * 返回值 Int64 - 固定返回 9
-     */
-    public override func getDefaultMargin(): Int64
 }
 ```
 
@@ -425,7 +448,7 @@ public open class QRCodeReader <: Reader {
     /*
      * 在图像中定位并解码 qrcode 二维码
      * 参数 image - BinaryBitmap 图像
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Result - 解码结果
      */
     public func decode(image: BinaryBitmap, hints: HashMap<DecodeHintType, Any>): Result
@@ -458,7 +481,7 @@ public class QRCodeWriter <: Writer {
      * 参数 format - 要生成的二维码格式，如果格式不是 BarcodeFormat.QR_CODE 则抛 IllegalArgumentException 异常
      * 参数 width - 图像宽度
      * 参数 height - 图像高度
-     * 参数 hints - 编码提示
+     * 参数 hints - 编码参数配置
      * 返回值 BitMatrix - 编码完成的 BitMatrix 图像
      */
     public func encode(contents: String, format: BarcodeFormat, width: Int64, height: Int64, hints: HashMap<EncodeHintType, Any>): BitMatrix
@@ -489,7 +512,7 @@ public class DataMatrixReader <: Reader {
     /*
      * 在图像中定位并解码 Data Matrix 二维码
      * 参数 image - BinaryBitmap 图像
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Result - 解码结果
      */
     public func decode(image: BinaryBitmap, hints: HashMap<DecodeHintType, Any>): Result
@@ -522,7 +545,7 @@ public class DataMatrixWriter <: Writer {
      * 参数 format - 要生成的二维码格式，如果格式不是 BarcodeFormat.DATA_MATRIX 则抛 IllegalArgumentException 异常
      * 参数 width - 图像宽度
      * 参数 height - 图像高度
-     * 参数 hints - 编码提示
+     * 参数 hints - 编码参数配置
      * 返回值 BitMatrix - 编码完成的 BitMatrix 图像
      */
     public func encode(contents: String, format: BarcodeFormat, width: Int64, height: Int64, hints: HashMap<EncodeHintType, Any>): BitMatrix
@@ -553,7 +576,7 @@ public open class PDF417Reader <: Reader & MultipleBarcodeReader {
     /*
      * 在图像中定位并解码 PDF417 barcode 二维码
      * 参数 image - BinaryBitmap 图像
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Result - 解码结果
      */
     public func decode(image: BinaryBitmap, hints: HashMap<DecodeHintType, Any>): Result
@@ -573,7 +596,7 @@ public open class PDF417Writer <: Writer {
     /*
      * 将内容编码为 PDF417 barcode 二维码
      * 参数 contents - 要编码的字符串
-     * 参数 format - 要生成的二维码格式，如果格式不是 BarcodeFormat.DATA_MATRIX 则抛 IllegalArgumentException 异常
+     * 参数 format - 要生成的二维码格式，如果格式不是 BarcodeFormat.PDF_417 则抛 IllegalArgumentException 异常
      * 参数 width - 图像宽度
      * 参数 height - 图像高度
      * 返回值 BitMatrix - 编码完成的 BitMatrix 图像
@@ -583,10 +606,10 @@ public open class PDF417Writer <: Writer {
     /*
      * 将内容编码为 PDF417 barcode 二维码
      * 参数 contents - 要编码的字符串
-     * 参数 format - 要生成的二维码格式，如果格式不是 BarcodeFormat.DATA_MATRIX 则抛 IllegalArgumentException 异常
+     * 参数 format - 要生成的二维码格式，如果格式不是 BarcodeFormat.PDF_417 则抛 IllegalArgumentException 异常
      * 参数 width - 图像宽度
      * 参数 height - 图像高度
-     * 参数 hints - 编码提示
+     * 参数 hints - 编码参数配置
      * 返回值 BitMatrix - 编码完成的 BitMatrix 图像
      */
     public func encode(contents: String, format: BarcodeFormat, width: Int64, height: Int64, hints: HashMap<EncodeHintType, Any>): BitMatrix
@@ -617,7 +640,7 @@ public class AztecReader <: Reader {
     /*
      * 在图像中定位并解码 Aztec barcode 二维码
      * 参数 image - BinaryBitmap 图像
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Result - 解码结果
      */
     public override func decode(image: BinaryBitmap, hints: HashMap<DecodeHintType, Any>): Result
@@ -650,7 +673,7 @@ public class AztecWriter <: Writer {
      * 参数 format - 要生成的二维码格式，如果格式不是 BarcodeFormat.AZTEC 则抛 IllegalArgumentException 异常
      * 参数 width - 图像宽度
      * 参数 height - 图像高度
-     * 参数 hints - 编码提示
+     * 参数 hints - 编码参数配置
      * 返回值 BitMatrix - 编码完成的 BitMatrix 图像
      */
     public func encode(contents: String, format: BarcodeFormat, width: Int64, height: Int64, hints: HashMap<EncodeHintType, Any>): BitMatrix
@@ -681,7 +704,7 @@ public class MaxiCodeReader <: Reader {
     /*
      * 在图像中定位并解码 MaxiCode 二维码
      * 参数 image - BinaryBitmap 图像
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Result - 解码结果
      */
     public override func decode(image: BinaryBitmap, hints: HashMap<DecodeHintType, Any>): Result
@@ -698,9 +721,9 @@ public class MaxiCodeReader <: Reader {
 场景：
 1. 用于物流、快递、包裹等方面；
 是否商用：是
-目标：提供解析MaxiCode格式的二维码
+目标：提供解析 RSS barcode 条码
 验收标准：
-1.  可根据实际场景需求解析 MaxiCode
+1.  可根据实际场景需求解析 RSS barcode 条码
 
 #### 7.1 RSS 解码
 
@@ -708,13 +731,37 @@ public class MaxiCodeReader <: Reader {
 ```cangjie
 public class RSS14Reader <: AbstractRSSReader {
     /*
-     * 解码单行图像中的 RSS 一维条形码
+     * 解码单行图像中的 RSS-14 一维条形码
      * 参数 rowNumber - 行号
      * 参数 row - 该行的黑/白像素 BitArray 数据
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Result - 解码结果
      */
     public func decodeRow(rowNumber: Int64, row: BitArray, hints: HashMap<DecodeHintType, Any>): Result
+
+    /*
+     * 空实现
+     */
+    public override func reset()
+}
+
+public class RSSExpandedReader <: AbstractRSSReader {
+    /*
+     * 解码单行图像中的 RSS-Expanded 一维条形码
+     * 参数 rowNumber - 行号
+     * 参数 row - 该行的黑/白像素 BitArray 数据
+     * 参数 hints - 解码参数配置
+     * 返回值 Result - 解码结果
+     */
+    public func decodeRow(rowNumber: Int64, row: BitArray, hints: HashMap<DecodeHintType, Any>): Result
+
+    /*
+     * 解码单行图像中的 RSS-Expanded 一维条形码
+     * 参数 rowNumber - 行号
+     * 参数 row - 该行的黑/白像素 BitArray 数据
+     * 返回值 ArrayList<ExpandedPair> - 解码结果
+     */
+    public func decodeRow2pairs(rowNumber: Int64, row: BitArray): ArrayList<ExpandedPair>
 
     /*
      * 空实现
@@ -747,7 +794,7 @@ public interface MultipleBarcodeReader {
     /*
      * 在图像中定位并解码多个二维码
      * 参数 image - BinaryBitmap 图像
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Array<Result> - 解码结果数组
      */
     func decodeMultiple(image: BinaryBitmap, hints: HashMap<DecodeHintType, Any>): Array<Result>
@@ -770,7 +817,7 @@ public class GenericMultipleBarcodeReader <: MultipleBarcodeReader {
     /*
      * 在图像中定位并解码多个二维码
      * 参数 image - BinaryBitmap 图像
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Array<Result> - 解码结果数组
      */
     func decodeMultiple(image: BinaryBitmap, hints: HashMap<DecodeHintType, Any>): Array<Result>
@@ -793,7 +840,7 @@ public class ByQuadrantReader <: Reader {
     /*
      * 扫描图像的子集并解码
      * 参数 image - BinaryBitmap 图像
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Result - 解码结果
      */
     public override func decode(image: BinaryBitmap, hints: HashMap<DecodeHintType, Any>): Result
@@ -815,7 +862,7 @@ public class QRCodeMultiReader <: QRCodeReader & MultipleBarcodeReader {
     /*
      * 在图像中定位并解码多个 qrcode 二维码
      * 参数 image - BinaryBitmap 图像
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Array<Result> - 解码结果数组
      */
     public func decodeMultiple(image: BinaryBitmap, hints: HashMap<DecodeHintType, Any>): Array<Result>
@@ -1063,7 +1110,7 @@ public abstract class OneDReader <: Reader {
     /*
      * 解码 BinaryBitmap 图像中的一维条形码
      * 参数 image - BinaryBitmap 图像
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Result - 解码结果
      */
     public open override func decode(image: BinaryBitmap, hints: HashMap<DecodeHintType, Any>): Result
@@ -1077,7 +1124,7 @@ public abstract class OneDReader <: Reader {
      * 解码单行图像中的一维条形码
      * 参数 rowNumber - 行号
      * 参数 row - 该行的黑/白像素 BitArray 数据
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Result - 解码结果
      */
     public func decodeRow(rowNumber: Int64, row: BitArray, hints: HashMap<DecodeHintType, Any>): Result
@@ -1097,7 +1144,7 @@ public abstract class OneDimensionalCodeWriter <: Writer {
     /*
      * 将内容编码为一维条形码的布尔数组
      * 参数 contents - 要编码的字符串
-     * 参数 hints - 编码提示
+     * 参数 hints - 编码参数配置
      * 返回值 Array<Bool> - 编码结果
      */
     public open func encode(contents: String, hints: HashMap<EncodeHintType, Any>): Array<Bool>
@@ -1118,7 +1165,7 @@ public abstract class OneDimensionalCodeWriter <: Writer {
      * 参数 format - 要生成的条形码格式，如果格式不是 BarcodeFormat.UPC_A 则抛 IllegalArgumentException 异常
      * 参数 width - 图像宽度
      * 参数 height - 图像高度
-     * 参数 hints - 编码提示
+     * 参数 hints - 编码参数配置
      * 返回值 BitMatrix - 编码完成的 BitMatrix 图像
      */
     public func encode(contents: String, format: BarcodeFormat, width: Int64, height: Int64, hints: HashMap<EncodeHintType, Any>): BitMatrix
@@ -1131,7 +1178,7 @@ public abstract class OneDimensionalCodeWriter <: Writer {
 }
 
 /**
- * 编码提示类型
+ * 解码提示类型
  */
 public enum DecodeHintType <: Hashable & Equatable<DecodeHintType> {
     /** 未指定的特定应用提示 */
@@ -1269,7 +1316,7 @@ public class Point <: ToString {
 
 public class Detector {
     /*
-     * 构造，Aztec 解码器
+     * 构造，Aztec 二维码的定位器
      * 参数 image - BitMatrix 图像
      */
     public init(image: BitMatrix)
@@ -1304,14 +1351,14 @@ public open class AddressBookParsedResult <: ParsedResult {
     /*
      * 构造
      * 参数 names - 姓名
-     * 参数 nicknames - 小名
+     * 参数 nicknames - 昵称
      * 参数 pronunciation - 电话类型
      * 参数 phoneNumbers - 电话
      * 参数 phoneTypes - 电话类型
      * 参数 emails - 邮箱
      * 参数 emailTypes - 邮箱类型
-     * 参数 instantMessenger - 地址
-     * 参数 note - 地址类型
+     * 参数 instantMessenger - 紧急联系人
+     * 参数 note - 备注
      * 参数 addresses - 地址
      * 参数 addressTypes - 地址类型
      * 参数 org - 组织
@@ -2334,7 +2381,7 @@ public open class MultiFormatReader <: Reader {
     /*
      * 在图像中定位并解码二维码
      * 参数 image - BinaryBitmap 图像
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Result - 解码结果
      */
     public func decode(image: BinaryBitmap, hints: HashMap<DecodeHintType, Any>): Result
@@ -2348,7 +2395,7 @@ public open class MultiFormatReader <: Reader {
 
     /*
      * 设置解码提示
-     * 参数 hints - 解码提示
+     * 参数 hints - 解码参数配置
      */
     public func setHints(hints: HashMap<DecodeHintType, Any>)
 
@@ -2584,7 +2631,7 @@ public open class MultiFormatWriter <: Writer {
      * 参数 format - 要生成的条形码格式，如果格式不是 BarcodeFormat.UPC_A 则抛 IllegalArgumentException 异常
      * 参数 width - 图像宽度
      * 参数 height - 图像高度
-     * 参数 hints - 编码提示
+     * 参数 hints - 编码参数配置
      * 返回值 BitMatrix - 编码完成的 BitMatrix 图像
      */
     public func encode(
@@ -5292,7 +5339,7 @@ public class MultiDetector <: Detector {
 
     /*
      * 解码
-     * 参数 hints - 解码提示
+     * 参数 hints - 解码参数配置
      * 返回值 ArrayList<DetectorResult>  - ArrayList<DetectorResult> 
      */
     public func detectMulti(hints: HashMap<DecodeHintType, Any>): ArrayList<DetectorResult> 
@@ -5302,7 +5349,7 @@ public class MultiDetector <: Detector {
 public class MultiFinderPatternFinder <: FinderPatternFinder {
     /*
      * 解码
-     * 参数 hints - 解码提示
+     * 参数 hints - 解码参数配置
      * 返回值 ArrayList<DetectorResult>  - Array<FinderPatternInfo>
      */
     public func findMulti(hints: HashMap<DecodeHintType, Any>): Array<FinderPatternInfo>
@@ -5409,7 +5456,7 @@ public abstract class AbstractRSSReader <: OneDReader {
      * 解码单行图像中的一维条形码
      * 参数 rowNumber - 行号
      * 参数 row - 该行的黑/白像素 BitArray 数据
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Result - 解码结果
      */
     public func decodeRow(rowNumber: Int64, row: BitArray, hints: HashMap<DecodeHintType, Any>): Result
@@ -5420,7 +5467,7 @@ public class RSSExpandedReader <: AbstractRSSReader {
      * 解码单行图像中的一维条形码
      * 参数 rowNumber - 行号
      * 参数 row - 该行的黑/白像素 BitArray 数据
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Result - 解码结果
      */
     public func decodeRow(rowNumber: Int64, row: BitArray, hints: HashMap<DecodeHintType, Any>): Result
@@ -5462,7 +5509,7 @@ public abstract class AbstractRSSReader <: OneDReader {
      * 解码单行图像中的一维条形码
      * 参数 rowNumber - 行号
      * 参数 row - 该行的黑/白像素 BitArray 数据
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Result - 解码结果
      */
     public func decodeRow(rowNumber: Int64, row: BitArray, hints: HashMap<DecodeHintType, Any>): Result
@@ -5574,7 +5621,7 @@ public open class MultiFormatOneDReader <: OneDReader {
      * 解码单行图像中的一维条形码
      * 参数 rowNumber - 行号
      * 参数 row - 该行的黑/白像素 BitArray 数据
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Result - 解码结果
      */
     public override func decodeRow(rowNumber: Int64, row: BitArray, hints: HashMap<DecodeHintType, Any>): Result
@@ -5591,7 +5638,7 @@ public open class MultiFormatUPCEANReader <: OneDReader {
      * 解码单行图像中的一维条形码
      * 参数 rowNumber - 行号
      * 参数 row - 该行的黑/白像素 BitArray 数据
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Result - 解码结果
      */
     public func decodeRow(rowNumber: Int64, row: BitArray, hints: HashMap<DecodeHintType, Any>): Result
@@ -5613,7 +5660,7 @@ public abstract class OneDimensionalCodeWriter <: Writer {
     /*
      * 将内容编码为一维条形码的布尔数组
      * 参数 contentsin - 要编码的字符串
-     * 参数 hints - 编码提示
+     * 参数 hints - 编码参数配置
      * 返回值 Array<Bool> - 编码结果
      */
     public open func encode(contents: String, hints: HashMap<EncodeHintType, Any>): Array<Bool>
@@ -5634,7 +5681,7 @@ public abstract class OneDimensionalCodeWriter <: Writer {
      * 参数 format - 要生成的条形码格式，如果格式不是 BarcodeFormat.UPC_A 则抛 IllegalArgumentException 异常
      * 参数 width - 图像宽度
      * 参数 height - 图像高度
-     * 参数 hints - 编码提示
+     * 参数 hints - 编码参数配置
      * 返回值 BitMatrix - 编码完成的 BitMatrix 图像
      */
     public func encode(
@@ -6018,7 +6065,7 @@ public open class PDF417ScanningDecoder {
     /*
      * 解码 BinaryBitmap 图像中的一维条形码
      * 参数 image - BinaryBitmap 图像
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Result - 解码结果
      */
     public static func decode(
@@ -6307,7 +6354,7 @@ public class DecodedBitStreamParser {
     /*
      * 解码 BinaryBitmap 图像中的一维条形码
      * 参数 image - BinaryBitmap 图像
-     * 参数 hints - 解码提示信息
+     * 参数 hints - 解码参数配置
      * 返回值 Result - 解码结果
      */
     public static func decode(
