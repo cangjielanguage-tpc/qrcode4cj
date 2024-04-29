@@ -1,14 +1,12 @@
-// EXEC: cjc %import-path %L %l %f
+// DEPENDENCE: ./libs.cj
+// EXEC: cjc %import-path %L %l %f libs.cj
 // EXEC: ./main
 
-from QRCode4cj import common.Qrcoder4cjFormatException
-from QRCode4cj import common.ResultPoint
-from QRCode4cj import aztec.common.AztecDetectorResult
-from QRCode4cj import common.BitArray
-from QRCode4cj import common.BitMatrix
-from QRCode4cj import common.DecoderResult
-from QRCode4cj import aztec.decoder.Decoder
+from QRCode4cj import common.*
+from QRCode4cj import common.reader.*
+from QRCode4cj import common.writer.*
 from QRCode4cj import tools.UTF32String
+from std import collection.*
 from std import unittest.*
 from std import unittest.testmacro.*
 
@@ -23,25 +21,16 @@ main(): Int64 {
 public class DecoderTestCase {
     @TestCase
     public func testDecode(): Unit {
-        var matrix: BitMatrix = BitMatrix.parse(
-            UTF32String(
-                "X X X X X     X X X       X X X     X X X     \n" + "X X X     X X X     X X X X     X X X     X X \n" +
-                "  X   X X       X   X   X X X X     X     X X \n" + "  X   X X     X X     X     X   X       X   X \n" +
-                "  X X   X X         X               X X     X \n" + "  X X   X X X X X X X X X X X X X X X     X   \n" +
-                "  X X X X X                       X   X X X   \n" + "  X   X   X   X X X X X X X X X   X X X   X X \n" +
-                "  X   X X X   X               X   X X       X \n" + "  X X   X X   X   X X X X X   X   X X X X   X \n" +
-                "  X X   X X   X   X       X   X   X   X X X   \n" + "  X   X   X   X   X   X   X   X   X   X   X   \n" +
-                "  X X X   X   X   X       X   X   X X   X X   \n" + "  X X X X X   X   X X X X X   X   X X X   X X \n" +
-                "X X   X X X   X               X   X   X X   X \n" + "  X       X   X X X X X X X X X   X   X     X \n" +
-                "  X X   X X                       X X   X X   \n" + "  X X X   X X X X X X X X X X X X X X   X X   \n" +
-                "X     X     X     X X   X X               X X \n" + "X   X X X X X   X X X X X     X   X   X     X \n" +
-                "X X X   X X X X           X X X       X     X \n" + "X X     X X X     X X X X     X X X     X X   \n" +
-                "    X X X     X X X       X X X     X X X X   \n"),
-            UTF32String("X "),
-            UTF32String("  ")
-        )
-        var aztecResult: AztecDetectorResult = AztecDetectorResult(matrix, Array<ResultPoint>(), false, 30, 2)
-        var result: DecoderResult = Decoder().decode(aztecResult)
-        @Assert("88888TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", result.getText())
+        let content = "ABCDEF"
+        let mfw = MultiFormatWriter();
+        var bitMatrixAfterEncode: BitMatrix = mfw.encode(content, BarcodeFormat.AZTEC, 30, 30)
+        var bitmap = bitMatrixToBinaryBitmap(bitMatrixAfterEncode, bitMatrixAfterEncode.getWidth(),
+            bitMatrixAfterEncode.getHeight())
+        let hintType: DecodeHintType = DecodeHintType.TRY_HARDER
+        var hints: HashMap<DecodeHintType, Any> = HashMap<DecodeHintType, Any>()
+        hints.put(hintType, true)
+        let reader: MultiFormatReader = MultiFormatReader()
+        let result = reader.decode(bitmap, hints)
+        @Assert(content, result.getText())
     }
 }

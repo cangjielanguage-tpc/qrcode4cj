@@ -452,11 +452,6 @@ public open class QRCodeReader <: Reader {
      * 返回值 Result - 解码结果
      */
     public func decode(image: BinaryBitmap, hints: HashMap<DecodeHintType, Any>): Result
-
-    /*
-     * 空实现
-     */
-    public func reset()
 }
 ```
 
@@ -516,11 +511,6 @@ public class DataMatrixReader <: Reader {
      * 返回值 Result - 解码结果
      */
     public func decode(image: BinaryBitmap, hints: HashMap<DecodeHintType, Any>): Result
-
-    /*
-     * 空实现
-     */
-    public func reset()
 }
 ```
 
@@ -580,11 +570,6 @@ public open class PDF417Reader <: Reader & MultipleBarcodeReader {
      * 返回值 Result - 解码结果
      */
     public func decode(image: BinaryBitmap, hints: HashMap<DecodeHintType, Any>): Result
-
-    /*
-     * 空实现
-     */
-    public func reset()
 }
 ```
 
@@ -644,11 +629,6 @@ public class AztecReader <: Reader {
      * 返回值 Result - 解码结果
      */
     public override func decode(image: BinaryBitmap, hints: HashMap<DecodeHintType, Any>): Result
-
-    /*
-     * 空实现
-     */
-    public override func reset()
 }
 ```
 
@@ -708,11 +688,6 @@ public class MaxiCodeReader <: Reader {
      * 返回值 Result - 解码结果
      */
     public override func decode(image: BinaryBitmap, hints: HashMap<DecodeHintType, Any>): Result
-
-    /*
-     * 空实现
-     */
-    public override func reset()
 }
 ```
 
@@ -738,11 +713,6 @@ public class RSS14Reader <: AbstractRSSReader {
      * 返回值 Result - 解码结果
      */
     public func decodeRow(rowNumber: Int64, row: BitArray, hints: HashMap<DecodeHintType, Any>): Result
-
-    /*
-     * 空实现
-     */
-    public override func reset()
 }
 
 public class RSSExpandedReader <: AbstractRSSReader {
@@ -762,11 +732,6 @@ public class RSSExpandedReader <: AbstractRSSReader {
      * 返回值 ArrayList<ExpandedPair> - 解码结果
      */
     public func decodeRow2pairs(rowNumber: Int64, row: BitArray): ArrayList<ExpandedPair>
-
-    /*
-     * 空实现
-     */
-    public override func reset()
 }
 ```
 
@@ -1116,11 +1081,6 @@ public abstract class OneDReader <: Reader {
     public open override func decode(image: BinaryBitmap, hints: HashMap<DecodeHintType, Any>): Result
 
     /*
-     * 空实现
-     */
-    public open func reset()
-
-    /*
      * 解码单行图像中的一维条形码
      * 参数 rowNumber - 行号
      * 参数 row - 该行的黑/白像素 BitArray 数据
@@ -1178,7 +1138,7 @@ public abstract class OneDimensionalCodeWriter <: Writer {
 }
 
 /**
- * 解码提示类型
+ * 解码参数配置
  */
 public enum DecodeHintType <: Hashable & Equatable<DecodeHintType> {
     /** 未指定的特定应用提示 */
@@ -5473,11 +5433,6 @@ public class RSSExpandedReader <: AbstractRSSReader {
     public func decodeRow(rowNumber: Int64, row: BitArray, hints: HashMap<DecodeHintType, Any>): Result
 
     /*
-     * 空实现
-     */
-    public func reset()
-
-    /*
      * 解码单行图像中的一维条形码
      * 参数 rowNumber - 行号
      * 参数 row - 该行的黑/白像素 BitArray 数据
@@ -5642,11 +5597,6 @@ public open class MultiFormatUPCEANReader <: OneDReader {
      * 返回值 Result - 解码结果
      */
     public func decodeRow(rowNumber: Int64, row: BitArray, hints: HashMap<DecodeHintType, Any>): Result
-
-    /*
-     * 空实现
-     */
-    public override func reset()
 }
 
 public abstract class OneDimensionalCodeWriter <: Writer {

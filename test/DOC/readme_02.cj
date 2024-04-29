@@ -2,7 +2,7 @@
 // EXEC: ./main
 
 from QRCode4cj import common.*
-from QRCode4cj import qrcode.*
+from QRCode4cj import common.writer.*
 from std import unittest.*
 from std import unittest.testmacro.*
 
@@ -17,7 +17,8 @@ main(): Int64 {
 public class EncoderTestCase {
     @TestCase
     public func testEncode(): Unit {
-        var res = QRCodeWriter().encode("ABCDEF", BarcodeFormat.QR_CODE, 21, 21)
+        var mfw = MultiFormatWriter();
+        var res: BitMatrix = mfw.encode("ABCDEF", BarcodeFormat.QR_CODE, 21, 21)
         var expected = """
                                                           
                                                           

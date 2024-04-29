@@ -77,16 +77,14 @@ cjpm build
 #### 解码功能示例:
 
 示例代码如下：
+额外依赖 bitMatrixToBinaryBitmap 转换代码在 test/DOC/libs.cj
 
 ```cangjie
-from QRCode4cj import common.Qrcoder4cjFormatException
-from QRCode4cj import common.ResultPoint
-from QRCode4cj import aztec.common.AztecDetectorResult
-from QRCode4cj import common.BitArray
-from QRCode4cj import common.BitMatrix
-from QRCode4cj import common.DecoderResult
-from QRCode4cj import aztec.decoder.Decoder
+from QRCode4cj import common.*
+from QRCode4cj import common.reader.*
+from QRCode4cj import common.writer.*
 from QRCode4cj import tools.UTF32String
+from std import collection.*
 from std import unittest.*
 from std import unittest.testmacro.*
 
@@ -101,26 +99,18 @@ main(): Int64 {
 public class DecoderTestCase {
     @TestCase
     public func testDecode(): Unit {
-        var matrix: BitMatrix = BitMatrix.parse(
-            UTF32String(
-                "X X X X X     X X X       X X X     X X X     \n" + "X X X     X X X     X X X X     X X X     X X \n" +
-                "  X   X X       X   X   X X X X     X     X X \n" + "  X   X X     X X     X     X   X       X   X \n" +
-                "  X X   X X         X               X X     X \n" + "  X X   X X X X X X X X X X X X X X X     X   \n" +
-                "  X X X X X                       X   X X X   \n" + "  X   X   X   X X X X X X X X X   X X X   X X \n" +
-                "  X   X X X   X               X   X X       X \n" + "  X X   X X   X   X X X X X   X   X X X X   X \n" +
-                "  X X   X X   X   X       X   X   X   X X X   \n" + "  X   X   X   X   X   X   X   X   X   X   X   \n" +
-                "  X X X   X   X   X       X   X   X X   X X   \n" + "  X X X X X   X   X X X X X   X   X X X   X X \n" +
-                "X X   X X X   X               X   X   X X   X \n" + "  X       X   X X X X X X X X X   X   X     X \n" +
-                "  X X   X X                       X X   X X   \n" + "  X X X   X X X X X X X X X X X X X X   X X   \n" +
-                "X     X     X     X X   X X               X X \n" + "X   X X X X X   X X X X X     X   X   X     X \n" +
-                "X X X   X X X X           X X X       X     X \n" + "X X     X X X     X X X X     X X X     X X   \n" +
-                "    X X X     X X X       X X X     X X X X   \n"),
-            UTF32String("X "),
-            UTF32String("  ")
-        )
-        var aztecResult: AztecDetectorResult = AztecDetectorResult(matrix, Array<ResultPoint>(), false, 30, 2)
-        var result: DecoderResult = Decoder().decode(aztecResult)
-        @Assert("88888TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", result.getText())
+        var content = "ABCDEF"
+        var mfw = MultiFormatWriter();
+        var bitMatrixAfterEncode: BitMatrix = mfw.encode(content, BarcodeFormat.AZTEC, 30, 30)
+
+        var bitmap = bitMatrixToBinaryBitmap(bitMatrixAfterEncode, bitMatrixAfterEncode.getWidth(),
+            bitMatrixAfterEncode.getHeight())
+        var hintType: DecodeHintType = DecodeHintType.TRY_HARDER
+        var hints: HashMap<DecodeHintType, Any> = HashMap<DecodeHintType, Any>()
+        hints.put(hintType, true)
+        var reader: MultiFormatReader = MultiFormatReader()
+        var result = reader.decode(bitmap, hints)
+        @Assert(content, result.getText())
     }
 }
 ```
@@ -137,7 +127,7 @@ public class DecoderTestCase {
 
 ```cangjie
 from QRCode4cj import common.*
-from QRCode4cj import qrcode.*
+from QRCode4cj import common.writer.*
 from std import unittest.*
 from std import unittest.testmacro.*
 
@@ -152,7 +142,8 @@ main(): Int64 {
 public class EncoderTestCase {
     @TestCase
     public func testEncode(): Unit {
-        var res = QRCodeWriter().encode("ABCDEF", BarcodeFormat.QR_CODE, 21, 21)
+        var mfw = MultiFormatWriter();
+        var res:BitMatrix =  mfw.encode("ABCDEF", BarcodeFormat.QR_CODE, 21, 21)
         var expected = """
                                                           
                                                           
