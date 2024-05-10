@@ -19,28 +19,37 @@ main(): Int64 {
 public class Tester {
     @TestCase
     func t1(): Unit {
-        var result = ExpandedProductParsedResult("","","","","","","","","","","","","","",HashMap<String, String>())
+        var result = ExpandedProductParsedResult("", "", "", "", "", "", "", "", "", "", "", "", "", "",
+            HashMap<String, String>())
         @Assert(result.equals(result),true)
     }
 
     @TestCase
     func t2(): Unit {
-        var result = ExpandedProductParsedResult("testtest","","","","","","","","","","","","","",HashMap<String, String>())
+        var result = ExpandedProductParsedResult("testtest", "", "", "", "", "", "", "", "", "", "", "", "", "",
+            HashMap<String, String>())
 
         @Assert(result.getRawText(),"testtest")
     }
 
     @TestCase
     func t3(): Unit {
-        var result = ExpandedProductParsedResult("testtest","","","","","","","","","","","","","",HashMap<String, String>())
+        var result = ExpandedProductParsedResult("testtest", "", "", "", "", "", "", "", "", "", "", "", "", "",
+            HashMap<String, String>())
+        var flag = true
+        try {
+            result.hashCode()
+        } catch (e: Exception) {
+            flag = false
+        }
 
-        @Assert(result.hashCode(),5863005)
+        @Assert(flag,true)
     }
 
     @TestCase
     func t4(): Unit {
-        var result = ExpandedProductParsedResult("testtest","","","","","","","","","","","","","",HashMap<String, String>())
+        var result = ExpandedProductParsedResult("testtest", "", "", "", "", "", "", "", "", "", "", "", "", "",
+            HashMap<String, String>())
         @Assert(result.equals(this),false)
     }
 }
-

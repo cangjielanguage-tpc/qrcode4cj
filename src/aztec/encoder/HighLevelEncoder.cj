@@ -85,11 +85,11 @@ public class HighLevelEncoder {
         '\v'.hashCode().hashCode(),
         '\f'.hashCode(),
         '\r'.hashCode(),
-        '!'.hashCode(),
-        '"'.hashCode(),
-        '#'.hashCode(),
-        '$'.hashCode(),
-        '%'.hashCode(),
+        Char(27).hashCode(),
+        Char(28).hashCode(),
+        Char(29).hashCode(),
+        Char(30).hashCode(),
+        Char(31).hashCode(),
         '@'.hashCode(),
         '\\'.hashCode(),
         '^'.hashCode(),
@@ -287,9 +287,6 @@ public class HighLevelEncoder {
     // state for the next character.  The resulting set of states are added to
     // the "result" list.
     private func updateStateForChar(state: State, index: Int64, result: ArrayList<State>) {
-        if (text[index] == 0x1a) {
-            text[index] = 128
-        }
         var ch: Char = Char(text[index] & 0xFF)
         var charInCurrentTable: Bool = CHAR_MAP[state.getMode()][Int64(UInt32(ch))] > 0 &&
             CHAR_MAP[state.getMode()][Int64(UInt32(ch))] != 128
