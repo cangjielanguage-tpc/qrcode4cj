@@ -4,10 +4,6 @@
 
 package qrcode.encoder
 
-/**
- * @author satorux@google.com (Satoru Takabayashi) - creator
- * @author dswitkin@google.com (Daniel Switkin) - ported from C++
- */
 public class MatrixUtil {
     private static let POSITION_DETECTION_PATTERN: Array<Array<Int64>> = [
         [1, 1, 1, 1, 1, 1, 1],

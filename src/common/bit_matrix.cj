@@ -10,19 +10,16 @@ from std import format.*
 
 //from std import collection.*
 /**
- * <p>Represents a 2D matrix of bits. In function arguments below, and throughout the common
+ * Represents a 2D matrix of bits. In function arguments below, and throughout the common
  * module, x is the column position, and y is the row position. The ordering is always x, y.
- * The origin is at the top-left.</p>
+ * The origin is at the top-left.
  *
- * <p>Internally the bits are represented in a 1-D array of 32-bit ints. However, each row begins
+ * Internally the bits are represented in a 1-D array of 32-bit ints. However, each row begins
  * with a new int. This is done intentionally so that we can copy out a row into a BitArray very
- * efficiently.</p>
+ * efficiently.
  *
- * <p>The ordering of bits is row-major. Within each int, the least significant bits are used first,
- * meaning they represent lower x values. This is compatible with BitArray's implementation.</p>
- *
- * @author
- * @author
+ * The ordering of bits is row-major. Within each int, the least significant bits are used first,
+ * meaning they represent lower x values. This is compatible with BitArray's implementation.
  */
 public class BitMatrix <: Equatable<BitMatrix> & ToString {
     public var width: Int64

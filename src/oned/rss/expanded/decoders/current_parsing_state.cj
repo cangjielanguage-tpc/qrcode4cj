@@ -10,9 +10,6 @@ enum State {
     | ISO_IEC_646
 }
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- */
 class CurrentParsingState {
     private var position: Int64 = 0
     private var encoding: State = NUMERIC

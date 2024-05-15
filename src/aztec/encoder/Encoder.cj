@@ -7,8 +7,6 @@ import common.MyCharset
 
 /**
  * Generates Aztec 2D barcodes.
- *
- * @author Rustam Abdullaev
  */
 public class Encoder {
     public static var DEFAULT_EC_PERCENT: Int64 = 33 // default minimal percentage of error check words

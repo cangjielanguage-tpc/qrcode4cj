@@ -26,8 +26,6 @@ from std import math.*
 
 /**
  * This implementation can detect and decode PDF417 codes in an image.
- *
- * @author Guenther Grau
  */
 public open class PDF417Reader <: Reader & MultipleBarcodeReader {
     private static var EMPTY_RESULT_ARRAY: Array<Result> = Array<Result>();

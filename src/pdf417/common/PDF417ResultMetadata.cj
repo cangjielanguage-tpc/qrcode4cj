@@ -4,9 +4,6 @@
 
 package pdf417.common
 
-/**
- * @author Guenther Grau
- */
 public open class PDF417ResultMetadata {
     private var segmentIndex: Int64 = 0
     private var fileId: String = ""

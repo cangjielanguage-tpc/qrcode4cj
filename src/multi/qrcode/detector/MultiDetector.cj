@@ -5,11 +5,8 @@ import common.DetectorResult
 import qrcode.detector.Detector
 
 /**
- * <p>Encapsulates logic that can detect one or more QR Codes in an image, even if the QR Code
- * is rotated or skewed, or partially obscured.</p>
- *
- * @author Sean Owen
- * @author Hannes Erven
+ * Encapsulates logic that can detect one or more QR Codes in an image, even if the QR Code
+ * is rotated or skewed, or partially obscured.
  */
 public class MultiDetector <: Detector {
     public init(image: BitMatrix) {

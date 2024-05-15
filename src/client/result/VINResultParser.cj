@@ -8,8 +8,6 @@ from std import regex.*
 
 /**
  * Detects a result that is likely a vehicle identification number.
- *
- * @author Sean Owen
  */
 public open class VINResultParser <: ResultParser {
     private static let IOQ: Regex = Regex("[IOQ]");

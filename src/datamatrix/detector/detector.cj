@@ -13,10 +13,8 @@ import common.GridSampler
 import common.detector.WhiteRectangleDetector
 
 /**
- * <p>Encapsulates logic that can detect a Data Matrix Code in an image, even if the Data Matrix Code
- * is rotated or skewed, or partially obscured.</p>
- *
- * @author Sean Owen
+ * Encapsulates logic that can detect a Data Matrix Code in an image, even if the Data Matrix Code
+ * is rotated or skewed, or partially obscured.
  */
 public class Detector {
     private let image: BitMatrix

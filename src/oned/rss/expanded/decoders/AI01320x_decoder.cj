@@ -4,9 +4,6 @@
 
 package oned.rss.expanded.decoders
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- */
 class AI01320xDecoder <: AI013x0xDecoder {
     init(information: BitArray) {
         super(information);

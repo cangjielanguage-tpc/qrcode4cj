@@ -4,10 +4,6 @@
 
 package oned.rss.expanded.decoders
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
- */
 class AnyAIDecoder <: AbstractExpandedDecoder {
     private static var HEADER_SIZE: Int64 = 2 + 1 + 2
 

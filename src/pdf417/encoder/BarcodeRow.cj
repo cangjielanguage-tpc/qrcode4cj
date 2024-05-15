@@ -6,9 +6,6 @@ package pdf417.encoder
 
 from std import time.*
 
-/**
- * @author Jacob Haynes
- */
 open class BarcodeRow {
     private let row: Array<UInt8>
 

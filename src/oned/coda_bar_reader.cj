@@ -5,10 +5,7 @@
 package oned
 
 /**
- * <p>Decodes Codabar barcodes.</p>
- *
- * @author Bas Vijfwinkel
- * @author David Walker
+ * Decodes Codabar barcodes.
  */
 public open class CodaBarReader <: OneDReader {
     // These values are critical for determining how permissive the decoding

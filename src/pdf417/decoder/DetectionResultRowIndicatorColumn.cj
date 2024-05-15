@@ -4,9 +4,6 @@
 
 package pdf417.decoder
 
-/**
- * @author Guenther Grau
- */
 open class DetectionResultRowIndicatorColumn <: DetectionResultColumn {
     private let isLeft_: Bool
 

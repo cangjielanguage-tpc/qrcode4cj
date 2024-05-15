@@ -4,11 +4,9 @@
 package qrcode.decoder
 
 /**
- * <p>Encapsulates a block of data within a QR Code. QR Codes may split their data into
+ * Encapsulates a block of data within a QR Code. QR Codes may split their data into
  * multiple blocks, each of which is a unit of data and error-correction codewords. Each
- * is represented by an instance of this class.</p>
- *
- * @author Sean Owen
+ * is represented by an instance of this class.
  */
 class DataBlock {
     private var numDataCodewords: Int64

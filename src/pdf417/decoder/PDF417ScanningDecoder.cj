@@ -8,9 +8,6 @@ import common.Qrcoder4cjChecksumException
 import pdf417.decoder.ec.ErrorCorrection
 from std import time.*
 
-/**
- * @author Guenther Grau
- */
 public open class PDF417ScanningDecoder {
     private static let CODEWORD_SKEW_SIZE: Int64 = 2
 

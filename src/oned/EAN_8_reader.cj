@@ -5,9 +5,7 @@
 package oned
 
 /**
- * <p>Implements decoding of the EAN-8 format.</p>
- *
- * @author Sean Owen
+ * Implements decoding of the EAN-8 format.
  */
 public open class EAN8Reader <: UPCEANReader {
     private var decodeMiddleCounters: Array<Int64> = Array<Int64>(4, item: 0)

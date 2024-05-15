@@ -7,8 +7,6 @@ package client.result
  * Parses the "URLTO" result format, which is of the form "URLTO:[title]:[url]".
  * This seems to be used sometimes, but I am not able to find documentation
  * on its origin or official format?
- *
- * @author Sean Owen
  */
 public open class URLTOResultParser <: ResultParser {
     public func parse(result: Result): ?ParsedResult {

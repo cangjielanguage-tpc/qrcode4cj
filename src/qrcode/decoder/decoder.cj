@@ -9,10 +9,8 @@ import common.reedsolomon.ReedSolomonDecoder
 import common.reedsolomon.Qrcoder4cjReedSolomonException
 
 /**
- * <p>The main class which implements QR Code decoding -- as opposed to locating and extracting
- * the QR Code from an image.</p>
- *
- * @author Sean Owen
+ * The main class which implements QR Code decoding -- as opposed to locating and extracting
+ * the QR Code from an image.
  */
 public class Decoder {
     private let rsDecoder: ReedSolomonDecoder
@@ -26,11 +24,12 @@ public class Decoder {
     }
 
     /**
-     * <p>Convenience method that can decode a QR Code represented as a 2D array of booleans.
-     * "true" is taken to mean a black module.</p>
+     * Convenience method that can decode a QR Code represented as a 2D array of booleans.
+     * "true" is taken to mean a black module.
      *
      * @param image booleans representing white/black QR Code modules
      * @param hints decoding hints that should be used to influence decoding
+     *
      * @return text and bytes encoded within the QR Code
      * @throws Qrcoder4cjFormatException if the QR Code cannot be decoded
      * @throws Qrcoder4cjChecksumException if error correction fails
@@ -44,7 +43,7 @@ public class Decoder {
     }
 
     /**
-     * <p>Decodes a QR Code represented as a {@link BitMatrix}. A 1 or "true" is taken to mean a black module.</p>
+     * Decodes a QR Code represented as a {@link BitMatrix}. A 1 or "true" is taken to mean a black module.
      *
      * @param bits booleans representing white/black QR Code modules
      * @param hints decoding hints that should be used to influence decoding
@@ -66,25 +65,26 @@ public class Decoder {
         }
 
         try {
-            // Revert the bit matrix
+            /* Revert the bit matrix */
             parser.remask();
 
-            // Will be attempting a mirrored reading of the version and format info.
+            /* Will be attempting a mirrored reading of the version and format info. */
             parser.setMirror(true);
 
-            // Preemptively read the version.
+            /* Preemptively read the version. */
             parser.readVersion();
 
-            // Preemptively read the format information.
+            /* Preemptively read the format information. */
             parser.readFormatInformation();
 
             /*
-             * Since we're here, this means we have successfully detected some kind
-             * of version and format information when mirrored. This is a good sign,
+             * Since we're here, this means we have successfully detected some kind of
+             * version and format information when mirrored. This is a good sign,
              * that the QR code may be mirrored, and we should try once more with a
              * mirrored content.
              */
-            // Prepare for a mirrored reading.
+
+            /* Prepare for a mirrored reading. */
             parser.Mirror();
 
             let result: DecoderResult = decode(parser, hints);

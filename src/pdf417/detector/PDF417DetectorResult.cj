@@ -8,9 +8,6 @@ import common.ResultPoint
 import common.BitMatrix
 from std import collection.*
 
-/**
- * @author Guenther Grau
- */
 public open class PDF417DetectorResult {
     private var bits: BitMatrix
     private var points: ArrayList<Array<ResultPoint>>

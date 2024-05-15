@@ -8,8 +8,6 @@ import tools.UTF32String
 /**
  * Represents a parsed result that encodes an SMS message, including recipients, subject
  * and body text.
- *
- * @author Sean Owen
  */
 public open class SMSParsedResult <: ParsedResult {
     private var numbers: Array<String> = Array<String>()

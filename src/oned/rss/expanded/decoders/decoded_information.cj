@@ -4,10 +4,6 @@
 
 package oned.rss.expanded.decoders
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
- */
 class DecodedInformation <: DecodedObject {
     private var newString: String = String()
     private var remainingValue: ?Int64 = Option<Int64>.None

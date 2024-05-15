@@ -25,10 +25,6 @@ class DataLength {
     }
 }
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
- */
 public class FieldParser {
     private static var TWO_DIGIT_DATA_LENGTH: HashMap<UTF32String, DataLength> = HashMap<UTF32String, DataLength>(
         [

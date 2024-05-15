@@ -4,10 +4,6 @@
 
 package oned.rss.expanded.decoders
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
- */
 abstract class AI01decoder <: AbstractExpandedDecoder {
     static let GTIN_SIZE: Int64 = 40;
 

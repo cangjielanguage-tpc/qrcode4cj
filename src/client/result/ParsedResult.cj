@@ -9,10 +9,8 @@ package client.result
  * a URL, or an e-mail address. {@link ResultParser#parseResult(com.google.zxing.Result)} will turn a raw
  * decoded string into the most appropriate type of structured representation.</p>
  *
- * <p>Thanks to Jeff Griffin for proposing rewrite of these classes that relies less
- * on exception-based mechanisms during parsing.</p>
- *
- * @author Sean Owen
+ * Thanks to Jeff Griffin for proposing rewrite of these classes that relies less
+ * on exception-based mechanisms during parsing.
  */
 public abstract class ParsedResult {
     private let thistype: ParsedResultType

@@ -4,9 +4,6 @@
 
 package oned.rss.expanded.decoders
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- */
 abstract class DecodedObject {
     private var newPosition: Int64 = 0
 

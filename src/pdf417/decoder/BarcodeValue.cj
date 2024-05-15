@@ -7,9 +7,6 @@ package pdf417.decoder
 import pdf417.common.PDF417Common
 from std import collection.*
 
-/**
- * @author Guenther Grau
- */
 open class BarcodeValue {
     private let values: HashMap<Int64, Int64> = HashMap<Int64, Int64>(1)
 

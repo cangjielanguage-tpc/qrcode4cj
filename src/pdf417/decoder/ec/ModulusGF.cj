@@ -7,10 +7,9 @@ package pdf417.decoder.ec
 import pdf417.common.PDF417Common
 
 /**
- * <p>A field based on powers of a generatoreger:Int64 modulo some modulus.</p>
+ * A field based on powers of a generatoreger:Int64 modulo some modulus.
      , *
- * @author Sean Owen
- * @see com.google.zxing.common.reedsolomon.GenericGF
+ * @see src.common.reedsolomon.GenericGF
  */
 public open class ModulusGF {
     public static let PDF417_GF: ModulusGF = ModulusGF(PDF417Common.NUMBER_OF_CODEWORDS, 3);
