@@ -7,8 +7,6 @@ package common
 /**
  * Thrown when a barcode was successfully detected and decoded, but
  * was not returned because its checksum feature failed.
- *
- * @author Sean Owen
  */
 public open class Qrcoder4cjChecksumException <: Qrcoder4cjReaderException {
     private init() {

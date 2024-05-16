@@ -7,10 +7,6 @@ package oned.rss.expanded
 import oned.rss.expanded.decoders.*
 from std import math.*
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
- */
 public class RSSExpandedReader <: AbstractRSSReader {
     private static var SYMBOL_WIDEST: Array<Int64> = [7, 5, 4, 3, 1]
     private static var EVEN_TOTAL_SUBSET: Array<Int64> = [4, 20, 52, 104, 204]
@@ -259,23 +255,25 @@ public class RSSExpandedReader <: AbstractRSSReader {
         // Discard if duplicate above or below; otherwise insert in order by row number.
         var insertPos: Int64 = 0;
         var prevIsSame: Bool = false;
-        var nextIsSame: Bool = false;
+        var nextIsSame_: Bool = false;
         while (insertPos < this.rows.size) {
             var erow: ExpandedRow = this.rows.get(insertPos).getOrThrow();
             if (erow.getRowNumber() > rowNumber) {
-                nextIsSame = erow.isEquivalent(this.pairs)
+                nextIsSame_ = erow.isEquivalent(this.pairs)
                 break
             }
             prevIsSame = erow.isEquivalent(this.pairs)
             insertPos++
         }
-        if (nextIsSame || prevIsSame) {
-            return;
+        if (nextIsSame_ || prevIsSame) {
+            return
         }
 
-        // When the row was partially decoded (e.g. 2 pairs found instead of 3),
-        // it will prevent us from detecting the barcode.
-        // Try to merge partial rows
+        /*
+         * When the row was partially decoded (e.g. 2 pairs found instead of 3),
+         * it will prevent us from detecting the barcode.
+         * Try to merge partial rows
+         */
 
         // Check whether the row is part of an already detected row
         if (isPartialRow(this.pairs, this.rows)) {
@@ -327,27 +325,27 @@ public class RSSExpandedReader <: AbstractRSSReader {
             var allFound: Bool = true;
 
             for (p in pairs) {
-                var found: Bool = false;
+                var found_: Bool = false;
                 for (j in 0..r.getPairs().size) {
                     if (p.equals(r.getPairs()[j])) {
-                        found = true
+                        found_ = true
                         break
                     }
                 }
-                if (!found) {
+                if (!found_) {
                     allFound = false
                     break
                 }
             }
             if (allFound) {
-                // the row 'r' contain all the pairs from 'pairs'
+                /* the row 'r' contain all the pairs from 'pairs' */ 
                 return true;
             }
         }
         return false;
     }
 
-    // Only used for unit testing
+    /* Only used for unit testing */ 
     public func getRows(): ArrayList<ExpandedRow> {
         var ret = this.rows
         return ret
@@ -411,15 +409,15 @@ public class RSSExpandedReader <: AbstractRSSReader {
     }
 
     private static func getNextSecondBar(row: BitArray, initialPos: Int64): Int64 {
-        var currentPos: Int64
+        var currentPos_: Int64
         if (row.get(initialPos)) {
-            currentPos = row.getNextUnset(initialPos)
-            currentPos = row.getNextSet(currentPos)
+            currentPos_ = row.getNextUnset(initialPos)
+            currentPos_ = row.getNextSet(currentPos_)
         } else {
-            currentPos = row.getNextSet(initialPos)
-            currentPos = row.getNextUnset(currentPos)
+            currentPos_ = row.getNextSet(initialPos)
+            currentPos_ = row.getNextUnset(currentPos_)
         }
-        return currentPos
+        return currentPos_
     }
 
     // not private for testing
@@ -431,7 +429,7 @@ public class RSSExpandedReader <: AbstractRSSReader {
 
         var pattern: ?FinderPattern = None
 
-        var keepFinding: Bool = true;
+        var keepFinding_: Bool = true;
         var forcedOffset: Int64 = -1;
         do {
             this.findNextPair(row, previousPairs, forcedOffset);
@@ -439,12 +437,14 @@ public class RSSExpandedReader <: AbstractRSSReader {
             if (let None <- pattern) {
                 forcedOffset = getNextSecondBar(row, this.startEnd[0])
             } else {
-                keepFinding = false
+                keepFinding_ = false
             }
-        } while (keepFinding)
+        } while (keepFinding_)
 
-        // When stacked symbol is split over multiple rows, there's no way to guess if this pair can be last or not.
-        // boolean mayBeLast = checkPairSequence(previousPairs, pattern);
+        /*
+         * When stacked symbol is split over multiple rows, there's no way to guess if this pair can be last or not.
+         * boolean mayBeLast = checkPairSequence(previousPairs, pattern);
+         */
         var leftChar: DataCharacter = this.decodeDataCharacter(row, pattern.getOrThrow(), isOddPattern, true);
 
         if (!previousPairs.isEmpty() && previousPairs.get(previousPairs.size - 1).getOrThrow().mustBeLast()) {

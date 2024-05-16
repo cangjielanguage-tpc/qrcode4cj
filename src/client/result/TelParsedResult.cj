@@ -6,8 +6,6 @@ package client.result
 
 /**
  * Represents a parsed result that encodes a telephone number.
- *
- * @author Sean Owen
  */
 public open class TelParsedResult <: ParsedResult {
     private var number: String = String()

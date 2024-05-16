@@ -4,9 +4,6 @@
 
 package pdf417.decoder
 
-/**
- * @author Guenther Grau
- */
 open class BarcodeMetadata {
     private let columnCount: Int64
     private let errorCorrectionLevel: Int64

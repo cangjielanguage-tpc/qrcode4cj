@@ -4,10 +4,8 @@
 package qrcode.decoder
 
 /**
- * <p>See ISO 18004:2006, 6.5.1. This enum encapsulates the four error correction levels
- * defined by the QR code standard.</p>
- *
- * @author Sean Owen
+ * See ISO 18004:2006, 6.5.1. This enum encapsulates the four error correction levels
+ * defined by the QR code standard.
  */
 let FOR_BITS: Array<ErrorCorrectionLevel> = [M(0x00), L(0x01), H(0x02), Q(0x03)]
 

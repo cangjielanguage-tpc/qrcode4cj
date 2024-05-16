@@ -8,9 +8,6 @@ import tools.System
 import tools.UTF32String
 from std import collection.*
 
-/**
- * @author Sean Owen
- */
 open class ModulusPoly <: ToString {
     public var field: ModulusGF
     public var coefficients: Array<Int64>

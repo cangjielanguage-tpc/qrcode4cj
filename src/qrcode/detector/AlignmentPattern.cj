@@ -7,10 +7,8 @@ import common.ResultPoint
 from std import math.*
 
 /**
- * <p>Encapsulates an alignment pattern, which are the smaller square patterns found in
- * all but the simplest QR Codes.</p>
- *
- * @author Sean Owen
+ * Encapsulates an alignment pattern, which are the smaller square patterns found in
+ * all but the simplest QR Codes.
  */
 class AlignmentPattern <: ResultPoint {
     public var estimatedModuleSize: Float32 = 0.0;

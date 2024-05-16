@@ -6,10 +6,6 @@ package oned.rss.expanded.decoders
 
 import common.*
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
- */
 public class GeneralAppIdDecoder {
     private var information: BitArray = BitArray();
     private var current_: CurrentParsingState = CurrentParsingState();

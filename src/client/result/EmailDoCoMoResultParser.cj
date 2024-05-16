@@ -7,8 +7,6 @@ package client.result
  * Implements the "MATMSG" email message entry format.
  *
  * Supported keys: TO, SUB, BODY
- *
- * @author Sean Owen
  */
 public open class EmailDoCoMoResultParser <: AbstractDoCoMoResultParser {
     private static let ATEXT_ALPHANUMERIC: Regex = Regex("[a-zA-Z0-9@.!#$%&'*+\\-/=?^_`{|}~]+");

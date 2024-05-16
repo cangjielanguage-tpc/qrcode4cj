@@ -4,10 +4,6 @@
 
 package oned.rss.expanded.decoders
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
- */
 class AI013x0x1xDecoder <: AI01weightDecoder {
     private static var HEADER_SIZE: Int64 = 7 + 1
     private static var WEIGHT_SIZE: Int64 = 20;

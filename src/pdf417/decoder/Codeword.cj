@@ -4,9 +4,6 @@
 
 package pdf417.decoder
 
-/**
- * @author Guenther Grau
- */
 open class Codeword {
     private static let BARCODE_ROW_UNKNOWN: Int64 = -1
 

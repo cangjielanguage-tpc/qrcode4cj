@@ -8,8 +8,6 @@ package client.result
 
  * A simple result type encapsulating a string that has no further
  * interpretation.
- *
- * @author Sean Owen
  */
 public open class TextParsedResult <: ParsedResult {
     private let text: String

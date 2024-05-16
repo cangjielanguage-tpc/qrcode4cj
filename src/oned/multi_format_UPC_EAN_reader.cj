@@ -5,11 +5,9 @@
 package oned
 
 /**
- * <p>A reader that can read all available UPC/EAN formats. If a caller wants to try to
+ * A reader that can read all available UPC/EAN formats. If a caller wants to try to
  * read all such formats, it is most efficient to use this implementation rather than invoke
- * individual readers.</p>
- *
- * @author Sean Owen
+ * individual readers.
  */
 public open class MultiFormatUPCEANReader <: OneDReader {
     private static let EMPTY_READER_ARRAY: Array<UPCEANReader> = Array<UPCEANReader>()

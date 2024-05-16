@@ -4,9 +4,6 @@
 
 package pdf417.decoder
 
-/**
- * @author Guenther Grau
- */
 open class DetectionResultColumn <: ToString {
     private static let MAX_NEARBY_DISTANCE: Int64 = 5
 

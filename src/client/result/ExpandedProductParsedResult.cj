@@ -9,9 +9,6 @@ from std import collection.*
 /**
  * Represents a parsed result that encodes extended product information as encoded
  * by the RSS format, like weight, price, dates, etc.
- *
- * @author Antonio Manuel Benjumea Conde, Servinform, S.A.
- * @author Agustín Delgado, Servinform, S.A.
  */
 public open class ExpandedProductParsedResult <: ParsedResult {
     public static let KILOGRAM: String = "KG";

@@ -6,10 +6,6 @@ package pdf417.common
 
 import common.detector.MathUtils
 
-/**
- * @author SITA Lab (kevin.osullivan@sita.aero)
- * @author Guenther Grau
- */
 public open class PDF417Common {
     public static let NUMBER_OF_CODEWORDS: Int64 = 929
 

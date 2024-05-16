@@ -6,8 +6,6 @@ package client.result
 
 /**
  * Parses a "tel:" URI result, which specifies a phone number.
- *
- * @author Sean Owen
  */
 public open class TelResultParser <: ResultParser {
     var returndata: TelParsedResult = TelParsedResult()

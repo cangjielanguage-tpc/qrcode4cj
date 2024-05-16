@@ -4,10 +4,8 @@
 package qrcode.decoder
 
 /**
- * <p>See ISO 18004:2006, 6.4.1, Tables 2 and 3. This enum encapsulates the various modes in which
- * data can be encoded to bits in the QR code standard.</p>
- *
- * @author Sean Owen
+ * See ISO 18004:2006, 6.4.1, Tables 2 and 3. This enum encapsulates the various modes in which
+ * data can be encoded to bits in the QR code standard.
  */
 public enum Mode <: Equatable<Mode> & ToString {
     | TERMINATOR(Array<Int64>, Int64) // Not really a mode...

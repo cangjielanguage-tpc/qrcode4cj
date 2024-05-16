@@ -5,10 +5,6 @@ package oned.rss.expanded.decoders
 
 import tools.UTF32String
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
- */
 class AI01AndOtherAIs <: AI01decoder {
     private static var HEADER_SIZE: Int64 = 1 + 1 + 2
 

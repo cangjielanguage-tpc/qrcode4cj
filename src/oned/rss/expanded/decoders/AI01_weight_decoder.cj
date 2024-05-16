@@ -4,9 +4,6 @@
 
 package oned.rss.expanded.decoders
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- */
 abstract class AI01weightDecoder <: AI01decoder {
     init(information: BitArray) {
         super(information);

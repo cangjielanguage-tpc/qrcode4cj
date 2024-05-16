@@ -5,8 +5,6 @@ package client.result
 
 /**
  * A simple result type encapsulating a URI that has no further interpretation.
- *
- * @author Sean Owen
  */
 public open class URIParsedResult <: ParsedResult {
     private var uri: String = String()

@@ -4,9 +4,7 @@
 package common
 
 /**
- * <p>Encapsulates the result of decoding a barcode within an image.</p>
- *
- * @author Sean Owen
+ * Encapsulates the result of decoding a barcode within an image.
  */
 public class Result {
     private var text: String = String();

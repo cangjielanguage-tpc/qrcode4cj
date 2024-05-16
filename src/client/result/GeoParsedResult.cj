@@ -6,8 +6,6 @@ package client.result
 /**
  * Represents a parsed result that encodes a geographic coordinate, with latitude,
  * longitude and altitude.
- *
- * @author Sean Owen
  */
 public open class GeoParsedResult <: ParsedResult {
     private var latitude: Float64 = 0.0

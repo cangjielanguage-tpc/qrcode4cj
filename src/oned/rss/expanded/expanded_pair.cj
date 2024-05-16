@@ -6,9 +6,6 @@ package oned.rss.expanded
 
 import oned.rss.*
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- */
 public class ExpandedPair {
     private var leftChar: ?DataCharacter
     private var rightChar: ?DataCharacter

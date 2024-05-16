@@ -1,9 +1,5 @@
 package maxicode.decoder
 
-/**
- * @author mike32767
- * @author Manuel Kasten
- */
 public class BitMatrixParser {
     private static var BITNR: Array<Array<Int64>> = [
         [

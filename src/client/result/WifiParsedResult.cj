@@ -5,8 +5,6 @@ package client.result
 
 /**
  * Represents a parsed result that encodes wifi network information, like SSID and password.
- *
- * @author Vikram Aggarwal
  */
 public open class WifiParsedResult <: ParsedResult {
     private var ssid: String = String()

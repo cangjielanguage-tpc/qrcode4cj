@@ -4,9 +4,6 @@ from std import collection.*
 
 /**
  * Implementation of this interface attempt to read several barcodes from one image.
- *
- * @see com.google.zxing.Reader
- * @author Sean Owen
  */
 public interface MultipleBarcodeReader {
     func decodeMultiple(image: BinaryBitmap): Array<Result>
