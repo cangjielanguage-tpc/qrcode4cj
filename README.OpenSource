@@ -1,9 +1,9 @@
 [
     {
-        "Name": " QRCode4cj ",
+        "Name": " ZXing ",
         "License": " Apache-2.0 license ",
         "License File": " LICENSE ",
-        "Version Number": " v2.0 ",
+        "Version Number": " v3.5.2 ",
         "Owner": "Srikanth Reddy Lingala"
         "Upstream URL": " https://github.com/zxing/zxing ",
         "Description": "  barcode scanning library for Java, Android "
