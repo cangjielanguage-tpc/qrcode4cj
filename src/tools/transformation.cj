@@ -1,3 +1,7 @@
+/*
+ * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
+ */
+
 package tools
 
 foreign func malloc(size: UIntNative): CPointer<Unit>
