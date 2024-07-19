@@ -186,6 +186,10 @@ public class EncoderTestCase {
 [ PASSED ] CASE: testEncode (2362800 ns)
 ```
 
+## 开源协议
+
+本项目基于 [Apache License 2.0](./LICENSE) ，请自由的享受和参与开源。
+
 ## <img alt="" src="./doc/assets/readme-icon-contribute.png" style="display: inline-block;" width=3%/> 参与贡献
 
 欢迎给我们提交PR，欢迎给我们提交Issue，欢迎参与任何形式的贡献。
