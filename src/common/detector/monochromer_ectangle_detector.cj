@@ -2,7 +2,12 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package common.detector
+package QRCode4cj.common.detector
+
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.math.*
 
 public class MonochromeRectangleDetector {
     private static let MAX_MODULES = 32
@@ -19,8 +24,8 @@ public class MonochromeRectangleDetector {
             let width: Int64 = image.getWidth()
             let halfHeight = Int64(height / 2)
             let halfWidth = Int64(width / 2)
-            let deltaY = Int64(math.max(1, height / (MAX_MODULES * 8)))
-            let deltaX = Int64(math.max(1, width / (MAX_MODULES * 8)))
+            let deltaY = Int64(max(1, height / (MAX_MODULES * 8)))
+            let deltaX = Int64(max(1, width / (MAX_MODULES * 8)))
 
             var top = 0
             var bottom = height

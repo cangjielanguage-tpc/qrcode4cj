@@ -2,7 +2,12 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned
+package QRCode4cj.oned
+
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.math.*
 
 /**
  * Implements decoding of the EAN-8 format.
@@ -12,7 +17,7 @@ public open class EAN8Reader <: UPCEANReader {
 
     public init() {}
 
-    protected func decodeMiddle(row: BitArray, startRange: Array<Int64>, result: ArrayList<Char>): Int64 {
+    protected func decodeMiddle(row: BitArray, startRange: Array<Int64>, result: ArrayList<Rune>): Int64 {
         var counters: Array<Int64> = decodeMiddleCounters
         counters[0] = 0
         counters[1] = 0
@@ -24,7 +29,7 @@ public open class EAN8Reader <: UPCEANReader {
         var x = 0;
         while (x < 4 && rowOffset < end) {
             var bestMatch: Int64 = decodeDigit(row, counters, rowOffset, L_PATTERNS);
-            result.append(Char('0'.hashCode() + bestMatch));
+            result.append(Rune(r'0'.hashCode() + bestMatch));
 
             for (i in 0..counters.size) {
                 rowOffset += counters[i]
@@ -38,7 +43,7 @@ public open class EAN8Reader <: UPCEANReader {
         x = 0
         while (x < 4 && rowOffset < end) {
             var bestMatch: Int64 = decodeDigit(row, counters, rowOffset, L_PATTERNS);
-            result.append(Char('0'.hashCode() + bestMatch));
+            result.append(Rune(r'0'.hashCode() + bestMatch));
 
             for (i in 0..counters.size) {
                 rowOffset += counters[i]

@@ -2,7 +2,9 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package maxicode.decoder
+package QRCode4cj.maxicode.decoder
+
+import QRCode4cj.common.*
 
 public class BitMatrixParser {
     private static var BITNR: Array<Array<Int64>> = [

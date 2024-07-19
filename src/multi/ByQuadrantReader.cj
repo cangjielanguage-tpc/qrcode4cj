@@ -2,16 +2,17 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package multi
+package QRCode4cj.multi
 
-import common.BinaryBitmap
-import common.Qrcoder4cjChecksumException
-import common.DecodeHintType
-import common.Qrcoder4cjFormatException
-import common.Qrcoder4cjNotFoundException
-import common.Reader
-import common.Result
-import common.ResultPoint
+import QRCode4cj.common.BinaryBitmap
+import QRCode4cj.common.Qrcoder4cjChecksumException
+import QRCode4cj.common.DecodeHintType
+import QRCode4cj.common.Qrcoder4cjFormatException
+import QRCode4cj.common.Qrcoder4cjNotFoundException
+import QRCode4cj.common.Reader
+import QRCode4cj.common.Result
+import QRCode4cj.common.ResultPoint
+import std.collection.*
 
 public class ByQuadrantReader <: Reader {
     private var delegate: Reader

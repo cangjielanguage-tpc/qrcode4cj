@@ -2,7 +2,9 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package pdf417.decoder
+package QRCode4cj.pdf417.decoder
+
+import std.format.*
 
 open class DetectionResultColumn <: ToString {
     private static let MAX_NEARBY_DISTANCE: Int64 = 5

@@ -2,7 +2,13 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned
+package QRCode4cj.oned
+
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.math.*
+import std.convert.*
 
 /**
  * @see UPCEANExtension2Support
@@ -13,7 +19,7 @@ open class UPCEANExtension5Support {
     private let decodeMiddleCounters: Array<Int64> = Array<Int64>(4, item: 0)
 
     func decodeRow(rowNumber: Int64, row: BitArray, extensionStartRange: Array<Int64>): Result {
-        var result: ArrayList<Char> = ArrayList<Char>()
+        var result: ArrayList<Rune> = ArrayList<Rune>()
 
         var end: Int64 = decodeMiddle(row, extensionStartRange, result);
 
@@ -38,7 +44,7 @@ open class UPCEANExtension5Support {
         return extensionResult
     }
 
-    private func decodeMiddle(row: BitArray, startRange: Array<Int64>, resultString: ArrayList<Char>): Int64 {
+    private func decodeMiddle(row: BitArray, startRange: Array<Int64>, resultString: ArrayList<Rune>): Int64 {
         var counters: Array<Int64> = decodeMiddleCounters
         counters[0] = 0
         counters[1] = 0
@@ -52,7 +58,7 @@ open class UPCEANExtension5Support {
         var x = 0;
         while (x < 5 && rowOffset < end) {
             var bestMatch: Int64 = UPCEANReader.decodeDigit(row, counters, rowOffset, UPCEANReader.L_AND_G_PATTERNS);
-            resultString.append(Char('0'.hashCode() + bestMatch % 10));
+            resultString.append(Rune(r'0'.hashCode() + bestMatch % 10));
 
             for (i in 0..counters.size) {
                 rowOffset += counters[i]
@@ -85,13 +91,13 @@ open class UPCEANExtension5Support {
         var sum: Int64 = 0;
         var i: Int64 = length - 2
         while (i >= 0) {
-            sum += s.get(i).hashCode() - '0'.hashCode()
+            sum += s.get(i).hashCode() - r'0'.hashCode()
             i -= 2
         }
         sum *= 3
         i = length - 1
         while (i >= 0) {
-            sum += s.get(i).hashCode() - '0'.hashCode()
+            sum += s.get(i).hashCode() - r'0'.hashCode()
             i -= 2
         }
         sum *= 3
@@ -128,11 +134,11 @@ open class UPCEANExtension5Support {
     private static func parseExtension5String(raw: UTF32String): String {
         var currency: String
         match (raw[0]) {
-            case '0' => currency = "£"
+            case r'0' => currency = "£"
 
-            case '5' => currency = "$"
+            case r'5' => currency = "$"
 
-            case '9' =>
+            case r'9' =>
                 if (raw == "90000") {
                     // No suggested retail price
                     return "";

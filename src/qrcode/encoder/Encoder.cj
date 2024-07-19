@@ -2,16 +2,15 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package qrcode.encoder
+package QRCode4cj.qrcode.encoder
 
-import common.EncodeHintType
-import common.StringUtils
-import common.CharacterSetECI
-import common.reedsolomon.GenericGF
-import common.reedsolomon.ReedSolomonEncoder
-import common.StandardCharsets
-import qrcode.decoder.ECBlocks
-from std import convert.*
+import QRCode4cj.common.*
+import QRCode4cj.common.reedsolomon.*
+import QRCode4cj.qrcode.decoder.*
+import std.convert.*
+import std.collection.*
+import QRCode4cj.tools.*
+import std.math.*
 
 public class Encoder {
     // The original table is defined in the table 5 of JISX0510:2004 (p.19).
@@ -336,8 +335,8 @@ public class Encoder {
         var hasNumeric: Bool = false;
         var hasAlphanumeric: Bool = false;
         for (i in 0..content.size) {
-            var c: Char = content[i]
-            if (c >= '0' && c <= '9') {
+            var c: Rune = content[i]
+            if (c >= r'0' && c <= r'9') {
                 hasNumeric = true
             } else if (getAlphanumericCode(c.hashCode()) != -1) {
                 hasAlphanumeric = true
@@ -660,17 +659,17 @@ public class Encoder {
         var length: Int64 = content.size;
         var i: Int64 = 0;
         while (i < length) {
-            var num1: Int64 = content[i].hashCode() - '0'.hashCode()
+            var num1: Int64 = content[i].hashCode() - r'0'.hashCode()
 
             if (i + 2 < length) {
                 // Encode three numeric letters in ten bits.
-                var num2: Int64 = content[i + 1].hashCode() - '0'.hashCode()
-                var num3: Int64 = content[i + 2].hashCode() - '0'.hashCode()
+                var num2: Int64 = content[i + 1].hashCode() - r'0'.hashCode()
+                var num3: Int64 = content[i + 2].hashCode() - r'0'.hashCode()
                 bits.appendBits(num1 * 100 + num2 * 10 + num3, 10);
                 i += 3
             } else if (i + 1 < length) {
                 // Encode two numeric letters in seven bits.
-                var num2_: Int64 = content[i + 1].hashCode() - '0'.hashCode()
+                var num2_: Int64 = content[i + 1].hashCode() - r'0'.hashCode()
                 bits.appendBits(num1 * 10 + num2_, 7);
                 i += 2
             } else {

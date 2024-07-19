@@ -2,23 +2,16 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package aztec
+package QRCode4cj.aztec
 
-import common.BinaryBitmap
-import common.DecodeHintType
-import common.Qrcoder4cjFormatException
-import common.Qrcoder4cjNotFoundException
-import common.Reader
-import common.Result
-import common.ResultMetadataType
-import common.ResultPoint
-import common.ResultPointCallback
-import tools.System
-import aztec.decoder.Decoder
-import aztec.detector.Detector
-import aztec.common.AztecDetectorResult
-import common.DecoderResult
-import tools.UTF32String
+import QRCode4cj.common.*
+import QRCode4cj.tools.System
+import QRCode4cj.aztec.decoder.Decoder
+import QRCode4cj.aztec.detector.Detector
+import QRCode4cj.aztec.common.AztecDetectorResult
+import QRCode4cj.common.DecoderResult
+import QRCode4cj.tools.UTF32String
+import std.collection.*
 
 public class AztecReader <: Reader {
     public override func decode(image: BinaryBitmap): Result {

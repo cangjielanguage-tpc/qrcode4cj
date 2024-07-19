@@ -1,7 +1,11 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package client.result
+package QRCode4cj.client.result
+
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
 
 /**
  * Represents a parsed result that encodes a geographic coordinate, with latitude,
@@ -27,17 +31,17 @@ public open class GeoParsedResult <: ParsedResult {
     }
 
     public func getGeoURI(): String {
-        var result: ArrayList<Char> = ArrayList<Char>();
+        var result: ArrayList<Rune> = ArrayList<Rune>();
         result.appendAll("geo:".toRuneArray());
         result.appendAll(latitude.toString().toRuneArray());
-        result.append(',');
+        result.append(r',');
         result.appendAll(longitude.toString().toRuneArray());
         if (altitude > 0.0) {
-            result.append(',');
+            result.append(r',');
             result.appendAll(altitude.toString().toRuneArray());
         }
         if (query != "") {
-            result.append('?');
+            result.append(r'?');
             result.appendAll(query.toRuneArray());
         }
         return String(result);
@@ -72,19 +76,19 @@ public open class GeoParsedResult <: ParsedResult {
     }
 
     public override func getDisplayResult(): String {
-        var result: ArrayList<Char> = ArrayList<Char>();
+        var result: ArrayList<Rune> = ArrayList<Rune>();
         result.appendAll(latitude.toString().toRuneArray());
         result.appendAll(", ".toRuneArray());
         result.appendAll(longitude.toString().toRuneArray());
         if (altitude > 0.0) {
             result.appendAll(", ".toRuneArray());
             result.appendAll(altitude.toString().toRuneArray());
-            result.append('m');
+            result.append(r'm');
         }
         if (query != "") {
             result.appendAll(" (".toRuneArray());
             result.appendAll(query.toRuneArray());
-            result.append(')');
+            result.append(r')');
         }
         return String(result);
     }

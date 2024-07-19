@@ -2,7 +2,10 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package pdf417.decoder
+package QRCode4cj.pdf417.decoder
+
+import QRCode4cj.pdf417.common.*
+import std.format.*
 
 open class DetectionResult <: ToString {
     private static let ADJUST_ROW_NUMBER_SKIP: Int64 = 2

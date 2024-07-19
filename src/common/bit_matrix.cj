@@ -2,13 +2,13 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package common
+package QRCode4cj.common
 
-import tools.System
-import tools.UTF32String
-from std import format.*
+import QRCode4cj.tools.System
+import std.format.*
+import QRCode4cj.tools.*
 
-//from std import collection.*
+//import std.collection.*
 /**
  * Represents a 2D matrix of bits. In function arguments below, and throughout the common
  * module, x is the column position, and y is the row position. The ordering is always x, y.
@@ -101,7 +101,7 @@ public class BitMatrix <: Equatable<BitMatrix> & ToString {
         var nRows = 0
         var pos = 0
         while (pos < stringRepresentation.charSize) {
-            if (stringRepresentation[pos] == '\n' || stringRepresentation[pos] == '\r') {
+            if (stringRepresentation[pos] == r'\n' || stringRepresentation[pos] == r'\r') {
                 if (bitsPos > rowStartPos) {
                     if (rowLength == -1) {
                         rowLength = bitsPos - rowStartPos

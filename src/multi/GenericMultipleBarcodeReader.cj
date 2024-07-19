@@ -2,9 +2,10 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package multi
+package QRCode4cj.multi
 
-import common.Qrcoder4cjReaderException
+import std.collection.*
+import QRCode4cj.common.*
 
 public class GenericMultipleBarcodeReader <: MultipleBarcodeReader {
     private static var MIN_DIMENSION_TO_RECUR: Int64 = 100

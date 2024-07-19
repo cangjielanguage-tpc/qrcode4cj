@@ -1,9 +1,9 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package datamatrix.decoder
+package QRCode4cj.datamatrix.decoder
 
-import common.Qrcoder4cjFormatException
+import QRCode4cj.common.Qrcoder4cjFormatException
 
 public class ECBlocks {
     private let ecCodewords: Int64

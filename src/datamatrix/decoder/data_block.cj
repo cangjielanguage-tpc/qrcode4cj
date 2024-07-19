@@ -2,10 +2,10 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package datamatrix.decoder
+package QRCode4cj.datamatrix.decoder
 
-from std import collection.*
-from std import overflow.*
+import std.collection.*
+import std.overflow.*
 
 /**
  * Encapsulates a block of data within a Data Matrix Code. Data Matrix Codes may split their data into

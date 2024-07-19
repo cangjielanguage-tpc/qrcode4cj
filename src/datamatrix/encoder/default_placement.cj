@@ -2,9 +2,9 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package datamatrix.encoder
+package QRCode4cj.datamatrix.encoder
 
-from std import time.*
+import std.time.*
 
 /**
  * Symbol Character Placement Program. Adapted from Annex M.1 in ISO/IEC 16022:2000(E).
@@ -14,7 +14,7 @@ public open class DefaultPlacement {
     private let numrows: Int64
     private let numcols: Int64
     private let bits: Array<UInt8>
-    private let codewordsArray: Array<Char>
+    private let codewordsArray: Array<Rune>
     /**
      * Main constructor
      *

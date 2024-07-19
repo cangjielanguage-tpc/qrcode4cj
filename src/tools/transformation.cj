@@ -2,7 +2,7 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package tools
+package QRCode4cj.tools
 
 foreign func malloc(size: UIntNative): CPointer<Unit>
 foreign func sprintf_s(ptr: CString, fmt: CString, ...): Int32

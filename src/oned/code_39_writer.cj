@@ -2,7 +2,13 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned
+package QRCode4cj.oned
+
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.math.*
+import std.convert.*
 
 /**
  * This object renders a CODE39 code as a {@link BitMatrix}.
@@ -71,42 +77,42 @@ public open class Code39Writer <: OneDimensionalCodeWriter {
 
     private static func tryToConvertToExtendedMode(contents: UTF32String): UTF32String {
         var length: Int64 = contents.charSize
-        var extendedContent: ArrayList<Char> = ArrayList<Char>()
+        var extendedContent: ArrayList<Rune> = ArrayList<Rune>()
 
         for (i in 0..length) {
-            var character: Char = contents.get(i)
+            var character: Rune = contents.get(i)
             match (character) {
-                case '\u{0000}' => extendedContent.appendAll("%U".toRuneArray())
-                case ' ' | '-' | '.' => extendedContent.append(character)
-                case '@' => extendedContent.appendAll("%V".toRuneArray())
+                case r'\u{0000}' => extendedContent.appendAll("%U".toRuneArray())
+                case r' ' | r'-' | r'.' => extendedContent.append(character)
+                case r'@' => extendedContent.appendAll("%V".toRuneArray())
 
-                case '`' => extendedContent.appendAll("%W".toRuneArray())
+                case r'`' => extendedContent.appendAll("%W".toRuneArray())
 
                 case _ => if (character.hashCode() <= 26) {
-                    extendedContent.append('$')
-                    extendedContent.append(Char('A'.hashCode() + (character.hashCode() - 1)))
-                } else if (character < ' ') {
-                    extendedContent.append('%')
-                    extendedContent.append(Char('A'.hashCode() + (character.hashCode() - 27)))
-                } else if (character <= ',' || character == '/' || character == ':') {
-                    extendedContent.append('/')
-                    extendedContent.append(Char('A'.hashCode() + (character.hashCode() - 33)))
-                } else if (character <= '9') {
-                    extendedContent.append(Char('0'.hashCode() + (character.hashCode() - 48)))
-                } else if (character <= '?') {
-                    extendedContent.append('%')
-                    extendedContent.append(Char('F'.hashCode() + (character.hashCode() - 59)))
-                } else if (character <= 'Z') {
-                    extendedContent.append(Char('A'.hashCode() + (character.hashCode() - 65)))
-                } else if (character <= '_') {
-                    extendedContent.append('%')
-                    extendedContent.append(Char('K'.hashCode() + (character.hashCode() - 91)))
-                } else if (character <= 'z') {
-                    extendedContent.append('+')
-                    extendedContent.append(Char('A'.hashCode() + (character.hashCode() - 97)))
+                    extendedContent.append(r'$')
+                    extendedContent.append(Rune(r'A'.hashCode() + (character.hashCode() - 1)))
+                } else if (character < r' ') {
+                    extendedContent.append(r'%')
+                    extendedContent.append(Rune(r'A'.hashCode() + (character.hashCode() - 27)))
+                } else if (character <= r',' || character == r'/' || character == r':') {
+                    extendedContent.append(r'/')
+                    extendedContent.append(Rune(r'A'.hashCode() + (character.hashCode() - 33)))
+                } else if (character <= r'9') {
+                    extendedContent.append(Rune(r'0'.hashCode() + (character.hashCode() - 48)))
+                } else if (character <= r'?') {
+                    extendedContent.append(r'%')
+                    extendedContent.append(Rune(r'F'.hashCode() + (character.hashCode() - 59)))
+                } else if (character <= r'Z') {
+                    extendedContent.append(Rune(r'A'.hashCode() + (character.hashCode() - 65)))
+                } else if (character <= r'_') {
+                    extendedContent.append(r'%')
+                    extendedContent.append(Rune(r'K'.hashCode() + (character.hashCode() - 91)))
+                } else if (character <= r'z') {
+                    extendedContent.append(r'+')
+                    extendedContent.append(Rune(r'A'.hashCode() + (character.hashCode() - 97)))
                 } else if (character.hashCode() <= 127) {
-                    extendedContent.append('%')
-                    extendedContent.append(Char('P'.hashCode() + (character.hashCode() - 123)))
+                    extendedContent.append(r'%')
+                    extendedContent.append(Rune(r'P'.hashCode() + (character.hashCode() - 123)))
                 } else {
                     throw IllegalArgumentException(
                         "Requested content contains a non-encodable character: '" + contents.get(i).toString() + "'")

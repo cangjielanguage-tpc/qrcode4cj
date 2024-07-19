@@ -2,9 +2,9 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package tools
+package QRCode4cj.tools
 
-from std import time.*
+import std.time.*
 
 public class System {
     public static func arraycopy<T>(src: Array<T>, srcPos: Int64, dest: Array<T>, destPos: Int64, length: Int64): Array<T> {

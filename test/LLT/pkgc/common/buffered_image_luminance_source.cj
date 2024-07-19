@@ -1,27 +1,3 @@
-/*
- * Copyright 2009 ZXing authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-/**
- * This LuminanceSource implementation is meant for J2SE clients and our blackbox unit tests.
-
- *
- * @author dswitkin@google.com (Daniel Switkin)
- * @author Sean Owen
- * @author code@elektrowolle.de (Wolfgang Jung)
- */
 public open class BufferedImageLuminanceSource <: LuminanceSource {
     private static let MINUS_45_IN_RADIANS: Float64 = -0.7853981633974483
 
@@ -153,12 +129,12 @@ public open class BufferedImageLuminanceSource <: LuminanceSource {
         var oldCenterY: Int64 = top + height / 2
 
         let rotatedImage = rotate(this.image, 45)
-        var sourceDimension: Int64 = math.max(this.image.bounds().size().x, this.image.bounds().size().y);
-        var halfDimension: Int64 = math.max(width, height) / 2
-        var newLeft: Int64 = math.max(0, oldCenterX - halfDimension);
-        var newTop: Int64 = math.max(0, oldCenterY - halfDimension);
-        var newRight: Int64 = math.min(sourceDimension - 1, oldCenterX + halfDimension);
-        var newBottom: Int64 = math.min(sourceDimension - 1, oldCenterY + halfDimension);
+        var sourceDimension: Int64 = max(this.image.bounds().size().x, this.image.bounds().size().y);
+        var halfDimension: Int64 = max(width, height) / 2
+        var newLeft: Int64 = max(0, oldCenterX - halfDimension);
+        var newTop: Int64 = max(0, oldCenterY - halfDimension);
+        var newRight: Int64 = min(sourceDimension - 1, oldCenterX + halfDimension);
+        var newBottom: Int64 = min(sourceDimension - 1, oldCenterY + halfDimension);
 
         return BufferedImageLuminanceSource(rotatedImage, newLeft, newTop, newRight - newLeft, newBottom - newTop);
     }

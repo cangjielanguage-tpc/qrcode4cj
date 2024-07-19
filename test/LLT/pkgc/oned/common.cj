@@ -1,4 +1,4 @@
-from std import format.*
+import std.format.*
 
 public class BitMatrixTestCase {
     private static let BIT_MATRIX_POINTS = [1, 2, 2, 0, 3, 1]

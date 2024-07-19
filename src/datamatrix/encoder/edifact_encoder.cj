@@ -2,7 +2,10 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package datamatrix.encoder
+package QRCode4cj.datamatrix.encoder
+
+import QRCode4cj.tools.*
+import std.collection.*
 
 class EdifactEncoder <: Encoder {
     public func getEncodingMode(): Int64 {
@@ -11,9 +14,9 @@ class EdifactEncoder <: Encoder {
 
     public func encode(context: EncoderContext): Unit {
         //step F
-        var buffer: ArrayList<Char> = ArrayList<Char>();
+        var buffer: ArrayList<Rune> = ArrayList<Rune>();
         while (context.hasMoreCharacters()) {
-            var c: Char = context.getCurrentChar();
+            var c: Rune = context.getCurrentChar();
             encodeChar(c, buffer);
             context.pos++
 
@@ -30,7 +33,7 @@ class EdifactEncoder <: Encoder {
                 }
             }
         }
-        buffer.append(Char(31)) //Unlatch
+        buffer.append(Rune(31)) //Unlatch
         handleEOD(context, buffer);
     }
 
@@ -40,7 +43,7 @@ class EdifactEncoder <: Encoder {
      * @param context the encoder context
      * @param buffer  the buffer with the remaining encoded characters
      */
-    private static func handleEOD(context: EncoderContext, buffer: ArrayList<Char>) {
+    private static func handleEOD(context: EncoderContext, buffer: ArrayList<Rune>) {
         try {
             var count: Int64 = buffer.size;
             if (count == 0) {
@@ -94,46 +97,46 @@ class EdifactEncoder <: Encoder {
         }
     }
 
-    private static func encodeChar(c: Char, sb: ArrayList<Char>) {
-        if (c >= ' ' && c <= '?') {
+    private static func encodeChar(c: Rune, sb: ArrayList<Rune>) {
+        if (c >= r' ' && c <= r'?') {
             sb.append(c);
-        } else if (c >= '@' && c <= '^') {
-            sb.append(Char(UInt32(c) - 64));
+        } else if (c >= r'@' && c <= r'^') {
+            sb.append(Rune(UInt32(c) - 64));
         } else {
             HighLevelEncoder.illegalCharacter(c);
         }
     }
 
     @OverflowWrapping
-    private static func encodeToCodewords(sb: ArrayList<Char>): UTF32String {
+    private static func encodeToCodewords(sb: ArrayList<Rune>): UTF32String {
         var len: Int64 = sb.size;
         if (len == 0) {
             throw IllegalArgumentException("StringBuilder must not be empty");
         }
-        var c1: Char = sb.get(0).getOrThrow();
-        var c2: Char
-        var c3: Char
-        var c4: Char
+        var c1: Rune = sb.get(0).getOrThrow();
+        var c2: Rune
+        var c3: Rune
+        var c4: Rune
         if (len >= 2) {
             c2 = sb.get(1).getOrThrow()
         } else {
-            c2 = Char(0)
+            c2 = Rune(0)
         }
         if (len >= 3) {
             c3 = sb.get(2).getOrThrow()
         } else {
-            c3 = Char(0)
+            c3 = Rune(0)
         }
         if (len >= 4) {
             c4 = sb.get(3).getOrThrow()
         } else {
-            c4 = Char(0)
+            c4 = Rune(0)
         }
         var v = (c1.hashCode() << 18) + (c2.hashCode() << 12) + (c3.hashCode() << 6) + c4.hashCode()
-        var cw1: Char = Char((v >> 16 & 255))
-        var cw2: Char = Char((v >> 8 & 255))
-        var cw3: Char = Char(v & 255)
-        var res: ArrayList<Char> = ArrayList<Char>();
+        var cw1: Rune = Rune((v >> 16 & 255))
+        var cw2: Rune = Rune((v >> 8 & 255))
+        var cw3: Rune = Rune(v & 255)
+        var res: ArrayList<Rune> = ArrayList<Rune>();
         res.append(cw1);
         if (len >= 2) {
             res.append(cw2);

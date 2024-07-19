@@ -1,28 +1,22 @@
-from std import fs.*
-from std import time.*
-from std import collection.*
-from std import math.*
-from std import convert.*
-from std import log.*
-from std import os.posix.*
-from QRCode4cj import aztec.common.*
-from QRCode4cj import common.BitMatrix
-from QRCode4cj import common.LuminanceSource
-from QRCode4cj import common.BinaryBitmap
-from QRCode4cj import common.BarcodeFormat
-from QRCode4cj import common.DecodeHintType
-from QRCode4cj import common.Result
-from QRCode4cj import common.HybridBinarizer
-from QRCode4cj import common.reader.MultiFormatReader
-from QRCode4cj import common.writer.MultiFormatWriter
-from image import color.*
-from image import image.*
-from image import drawer.*
-from image import internals.model.*
-from image import internals.imageutil.*
-from image import png.*
-from image import png.zlib.*
-from image import jpeg.*
+import std.fs.*
+import std.time.*
+import std.collection.*
+import std.convert.*
+import std.log.*
+import std.math.*
+import std.os.posix.*
+import QRCode4cj.aztec.common.*
+import QRCode4cj.common.*
+import QRCode4cj.common.reader.MultiFormatReader
+import QRCode4cj.common.writer.MultiFormatWriter
+import image.color.*
+import image.image.*
+import image.drawer.*
+import image.internals.model as imternalmodel
+import image.internals.imageutil.*
+import image.png as png
+import image.png.zlib.*
+import image.jpeg as jpeg
 
 public class CvImageForZxing {
     var width: Int64 = 0
@@ -40,7 +34,7 @@ public class CvImageForZxing {
         var len: Int64 = 0
         var img: Image
 
-        var imageData: internals.model.Image = nilImage
+        var imageData: imternalmodel.Image = nilImage
         try (fsI = File(path0, OpenOption.Open(true, false))) {
             if (fsI.canRead()) {
                 var extensionName = fsI.info.path.extensionName
@@ -231,24 +225,24 @@ public func rotate(src: ImageI, rotateAngle: Int64): ImageI {
     let hH = Float64(sH) * 0.5
 
     let angle = Float64(rotateAngle) * Float64.PI / 180.0
-    let sin = math.sin(angle)
-    let cos = math.cos(angle)
+    let sin = sin(angle)
+    let cos = cos(angle)
 
     let (ltX, ltY) = (-hW * cos + hH * sin, hW * sin + hH * cos)
     let (rtX, rtY) = (hW * cos + hH * sin, -hW * sin + hH * cos)
     let (lbX, lbY) = (-hW * cos - hH * sin, hW * sin - hH * cos)
     let (rbX, rbY) = (hW * cos - hH * sin, -hW * sin - hH * cos)
 
-    let maxWidth = Int64(math.max(math.abs(rbX - ltX), math.abs(rtX - lbX)))
-    let maxHeight = Int64(math.max(math.abs(rbY - ltY), math.abs(rtY - lbY)))
+    let maxWidth = Int64(max(abs(rbX - ltX), abs(rtX - lbX)))
+    let maxHeight = Int64(max(abs(rbY - ltY), abs(rtY - lbY)))
 
     let dst = RGBA_p(Rectangle_p(0, 0, maxWidth, maxHeight))
 
     let halfWidth = Float64(maxWidth) * 0.5
     let halfHeight = Float64(maxHeight) * 0.5
     let subAngle = Float64(360 - rotateAngle % 360) * Float64.PI / 180.0
-    let sinR = math.sin(subAngle)
-    let cosR = math.cos(subAngle)
+    let sinR = sinh(subAngle)
+    let cosR = cosh(subAngle)
 
     for (y in 0..maxHeight) {
         for (x in 0..maxWidth) {
@@ -258,7 +252,7 @@ public func rotate(src: ImageI, rotateAngle: Int64): ImageI {
             let tY = Int64(tYF)
             let colour = if (!(tXF > hW || tXF < -hW || tYF > hH || tYF < -hH)) {
                 let tXN = Int64(tXF + hW)
-                let tYN = Int64(math.abs(tYF - hH))
+                let tYN = Int64(abs(tYF - hH))
                 let (r, g, b, a) = src.at(tXN, tYN).rgba()
                 RGBAC(UInt8(r >> 8), UInt8(g >> 8), UInt8(b >> 8), UInt8(a))
             } else {
@@ -1093,12 +1087,12 @@ public open class BufferedImageLuminanceSource <: LuminanceSource {
         var oldCenterY: Int64 = top + height / 2
 
         let rotatedImage = rotate(this.image, 45)
-        var sourceDimension: Int64 = math.max(this.image.bounds().size().x, this.image.bounds().size().y);
-        var halfDimension: Int64 = math.max(width, height) / 2
-        var newLeft: Int64 = math.max(0, oldCenterX - halfDimension);
-        var newTop: Int64 = math.max(0, oldCenterY - halfDimension);
-        var newRight: Int64 = math.min(sourceDimension - 1, oldCenterX + halfDimension);
-        var newBottom: Int64 = math.min(sourceDimension - 1, oldCenterY + halfDimension);
+        var sourceDimension: Int64 = max(this.image.bounds().size().x, this.image.bounds().size().y);
+        var halfDimension: Int64 = max(width, height) / 2
+        var newLeft: Int64 = max(0, oldCenterX - halfDimension);
+        var newTop: Int64 = max(0, oldCenterY - halfDimension);
+        var newRight: Int64 = min(sourceDimension - 1, oldCenterX + halfDimension);
+        var newBottom: Int64 = min(sourceDimension - 1, oldCenterY + halfDimension);
 
         return BufferedImageLuminanceSource(rotatedImage, newLeft, newTop, newRight - newLeft, newBottom - newTop);
     }

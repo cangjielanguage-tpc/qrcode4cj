@@ -2,10 +2,12 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package aztec.encoder
+package QRCode4cj.aztec.encoder
 
-import common.CharacterSetECI
-from std import collection.*
+import QRCode4cj.common.CharacterSetECI
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
 
 /**
  * This produces nearly optimal encodings of text into the first-level of encoding
@@ -74,87 +76,87 @@ public class HighLevelEncoder {
     private static var CHAR_MAP: Array<Array<Int64>> = Array<Array<Int64>>(5, {int: Int64 => Array<Int64>(256, item: 0)}
     )
     private static var mixedTable: Array<Int64> = [
-        '\0'.hashCode(),
-        ' '.hashCode(),
-        Char(0x01).hashCode(),
-        Char(0x02).hashCode(),
-        Char(0x03).hashCode(),
-        Char(0x04).hashCode(),
-        Char(0x05).hashCode(),
-        Char(0x06).hashCode(),
-        Char(0x07).hashCode(),
-        '\b'.hashCode(),
-        '\t'.hashCode(),
-        '\n'.hashCode(),
-        '\v'.hashCode().hashCode(),
-        '\f'.hashCode(),
-        '\r'.hashCode(),
-        Char(27).hashCode(),
-        Char(28).hashCode(),
-        Char(29).hashCode(),
-        Char(30).hashCode(),
-        Char(31).hashCode(),
-        '@'.hashCode(),
-        '\\'.hashCode(),
-        '^'.hashCode(),
-        '_'.hashCode(),
-        '`'.hashCode(),
-        '|'.hashCode(),
-        '~'.hashCode(),
-        Char(0x7F).hashCode()
+        r'\0'.hashCode(),
+        r' '.hashCode(),
+        Rune(0x01).hashCode(),
+        Rune(0x02).hashCode(),
+        Rune(0x03).hashCode(),
+        Rune(0x04).hashCode(),
+        Rune(0x05).hashCode(),
+        Rune(0x06).hashCode(),
+        Rune(0x07).hashCode(),
+        r'\b'.hashCode(),
+        r'\t'.hashCode(),
+        r'\n'.hashCode(),
+        r'\v'.hashCode().hashCode(),
+        r'\f'.hashCode(),
+        r'\r'.hashCode(),
+        Rune(27).hashCode(),
+        Rune(28).hashCode(),
+        Rune(29).hashCode(),
+        Rune(30).hashCode(),
+        Rune(31).hashCode(),
+        r'@'.hashCode(),
+        r'\\'.hashCode(),
+        r'^'.hashCode(),
+        r'_'.hashCode(),
+        r'`'.hashCode(),
+        r'|'.hashCode(),
+        r'~'.hashCode(),
+        Rune(0x7F).hashCode()
     ]
     private static var punctTable: Array<Int64> = [
-        '\0'.hashCode(),
-        '\r'.hashCode(),
-        '\0'.hashCode(),
-        '\0'.hashCode(),
-        '\0'.hashCode(),
-        '\0'.hashCode(),
-        '!'.hashCode(),
-        '\''.hashCode(),
-        '#'.hashCode(),
-        '$'.hashCode(),
-        '%'.hashCode(),
-        '&'.hashCode(),
-        '\''.hashCode(),
-        '('.hashCode(),
-        ')'.hashCode(),
-        '*'.hashCode(),
-        '+'.hashCode(),
-        ','.hashCode(),
-        '-'.hashCode(),
-        '.'.hashCode(),
-        '/'.hashCode(),
-        ':'.hashCode(),
-        ';'.hashCode(),
-        '<'.hashCode(),
-        '='.hashCode(),
-        '>'.hashCode(),
-        '?'.hashCode(),
-        '['.hashCode(),
-        ']'.hashCode(),
-        '{'.hashCode(),
-        '}'.hashCode()
+        r'\0'.hashCode(),
+        r'\r'.hashCode(),
+        r'\0'.hashCode(),
+        r'\0'.hashCode(),
+        r'\0'.hashCode(),
+        r'\0'.hashCode(),
+        r'!'.hashCode(),
+        r'\''.hashCode(),
+        r'#'.hashCode(),
+        r'$'.hashCode(),
+        r'%'.hashCode(),
+        r'&'.hashCode(),
+        r'\''.hashCode(),
+        r'('.hashCode(),
+        r')'.hashCode(),
+        r'*'.hashCode(),
+        r'+'.hashCode(),
+        r','.hashCode(),
+        r'-'.hashCode(),
+        r'.'.hashCode(),
+        r'/'.hashCode(),
+        r':'.hashCode(),
+        r';'.hashCode(),
+        r'<'.hashCode(),
+        r'='.hashCode(),
+        r'>'.hashCode(),
+        r'?'.hashCode(),
+        r'['.hashCode(),
+        r']'.hashCode(),
+        r'{'.hashCode(),
+        r'}'.hashCode()
     ]
 
     public static var SHIFT_TABLE_: Array<Array<Int64>> = Array<Array<Int64>>(6, {int: Int64 => Array<Int64>(6, item: -1)}
     )
 
     private func initSomeTables() {
-        CHAR_MAP[MODE_UPPER][Int64(UInt32(' '))] = 1
-        for (c in Int64(UInt32('A'))..=(Int64(UInt32('Z')))) {
-            CHAR_MAP[MODE_UPPER][c] = c - Int64(UInt32('A')) + 2
+        CHAR_MAP[MODE_UPPER][Int64(UInt32(r' '))] = 1
+        for (c in Int64(UInt32(r'A'))..=(Int64(UInt32(r'Z')))) {
+            CHAR_MAP[MODE_UPPER][c] = c - Int64(UInt32(r'A')) + 2
         }
-        CHAR_MAP[MODE_LOWER][Int64(UInt32(' '))] = 1
-        for (c in Int64(UInt32('a'))..=(Int64(UInt32('z')))) {
-            CHAR_MAP[MODE_LOWER][c] = c - Int64(UInt32('a')) + 2
+        CHAR_MAP[MODE_LOWER][Int64(UInt32(r' '))] = 1
+        for (c in Int64(UInt32(r'a'))..=(Int64(UInt32(r'Z')))) {
+            CHAR_MAP[MODE_LOWER][c] = c - Int64(UInt32(r'a')) + 2
         }
-        CHAR_MAP[MODE_DIGIT][Int64(UInt32(' '))] = 1
-        for (c in Int64(UInt32('0'))..=(Int64(UInt32('9')))) {
-            CHAR_MAP[MODE_DIGIT][c] = c - Int64(UInt32('0')) + 2
+        CHAR_MAP[MODE_DIGIT][Int64(UInt32(r' '))] = 1
+        for (c in Int64(UInt32(r'0'))..=(Int64(UInt32(r'9')))) {
+            CHAR_MAP[MODE_DIGIT][c] = c - Int64(UInt32(r'0')) + 2
         }
-        CHAR_MAP[MODE_DIGIT][Int64(UInt32(','))] = 12
-        CHAR_MAP[MODE_DIGIT][Int64(UInt32('.'))] = 13
+        CHAR_MAP[MODE_DIGIT][Int64(UInt32(r','))] = 12
+        CHAR_MAP[MODE_DIGIT][Int64(UInt32(r'.'))] = 13
 
         for (i in 0..mixedTable.size) {
             CHAR_MAP[MODE_MIXED][mixedTable[i]] = i
@@ -216,13 +218,13 @@ public class HighLevelEncoder {
             if (index + 1 < text.size) {
                 nextChar = text[index + 1]
             }
-            match (Char(text[index])) {
-                case '\r' => pairCode = getpairCode1(nextChar)
-                case '.' => pairCode = getpairCode2(nextChar)
-                case ',' => pairCode = getpairCode3(nextChar)
-                case ':' =>
+            match (Rune(text[index])) {
+                case r'\r' => pairCode = getpairCode1(nextChar)
+                case r'.' => pairCode = getpairCode2(nextChar)
+                case r',' => pairCode = getpairCode3(nextChar)
+                case r':' =>
                     pairCode = 0
-                    if (Char(nextChar) == ' ') {
+                    if (Rune(nextChar) == r' ') {
                         pairCode = 5
                     }
                 case _ => pairCode = 0
@@ -254,21 +256,21 @@ public class HighLevelEncoder {
     }
 
     static private func getpairCode1(nextChar: UInt8): Int64 {
-        if (Char(nextChar) == '\n') {
+        if (Rune(nextChar) == r'\n') {
             return 2
         }
         return 0
     }
 
     static private func getpairCode2(nextChar: UInt8): Int64 {
-        if (Char(nextChar) == ' ') {
+        if (Rune(nextChar) == r' ') {
             return 3
         }
         return 0
     }
 
     static private func getpairCode3(nextChar: UInt8): Int64 {
-        if (Char(nextChar) == ' ') {
+        if (Rune(nextChar) == r' ') {
             return 4
         }
         return 0
@@ -291,7 +293,7 @@ public class HighLevelEncoder {
     // state for the next character.  The resulting set of states are added to
     // the "result" list.
     private func updateStateForChar(state: State, index: Int64, result: ArrayList<State>) {
-        var ch: Char = Char(text[index] & 0xFF)
+        var ch: Rune = Rune(text[index] & 0xFF)
         var charInCurrentTable: Bool = CHAR_MAP[state.getMode()][Int64(UInt32(ch))] > 0 &&
             CHAR_MAP[state.getMode()][Int64(UInt32(ch))] != 128
         var stateNoBinary: ?State = None

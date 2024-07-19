@@ -2,9 +2,13 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned
+package QRCode4cj.oned
 
-from std import convert.*
+import std.convert.*
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.math.*
 
 /**
  * @see UPCEANExtension5Support
@@ -13,7 +17,7 @@ open class UPCEANExtension2Support {
     private let decodeMiddleCounters: Array<Int64> = Array<Int64>(4, item: 0)
 
     func decodeRow(rowNumber: Int64, row: BitArray, extensionStartRange: Array<Int64>): Result {
-        var result: ArrayList<Char> = ArrayList<Char>()
+        var result: ArrayList<Rune> = ArrayList<Rune>()
 
         var end: Int64 = decodeMiddle(row, extensionStartRange, result);
 
@@ -38,7 +42,7 @@ open class UPCEANExtension2Support {
         return extensionResult
     }
 
-    private func decodeMiddle(row: BitArray, startRange: Array<Int64>, resultString: ArrayList<Char>): Int64 {
+    private func decodeMiddle(row: BitArray, startRange: Array<Int64>, resultString: ArrayList<Rune>): Int64 {
         var counters: Array<Int64> = decodeMiddleCounters
         counters[0] = 0
         counters[1] = 0
@@ -52,7 +56,7 @@ open class UPCEANExtension2Support {
         var x = 0;
         while (x < 2 && rowOffset < end) {
             var bestMatch: Int64 = UPCEANReader.decodeDigit(row, counters, rowOffset, UPCEANReader.L_AND_G_PATTERNS);
-            resultString.append(Char('0'.hashCode() + bestMatch % 10));
+            resultString.append(Rune(r'0'.hashCode() + bestMatch % 10));
 
             for (i in 0..counters.size) {
                 rowOffset += counters[i]

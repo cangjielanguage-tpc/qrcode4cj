@@ -2,7 +2,12 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package qrcode.encoder
+package QRCode4cj.qrcode.encoder
+
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import QRCode4cj.qrcode.decoder.*
+import std.math.*
 
 public class MatrixUtil {
     private static let POSITION_DETECTION_PATTERN: Array<Array<Int64>> = [

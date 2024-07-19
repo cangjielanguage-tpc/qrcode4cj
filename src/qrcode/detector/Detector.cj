@@ -1,15 +1,14 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package qrcode.detector
+package QRCode4cj.qrcode.detector
 
-import common.Qrcoder4cjFormatException
-import common.DetectorResult
-import common.GridSampler
-import common.PerspectiveTransform
-import common.detector.MathUtils
-import common.DecodeHintType
-import qrcode.decoder.Version
+import QRCode4cj.qrcode.decoder.*
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import QRCode4cj.common.detector.*
+import std.math.*
 
 /**
  * Encapsulates logic that can detect a QR Code in an image, even if the QR Code

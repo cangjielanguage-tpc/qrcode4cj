@@ -2,18 +2,20 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package datamatrix.encoder
+package QRCode4cj.datamatrix.encoder
 
-from std import collection.*
-from std import core.*
-import common.StandardCharsets
+import std.collection.*
+import std.core.*
+import QRCode4cj.common.StandardCharsets
+import QRCode4cj.tools.*
+import QRCode4cj.common.Dimension
 
 public class EncoderContext {
     private var msg: UTF32String
     private var shape: SymbolShapeHint
     private var minSize: ?Dimension = None
     private var maxSize: ?Dimension = None
-    private let codewords: ArrayList<Char>
+    private let codewords: ArrayList<Rune>
     var pos: Int64 = 0;
     private var newEncoding: Int64
     private var symbolInfo: ?SymbolInfo = None
@@ -22,10 +24,10 @@ public class EncoderContext {
     init(msg: UTF32String) {
         //From this point on Strings are not Unicode anymore!
         var msgBinary: Array<UInt8> = StandardCharsets.ISO_8859_1.newEncoder().getBytes(msg)
-        var sb: ArrayList<Char> = ArrayList<Char>();
+        var sb: ArrayList<Rune> = ArrayList<Rune>();
         for (i in 0..msgBinary.size) {
-            var ch: Char = Char(msgBinary[i] & 0xff)
-            if (ch == '?' && msg[i] != '?') {
+            var ch: Rune = Rune(msgBinary[i] & 0xff)
+            if (ch == r'?' && msg[i] != r'?') {
                 throw IllegalArgumentException("Message contains characters outside ISO-8859-1 encoding.");
             }
             sb.append(ch);
@@ -34,7 +36,7 @@ public class EncoderContext {
 
         //Not Unicode here!
         shape = SymbolShapeHint.FORCE_NONE
-        this.codewords = ArrayList<Char>()
+        this.codewords = ArrayList<Rune>()
         this.newEncoding = -1
     }
 
@@ -55,15 +57,15 @@ public class EncoderContext {
         this.skipAtEnd = count
     }
 
-    public func getCurrentChar(): Char {
+    public func getCurrentChar(): Rune {
         return msg[pos];
     }
 
-    public func getCurrent(): Char {
+    public func getCurrent(): Rune {
         return msg[pos];
     }
 
-    public func getCodewords(): ArrayList<Char> {
+    public func getCodewords(): ArrayList<Rune> {
         return codewords
     }
 
@@ -71,7 +73,7 @@ public class EncoderContext {
         this.codewords.appendAll(codewords.toRuneArray());
     }
 
-    public func writeCodeword(codeword: Char) {
+    public func writeCodeword(codeword: Rune) {
         this.codewords.append(codeword);
     }
 

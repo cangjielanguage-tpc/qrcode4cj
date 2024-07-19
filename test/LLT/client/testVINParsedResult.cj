@@ -1,18 +1,17 @@
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 
-from std import unittest.*
-from std import unittest.testmacro.*
-from std import collection.*
-from QRCode4cj import common.*
-from QRCode4cj import common.ResultPoint
-from QRCode4cj import client.result.*
+import std.unittest.*
+import std.unittest.testmacro.*
+import std.collection.*
+import QRCode4cj.common.*
+import QRCode4cj.common.ResultPoint
+import QRCode4cj.client.result.*
 
 main(): Int64 {
     let tester = Tester()
-    tester.execute()
-    tester.printResult()
-    0
+    let test = tester.asTestSuite().runTests()
+    test.failedCount + test.errorCount
 }
 
 @Test

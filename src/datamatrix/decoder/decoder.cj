@@ -1,12 +1,13 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package datamatrix.decoder
+package QRCode4cj.datamatrix.decoder
 
-import common.Qrcoder4cjChecksumException
-import common.reedsolomon.GenericGF
-import common.reedsolomon.ReedSolomonDecoder
-import common.reedsolomon.Qrcoder4cjReedSolomonException
+import std.collection.*
+import QRCode4cj.common.*
+import QRCode4cj.common.reedsolomon.GenericGF
+import QRCode4cj.common.reedsolomon.ReedSolomonDecoder
+import QRCode4cj.common.reedsolomon.Qrcoder4cjReedSolomonException
 
 /**
  * The main class which implements Data Matrix Code decoding -- as opposed to locating and extracting

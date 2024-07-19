@@ -4,18 +4,17 @@
 // EXEC: cjc %import-path %L %l %f ./abstract_back_box_test_case.cj ./test_result.cj ./test_common.cj
 // EXEC: ./main
 
-from std import unittest.*
-from std import unittest.testmacro.*
-from std import collection.*
-from QRCode4cj import oned.*
-from QRCode4cj import common.*
-from QRCode4cj import multi.*
+import std.unittest.*
+import std.unittest.testmacro.*
+import std.collection.*
+import QRCode4cj.oned.*
+import QRCode4cj.common.*
+import QRCode4cj.multi.*
 
 main(): Int64 {
     let tester = Tester()
-    tester.execute()
-    tester.printResult()
-    0
+    let test = tester.asTestSuite().runTests()
+    test.failedCount + test.errorCount
 }
 
 @Test

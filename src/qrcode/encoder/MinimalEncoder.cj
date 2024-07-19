@@ -2,13 +2,16 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package qrcode.encoder
+package QRCode4cj.qrcode.encoder
 
-import common.BitArray
-import common.ECIEncoderSet
-import common.Qrcoder4cjWriterException
-import common.MyCharset
-import tools.UTF32String
+import QRCode4cj.common.BitArray
+import QRCode4cj.common.ECIEncoderSet
+import QRCode4cj.common.Qrcoder4cjWriterException
+import QRCode4cj.common.MyCharset
+import QRCode4cj.tools.UTF32String
+import QRCode4cj.qrcode.decoder.*
+import std.collection.*
+import std.math.*
 
 enum VersionSize {
     | SMALL(String) //("version 1-9")
@@ -282,13 +285,13 @@ public class ResultList {
     }
 
     public func toString(): String {
-        var result: ArrayList<Char> = ArrayList<Char>();
+        var result: ArrayList<Rune> = ArrayList<Rune>();
         var previous: ?ResultNode = Option<ResultNode>.None;
         var flag: Bool = false;
 
         for (i in 0..resultnodelist.size) {
             if (let Some(p) <- previous) {
-                result.append(',');
+                result.append(r',');
             }
             result.appendAll(resultnodelist[i].getOrThrow().toString().toRuneArray());
             previous = resultnodelist[i]
@@ -396,23 +399,23 @@ public class ResultNode {
     }
 
     public func toString(): String {
-        var result: ArrayList<Char> = ArrayList<Char>();
+        var result: ArrayList<Rune> = ArrayList<Rune>();
         result.appendAll(mode.toString().toRuneArray());
-        result.append('(')
+        result.append(r'(')
         if (mode == Mode.ECI([0, 0, 0], 0x07)) {
             result.appendAll(encoders.getCharset(charsetEncoderIndex).name().toString().toRuneArray());
         } else {
             result.appendAll(makePrintable(stringToEncode.substring(fromPosition, characterLength)).toRuneArray());
         }
-        result.append(')');
+        result.append(r')');
         return String(result);
     }
 
     private func makePrintable(s: UTF32String): String {
-        var result: ArrayList<Char> = ArrayList<Char>();
+        var result: ArrayList<Rune> = ArrayList<Rune>();
         for (i in 0..s.charSize) {
             if (s.get(i).hashCode() < 32 || s.get(i).hashCode() > 126) {
-                result.append('.');
+                result.append(r'.');
             } else {
                 result.append(s.get(i));
             }
@@ -529,19 +532,19 @@ public class MinimalEncoder {
         }
     }
 
-    static func isNumeric(c: Char): Bool {
-        return c >= '0' && c <= '9'
+    static func isNumeric(c: Rune): Bool {
+        return c >= r'0' && c <= r'9'
     }
 
-    static func isDoubleByteKanji(c: Char): Bool {
+    static func isDoubleByteKanji(c: Rune): Bool {
         return Encoder.isOnlyDoubleByteKanji(UTF32String(c));
     }
 
-    static func isAlphanumeric(c: Char): Bool {
+    static func isAlphanumeric(c: Rune): Bool {
         return Encoder.getAlphanumericCode(c.hashCode()) != -1
     }
 
-    func canEncode(mode: Mode, c: Char): Bool {
+    func canEncode(mode: Mode, c: Rune): Bool {
         match (mode) {
             case KANJI(x, y) => return isDoubleByteKanji(c);
             case ALPHANUMERIC(x, y) => return isAlphanumeric(c);

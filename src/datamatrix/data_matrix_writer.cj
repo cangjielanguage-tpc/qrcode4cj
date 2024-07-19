@@ -2,25 +2,25 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package datamatrix
+package QRCode4cj.datamatrix
 
-from std import convert.*
-import common.BarcodeFormat
-import common.EncodeHintType
-import common.Writer
-import common.BitMatrix
-import common.MyCharset
-import datamatrix.encoder.DefaultPlacement
-import common.Dimension
-import datamatrix.encoder.ErrorCorrection
-import datamatrix.encoder.HighLevelEncoder
-import datamatrix.encoder.MinimalEncoder
-import datamatrix.encoder.SymbolInfo
-import datamatrix.encoder.SymbolShapeHint
-import qrcode.encoder.ByteMatrix
-import tools.UTF32String
-from std import collection.*
-from std import math.*
+import std.convert.*
+import QRCode4cj.common.BarcodeFormat
+import QRCode4cj.common.EncodeHintType
+import QRCode4cj.common.Writer
+import QRCode4cj.common.BitMatrix
+import QRCode4cj.common.MyCharset
+import QRCode4cj.datamatrix.encoder.DefaultPlacement
+import QRCode4cj.common.Dimension
+import QRCode4cj.datamatrix.encoder.ErrorCorrection
+import QRCode4cj.datamatrix.encoder.HighLevelEncoder
+import QRCode4cj.datamatrix.encoder.MinimalEncoder
+import QRCode4cj.datamatrix.encoder.SymbolInfo
+import QRCode4cj.datamatrix.encoder.SymbolShapeHint
+import QRCode4cj.qrcode.encoder.ByteMatrix
+import QRCode4cj.tools.UTF32String
+import std.collection.*
+import std.math.*
 
 /**
  * This object renders a Data Matrix code as a BitMatrix 2D array of greyscale values.

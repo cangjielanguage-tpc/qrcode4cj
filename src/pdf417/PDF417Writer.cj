@@ -2,19 +2,18 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package pdf417
+package QRCode4cj.pdf417
 
-from std import convert.*
-import common.EncodeHintType
-import common.Writer
-import common.Qrcoder4cjWriterException
-import common.BitMatrix
-import common.MyCharset
-import pdf417.encoder.Compaction
-import pdf417.encoder.Dimensions
-import pdf417.encoder.PDF417
-import qrcode.decoder.ErrorCorrectionLevel
-import tools.UTF32String
+import std.convert.*
+import QRCode4cj.pdf417.encoder.Compaction
+import QRCode4cj.pdf417.encoder.Dimensions
+import QRCode4cj.pdf417.encoder.PDF417
+import QRCode4cj.qrcode.decoder.ErrorCorrectionLevel
+import QRCode4cj.tools.UTF32String
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.math.*
 
 public open class PDF417Writer <: Writer {
     /**

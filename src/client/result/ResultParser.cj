@@ -1,7 +1,13 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package client.result
+package QRCode4cj.client.result
+
+import std.regex.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.collection.*
+import encoding.url.*
 
 /**
  * <p>Abstract class representing the result of decoding a barcode, as more than
@@ -70,17 +76,17 @@ public abstract class ResultParser {
         return TextParsedResult(theResult.getText(), "");
     }
 
-    protected static func maybeAppend(value: String, result: ArrayList<Char>) {
+    protected static func maybeAppend(value: String, result: ArrayList<Rune>) {
         if (!value.isEmpty()) {
-            result.append('\n');
+            result.append(r'\n');
             result.appendAll(value.toRuneArray());
         }
     }
 
-    protected static func maybeAppend(value: Array<String>, result: ArrayList<Char>) {
+    protected static func maybeAppend(value: Array<String>, result: ArrayList<Rune>) {
         if (value.size != 0) {
             for (s in value) {
-                result.append('\n');
+                result.append(r'\n');
                 result.appendAll(s.toRuneArray());
             }
         }
@@ -102,13 +108,13 @@ public abstract class ResultParser {
             backslash = escaped.indexOf("\\").getOrThrow()
         }
         var max: Int64 = escaped.size;
-        var unescaped: ArrayList<Char> = ArrayList<Char>();
+        var unescaped: ArrayList<Rune> = ArrayList<Rune>();
         unescaped.appendAll(escaped.substring(0, backslash).toRuneArray());
         var nextIsEscaped: Bool = false;
 
         for (i in backslash..max) {
-            var c: Char = escaped.get(i);
-            if (nextIsEscaped || c != '\\') {
+            var c: Rune = escaped.get(i);
+            if (nextIsEscaped || c != r'\\') {
                 unescaped.append(c);
                 nextIsEscaped = false
             } else {
@@ -118,14 +124,14 @@ public abstract class ResultParser {
         return UTF32String(unescaped);
     }
 
-    protected static func parseHexDigit(c: Char): UInt32 {
-        if (c >= '0' && c <= '9') {
+    protected static func parseHexDigit(c: Rune): UInt32 {
+        if (c >= r'0' && c <= r'9') {
             return UInt32(c) - UInt32(b'0')
         }
-        if (c >= 'a' && c <= 'f') {
+        if (c >= r'a' && c <= r'f') {
             return 10 + (UInt32(c) - UInt32(b'a'))
         }
-        if (c >= 'A' && c <= 'F') {
+        if (c >= r'A' && c <= r'F') {
             return 10 + (UInt32(c) - UInt32(b'A'))
         }
         return throw IllegalArgumentException();
@@ -167,7 +173,7 @@ public abstract class ResultParser {
 
     static func parseNameValuePairs(uri: UTF32String): HashMap<String, String> {
         var paramStart: Int64 = 0
-        var obj = uri.indexOf('?'.toString())
+        var obj = uri.indexOf(r'?'.toString())
         if (let None <- obj) {
             paramStart = -1
         } else {
@@ -185,7 +191,7 @@ public abstract class ResultParser {
 
     private static func appendKeyValue(keyValue: UTF32String, result: Map<String, String>) {
         var keyValueTokens: Array<UTF32String> = [UTF32String(""), UTF32String("")]
-        var equalsIndex = keyValue.indexOf('='.toString())
+        var equalsIndex = keyValue.indexOf(r'='.toString())
         if (equalsIndex.getOrThrow() >= 0) {
             keyValueTokens[0] = keyValue.substring(0, equalsIndex.getOrThrow())
             keyValueTokens[1] = keyValue.substring(equalsIndex.getOrThrow() + 1)
@@ -213,7 +219,7 @@ public abstract class ResultParser {
         }
     }
 
-    static func matchPrefixedField(prefix: String, rawText: UTF32String, endChar: Char, trim: Bool): Array<String> {
+    static func matchPrefixedField(prefix: String, rawText: UTF32String, endChar: Rune, trim: Bool): Array<String> {
         var matches: ArrayList<String> = ArrayList<String>();
         var i: Int64 = 0;
         var max: Int64 = rawText.size;
@@ -267,14 +273,14 @@ public abstract class ResultParser {
     private static func countPrecedingBackslashes(s: UTF32String, pos: Int64): Int64 {
         var i = pos - 1
         var count: Int64 = 0;
-        while (i >= 0 && s.get(i) == '\\') {
+        while (i >= 0 && s.get(i) == r'\\') {
             count++
             i--
         }
         return count
     }
 
-    static func matchSinglePrefixedField(prefix: String, rawText: UTF32String, endChar: Char, trim: Bool): String {
+    static func matchSinglePrefixedField(prefix: String, rawText: UTF32String, endChar: Rune, trim: Bool): String {
         var matches: Array<String> = matchPrefixedField(prefix, rawText, endChar, trim);
         if (matches.isEmpty()) {
             return ""

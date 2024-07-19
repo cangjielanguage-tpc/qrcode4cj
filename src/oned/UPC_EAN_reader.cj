@@ -2,7 +2,13 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned
+package QRCode4cj.oned
+
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.math.*
+import QRCode4cj.oned.rss.*
 
 /**
  * Encapsulates functionality and implementation that is common to UPC and EAN families
@@ -73,12 +79,12 @@ public abstract class UPCEANReader <: OneDReader {
         [2, 1, 1, 3]
     ]
 
-    private let decodeRowStringBuffer: ArrayList<Char>
+    private let decodeRowStringBuffer: ArrayList<Rune>
     private let extensionReader: UPCEANExtensionSupport
     private let eanManSupport: EANManufacturerOrgSupport
 
     protected init() {
-        decodeRowStringBuffer = ArrayList<Char>()
+        decodeRowStringBuffer = ArrayList<Rune>()
         extensionReader = UPCEANExtensionSupport()
         eanManSupport = EANManufacturerOrgSupport()
     }
@@ -147,7 +153,7 @@ public abstract class UPCEANReader <: OneDReader {
                 ResultPoint(Float32(startGuardRange[0] + startGuardRange[1]) / 2.0, Float32(rowNumber)))
         }
 
-        var result: ArrayList<Char> = ArrayList<Char>()
+        var result: ArrayList<Rune> = ArrayList<Rune>()
 
         var endStart: Int64 = decodeMiddle(row, startGuardRange, result)
 
@@ -290,7 +296,7 @@ public abstract class UPCEANReader <: OneDReader {
         var sum: Int64 = 0
         var i: Int64 = length - 1
         while (i >= 0) {
-            var digit: Int64 = s.get(i).hashCode() - '0'.hashCode()
+            var digit: Int64 = s.get(i).hashCode() - r'0'.hashCode()
             if (digit < 0 || digit > 9) {
                 throw Qrcoder4cjFormatException.getFormatInstance()
             }
@@ -300,7 +306,7 @@ public abstract class UPCEANReader <: OneDReader {
         sum *= 3
         i = length - 2
         while (i >= 0) {
-            var digit: Int64 = s.get(i).hashCode() - '0'.hashCode()
+            var digit: Int64 = s.get(i).hashCode() - r'0'.hashCode()
             if (digit < 0 || digit > 9) {
                 throw Qrcoder4cjFormatException.getFormatInstance()
             }
@@ -429,6 +435,6 @@ public abstract class UPCEANReader <: OneDReader {
     protected func decodeMiddle(
         row: BitArray,
         startRange: Array<Int64>,
-        resultString: ArrayList<Char>
+        resultString: ArrayList<Rune>
     ): Int64
 }

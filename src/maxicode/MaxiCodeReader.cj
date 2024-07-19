@@ -2,24 +2,24 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package maxicode
+package QRCode4cj.maxicode
 
-import common.BarcodeFormat
-import common.BinaryBitmap
-import common.Qrcoder4cjChecksumException
-import common.DecodeHintType
-import common.Qrcoder4cjFormatException
-import common.Qrcoder4cjNotFoundException
-import common.Reader
-import common.Result
-import common.ResultMetadataType
-import common.ResultPoint
-import common.BitMatrix
-import common.DecoderResult
-import maxicode.decoder.Decoder
-from std import math.*
-from std import collection.*
-import tools.UTF32String
+import QRCode4cj.common.BarcodeFormat
+import QRCode4cj.common.BinaryBitmap
+import QRCode4cj.common.Qrcoder4cjChecksumException
+import QRCode4cj.common.DecodeHintType
+import QRCode4cj.common.Qrcoder4cjFormatException
+import QRCode4cj.common.Qrcoder4cjNotFoundException
+import QRCode4cj.common.Reader
+import QRCode4cj.common.Result
+import QRCode4cj.common.ResultMetadataType
+import QRCode4cj.common.ResultPoint
+import QRCode4cj.common.BitMatrix
+import QRCode4cj.common.DecoderResult
+import QRCode4cj.maxicode.decoder.Decoder
+import std.math.*
+import std.collection.*
+import QRCode4cj.tools.UTF32String
 
 /**
  * This implementation can detect and decode a MaxiCode in an image.
@@ -86,7 +86,7 @@ public class MaxiCodeReader <: Reader {
         // Now just read off the bits
         var bits: BitMatrix = BitMatrix(MATRIX_WIDTH, MATRIX_HEIGHT)
         for (y in 0..MATRIX_HEIGHT) {
-            var iy: Int64 = math.min(top + (y * height + height / 2) / MATRIX_HEIGHT, height - 1)
+            var iy: Int64 = min(top + (y * height + height / 2) / MATRIX_HEIGHT, height - 1)
             for (x in 0..MATRIX_WIDTH) {
                 // srowen: I don't quite understand why the formula below is necessary, but it
                 // can walk off the image if left + width = the right boundary. So cap it.

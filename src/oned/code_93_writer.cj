@@ -2,7 +2,13 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned
+package QRCode4cj.oned
+
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.math.*
+import std.convert.*
 
 /**
  * This object renders a CODE93 code as a BitMatrix
@@ -106,10 +112,10 @@ public class Code93Writer <: OneDimensionalCodeWriter {
 
     static func convertToExtended(contents: UTF32String): UTF32String {
         var length: Int64 = contents.charSize;
-        var extendedContent: ArrayList<Char> = ArrayList<Char>();
+        var extendedContent: ArrayList<Rune> = ArrayList<Rune>();
 
         for (i in 0..length) {
-            var character: Char = contents.get(i);
+            var character: Rune = contents.get(i);
 
             /* ($)=a, (%)=b, (/)=c, (+)=d. see Code93Reader.ALPHABET_STRING */
             if (character.hashCode() == 0) {
@@ -117,51 +123,51 @@ public class Code93Writer <: OneDimensionalCodeWriter {
                 extendedContent.appendAll("bU".toRuneArray());
             } else if (character.hashCode() <= 26) {
                 /* SOH - SUB: ($)A - ($)Z */
-                extendedContent.append('a');
-                extendedContent.append(Char('A'.hashCode() + character.hashCode() - 1));
+                extendedContent.append(r'a');
+                extendedContent.append(Rune(r'A'.hashCode() + character.hashCode() - 1));
             } else if (character.hashCode() <= 31) {
                 /* ESC - US: (%)A - (%)E */
-                extendedContent.append('b');
-                extendedContent.append(Char('A'.hashCode() + character.hashCode() - 27));
-            } else if (character == ' ' || character == '$' || character == '%' || character == '+') {
+                extendedContent.append(r'b');
+                extendedContent.append(Rune(r'A'.hashCode() + character.hashCode() - 27));
+            } else if (character == r' ' || character == r'$' || character == r'%' || character == r'+') {
                 /* space $ % + */
                 extendedContent.append(character);
-            } else if (character <= ',') {
+            } else if (character <= r',') {
                 /* ! " # & ' ( ) * ,: (/)A - (/)L */
-                extendedContent.append('c');
-                extendedContent.append(Char('A'.hashCode() + character.hashCode() - '!'.hashCode()));
-            } else if (character <= '9') {
+                extendedContent.append(r'c');
+                extendedContent.append(Rune(r'A'.hashCode() + character.hashCode() - r'!'.hashCode()));
+            } else if (character <= r'9') {
                 extendedContent.append(character);
-            } else if (character == ':') {
+            } else if (character == r':') {
                 // :: (/)Z
                 extendedContent.appendAll("cZ".toRuneArray());
-            } else if (character <= '?') {
+            } else if (character <= r'?') {
                 // ; - ?: (%)F - (%)J
-                extendedContent.append('b');
-                extendedContent.append(Char('F'.hashCode() + character.hashCode() - ';'.hashCode()));
-            } else if (character == '@') {
+                extendedContent.append(r'b');
+                extendedContent.append(Rune(r'F'.hashCode() + character.hashCode() - r';'.hashCode()));
+            } else if (character == r'@') {
                 /* @: (%)V */
                 extendedContent.appendAll("bV".toRuneArray());
-            } else if (character <= 'Z') {
+            } else if (character <= r'Z') {
                 /* A - Z */
                 extendedContent.append(character);
-            } else if (character <= '_') {
+            } else if (character <= r'_') {
                 /* [ - _: (%)K - (%)O */
-                extendedContent.append('b');
-                extendedContent.append(Char('K'.hashCode() + character.hashCode() - '['.hashCode()));
-            } else if (character == '`') {
+                extendedContent.append(r'b');
+                extendedContent.append(Rune(r'K'.hashCode() + character.hashCode() - r'['.hashCode()));
+            } else if (character == r'`') {
                 /* `: (%)W */
                 extendedContent.appendAll("bW".toRuneArray());
-            } else if (character <= 'z') {
+            } else if (character <= r'z') {
                 /* a - z: (*)A - (*)Z */
-                extendedContent.append('d');
-                extendedContent.append(Char('A'.hashCode() + character.hashCode() - 'a'.hashCode()));
+                extendedContent.append(r'd');
+                extendedContent.append(Rune(r'A'.hashCode() + character.hashCode() - r'a'.hashCode()));
             } else if (character.hashCode() <= 127) {
                 /* { - DEL: (%)P - (%)T */
-                extendedContent.append('b');
-                extendedContent.append(Char('P'.hashCode() + character.hashCode() - '{'.hashCode()));
+                extendedContent.append(r'b');
+                extendedContent.append(Rune(r'P'.hashCode() + character.hashCode() - r'{'.hashCode()));
             } else {
-                throw IllegalArgumentException("Requested content contains a non-encodable character: '${character}'");
+                throw IllegalArgumentException("Requested content contains a non-encodable character: r'${character}'");
             }
         }
         return UTF32String(extendedContent);

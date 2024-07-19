@@ -2,7 +2,12 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned
+package QRCode4cj.oned
+
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.math.*
 
 /**
  * Implements decoding of the UPC-E format.
@@ -30,7 +35,7 @@ public open class UPCEReader <: UPCEANReader {
         decodeMiddleCounters = Array<Int64>(4, item: 0)
     }
 
-    protected override func decodeMiddle(row: BitArray, startRange: Array<Int64>, result: ArrayList<Char>): Int64 {
+    protected override func decodeMiddle(row: BitArray, startRange: Array<Int64>, result: ArrayList<Rune>): Int64 {
         var counters: Array<Int64> = decodeMiddleCounters
         counters[0] = 0
         counters[1] = 0
@@ -44,7 +49,7 @@ public open class UPCEReader <: UPCEANReader {
         var x = 0;
         while (x < 6 && rowOffset < end) {
             var bestMatch: Int64 = decodeDigit(row, counters, rowOffset, L_AND_G_PATTERNS);
-            result.append(Char('0'.hashCode() + bestMatch % 10));
+            result.append(Rune(r'0'.hashCode() + bestMatch % 10));
 
             for (i in 0..counters.size) {
                 rowOffset += counters[i]
@@ -68,12 +73,12 @@ public open class UPCEReader <: UPCEANReader {
         return super.checkChecksum(convertUPCEtoUPCA(s));
     }
 
-    private static func determineNumSysAndCheckDigit(resultString: ArrayList<Char>, lgPatternFound: Int64) {
+    private static func determineNumSysAndCheckDigit(resultString: ArrayList<Rune>, lgPatternFound: Int64) {
         for (numSys in 0..2) {
             for (d in 0..10) {
                 if (lgPatternFound == NUMSYS_AND_CHECK_DIGIT_PATTERNS[numSys][d]) {
-                    resultString.insert(0, Char('0'.hashCode() + numSys));
-                    resultString.append(Char('0'.hashCode() + d));
+                    resultString.insert(0, Rune(r'0'.hashCode() + numSys));
+                    resultString.append(Rune(r'0'.hashCode() + d));
                     return;
                 }
             }
@@ -92,12 +97,12 @@ public open class UPCEReader <: UPCEANReader {
      * @return equivalent UPC-A code as string of digits
      */
     public static func convertUPCEtoUPCA(upce: UTF32String): UTF32String {
-        var upceChars: Array<Char> = upce.substring(1, 6).toRuneArray()
-        var result: ArrayList<Char> = ArrayList<Char>();
+        var upceChars: Array<Rune> = upce.substring(1, 6).toRuneArray()
+        var result: ArrayList<Rune> = ArrayList<Rune>();
         result.append(upce.get(0))
-        var lastChar: Char = upceChars[5]
+        var lastChar: Rune = upceChars[5]
         match (lastChar) {
-            case '0' | '1' | '2' =>
+            case r'0' | r'1' | r'2' =>
                 result.append(upceChars[0])
                 result.append(upceChars[1])
                 result.append(lastChar);
@@ -106,7 +111,7 @@ public open class UPCEReader <: UPCEANReader {
                 result.append(upceChars[3])
                 result.append(upceChars[4])
 
-            case '3' =>
+            case r'3' =>
                 result.append(upceChars[0])
                 result.append(upceChars[1])
                 result.append(upceChars[2])
@@ -116,7 +121,7 @@ public open class UPCEReader <: UPCEANReader {
                 result.append(upceChars[3])
                 result.append(upceChars[4])
 
-            case '4' =>
+            case r'4' =>
                 result.append(upceChars[0])
                 result.append(upceChars[1])
                 result.append(upceChars[2])

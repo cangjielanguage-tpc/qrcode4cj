@@ -1,9 +1,13 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package qrcode.detector
+package QRCode4cj.qrcode.detector
 
-from std import time.*
+import std.time.*
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.math.*
 
 /**
  * This class attempts to find finder patterns in a QR Code. Finder patterns are the square

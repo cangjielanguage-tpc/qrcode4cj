@@ -2,9 +2,9 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package pdf417.common
+package QRCode4cj.pdf417.common
 
-import common.detector.MathUtils
+import QRCode4cj.common.detector.MathUtils
 
 public open class PDF417Common {
     public static let NUMBER_OF_CODEWORDS: Int64 = 929

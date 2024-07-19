@@ -4,7 +4,7 @@
 // dependence: ./LogicEnAndDe.cj
 // data_file: ./string1024.txt
 
-from encoding import json.*
+import encoding.json.*
 
 @Test
 public class TestQRCode4cjEncodeDecodeAll01{

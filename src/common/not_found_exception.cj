@@ -1,7 +1,7 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package common
+package QRCode4cj.common
 
 /**
  * Thrown when a barcode was not found in the image. It might have been

@@ -1,37 +1,19 @@
-/*
- * Copyright 2006 Jeremias Maerki.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package pkgc.datamatrix.encoder
 
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 
-from QRCode4cj import datamatrix.encoder.*
-from QRCode4cj import common.*
-from std import unittest.*
-from std import unittest.testmacro.*
-from std import collection.*
-from QRCode4cj import tools.UTF32String
+import QRCode4cj.datamatrix.encoder.*
+import QRCode4cj.common.*
+import std.unittest.*
+import std.unittest.testmacro.*
+import std.collection.*
+import QRCode4cj.tools.UTF32String
 
 main(): Int64 {
     let tester = HighLevelEncodeTestCase()
-    tester.execute()
-    tester.printResult()
-    tester.getTestInfo().errorCount + tester.getTestInfo().failedCount
-    0
+    let test = tester.asTestSuite().runTests()
+    test.failedCount + test.errorCount
 }
 
 /**
@@ -85,7 +67,7 @@ public class HighLevelEncodeTestCase {
         var sb: StringBuilder = StringBuilder();
         for (i in 0..codewords.charSize) {
             if (i > 0) {
-                sb.append(' ');
+                sb.append(r' ');
             }
             sb.append(codewords.get(i).hashCode())
         }
@@ -304,12 +286,12 @@ public class HighLevelEncodeTestCase {
     }
 
     private static func createBinaryMessage(len: Int64): String {
-        var sb: ArrayList<Char> = ArrayList<Char>();
+        var sb: ArrayList<Rune> = ArrayList<Rune>();
         sb.appendAll("\u{00AB}äöüéàá-".toRuneArray());
         for (i in 0..(len - 9)) {
-            sb.append('\u{00B7}');
+            sb.append(r'\u{00B7}');
         }
-        sb.append('\u{00BB}');
+        sb.append(r'\u{00BB}');
         return String(sb);
     }
 

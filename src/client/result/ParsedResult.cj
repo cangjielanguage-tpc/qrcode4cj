@@ -1,7 +1,9 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package client.result
+package QRCode4cj.client.result
+
+import std.collection.*
 
 /**
  * <p>Abstract class representing the result of decoding a barcode, as more than
@@ -31,17 +33,17 @@ public abstract class ParsedResult {
         return getDisplayResult();
     }
 
-    public static func maybeAppend(value: String, result: ArrayList<Char>) {
+    public static func maybeAppend(value: String, result: ArrayList<Rune>) {
         if (value != "" && !value.isEmpty()) {
             // Don't add a newline before the first value
             if (result.size > 0) {
-                result.append('\n');
+                result.append(r'\n');
             }
             result.appendAll(value.toRuneArray());
         }
     }
 
-    public static func maybeAppend(values: Array<String>, result: ArrayList<Char>) {
+    public static func maybeAppend(values: Array<String>, result: ArrayList<Rune>) {
         if (values != []) {
             for (value in values) {
                 maybeAppend(value, result);

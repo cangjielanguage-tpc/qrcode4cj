@@ -1,7 +1,7 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package common.reedsolomon
+package QRCode4cj.common.reedsolomon
 
 public class ReedSolomonDecoder {
     private let field: GenericGF

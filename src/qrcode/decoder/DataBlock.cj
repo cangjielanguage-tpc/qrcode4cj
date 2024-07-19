@@ -1,7 +1,9 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package qrcode.decoder
+package QRCode4cj.qrcode.decoder
+
+import std.collection.*
 
 /**
  * Encapsulates a block of data within a QR Code. QR Codes may split their data into

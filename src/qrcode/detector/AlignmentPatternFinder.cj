@@ -1,12 +1,13 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package qrcode.detector
+package QRCode4cj.qrcode.detector
 
-import common.Qrcoder4cjNotFoundException
-import common.ResultPointCallback
-import common.BitMatrix
-from std import collection.*
+import QRCode4cj.common.Qrcoder4cjNotFoundException
+import QRCode4cj.common.ResultPointCallback
+import QRCode4cj.common.BitMatrix
+import std.collection.*
+import std.math.*
 
 public class AlignmentPatternFinder {
     private var image: BitMatrix = BitMatrix();

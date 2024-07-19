@@ -2,7 +2,13 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned
+package QRCode4cj.oned
+
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.math.*
+import QRCode4cj.oned.rss.*
 
 public open class ITFReader <: OneDReader {
     private static let MAX_AVG_VARIANCE: Float32 = 0.38
@@ -64,7 +70,7 @@ public open class ITFReader <: OneDReader {
         var startRange: Array<Int64> = decodeStart(row)
         var endRange: Array<Int64> = decodeEnd(row)
 
-        var result: ArrayList<Char> = ArrayList<Char>()
+        var result: ArrayList<Rune> = ArrayList<Rune>()
         decodeMiddle(row, startRange[1], endRange[0], result)
         var resultString: UTF32String = UTF32String(result)
 
@@ -127,7 +133,7 @@ public open class ITFReader <: OneDReader {
         row: BitArray,
         payloadStartin: Int64,
         payloadEnd: Int64,
-        resultString: ArrayList<Char>
+        resultString: ArrayList<Rune>
     ) {
         // Digits are interleaved in pairs - 5 black lines for one digit, and the 5
         // interleaved white lines for the second digit.
@@ -151,9 +157,9 @@ public open class ITFReader <: OneDReader {
             }
 
             var bestMatch: Int64 = decodeDigit(counterBlack)
-            resultString.append(Char('0'.hashCode() + bestMatch))
+            resultString.append(Rune(r'0'.hashCode() + bestMatch))
             bestMatch = decodeDigit(counterWhite)
-            resultString.append(Char('0'.hashCode() + bestMatch))
+            resultString.append(Rune(r'0'.hashCode() + bestMatch))
 
             for (i in 0..counterDigitPair.size) {
                 payloadStart += counterDigitPair[i]

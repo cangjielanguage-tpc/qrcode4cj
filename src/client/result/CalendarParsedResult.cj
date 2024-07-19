@@ -2,11 +2,14 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package client.result
+package QRCode4cj.client.result
 
-from std import math.*
-from std import ast.*
-from std import time.*
+import std.math.*
+import std.ast.*
+import std.time.*
+import std.regex.*
+import std.collection.*
+import std.convert.*
 
 public open class CalendarParsedResult <: ParsedResult {
     private static let RFC2445_DURATION: Regex = Regex(
@@ -171,7 +174,7 @@ public open class CalendarParsedResult <: ParsedResult {
     }
 
     public override func getDisplayResult(): String {
-        var result: ArrayList<Char> = ArrayList<Char>();
+        var result: ArrayList<Rune> = ArrayList<Rune>();
         maybeAppend(summary, result);
         maybeAppend(format(startAllDay, start), result);
         maybeAppend(format(endAllDay, end), result);
@@ -208,7 +211,7 @@ public open class CalendarParsedResult <: ParsedResult {
         }
 
         // The when string can be local time, or UTC if it ends with a Z
-        if (charArray.size == 16 && charArray[15] == 'Z') {
+        if (charArray.size == 16 && charArray[15] == r'Z') {
             var milliseconds: Int64 = parseDateTimeString(String(charArray[Range<Int64>(0, 15, 1, true, true, false)]));
 
             return milliseconds

@@ -2,12 +2,12 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package pdf417.decoder
+package QRCode4cj.pdf417.decoder
 
-import common.Qrcoder4cjNotFoundException
-import common.ResultPoint
-import common.BitMatrix
-from std import math.*
+import QRCode4cj.common.Qrcoder4cjNotFoundException
+import QRCode4cj.common.ResultPoint
+import QRCode4cj.common.BitMatrix
+import std.math.*
 
 open class BoundingBox {
     private var image: BitMatrix = BitMatrix()

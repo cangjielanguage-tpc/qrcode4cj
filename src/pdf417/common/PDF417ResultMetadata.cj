@@ -2,7 +2,7 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package pdf417.common
+package QRCode4cj.pdf417.common
 
 public open class PDF417ResultMetadata {
     private var segmentIndex: Int64 = 0

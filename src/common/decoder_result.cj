@@ -1,7 +1,9 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package common
+package QRCode4cj.common
+
+import std.collection.*
 
 public class DecoderResult {
     public let rawBytes: Array<UInt8>

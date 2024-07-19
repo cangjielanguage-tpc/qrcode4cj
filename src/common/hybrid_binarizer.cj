@@ -2,7 +2,9 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package common
+package QRCode4cj.common
+
+import std.math.*
 
 public class HybridBinarizer <: GlobalHistogramBinarizer {
     static let BLOCK_SIZE_POWER = 3
@@ -101,7 +103,7 @@ public class HybridBinarizer <: GlobalHistogramBinarizer {
         if (value < 2) {
             2
         } else {
-            math.min(value, max)
+            min(value, max)
         }
     }
 

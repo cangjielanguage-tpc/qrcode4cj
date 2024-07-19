@@ -1,7 +1,9 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package client.result
+package QRCode4cj.client.result
+
+import std.collection.*
 
 /**
  * Represents a parsed result that encodes wifi network information, like SSID and password.
@@ -82,7 +84,7 @@ public open class WifiParsedResult <: ParsedResult {
     }
 
     public override func getDisplayResult(): String {
-        var result: ArrayList<Char> = ArrayList<Char>();
+        var result: ArrayList<Rune> = ArrayList<Rune>();
         maybeAppend(ssid, result);
         maybeAppend(networkEncryption, result);
         maybeAppend(password, result);

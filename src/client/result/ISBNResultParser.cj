@@ -1,9 +1,11 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package client.result
+package QRCode4cj.client.result
 
-import common.BarcodeFormat
+import QRCode4cj.common.BarcodeFormat
+import QRCode4cj.common.*
+import QRCode4cj.tools.*
 
 /**
  * Parses strings of digits that represent a ISBN.

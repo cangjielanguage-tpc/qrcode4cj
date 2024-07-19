@@ -2,10 +2,14 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned.rss.expanded
+package QRCode4cj.oned.rss.expanded
 
-import oned.rss.expanded.decoders.*
-from std import math.*
+import QRCode4cj.oned.rss.expanded.decoders.*
+import QRCode4cj.oned.rss.*
+import std.math.*
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
 
 public class RSSExpandedReader <: AbstractRSSReader {
     private static var SYMBOL_WIDEST: Array<Int64> = [7, 5, 4, 3, 1]

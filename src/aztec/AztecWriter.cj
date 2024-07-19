@@ -2,19 +2,20 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package aztec
+package QRCode4cj.aztec
 
-from std import convert.*
-from std import collection.*
-from std import math.*
-import common.BarcodeFormat
-import common.EncodeHintType
-import common.Writer
-import aztec.encoder.AztecCode
-import aztec.encoder.Encoder
-import common.BitMatrix
-import common.MyCharset
-import qrcode.decoder.ErrorCorrectionLevel
+import std.convert.*
+import std.collection.*
+import std.math.*
+import QRCode4cj.common.BarcodeFormat
+import QRCode4cj.common.EncodeHintType
+import QRCode4cj.common.Writer
+import QRCode4cj.aztec.encoder.AztecCode
+import QRCode4cj.aztec.encoder.Encoder
+import QRCode4cj.common.BitMatrix
+import QRCode4cj.common.MyCharset
+import QRCode4cj.qrcode.decoder.ErrorCorrectionLevel
+import QRCode4cj.tools.*
 
 public class AztecWriter <: Writer {
     public func encode(contents: String, format: BarcodeFormat, width: Int64, height: Int64): BitMatrix {

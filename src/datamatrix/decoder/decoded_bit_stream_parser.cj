@@ -2,14 +2,11 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package datamatrix.decoder
+package QRCode4cj.datamatrix.decoder
 
-import common.BitSource
-import common.DecoderResult
-import common.ECIStringBuilder
-import common.Qrcoder4cjReaderException
-import common.MyCharset
-import common.StandardCharsets
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
 
 /**
  * <p>Data Matrix Codes can encode text as bits in one of several modes, and can use multiple modes
@@ -62,77 +59,77 @@ public class DecodedBitStreamParser {
      * See ISO 16022:2006, Annex C Table C.1
      * The C40 Basic Character Set (*'s used for placeholders for the shift values)
      */
-    private static let C40_BASIC_SET_CHARS = [
-        '*',
-        '*',
-        '*',
-        ' ',
-        '0',
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '7',
-        '8',
-        '9',
-        'A',
-        'B',
-        'C',
-        'D',
-        'E',
-        'F',
-        'G',
-        'H',
-        'I',
-        'J',
-        'K',
-        'L',
-        'M',
-        'N',
-        'O',
-        'P',
-        'Q',
-        'R',
-        'S',
-        'T',
-        'U',
-        'V',
-        'W',
-        'X',
-        'Y',
-        'Z'
+    private static let C40_BASIC_SET_CHARS: Array<Rune> = [
+        r'*',
+        r'*',
+        r'*',
+        r' ',
+        r'0',
+        r'1',
+        r'2',
+        r'3',
+        r'4',
+        r'5',
+        r'6',
+        r'7',
+        r'8',
+        r'9',
+        r'A',
+        r'B',
+        r'C',
+        r'D',
+        r'E',
+        r'F',
+        r'G',
+        r'H',
+        r'I',
+        r'J',
+        r'K',
+        r'L',
+        r'M',
+        r'N',
+        r'O',
+        r'P',
+        r'Q',
+        r'R',
+        r'S',
+        r'T',
+        r'U',
+        r'V',
+        r'W',
+        r'X',
+        r'Y',
+        r'Z'
     ]
 
     private static let C40_SHIFT2_SET_CHARS = [
-        '!',
-        '"',
-        '#',
-        '$',
-        '%',
-        '&',
-        '\'',
-        '(',
-        ')',
-        '*',
-        '+',
-        ',',
-        '-',
-        '.',
-        '/',
-        ':',
-        ';',
-        '<',
-        '=',
-        '>',
-        '?',
-        '@',
-        '[',
-        '\\',
-        ']',
-        '^',
-        '_'
+        r'!',
+        r'"',
+        r'#',
+        r'$',
+        r'%',
+        r'&',
+        r'\'',
+        r'(',
+        r')',
+        r'*',
+        r'+',
+        r',',
+        r'-',
+        r'.',
+        r'/',
+        r':',
+        r';',
+        r'<',
+        r'=',
+        r'>',
+        r'?',
+        r'@',
+        r'[',
+        r'\\',
+        r']',
+        r'^',
+        r'_'
     ]
 
     /**
@@ -140,84 +137,84 @@ public class DecodedBitStreamParser {
      * The Text Basic Character Set (*'s used for placeholders for the shift values)
      */
     private static let TEXT_BASIC_SET_CHARS = [
-        '*',
-        '*',
-        '*',
-        ' ',
-        '0',
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '7',
-        '8',
-        '9',
-        'a',
-        'b',
-        'c',
-        'd',
-        'e',
-        'f',
-        'g',
-        'h',
-        'i',
-        'j',
-        'k',
-        'l',
-        'm',
-        'n',
-        'o',
-        'p',
-        'q',
-        'r',
-        's',
-        't',
-        'u',
-        'v',
-        'w',
-        'x',
-        'y',
-        'z'
+        r'*',
+        r'*',
+        r'*',
+        r' ',
+        r'0',
+        r'1',
+        r'2',
+        r'3',
+        r'4',
+        r'5',
+        r'6',
+        r'7',
+        r'8',
+        r'9',
+        r'a',
+        r'b',
+        r'c',
+        r'd',
+        r'e',
+        r'f',
+        r'g',
+        r'h',
+        r'i',
+        r'j',
+        r'k',
+        r'l',
+        r'm',
+        r'n',
+        r'o',
+        r'p',
+        r'q',
+        r'r',
+        r's',
+        r't',
+        r'u',
+        r'v',
+        r'w',
+        r'x',
+        r'y',
+        r'z'
     ]
 
     // Shift 2 for Text is the same encoding as C40
-    private static let TEXT_SHIFT2_SET_CHARS: Array<Char> = C40_SHIFT2_SET_CHARS
+    private static let TEXT_SHIFT2_SET_CHARS: Array<Rune> = C40_SHIFT2_SET_CHARS
 
     private static let TEXT_SHIFT3_SET_CHARS = [
-        '`',
-        'A',
-        'B',
-        'C',
-        'D',
-        'E',
-        'F',
-        'G',
-        'H',
-        'I',
-        'J',
-        'K',
-        'L',
-        'M',
-        'N',
-        'O',
-        'P',
-        'Q',
-        'R',
-        'S',
-        'T',
-        'U',
-        'V',
-        'W',
-        'X',
-        'Y',
-        'Z',
-        '{',
-        '|',
-        '}',
-        '~',
-        Char(127)
+        r'`',
+        r'A',
+        r'B',
+        r'C',
+        r'D',
+        r'E',
+        r'F',
+        r'G',
+        r'H',
+        r'I',
+        r'J',
+        r'K',
+        r'L',
+        r'M',
+        r'N',
+        r'O',
+        r'P',
+        r'Q',
+        r'R',
+        r'S',
+        r'T',
+        r'U',
+        r'V',
+        r'W',
+        r'X',
+        r'Y',
+        r'Z',
+        r'{',
+        r'|',
+        r'}',
+        r'~',
+        Rune(127)
     ]
 
     init() {}
@@ -225,7 +222,7 @@ public class DecodedBitStreamParser {
     public static func decode(bytes: Array<UInt8>): DecoderResult {
         var bits: BitSource = BitSource(bytes);
         var result: ECIStringBuilder = ECIStringBuilder(100);
-        var resultTrailer: ArrayList<Char> = ArrayList<Char>();
+        var resultTrailer: ArrayList<Rune> = ArrayList<Rune>();
         var byteSegments = ArrayList<Array<UInt8>>(1)
         var mode: Mode = Mode.ASCII_ENCODE;
 
@@ -291,7 +288,7 @@ public class DecodedBitStreamParser {
     /**
      * See ISO 16022:2006, 5.2.3 and Annex C, Table C.2
      */
-    private static func decodeAsciiSegment(bits: BitSource, result: ECIStringBuilder, resultTrailer: ArrayList<Char>,
+    private static func decodeAsciiSegment(bits: BitSource, result: ECIStringBuilder, resultTrailer: ArrayList<Rune>,
         fnc1positions: Set<Int64>): Mode {
         var upperShift: Bool = false;
         do {
@@ -302,7 +299,7 @@ public class DecodedBitStreamParser {
                 if (upperShift) {
                     oneByte += 128
                 }
-                result.append(Char(oneByte - 1));
+                result.append(Rune(oneByte - 1));
 
                 return Mode.ASCII_ENCODE;
             } else if (oneByte == 129) { // Pad
@@ -317,7 +314,7 @@ public class DecodedBitStreamParser {
                     case 232 =>
                         // FNC1
                         fnc1positions.put(result.length());
-                        result.append(Char(29)) // translate as ASCII 29
+                        result.append(Rune(29)) // translate as ASCII 29
                         break
                     case 233 => break // Structured Append
                     case 234 => break // Reader Programming 
@@ -392,9 +389,9 @@ public class DecodedBitStreamParser {
                     case 0 => if (cValue < 3) {
                         shift = cValue + 1
                     } else if (cValue < C40_BASIC_SET_CHARS.size) {
-                        var c40char: Char = C40_BASIC_SET_CHARS[cValue]
+                        var c40char: Rune = C40_BASIC_SET_CHARS[cValue]
                         if (upperShift) {
-                            result.append(Char(c40char.hashCode() + 128));
+                            result.append(Rune(c40char.hashCode() + 128));
                             upperShift = false
                         } else {
                             result.append(c40char);
@@ -404,10 +401,10 @@ public class DecodedBitStreamParser {
                     }
                     case 1 =>
                         if (upperShift) {
-                            result.append(Char(cValue + 128));
+                            result.append(Rune(cValue + 128));
                             upperShift = false
                         } else {
-                            result.append(Char(cValue))
+                            result.append(Rune(cValue))
                         }
                         shift = 0
                     case 2 => (upperShift, shift) = exdecodeC40Segment2(upperShift, result, cValue, fnc1positions)
@@ -422,9 +419,9 @@ public class DecodedBitStreamParser {
         fnc1positions: Set<Int64>): (Bool, Int64) {
         var upperShift_p = upperShift
         if (cValue < C40_SHIFT2_SET_CHARS.size) {
-            var c40char: Char = C40_SHIFT2_SET_CHARS[cValue]
+            var c40char: Rune = C40_SHIFT2_SET_CHARS[cValue]
             if (upperShift_p) {
-                result.append(Char(c40char.hashCode() + 128));
+                result.append(Rune(c40char.hashCode() + 128));
                 upperShift_p = false
             } else {
                 result.append(c40char);
@@ -434,7 +431,7 @@ public class DecodedBitStreamParser {
                 case 27 =>
                     // FNC1
                     fnc1positions.put(result.length());
-                    result.append(Char(29)) // translate as ASCII 29
+                    result.append(Rune(29)) // translate as ASCII 29
                 case 30 => // Upper Shift
                     upperShift_p = true
                 case _ => throw Qrcoder4cjFormatException.getFormatInstance();
@@ -446,10 +443,10 @@ public class DecodedBitStreamParser {
     private static func exdecodeC40Segment3(upperShift: Bool, result: ECIStringBuilder, cValue: Int64): (Bool, Int64) {
         var upperShift_p = upperShift
         if (upperShift_p) {
-            result.append(Char(cValue + 224));
+            result.append(Rune(cValue + 224));
             upperShift_p = false
         } else {
-            result.append(Char(cValue + 96));
+            result.append(Rune(cValue + 96));
         }
         return (upperShift_p, 0)
     }
@@ -485,9 +482,9 @@ public class DecodedBitStreamParser {
                     case 0 => if (cValue < 3) {
                         shift = cValue + 1
                     } else if (cValue < TEXT_BASIC_SET_CHARS.size) {
-                        var textChar: Char = TEXT_BASIC_SET_CHARS[cValue]
+                        var textChar: Rune = TEXT_BASIC_SET_CHARS[cValue]
                         if (upperShift) {
-                            result.append(Char(textChar.hashCode() + 128));
+                            result.append(Rune(textChar.hashCode() + 128));
                             upperShift = false
                         } else {
                             result.append(textChar);
@@ -497,10 +494,10 @@ public class DecodedBitStreamParser {
                     }
                     case 1 =>
                         if (upperShift) {
-                            result.append(Char(cValue + 128));
+                            result.append(Rune(cValue + 128));
                             upperShift = false
                         } else {
-                            result.append(Char(cValue))
+                            result.append(Rune(cValue))
                         }
                         shift = 0
                     case 2 => (upperShift, shift) = exdecodeTextSegment2(upperShift, result, cValue, fnc1positions)
@@ -516,9 +513,9 @@ public class DecodedBitStreamParser {
         var upperShift_p = upperShift
         // Shift 2 for Text is the same encoding as C40
         if (cValue < TEXT_SHIFT2_SET_CHARS.size) {
-            var textChar: Char = TEXT_SHIFT2_SET_CHARS[cValue]
+            var textChar: Rune = TEXT_SHIFT2_SET_CHARS[cValue]
             if (upperShift_p) {
-                result.append(Char(textChar.hashCode() + 128));
+                result.append(Rune(textChar.hashCode() + 128));
                 upperShift_p = false
             } else {
                 result.append(textChar);
@@ -528,7 +525,7 @@ public class DecodedBitStreamParser {
                 case 27 =>
                     // FNC1
                     fnc1positions.put(result.length());
-                    result.append(Char(29)) // translate as ASCII 29
+                    result.append(Rune(29)) // translate as ASCII 29
                 case 30 => // Upper Shift
                     upperShift_p = true
                 case _ => throw Qrcoder4cjFormatException.getFormatInstance();
@@ -540,9 +537,9 @@ public class DecodedBitStreamParser {
     private static func exdecodeTextSegment3(upperShift: Bool, result: ECIStringBuilder, cValue: Int64): (Bool, Int64) {
         var upperShift_p = upperShift
         if (cValue < TEXT_SHIFT3_SET_CHARS.size) {
-            var textChar: Char = TEXT_SHIFT3_SET_CHARS[cValue]
+            var textChar: Rune = TEXT_SHIFT3_SET_CHARS[cValue]
             if (upperShift_p) {
-                result.append(Char(textChar.hashCode() + 128));
+                result.append(Rune(textChar.hashCode() + 128));
                 upperShift_p = false
             } else {
                 result.append(textChar);
@@ -576,17 +573,17 @@ public class DecodedBitStreamParser {
                 var cValue: Int64 = cValues[i]
                 match (cValue) {
                     case 0 => // X12 segment terminator <CR>
-                        result.append('\r');
+                        result.append(r'\r');
                     case 1 => // X12 segment separator *
-                        result.append('*');
+                        result.append(r'*');
                     case 2 => // X12 sub-element separator >
-                        result.append('>');
+                        result.append(r'>');
                     case 3 => // space
-                        result.append(' ');
+                        result.append(r' ');
                     case _ => if (cValue < 14) { // 0 - 9
-                        result.append(Char(cValue + 44));
+                        result.append(Rune(cValue + 44));
                     } else if (cValue < 40) { // A - Z
-                        result.append(Char(cValue + 51));
+                        result.append(Rune(cValue + 51));
                     } else {
                         throw Qrcoder4cjFormatException.getFormatInstance();
                     }
@@ -632,7 +629,7 @@ public class DecodedBitStreamParser {
                     edifactValue |= 0x40
                     // Add a leading 01 to the 6 bit binary value
                 }
-                result.append(Char(edifactValue))
+                result.append(Rune(edifactValue))
             }
         } while (bits.available() > 0)
     }

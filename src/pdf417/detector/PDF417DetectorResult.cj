@@ -2,11 +2,11 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package pdf417.detector
+package QRCode4cj.pdf417.detector
 
-import common.ResultPoint
-import common.BitMatrix
-from std import collection.*
+import QRCode4cj.common.ResultPoint
+import QRCode4cj.common.BitMatrix
+import std.collection.*
 
 public open class PDF417DetectorResult {
     private var bits: BitMatrix

@@ -2,7 +2,11 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package client.result
+package QRCode4cj.client.result
+
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
 
 /**
  * Parses a "tel:" URI result, which specifies a phone number.
@@ -24,7 +28,7 @@ public open class TelResultParser <: ResultParser {
         }
 
         // Drop tel, query portion
-        var obj = rawText.indexOf('?'.toString(), start: 4)
+        var obj = rawText.indexOf(r'?'.toString(), start: 4)
         var queryStart = 0
         if (let Some(v) <- obj) {
             queryStart = v

@@ -2,11 +2,11 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned
+package QRCode4cj.oned
 
-import oned.rss.*
-import oned.rss.expanded.*
-import common.*
-from std import collection.*
-from std import math.*
-import tools.System
+import QRCode4cj.oned.rss.*
+import QRCode4cj.oned.rss.expanded.*
+import QRCode4cj.common.*
+import std.collection.*
+import std.math.*
+import QRCode4cj.tools.System

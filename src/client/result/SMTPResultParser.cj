@@ -2,7 +2,11 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package client.result
+package QRCode4cj.client.result
+
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
 
 public open class SMTPResultParser <: ResultParser {
     public func parse(result: Result): ?ParsedResult {
@@ -13,11 +17,11 @@ public open class SMTPResultParser <: ResultParser {
         var emailAddress: UTF32String = rawText.substring(5);
         var subject: UTF32String = UTF32String()
         var body: UTF32String = UTF32String()
-        var colon = emailAddress.indexOf(':'.toString());
+        var colon = emailAddress.indexOf(r':'.toString());
         if (colon != None) {
             subject = emailAddress.substring(colon.getOrThrow() + 1)
             emailAddress = emailAddress.substring(0, colon.getOrThrow())
-            colon = subject.indexOf(':'.toString())
+            colon = subject.indexOf(r':'.toString())
             if (colon != None) {
                 body = subject.substring(colon.getOrThrow() + 1)
                 subject = subject.substring(0, colon.getOrThrow())

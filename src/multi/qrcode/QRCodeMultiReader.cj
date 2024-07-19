@@ -2,26 +2,26 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package multi.qrcode
+package QRCode4cj.multi.qrcode
 
-import common.BarcodeFormat
-import common.BinaryBitmap
-import common.DecodeHintType
-import common.Qrcoder4cjNotFoundException
-import common.Qrcoder4cjReaderException
-import common.Result
-import common.ResultMetadataType
-import common.ResultPoint
-import common.DecoderResult
-import common.DetectorResult
-import multi.MultipleBarcodeReader
-import multi.qrcode.detector.MultiDetector
-import qrcode.QRCodeReader
-import qrcode.decoder.QRCodeDecoderMetaData
-import tools.UTF32String
-from std import math.*
-from std import collection.*
-from std import io.*
+import QRCode4cj.common.BarcodeFormat
+import QRCode4cj.common.BinaryBitmap
+import QRCode4cj.common.DecodeHintType
+import QRCode4cj.common.Qrcoder4cjNotFoundException
+import QRCode4cj.common.Qrcoder4cjReaderException
+import QRCode4cj.common.Result
+import QRCode4cj.common.ResultMetadataType
+import QRCode4cj.common.ResultPoint
+import QRCode4cj.common.DecoderResult
+import QRCode4cj.common.DetectorResult
+import QRCode4cj.multi.MultipleBarcodeReader
+import QRCode4cj.multi.qrcode.detector.MultiDetector
+import QRCode4cj.qrcode.QRCodeReader
+import QRCode4cj.qrcode.decoder.QRCodeDecoderMetaData
+import QRCode4cj.tools.UTF32String
+import std.math.*
+import std.collection.*
+import std.io.*
 
 public class QRCodeMultiReader <: QRCodeReader & MultipleBarcodeReader {
     private static var NO_POINTS: Array<ResultPoint> = Array<ResultPoint>();
@@ -61,7 +61,7 @@ public class QRCodeMultiReader <: QRCodeReader & MultipleBarcodeReader {
 
         // sort and concatenate the SA list items
         saResults.sortBy(stable: true, comparator: SAComparator)
-        var newText: ArrayList<Char> = ArrayList<Char>()
+        var newText: ArrayList<Rune> = ArrayList<Rune>()
         var newRawBytes: ByteArrayStream = ByteArrayStream()
         var newByteSegment: ByteArrayStream = ByteArrayStream()
         for (saResultN in 0..saResults.size) {

@@ -2,10 +2,11 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package aztec.encoder
+package QRCode4cj.aztec.encoder
 
-from std import format.*
-import tools.UTF32String
+import std.format.*
+import QRCode4cj.tools.UTF32String
+import QRCode4cj.common.*
 
 public class SimpleToken <: Token {
     // For normal words, indicates value and bitCount

@@ -1,44 +1,25 @@
-/*
- * Copyright 2008 ZXing authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 
 // DEPENDENCE: ../../common/bit_source_builder.cj
 // EXEC: cjc %import-path %L %l %f ./bit_source_builder.cj
 // EXEC: ./main
 
-from QRCode4cj import common.*
-from QRCode4cj import qrcode.decoder.*
-from QRCode4cj import tools.UTF32String
-from std import unittest.*
-from std import unittest.testmacro.*
-from std import collection.*
-from std import unicode.*
-from std import regex.*
-from std import io.*
+import QRCode4cj.common.*
+import QRCode4cj.qrcode.decoder.*
+import QRCode4cj.tools.UTF32String
+import std.unittest.*
+import std.unittest.testmacro.*
+import std.collection.*
+import std.unicode.*
+import std.regex.*
+import std.io.*
 
 main(): Int64 {
     let tester = ModeTestCase()
-    tester.execute()
-    tester.printResult()
-    tester.getTestInfo().errorCount + tester.getTestInfo().failedCount
-    0
+    let test = tester.asTestSuite().runTests()
+    test.failedCount + test.errorCount
 }
 
-/**
- * @author Sean Owen
- */
 @Test
 public class ModeTestCase {
     @TestCase

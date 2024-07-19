@@ -2,9 +2,9 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned.rss.expanded
+package QRCode4cj.oned.rss.expanded
 
-import oned.rss.*
+import QRCode4cj.oned.rss.*
 
 public class ExpandedPair {
     private var leftChar: ?DataCharacter

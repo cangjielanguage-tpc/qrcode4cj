@@ -2,7 +2,11 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package common
+package QRCode4cj.common
+
+import std.collection.*
+import QRCode4cj.tools.*
+import std.math.*
 
 public open class MinimalECIInput <: ECIInput {
     private static let COST_PER_ECI: Int64 = 3; // approximated (latch + 2 codewords)
@@ -15,7 +19,7 @@ public open class MinimalECIInput <: ECIInput {
         if (encoderSet.length() == 1) { //optimization for the case when all can be encoded without ECI in ISO-8859-1
             bytes = Array<Int64>(stringToEncode.charSize, item: 0)
             for (i in 0..bytes.size) {
-                var c: Char = stringToEncode[i];
+                var c: Rune = stringToEncode[i];
                 if (c.hashCode() == fnc1) {
                     bytes[i] = 1000
                 } else {
@@ -54,7 +58,7 @@ public open class MinimalECIInput <: ECIInput {
         return true;
     }
 
-    public func charAt(index: Int64): Char {
+    public func charAt(index: Int64): Rune {
         if (index < 0 || index >= length()) {
             throw IndexOutOfBoundsException(index.toString());
         }
@@ -62,9 +66,9 @@ public open class MinimalECIInput <: ECIInput {
             throw IllegalArgumentException("value at ${index} is not a character but an ECI");
         }
         if (isFNC1(index)) {
-            return Char(fnc1)
+            return Rune(fnc1)
         } else {
-            return Char(bytes[index])
+            return Rune(bytes[index])
         }
     }
 
@@ -72,7 +76,7 @@ public open class MinimalECIInput <: ECIInput {
         if (start < 0 || start > end || end > length()) {
             throw IndexOutOfBoundsException(start.toString());
         }
-        var result: ArrayList<Char> = ArrayList<Char>();
+        var result: ArrayList<Rune> = ArrayList<Rune>();
 
         for (i in start..end) {
             if (isECI(i)) {
@@ -124,7 +128,7 @@ public open class MinimalECIInput <: ECIInput {
     }
 
     public func toString(): String {
-        var result: ArrayList<Char> = ArrayList<Char>();
+        var result: ArrayList<Rune> = ArrayList<Rune>();
         for (i in 0..length()) {
             if (i > 0) {
                 result.appendAll(", ".toRuneArray());
@@ -132,11 +136,11 @@ public open class MinimalECIInput <: ECIInput {
             if (isECI(i)) {
                 result.appendAll("ECI(".toRuneArray());
                 result.appendAll(getECIValue(i).toString().toRuneArray());
-                result.append(')');
+                result.append(r')');
             } else if (charAt(i).hashCode() < 128) {
-                result.append('\'');
+                result.append(r'\'');
                 result.append(charAt(i));
-                result.append('\'');
+                result.append(r'\'');
             } else {
                 result.appendAll(charAt(i).hashCode().toString().toRuneArray())
             }
@@ -161,7 +165,7 @@ public open class MinimalECIInput <: ECIInput {
         previous: ?InputEdge,
         fnc1: Int64
     ) {
-        var ch: Char = stringToEncode.toRuneArray()[froms];
+        var ch: Rune = stringToEncode.toRuneArray()[froms];
         var start: Int64 = 0;
         var end: Int64 = encoderSet.length();
         if (encoderSet.getPriorityEncoderIndex() >= 0 && (ch.hashCode() == fnc1 || encoderSet.canEncode(
@@ -266,19 +270,19 @@ public open class MinimalECIInput <: ECIInput {
 
 open class InputEdge {
     private static let COST_PER_ECI: Int64 = 3; // approximated (latch + 2 codewords)
-    public var c: Char
+    public var c: Rune
     public var encoderIndex: Int64 //the encoding of this edge
     public var previous: ?InputEdge = None
     public var cachedTotalSize: Int64
     public var flag = false
     init() {
-        this.c = ' '
+        this.c = r' '
         this.encoderIndex = 0 //the encoding of this edge
         this.cachedTotalSize = 0
     }
-    init(c: Char, encoderSet: ECIEncoderSet, encoderIndex: Int64, previous: ?InputEdge, fnc1: Int64) {
+    init(c: Rune, encoderSet: ECIEncoderSet, encoderIndex: Int64, previous: ?InputEdge, fnc1: Int64) {
         if (c.hashCode() == fnc1) {
-            this.c = Char(1000)
+            this.c = Rune(1000)
         } else {
             this.c = c
         }

@@ -1,19 +1,3 @@
-/*
- * Copyright 2013 ZXing authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 // DEPENDENCE: ../common/abstract_back_box_test_case.cj
 // DEPENDENCE: ../common/test_result.cj
 // DEPENDENCE: ../../test_common.cj
@@ -22,38 +6,31 @@
 // EXEC: ./main
 
 
-from QRCode4cj import common.BarcodeFormat
-from QRCode4cj import common.BinaryBitmap
-from QRCode4cj import common.DecodeHintType
-from QRCode4cj import common.LuminanceSource
-from QRCode4cj import common.Qrcoder4cjReaderException
-from QRCode4cj import common.Result
-from QRCode4cj import common.ResultMetadataType
-from QRCode4cj import common.HybridBinarizer
-from QRCode4cj import multi.MultipleBarcodeReader
-from QRCode4cj import pdf417.common.PDF417ResultMetadata
-from QRCode4cj import common.*
-from QRCode4cj import pdf417.PDF417Reader
-from std import fs.*
-from std import log.*
-from std import collection.*
-from QRCode4cj import tools.UTF32String
-from std import unittest.* //testfame
-from std import unittest.testmacro.* //macro_Defintion
+import QRCode4cj.common.BarcodeFormat
+import QRCode4cj.common.BinaryBitmap
+import QRCode4cj.common.DecodeHintType
+import QRCode4cj.common.LuminanceSource
+import QRCode4cj.common.Qrcoder4cjReaderException
+import QRCode4cj.common.Result
+import QRCode4cj.common.ResultMetadataType
+import QRCode4cj.common.HybridBinarizer
+import QRCode4cj.multi.MultipleBarcodeReader
+import QRCode4cj.pdf417.common.PDF417ResultMetadata
+import QRCode4cj.common.*
+import QRCode4cj.pdf417.PDF417Reader
+import std.fs.*
+import std.log.*
+import std.collection.*
+import QRCode4cj.tools.UTF32String
+import std.unittest.* //testfame
+import std.unittest.testmacro.* //macro_Defintion
 
 main(): Int64 {
     let tester = PDF417BlackBox4TestCase()
-    tester.execute()
-    tester.printResult()
-    0
+    let test = tester.asTestSuite().runTests()
+    test.failedCount + test.errorCount
 }
 
-/**
- * This class tests Macro PDF417 barcode specific functionality. It ensures that information, which is split into
- * several barcodes can be properly combined again to yield the original data content.
- *
- * @author Guenther Grau
- */
 @Test
 public class PDF417BlackBox4TestCase {
     public var log: SimpleLogger = SimpleLogger()
@@ -134,7 +111,7 @@ public class PDF417BlackBox4TestCase {
                     stable: true,
                     comparator: {a: Result, b: Result => getMeta(a).getSegmentIndex().compare(getMeta(b).getSegmentIndex())}
                 )
-                var resultText: ArrayList<Char> = ArrayList<Char>();
+                var resultText: ArrayList<Rune> = ArrayList<Rune>();
                 var fileId: String = "";
                 for (result in results) {
                     var resultMetadata: PDF417ResultMetadata = getMeta(result);

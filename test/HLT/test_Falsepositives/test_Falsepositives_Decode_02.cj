@@ -4,6 +4,16 @@
 // dependence: ../LogicEnAndDe.cj
 // data_file: ../resources/blackbox/falsepositives-2
 
+import QRCode4cj.aztec.decoder.*
+import QRCode4cj.aztec.detector.*
+import QRCode4cj.aztec.common.*
+import QRCode4cj.multi.*
+import QRCode4cj.common.*
+import QRCode4cj.common.reader.*
+import QRCode4cj.common.writer.*
+import QRCode4cj.oned.*
+import std.collection.*
+
 @Test
 public class TestQRCode4cjFalsepositivesDecode02{
     var cur_de_hints=Option<HashMap<DecodeHintType, Any>>.Some(HashMap<DecodeHintType, Any>([(DecodeHintType.TRY_HARDER,true)]))

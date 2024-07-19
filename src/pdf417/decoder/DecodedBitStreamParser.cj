@@ -2,16 +2,17 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package pdf417.decoder
+package QRCode4cj.pdf417.decoder
 
-from std import convert.*
-from std import format.*
-import common.Qrcoder4cjFormatException
-import common.ECIStringBuilder
-import common.DecoderResult
-import pdf417.common.PDF417ResultMetadata
-import tools.BigInteger
-import tools.UTF32String
+import std.convert.*
+import std.format.*
+import QRCode4cj.common.Qrcoder4cjFormatException
+import QRCode4cj.common.ECIStringBuilder
+import QRCode4cj.common.DecoderResult
+import QRCode4cj.pdf417.common.PDF417ResultMetadata
+import QRCode4cj.tools.BigInteger
+import QRCode4cj.tools.UTF32String
+import std.collection.*
 
 enum Mode {
     | ALPHA
@@ -55,9 +56,9 @@ public open class DecodedBitStreamParser {
     private static let PS: Int64 = 29
     private static let PAL: Int64 = 29
 
-    private static let PUNCT_CHARS: Array<Char> = ";<>@[\\]_`~!\r\t,:\n-.$/\"|*()?{}'".toRuneArray()
+    private static let PUNCT_CHARS: Array<Rune> = ";<>@[\\]_`~!\r\t,:\n-.$/\"|*()?{}'".toRuneArray()
 
-    private static let MIXED_CHARS: Array<Char> = "0123456789&\r\t,:#-.$/+%*=^".toRuneArray()
+    private static let MIXED_CHARS: Array<Rune> = "0123456789&\r\t,:#-.$/+%*=^".toRuneArray()
 
     /**
      * Table containing values for the exponent of 900.
@@ -103,7 +104,7 @@ public open class DecodedBitStreamParser {
                     result
                 )
             } else if (code == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
-                result.append(Char(codewords[codeIndex]))
+                result.append(Rune(codewords[codeIndex]))
                 codeIndex++
             } else if (code == NUMERIC_COMPACTION_MODE_LATCH) {
                 codeIndex = numericCompaction(codewords, codeIndex, result)
@@ -157,7 +158,7 @@ public open class DecodedBitStreamParser {
         // Decoding the fileId codewords as 0-899 numbers, each 0-filled to width 3. This follows the spec
         // (See ISO/IEC 15438:2015 Annex H.6) and preserves all info, but some generators (e.g. TEC-IT) write the
         // fileId using text compaction, so in those cases the fileId will appear mangled.
-        var fileId: ArrayList<Char> = ArrayList<Char>()
+        var fileId: ArrayList<Rune> = ArrayList<Rune>()
         while (codeIndex_ < codewords[0] && codeIndex_ < codewords.size && codewords[codeIndex_] !=
                 MACRO_PDF417_TERMINATOR && codewords[codeIndex_] != BEGIN_MACRO_PDF417_OPTIONAL_FIELD) {
             fileId.appendAll(codewords[codeIndex_].format(".3").toRuneArray())
@@ -353,16 +354,16 @@ public open class DecodedBitStreamParser {
         var i: Int64 = 0
         while (i < length) {
             var subModeCh: Int64 = textCompactionData[i]
-            var ch: Char = Char(0x00)
+            var ch: Rune = Rune(0x00)
             match (subMode) {
                 case ALPHA =>
                     // Alpha (uppercase alphabetic)
                     if (subModeCh < 26) {
                     // Upper case Alpha Character
-                    ch = Char('A'.hashCode() + subModeCh)
+                    ch = Rune(r'A'.hashCode() + subModeCh)
                 } else {
                     if (subModeCh == 26) {
-                        ch = ' '
+                        ch = r' '
                     } else if (subModeCh == LL) {
                         subMode = Mode.LOWER
                         latchedMode = subMode
@@ -373,7 +374,7 @@ public open class DecodedBitStreamParser {
                         priorToShiftMode = subMode
                         subMode = Mode.PUNCT_SHIFT
                     } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
-                        result.append(Char(byteCompactionData[i]))
+                        result.append(Rune(byteCompactionData[i]))
                     } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
                         subMode = Mode.ALPHA
                         latchedMode = subMode
@@ -382,10 +383,10 @@ public open class DecodedBitStreamParser {
                 case LOWER =>
                     // Lower (lowercase alphabetic)
                     if (subModeCh < 26) {
-                    ch = Char('a'.hashCode() + subModeCh)
+                    ch = Rune(r'a'.hashCode() + subModeCh)
                 } else {
                     if (subModeCh == 26) {
-                        ch = ' '
+                        ch = r' '
                     } else if (subModeCh == AS) {
                         priorToShiftMode = subMode
                         subMode = Mode.ALPHA_SHIFT
@@ -396,7 +397,7 @@ public open class DecodedBitStreamParser {
                         priorToShiftMode = subMode
                         subMode = Mode.PUNCT_SHIFT
                     } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
-                        result.append(Char(byteCompactionData[i]))
+                        result.append(Rune(byteCompactionData[i]))
                     } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
                         subMode = Mode.ALPHA
                         latchedMode = subMode
@@ -411,7 +412,7 @@ public open class DecodedBitStreamParser {
                         subMode = Mode.PUNCT
                         latchedMode = subMode
                     } else if (subModeCh == 26) {
-                        ch = ' '
+                        ch = r' '
                     } else if (subModeCh == LL) {
                         subMode = Mode.LOWER
                         latchedMode = subMode
@@ -422,7 +423,7 @@ public open class DecodedBitStreamParser {
                         priorToShiftMode = subMode
                         subMode = Mode.PUNCT_SHIFT
                     } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
-                        result.append(Char(byteCompactionData[i]))
+                        result.append(Rune(byteCompactionData[i]))
                     }
                 }
                 case PUNCT =>
@@ -434,17 +435,17 @@ public open class DecodedBitStreamParser {
                         subMode = Mode.ALPHA
                         latchedMode = subMode
                     } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
-                        result.append(Char(byteCompactionData[i]))
+                        result.append(Rune(byteCompactionData[i]))
                     }
                 }
                 case ALPHA_SHIFT =>
                     // Restore sub-mode
                     subMode = priorToShiftMode
                     if (subModeCh < 26) {
-                        ch = Char('A'.hashCode() + subModeCh)
+                        ch = Rune(r'A'.hashCode() + subModeCh)
                     } else {
                         if (subModeCh == 26) {
-                            ch = ' '
+                            ch = r' '
                         } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
                             subMode = Mode.ALPHA
                         }
@@ -458,11 +459,11 @@ public open class DecodedBitStreamParser {
                         if (subModeCh == PAL || subModeCh == TEXT_COMPACTION_MODE_LATCH) {
                             subMode = Mode.ALPHA
                         } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
-                            result.append(Char(byteCompactionData[i]))
+                            result.append(Rune(byteCompactionData[i]))
                         }
                     }
             }
-            if (ch != Char(0x00)) {
+            if (ch != Rune(0x00)) {
                 // Append decoded character to result
                 result.append(ch)
             }
@@ -639,7 +640,7 @@ public open class DecodedBitStreamParser {
             result = result + (BigInteger(EXP900[count - i - 1]) * (BigInteger(codewords[i])))
         }
         var resultString: String = result.toString()
-        if (Char(resultString[0]) != '1') {
+        if (Rune(resultString[0]) != r'1') {
             throw Qrcoder4cjFormatException.getFormatInstance()
         }
         return resultString[Range<Int64>(1, resultString.size, 1, true, true, false)]

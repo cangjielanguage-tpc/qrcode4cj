@@ -2,7 +2,10 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package common
+package QRCode4cj.common
+
+import QRCode4cj.tools.*
+import std.collection.*
 
 public class ECIEncoderSet {
     // List of encoders that potentially encode characters not in ISO-8859-1 in one byte.
@@ -87,7 +90,7 @@ public class ECIEncoderSet {
         for (i in 0..stringToEncodeIn.charSize) {
             var canEncode: Bool = false;
             for (j in 0..neededEncoders.size) {
-                var c: Char = stringToEncodeIn[i];
+                var c: Rune = stringToEncodeIn[i];
                 if (c.hashCode() == fnc1 || neededEncoders[j].canEncode(c)) {
                     canEncode = true
                     break
@@ -145,7 +148,7 @@ public class ECIEncoderSet {
         return priorityEncoderIndex
     }
 
-    public func canEncode(c: Char, encoderIndex: Int64): Bool {
+    public func canEncode(c: Rune, encoderIndex: Int64): Bool {
         if (!(encoderIndex < length())) {
             throw Exception()
         }
@@ -153,7 +156,7 @@ public class ECIEncoderSet {
         return encoder.canEncode(c);
     }
 
-    public func encode(c: Char, encoderIndex: Int64): Array<UInt8> {
+    public func encode(c: Rune, encoderIndex: Int64): Array<UInt8> {
         if (!(encoderIndex < length())) {
             throw Exception()
         }

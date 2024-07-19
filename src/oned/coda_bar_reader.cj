@@ -2,7 +2,14 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned
+package QRCode4cj.oned
+
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.math.*
+import std.convert.*
+import QRCode4cj.oned.rss.*
 
 /**
  * Decodes Codabar barcodes.
@@ -49,7 +56,7 @@ public open class CodaBarReader <: OneDReader {
     private static let MIN_CHARACTER_LENGTH: Int64 = 3;
 
     // official start and end patterns
-    private static let STARTEND_ENCODING: Array<Char> = ['A', 'B', 'C', 'D']
+    private static let STARTEND_ENCODING: Array<Rune> = [r'A', r'B', r'C', r'D']
 
     // some Codabar generator allow the Codabar string to be closed by every
     // character. This will cause lots of false positives!
@@ -57,12 +64,12 @@ public open class CodaBarReader <: OneDReader {
     // some industries use a checksum standard but this is not part of the original Codabar standard
 
     // Keep some instance variables to avoid reallocations
-    private var decodeRowResult: ArrayList<Char> = ArrayList<Char>()
+    private var decodeRowResult: ArrayList<Rune> = ArrayList<Rune>()
     private var counters: Array<Int64> = Array<Int64>()
     private var counterLength: Int64 = 0
 
     public init() {
-        decodeRowResult = ArrayList<Char>()
+        decodeRowResult = ArrayList<Rune>()
         counters = Array<Int64>(80, item: 0)
         counterLength = 0
     }
@@ -71,7 +78,7 @@ public open class CodaBarReader <: OneDReader {
         setCounters(row);
         var startOffset: Int64 = findStartPattern();
         var nextStart: Int64 = startOffset
-        decodeRowResult = ArrayList<Char>()
+        decodeRowResult = ArrayList<Rune>()
 
         do {
             var charOffset: Int64 = toNarrowWidePattern(nextStart);
@@ -82,7 +89,7 @@ public open class CodaBarReader <: OneDReader {
             // Hack: We store the position in the alphabet table into a
             // StringBuilder, so that we can access the decoded patterns in
             // validatePattern. We'll translate to the actual characters later.
-            decodeRowResult.append(Char(charOffset))
+            decodeRowResult.append(Rune(charOffset))
             nextStart += 8
 
             // Stop as soon as we see the end character.
@@ -112,7 +119,7 @@ public open class CodaBarReader <: OneDReader {
         validatePattern(startOffset);
 
         // Translate character table offsets to actual characters.
-        var ldecodeRowResult: ArrayList<Char> = ArrayList<Char>()
+        var ldecodeRowResult: ArrayList<Rune> = ArrayList<Rune>()
         for (i in 0..decodeRowResult.size) {
             ldecodeRowResult.append(ALPHABET_STRING[decodeRowResult.get(i).getOrThrow().hashCode()])
         }
@@ -141,13 +148,13 @@ public open class CodaBarReader <: OneDReader {
         return result
     }
 
-    private func extdecodeRow(decodeRowResult: ArrayList<Char>, hints: HashMap<DecodeHintType, Any>) {
-        var startchar: Char = decodeRowResult.get(0).getOrThrow()
+    private func extdecodeRow(decodeRowResult: ArrayList<Rune>, hints: HashMap<DecodeHintType, Any>) {
+        var startchar: Rune = decodeRowResult.get(0).getOrThrow()
         if (!arrayContains(STARTEND_ENCODING, startchar)) {
             throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
 
-        var endchar: Char = decodeRowResult.get(decodeRowResult.size - 1).getOrThrow()
+        var endchar: Rune = decodeRowResult.get(decodeRowResult.size - 1).getOrThrow()
         if (!arrayContains(STARTEND_ENCODING, endchar)) {
             throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
@@ -289,7 +296,7 @@ public open class CodaBarReader <: OneDReader {
         throw Qrcoder4cjNotFoundException.getNotFoundInstance();
     }
 
-    static func arrayContains(array: Array<Char>, key: Char): Bool {
+    static func arrayContains(array: Array<Rune>, key: Rune): Bool {
         if (array.size > 0) {
             for (c in 0..array.size) {
                 if (array[c] == key) {

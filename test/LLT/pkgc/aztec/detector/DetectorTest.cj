@@ -1,43 +1,25 @@
-/*
- * Copyright 2013 ZXing authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 
-from QRCode4cj import common.Qrcoder4cjNotFoundException
-from QRCode4cj import aztec.common.AztecDetectorResult
-from QRCode4cj import aztec.decoder.Decoder
-from QRCode4cj import aztec.detector.Point
-from QRCode4cj import aztec.detector.Detector
-from QRCode4cj import aztec.encoder.AztecCode
-from QRCode4cj import aztec.encoder.Encoder
-from QRCode4cj import common.BitMatrix
-from QRCode4cj import common.DecoderResult
-from std import unittest.*
-from std import unittest.testmacro.*
-from std import collection.*
-from std import unicode.*
-from std import random.*
+import QRCode4cj.common.Qrcoder4cjNotFoundException
+import QRCode4cj.aztec.common.AztecDetectorResult
+import QRCode4cj.aztec.decoder.Decoder
+import QRCode4cj.aztec.detector.Point
+import QRCode4cj.aztec.detector.Detector
+import QRCode4cj.aztec.encoder.AztecCode
+import QRCode4cj.aztec.encoder.Encoder
+import QRCode4cj.common.BitMatrix
+import QRCode4cj.common.DecoderResult
+import std.unittest.*
+import std.unittest.testmacro.*
+import std.collection.*
+import std.unicode.*
+import std.random.*
 
 main(): Int64 {
     let tester = DetectorTest()
-    tester.execute()
-    tester.printResult()
-    tester.getTestInfo().errorCount + tester.getTestInfo().failedCount
-    0
+    let test = tester.asTestSuite().runTests()
+    test.failedCount + test.errorCount
 }
 
 var random_1: Array<Int64> = [
@@ -461,11 +443,6 @@ var random_3: Array<Int64> = [
     5
 ]
 
-/**
- * Tests for the Detector
- *
- * @author Frank Yellin
- */
 @Test
 public class DetectorTest {
     @TestCase

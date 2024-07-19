@@ -2,14 +2,14 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package aztec.decoder
+package QRCode4cj.aztec.decoder
 
-from std import collection.*
-from std import io.*
-import aztec.common.AztecDetectorResult
-import common.*
-import common.reedsolomon.*
-import tools.UTF32String
+import std.collection.*
+import std.io.*
+import QRCode4cj.aztec.common.AztecDetectorResult
+import QRCode4cj.common.*
+import QRCode4cj.common.reedsolomon.*
+import QRCode4cj.tools.UTF32String
 
 enum DecoderTable {
     | UPPER
@@ -132,24 +132,24 @@ public class Decoder {
     private static let MIXED_TABLE: Array<UTF32String> = [
         UTF32String("CTRL_PS"),
         UTF32String(" "),
-        UTF32String(Char(1).toString()),
-        UTF32String(Char(2).toString()),
-        UTF32String(Char(3).toString()),
-        UTF32String(Char(4).toString()),
-        UTF32String(Char(5).toString()),
-        UTF32String(Char(6).toString()),
-        UTF32String(Char(7).toString()),
+        UTF32String(Rune(1).toString()),
+        UTF32String(Rune(2).toString()),
+        UTF32String(Rune(3).toString()),
+        UTF32String(Rune(4).toString()),
+        UTF32String(Rune(5).toString()),
+        UTF32String(Rune(6).toString()),
+        UTF32String(Rune(7).toString()),
         UTF32String("\b"),
         UTF32String("\t"),
         UTF32String("\n"),
         UTF32String("\v"),
         UTF32String("\f"),
         UTF32String("\r"),
-        UTF32String(Char(27).toString()),
-        UTF32String(Char(28).toString()),
-        UTF32String(Char(29).toString()),
-        UTF32String(Char(30).toString()),
-        UTF32String(Char(31).toString()),
+        UTF32String(Rune(27).toString()),
+        UTF32String(Rune(28).toString()),
+        UTF32String(Rune(29).toString()),
+        UTF32String(Rune(30).toString()),
+        UTF32String(Rune(31).toString()),
         UTF32String("@"),
         UTF32String("\\"),
         UTF32String("^"),
@@ -157,7 +157,7 @@ public class Decoder {
         UTF32String("`"),
         UTF32String("|"),
         UTF32String("~"),
-        UTF32String(Char(0x7F).toString()),
+        UTF32String(Rune(0x7F).toString()),
         UTF32String("CTRL_LL"),
         UTF32String("CTRL_UL"),
         UTF32String("CTRL_PL"),
@@ -250,7 +250,7 @@ public class Decoder {
         var latchTable = DecoderTable.UPPER // table most recently latched to
         var shiftTable = DecoderTable.UPPER // table to use for the next read
 
-        var result: ArrayList<Char> = ArrayList<Char>()
+        var result: ArrayList<Rune> = ArrayList<Rune>()
 
         var decodedBytes: ByteArrayStream = ByteArrayStream()
         var encoding: MyCharset = DEFAULT_ENCODING
@@ -312,7 +312,7 @@ public class Decoder {
                     }
                     decodedBytes = ByteArrayStream()
                     match (n) {
-                        case 0 => result.append(Char(UInt32(29))) // translate FNC1 as ASCII 29 
+                        case 0 => result.append(Rune(UInt32(29))) // translate FNC1 as ASCII 29 
                         case 7 => throw Qrcoder4cjFormatException.getFormatInstance() // FLG(7) is reserved and illegal
                         case _ =>
                             // ECI is decimal integer encoded as 1-6 codes in DIGIT mode
@@ -335,7 +335,7 @@ public class Decoder {
                     // Our test case dlusbs.png for issue #642 exercises that.
                     latchTable = shiftTable // Latch the current mode, so as to return to Upper after U/S B/S
                     shiftTable = getTable(str[5])
-                    if (str[6] == 'L') {
+                    if (str[6] == r'L') {
                         latchTable = shiftTable
                     }
                 } else {
@@ -379,14 +379,14 @@ public class Decoder {
     /**
      * gets the table corresponding to the char passed
      */
-    private static func getTable(t: Char): DecoderTable {
+    private static func getTable(t: Rune): DecoderTable {
         match (t) {
-            case 'L' => return DecoderTable.LOWER
-            case 'P' => return DecoderTable.PUNCT
-            case 'M' => return DecoderTable.MIXED
-            case 'D' => return DecoderTable.DIGIT
-            case 'B' => return DecoderTable.BINARY
-            case 'U' => return DecoderTable.UPPER
+            case r'L' => return DecoderTable.LOWER
+            case r'P' => return DecoderTable.PUNCT
+            case r'M' => return DecoderTable.MIXED
+            case r'D' => return DecoderTable.DIGIT
+            case r'B' => return DecoderTable.BINARY
+            case r'U' => return DecoderTable.UPPER
             case _ => return DecoderTable.UPPER
         }
     }

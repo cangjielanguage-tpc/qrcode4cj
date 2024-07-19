@@ -2,11 +2,13 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package datamatrix.encoder
+package QRCode4cj.datamatrix.encoder
 
-from std import math.*
-from std import format.*
-import tools.UTF32String
+import std.math.*
+import std.format.*
+import QRCode4cj.tools.UTF32String
+import QRCode4cj.common.*
+import std.collection.*
 
 /**
  * DataMatrix ECC 200 data encoder following the algorithm described in ISO/IEC 16022:200(E) in
@@ -16,17 +18,17 @@ public class HighLevelEncoder {
     /**
      * Padding character
      */
-    private static let PAD: Char = Char(129)
+    private static let PAD: Rune = Rune(129)
 
     /**
      * mode latch to C40 encodation mode
      */
-    public static let LATCH_TO_C40: Char = Char(230)
+    public static let LATCH_TO_C40: Rune = Rune(230)
 
     /**
      * mode latch to Base 256 encodation mode
      */
-    static let LATCH_TO_BASE256: Char = Char(231)
+    static let LATCH_TO_BASE256: Rune = Rune(231)
 
     /**
      * FNC1 Codeword
@@ -43,32 +45,32 @@ public class HighLevelEncoder {
     /**
      * Upper Shift
      */
-    static let UPPER_SHIFT: Char = Char(235)
+    static let UPPER_SHIFT: Rune = Rune(235)
 
     /**
      * 05 Macro
      */
-    private static let MACRO_05: Char = Char(236)
+    private static let MACRO_05: Rune = Rune(236)
 
     /**
      * 06 Macro
      */
-    private static let MACRO_06: Char = Char(237)
+    private static let MACRO_06: Rune = Rune(237)
 
     /**
      * mode latch to ANSI X.12 encodation mode
      */
-    static let LATCH_TO_ANSIX12: Char = Char(238)
+    static let LATCH_TO_ANSIX12: Rune = Rune(238)
 
     /**
      * mode latch to Text encodation mode
      */
-    static let LATCH_TO_TEXT: Char = Char(239)
+    static let LATCH_TO_TEXT: Rune = Rune(239)
 
     /**
      * mode latch to EDIFACT encodation mode
      */
-    static let LATCH_TO_EDIFACT: Char = Char(240)
+    static let LATCH_TO_EDIFACT: Rune = Rune(240)
 
     /**
      * ECI character (Extended Channel Interpretation)
@@ -78,12 +80,12 @@ public class HighLevelEncoder {
     /**
      * Unlatch from C40 encodation
      */
-    static let C40_UNLATCH: Char = Char(254)
+    static let C40_UNLATCH: Rune = Rune(254)
 
     /**
      * Unlatch from X12 encodation
      */
-    static let X12_UNLATCH: Char = Char(254)
+    static let X12_UNLATCH: Rune = Rune(254)
 
     /**
      * 05 Macro header
@@ -109,15 +111,15 @@ public class HighLevelEncoder {
 
     init() {}
 
-    private static func randomize253State(codewordPosition: Int64): Char {
+    private static func randomize253State(codewordPosition: Int64): Rune {
         let pseudoRandom = ((149 * codewordPosition) % 253) + 1
         let tempVariable = PAD.hashCode() + pseudoRandom
         if (tempVariable <= 254) {
             let t = UInt8(tempVariable)
-            return Char(t)
+            return Rune(t)
         } else {
             let t = UInt8(tempVariable - 254)
-            return Char(t)
+            return Rune(t)
         }
     }
 
@@ -217,11 +219,11 @@ public class HighLevelEncoder {
         var capacity: Int64 = context.getSymbolInfo().getOrThrow().getDataCapacity();
         if (len < capacity && encodingMode != ASCII_ENCODATION && encodingMode != BASE256_ENCODATION && encodingMode !=
             EDIFACT_ENCODATION) {
-            context.writeCodeword('\u{00fe}');
+            context.writeCodeword(r'\u{00fe}');
         }
 
         //Padding
-        var codewords: ArrayList<Char> = context.getCodewords();
+        var codewords: ArrayList<Rune> = context.getCodewords();
         if (codewords.size < capacity) {
             codewords.append(PAD);
         }
@@ -233,10 +235,10 @@ public class HighLevelEncoder {
     }
 
     static func visualize(codewords: UTF32String): UTF32String {
-        var sb: ArrayList<Char> = ArrayList<Char>();
+        var sb: ArrayList<Rune> = ArrayList<Rune>();
         for (i in 0..codewords.charSize) {
             if (i > 0) {
-                sb.append(' ');
+                sb.append(r' ');
             }
             sb.appendAll(codewords.get(i).hashCode().toString().toRuneArray())
         }
@@ -308,7 +310,7 @@ public class HighLevelEncoder {
                 return C40_ENCODATION
             }
 
-            var c: Char = msg.get(startpos + charsProcessed);
+            var c: Rune = msg.get(startpos + charsProcessed);
             charsProcessed++
 
             //step L
@@ -428,7 +430,7 @@ public class HighLevelEncoder {
                     if (intCharCounts[C40_ENCODATION] == intCharCounts[X12_ENCODATION]) {
                         var p: Int64 = startpos + charsProcessed + 1
                         while (p < msg.charSize) {
-                            var tc: Char = msg.get(p);
+                            var tc: Rune = msg.get(p);
                             if (isX12TermSep(tc)) {
                                 return X12_ENCODATION
                             }
@@ -446,11 +448,11 @@ public class HighLevelEncoder {
     }
 
     private static func min(f1: Int64, f2: Int64, f3: Int64, f4: Int64, f5: Int64): Int64 {
-        return math.min(min(f1, f2, f3, f4), f5);
+        return min(min(f1, f2, f3, f4), f5);
     }
 
     private static func min(f1: Int64, f2: Int64, f3: Int64, f4: Int64): Int64 {
-        return math.min(f1, math.min(f2, min(f3, f4)));
+        return min(f1, min(f2, min(f3, f4)));
     }
 
     private static func findMinimums(
@@ -486,35 +488,35 @@ public class HighLevelEncoder {
         return minCount
     }
 
-    static func isDigit(ch: Char): Bool {
-        return ch >= '0' && ch <= '9'
+    static func isDigit(ch: Rune): Bool {
+        return ch >= r'0' && ch <= r'9'
     }
 
-    static func isExtendedASCII(ch: Char): Bool {
+    static func isExtendedASCII(ch: Rune): Bool {
         return ch.hashCode() >= 128 && ch.hashCode() <= 255
     }
 
-    static func isNativeC40(ch: Char): Bool {
-        return (ch == ' ') || (ch >= '0' && ch <= '9') || (ch >= 'A' && ch <= 'Z')
+    static func isNativeC40(ch: Rune): Bool {
+        return (ch == r' ') || (ch >= r'0' && ch <= r'9') || (ch >= r'A' && ch <= r'Z')
     }
 
-    static func isNativeText(ch: Char): Bool {
-        return (ch == ' ') || (ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'z')
+    static func isNativeText(ch: Rune): Bool {
+        return (ch == r' ') || (ch >= r'0' && ch <= r'9') || (ch >= r'a' && ch <= r'z')
     }
 
-    static func isNativeX12(ch: Char): Bool {
-        return isX12TermSep(ch) || (ch == ' ') || (ch >= '0' && ch <= '9') || (ch >= 'A' && ch <= 'Z')
+    static func isNativeX12(ch: Rune): Bool {
+        return isX12TermSep(ch) || (ch == r' ') || (ch >= r'0' && ch <= r'9') || (ch >= r'A' && ch <= r'Z')
     }
 
-    private static func isX12TermSep(ch: Char): Bool {
-        return (ch == '\r') || (ch == '*') || (ch == '>')
+    private static func isX12TermSep(ch: Rune): Bool {
+        return (ch == r'\r') || (ch == r'*') || (ch == r'>')
     }
 
-    static func isNativeEDIFACT(ch: Char): Bool {
-        return ch >= ' ' && ch <= '^'
+    static func isNativeEDIFACT(ch: Rune): Bool {
+        return ch >= r' ' && ch <= r'^'
     }
 
-    private static func isSpecialB256(_: Char): Bool {
+    private static func isSpecialB256(_: Rune): Bool {
         return false; //TODO NOT IMPLEMENTED YET!!!
     }
 
@@ -534,7 +536,7 @@ public class HighLevelEncoder {
         return idx - startpos
     }
 
-    static func illegalCharacter(c: Char) {
+    static func illegalCharacter(c: Rune) {
         var hex: String = c.hashCode().format("x");
 
         hex = "0000"[Range<Int64>(0, 4 - hex.size, 1, true, true, false)] + hex

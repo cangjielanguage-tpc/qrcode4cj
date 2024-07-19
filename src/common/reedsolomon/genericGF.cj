@@ -1,10 +1,10 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package common.reedsolomon
+package QRCode4cj.common.reedsolomon
 
-from encoding import hex.*
-import tools.*
+import encoding.hex.*
+import QRCode4cj.tools.*
 
 public class GenericGF {
     public static let AZTEC_DATA_12: GenericGF = GenericGF(0x1069, 4096, 1) // x^12 + x^6 + x^5 + x^3 + 1

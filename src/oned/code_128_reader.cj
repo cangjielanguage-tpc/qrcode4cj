@@ -2,7 +2,14 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned
+package QRCode4cj.oned
+
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.math.*
+import std.convert.*
+import QRCode4cj.oned.rss.*
 
 /**
  * Decodes Code 128 barcodes.
@@ -239,7 +246,7 @@ public open class Code128Reader <: OneDReader {
         var done: Bool = false
         var isNextShifted: Bool = false
 
-        var result: ArrayList<Char> = ArrayList<Char>()
+        var result: ArrayList<Rune> = ArrayList<Rune>()
 
         var lastStart: Int64 = startPatternInfo[0]
         var nextStart: Int64 = startPatternInfo[1]
@@ -291,16 +298,16 @@ public open class Code128Reader <: OneDReader {
             if (codeSet == CODE_CODE_A) {
                 if (code < 64) {
                     if (shiftUpperMode == upperMode_) {
-                        result.append(Char(' '.hashCode() + code))
+                        result.append(Rune(r' '.hashCode() + code))
                     } else {
-                        result.append(Char(' '.hashCode() + code + 128))
+                        result.append(Rune(r' '.hashCode() + code + 128))
                     }
                     shiftUpperMode = false
                 } else if (code < 96) {
                     if (shiftUpperMode == upperMode_) {
-                        result.append(Char(code - 64))
+                        result.append(Rune(code - 64))
                     } else {
-                        result.append(Char(code + 64))
+                        result.append(Rune(code + 64))
                     }
                     shiftUpperMode = false
                 } else {
@@ -323,7 +330,7 @@ public open class Code128Reader <: OneDReader {
                                 result.appendAll("]C1".toRuneArray())
                             } else {
                                 // GS1 specification 5.4.7.5. Every subsequent FNC1 is returned as ASCII 29 (GS)
-                                result.append(Char(29))
+                                result.append(Rune(29))
                             }
                         }
                     } else if (code == CODE_FNC_2) {
@@ -353,9 +360,9 @@ public open class Code128Reader <: OneDReader {
             } else if (codeSet == CODE_CODE_B) {
                 if (code < 96) {
                     if (shiftUpperMode == upperMode_) {
-                        result.append(Char(' '.hashCode() + code))
+                        result.append(Rune(r' '.hashCode() + code))
                     } else {
-                        result.append(Char(' '.hashCode() + code + 128))
+                        result.append(Rune(r' '.hashCode() + code + 128))
                     }
                     shiftUpperMode = false
                 } else {
@@ -375,7 +382,7 @@ public open class Code128Reader <: OneDReader {
                                 result.appendAll("]C1".toRuneArray())
                             } else {
                                 // GS1 specification 5.4.7.5. Every subsequent FNC1 is returned as ASCII 29 (GS)
-                                result.append(Char(29))
+                                result.append(Rune(29))
                             }
                         }
                     } else if (code == CODE_FNC_2) {
@@ -405,7 +412,7 @@ public open class Code128Reader <: OneDReader {
             } else if (codeSet == CODE_CODE_C) {
                 if (code < 100) {
                     if (code < 10) {
-                        result.append('0')
+                        result.append(r'0')
                     }
                     result.appendAll(code.toString().toRuneArray())
                 } else {
@@ -426,7 +433,7 @@ public open class Code128Reader <: OneDReader {
                                 result.appendAll("]C1".toRuneArray())
                             } else {
                                 // GS1 specification 5.4.7.5. Every subsequent FNC1 is returned as ASCII 29 (GS)
-                                result.append(Char(29))
+                                result.append(Rune(29))
                             }
                         }
                     } else if (code == CODE_CODE_A) {

@@ -1,7 +1,9 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package client.result
+package QRCode4cj.client.result
+
+import std.collection.*
 
 /**
  * Represents a parsed result that encodes a Vehicle Identification Number (VIN).
@@ -14,7 +16,7 @@ public open class VINParsedResult <: ParsedResult {
     private var countryCode: String = String()
     private var vehicleAttributes: String = String()
     private var modelYear: Int64 = 0
-    private var plantCode: Char = '0'
+    private var plantCode: Rune = '0'
     private var sequentialNumber: String = String()
     private var flag: Bool = false
     public init() {
@@ -28,7 +30,7 @@ public open class VINParsedResult <: ParsedResult {
         countryCode_: String,
         vehicleAttributes_: String,
         modelYear_: Int64,
-        plantCode_: Char,
+        plantCode_: Rune,
         sequentialNumber_: String
     ) {
         super(ParsedResultType.VIN)
@@ -72,7 +74,7 @@ public open class VINParsedResult <: ParsedResult {
         return modelYear
     }
 
-    public func getPlantCode(): Char {
+    public func getPlantCode(): Rune {
         return plantCode
     }
 
@@ -81,23 +83,23 @@ public open class VINParsedResult <: ParsedResult {
     }
 
     public override func getDisplayResult(): String {
-        var result: ArrayList<Char> = ArrayList<Char>()
+        var result: ArrayList<Rune> = ArrayList<Rune>()
         result.appendAll(worldManufacturerID.toRuneArray())
-        result.append(' ')
+        result.append(r' ')
         result.appendAll(vehicleDescriptorSection.toRuneArray())
-        result.append(' ')
+        result.append(r' ')
         result.appendAll(vehicleIdentifierSection.toRuneArray())
-        result.append('\n')
+        result.append(r'\n')
         if (countryCode != "") {
             result.appendAll(countryCode.toRuneArray())
-            result.append(' ')
+            result.append(r' ')
         }
         result.appendAll(modelYear.toString().toRuneArray())
-        result.append(' ')
+        result.append(r' ')
         result.append(plantCode)
-        result.append(' ')
+        result.append(r' ')
         result.appendAll(sequentialNumber.toRuneArray())
-        result.append('\n')
+        result.append(r'\n')
         return String(result)
     }
 }

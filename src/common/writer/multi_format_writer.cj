@@ -2,23 +2,23 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package common.writer
+package QRCode4cj.common.writer
 
-import aztec.AztecWriter
-import datamatrix.DataMatrixWriter
-import oned.CodaBarWriter
-import oned.Code128Writer
-import oned.Code39Writer
-import oned.Code93Writer
-import oned.EAN13Writer
-import oned.EAN8Writer
-import oned.ITFWriter
-import oned.UPCAWriter
-import oned.UPCEWriter
-import pdf417.PDF417Writer
-import qrcode.QRCodeWriter
-import common.*
-from std import collection.*
+import QRCode4cj.aztec.AztecWriter
+import QRCode4cj.datamatrix.DataMatrixWriter
+import QRCode4cj.oned.CodaBarWriter
+import QRCode4cj.oned.Code128Writer
+import QRCode4cj.oned.Code39Writer
+import QRCode4cj.oned.Code93Writer
+import QRCode4cj.oned.EAN13Writer
+import QRCode4cj.oned.EAN8Writer
+import QRCode4cj.oned.ITFWriter
+import QRCode4cj.oned.UPCAWriter
+import QRCode4cj.oned.UPCEWriter
+import QRCode4cj.pdf417.PDF417Writer
+import QRCode4cj.qrcode.QRCodeWriter
+import QRCode4cj.common.*
+import std.collection.*
 
 /**
  * This is a factory class which finds the appropriate Writer subclass for the BarcodeFormat

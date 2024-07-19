@@ -6,10 +6,11 @@
  * This file has been modified from its original form in Barcode4J.
  */
 
-package pdf417.encoder
+package QRCode4cj.pdf417.encoder
 
-from std import collection.*
-import common.Qrcoder4cjWriterException
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.Qrcoder4cjWriterException
 
 /**
  * PDF417 error correction code following the algorithm described in ISO/IEC 15438:2001(E) in
@@ -1089,7 +1090,7 @@ open class PDF417ErrorCorrection {
      */
     static func generateErrorCorrection(dataCodewords: UTF32String, errorCorrectionLevel: Int64): UTF32String {
         let k: Int64 = getErrorCorrectionCodewordCount(errorCorrectionLevel)
-        var e: Array<Char> = Array<Char>(k, item: '\u{00}')
+        var e: Array<Rune> = Array<Rune>(k, item: r'\u{00}')
         let sld: Int64 = dataCodewords.charSize
         for (i in 0..sld) {
             var t1: Int64 = (dataCodewords[i].hashCode() + e[e.size - 1].hashCode()) % 929
@@ -1098,16 +1099,16 @@ open class PDF417ErrorCorrection {
             for (j in k - 1..=1 : -1) {
                 t2 = (t1 * EC_COEFFICIENTS[errorCorrectionLevel][j]) % 929
                 t3 = 929 - t2
-                e[j] = Char((e[j - 1].hashCode() + t3) % 929)
+                e[j] = Rune((e[j - 1].hashCode() + t3) % 929)
             }
             t2 = (t1 * EC_COEFFICIENTS[errorCorrectionLevel][0]) % 929
             t3 = 929 - t2
-            e[0] = Char(t3 % 929)
+            e[0] = Rune(t3 % 929)
         }
-        var sb: ArrayList<Char> = ArrayList<Char>()
+        var sb: ArrayList<Rune> = ArrayList<Rune>()
         for (j in k - 1..=0 : -1) {
             if (e[j].hashCode() != 0) {
-                e[j] = Char(929 - e[j].hashCode())
+                e[j] = Rune(929 - e[j].hashCode())
             }
             sb.append(e[j])
         }

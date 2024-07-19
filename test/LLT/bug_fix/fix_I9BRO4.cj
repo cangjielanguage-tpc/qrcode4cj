@@ -1,15 +1,15 @@
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 
-from std import unittest.*
-from std import unittest.testmacro.*
-from QRCode4cj import common.Qrcoder4cjChecksumException
-from QRCode4cj import common.Qrcoder4cjFormatException
-from QRCode4cj import common.Qrcoder4cjNotFoundException
-from QRCode4cj import common.Qrcoder4cjReaderException
-from QRCode4cj import common.Qrcoder4cjWriterException
-from QRCode4cj import common.Qrcoder4cjNotFoundException
-from QRCode4cj import common.reedsolomon.Qrcoder4cjReedSolomonException
+import std.unittest.*
+import std.unittest.testmacro.*
+import QRCode4cj.common.Qrcoder4cjChecksumException
+import QRCode4cj.common.Qrcoder4cjFormatException
+import QRCode4cj.common.Qrcoder4cjNotFoundException
+import QRCode4cj.common.Qrcoder4cjReaderException
+import QRCode4cj.common.Qrcoder4cjWriterException
+import QRCode4cj.common.Qrcoder4cjNotFoundException
+import QRCode4cj.common.reedsolomon.Qrcoder4cjReedSolomonException
 
 main(): Int64 {
     let tester = Tester()

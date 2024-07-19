@@ -1,38 +1,21 @@
-/*
- * Copyright 2014 ZXing authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 
-from std import math.*
-from std import time.*
-from std import unicode.*
-from std import unittest.*
-from std import unittest.testmacro.*
-from std import collection.*
-from QRCode4cj import common.BarcodeFormat
-from QRCode4cj import common.Result
-from QRCode4cj import common.ResultPoint
-from QRCode4cj import client.result.*
+import std.math.*
+import std.time.*
+import std.unicode.*
+import std.unittest.*
+import std.unittest.testmacro.*
+import std.collection.*
+import QRCode4cj.common.BarcodeFormat
+import QRCode4cj.common.Result
+import QRCode4cj.common.ResultPoint
+import QRCode4cj.client.result.*
 
 main(): Int64 {
     let tester = VINParsedResultTestCase()
-    tester.execute()
-    tester.printResult()
-    0
+    let test = tester.asTestSuite().runTests()
+    test.failedCount + test.errorCount
 }
 
 /**
@@ -62,9 +45,9 @@ public class VINParsedResultTestCase {
 
     @TestCase
     public func testVIN(): Unit {
-        doTest("1M8GDM9AXKP042788", "1M8", "GDM9AX", "KP042788", "US", "GDM9A", 1989, 'P', "042788");
-        doTest("I1M8GDM9AXKP042788", "1M8", "GDM9AX", "KP042788", "US", "GDM9A", 1989, 'P', "042788");
-        doTest("LJCPCBLCX11000237", "LJC", "PCBLCX", "11000237", "CN", "PCBLC", 2001, '1', "000237");
+        doTest("1M8GDM9AXKP042788", "1M8", "GDM9AX", "KP042788", "US", "GDM9A", 1989, r'P', "042788");
+        doTest("I1M8GDM9AXKP042788", "1M8", "GDM9AX", "KP042788", "US", "GDM9A", 1989, r'P', "042788");
+        doTest("LJCPCBLCX11000237", "LJC", "PCBLCX", "11000237", "CN", "PCBLC", 2001, r'1', "000237");
     }
 
     private static func doTest(
@@ -75,7 +58,7 @@ public class VINParsedResultTestCase {
         country: String,
         attributes: String,
         year: Int64,
-        plant: Char,
+        plant: Rune,
         sequential: String
     ) {
         var fakeResult: Result = Result(

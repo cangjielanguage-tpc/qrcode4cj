@@ -2,9 +2,9 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package qrcode.encoder
+package QRCode4cj.qrcode.encoder
 
-from std import math.*
+import std.math.*
 
 public class MaskUtil {
     private static let N1: Int64 = 3;

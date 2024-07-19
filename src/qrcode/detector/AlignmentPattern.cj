@@ -1,10 +1,10 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package qrcode.detector
+package QRCode4cj.qrcode.detector
 
-import common.ResultPoint
-from std import math.*
+import QRCode4cj.common.ResultPoint
+import std.math.*
 
 /**
  * Encapsulates an alignment pattern, which are the smaller square patterns found in

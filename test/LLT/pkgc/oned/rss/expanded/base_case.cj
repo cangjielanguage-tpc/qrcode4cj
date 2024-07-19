@@ -1,21 +1,21 @@
 package pkgc.oned.rss.expanded
 
-import tools.*
-import common.*
-import oned.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import QRCode4cj.oned.*
 import pkgc.common.*
-import oned.rss.*
-import oned.rss.expanded.*
-import oned.rss.expanded.decoders.*
-import client.result.*
-import common.reader.*
-from std import unittest.* //testfame
-from std import unittest.testmacro.* //macro_Defintion
-from std import regex.*
-from std import collection.*
-from std import convert.*
-from std import fs.*
-from std import log.*
-from std import os.posix.*
+import QRCode4cj.oned.rss.*
+import QRCode4cj.oned.rss.expanded.*
+import QRCode4cj.oned.rss.expanded.decoders.*
+import QRCode4cj.client.result.*
+import QRCode4cj.common.reader.*
+import std.unittest.* //testfame
+import std.unittest.testmacro.* //macro_Defintion
+import std.regex.*
+import std.collection.*
+import std.convert.*
+import std.fs.*
+import std.log.*
+import std.os.posix.*
 import image.cjc.image.*
 import image.cjc.*

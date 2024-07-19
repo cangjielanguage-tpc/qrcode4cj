@@ -1,10 +1,10 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package common.reedsolomon
+package QRCode4cj.common.reedsolomon
 
-from std import collection.*
-from std import core.*
+import std.collection.*
+import std.core.*
 
 
 public class GenericGFPoly <: Equatable<GenericGFPoly> & ToString {
@@ -201,13 +201,13 @@ public class GenericGFPoly <: Equatable<GenericGFPoly> & ToString {
         if (isZero()) {
             return "0"
         }
-        var result: ArrayList<Char> = ArrayList<Char>();
+        var result: ArrayList<Rune> = ArrayList<Rune>();
         for (degree in getDegree()..=0 : -1) {
             var coefficient = getCoefficient(degree)
             if (coefficient != 0) {
                 if (coefficient < 0) {
                     if (degree == getDegree()) {
-                        result.append('-')
+                        result.append(r'-')
                     } else {
                         result.appendAll(" - ".toRuneArray())
                     }
@@ -220,9 +220,9 @@ public class GenericGFPoly <: Equatable<GenericGFPoly> & ToString {
                 if (degree == 0 || coefficient != 1) {
                     let alphaPower = field.getOrThrow().log(coefficient);
                     if (alphaPower == 0) {
-                        result.append('1')
+                        result.append(r'1')
                     } else if (alphaPower == 1) {
-                        result.append('a')
+                        result.append(r'a')
                     } else {
                         result.appendAll("a^".toRuneArray())
                         result.appendAll(alphaPower.toString().toRuneArray())
@@ -230,7 +230,7 @@ public class GenericGFPoly <: Equatable<GenericGFPoly> & ToString {
                 }
                 if (degree != 0) {
                     if (degree == 1) {
-                        result.append('x')
+                        result.append(r'x')
                     } else {
                         result.appendAll("x^".toRuneArray())
                         result.appendAll(degree.toString().toRuneArray())

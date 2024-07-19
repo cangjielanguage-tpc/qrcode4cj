@@ -1,14 +1,17 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package qrcode.decoder
+package QRCode4cj.qrcode.decoder
 
-import common.DecodeHintType
-import common.BitSource
-import common.CharacterSetECI
-import common.DecoderResult
-import common.StringUtils
-import common.MyCharset
+import QRCode4cj.common.DecodeHintType
+import QRCode4cj.common.BitSource
+import QRCode4cj.common.CharacterSetECI
+import QRCode4cj.common.DecoderResult
+import QRCode4cj.common.StringUtils
+import QRCode4cj.common.MyCharset
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.Qrcoder4cjFormatException
 
 /**
  * QR Codes can encode text as bits in one of several modes, and can use multiple modes
@@ -20,7 +23,7 @@ public class DecodedBitStreamParser {
     /**
      * See ISO 18004:2006, 6.4.4 Table 5
      */
-    private static let ALPHANUMERIC_CHARS: Array<Char> = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:".toRuneArray();
+    private static let ALPHANUMERIC_CHARS: Array<Rune> = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:".toRuneArray();
     private static let GB2312_SUBSET: Int64 = 1;
 
     init() {}
@@ -32,7 +35,7 @@ public class DecodedBitStreamParser {
         hints: HashMap<DecodeHintType, Any>
     ): DecoderResult {
         let bits: BitSource = BitSource(bytes);
-        var result: ArrayList<Char> = ArrayList<Char>();
+        var result: ArrayList<Rune> = ArrayList<Rune>();
         var byteSegments: ArrayList<Array<Byte>> = ArrayList<Array<Byte>>(1);
         var symbolSequence: Int64 = -1;
         var parityData: Int64 = -1;
@@ -176,7 +179,7 @@ public class DecodedBitStreamParser {
     @OverflowWrapping
     private static func decodeHanziSegment(
         bits: BitSource,
-        result: ArrayList<Char>,
+        result: ArrayList<Rune>,
         count: Int64
     ) {
         var count_: Int64 = count
@@ -219,7 +222,7 @@ public class DecodedBitStreamParser {
     @OverflowWrapping
     private static func decodeKanjiSegment(
         bits: BitSource,
-        result: ArrayList<Char>,
+        result: ArrayList<Rune>,
         count: Int64
     ) {
         var count_ = count
@@ -256,7 +259,7 @@ public class DecodedBitStreamParser {
 
     private static func decodeByteSegment(
         bits: BitSource,
-        result: ArrayList<Char>,
+        result: ArrayList<Rune>,
         count: Int64,
         currentCharacterSetECI: ?CharacterSetECI,
         byteSegments: ArrayList<Array<Byte>>,
@@ -290,7 +293,7 @@ public class DecodedBitStreamParser {
         byteSegments.append(readBytes);
     }
 
-    private static func toAlphaNumericChar(value: Int64): Char {
+    private static func toAlphaNumericChar(value: Int64): Rune {
         let arraySize: Int64 = ALPHANUMERIC_CHARS.size;
         if (value >= arraySize) {
             throw Qrcoder4cjFormatException.getFormatInstance();
@@ -300,7 +303,7 @@ public class DecodedBitStreamParser {
 
     private static func decodeAlphanumericSegment(
         bits: BitSource,
-        result: ArrayList<Char>,
+        result: ArrayList<Rune>,
         count: Int64,
         fc1InEffect: Bool
     ) {
@@ -329,14 +332,14 @@ public class DecodedBitStreamParser {
         if (fc1InEffect) {
             /* We need to massage the result a bit if in an FNC1 mode: */ 
             for (i in start..result.size) {
-                if (result.get(i).getOrThrow() == '%') {
-                    if (i < result.size - 1 && result.get(i + 1).getOrThrow() == '%') {
+                if (result.get(i).getOrThrow() == r'%') {
+                    if (i < result.size - 1 && result.get(i + 1).getOrThrow() == r'%') {
                         // %% is rendered as %
                         result.remove(i + 1);
                     } else {
                         // In alpha mode, % should be converted to FNC1 separator 0x1D
                         result.remove(i);
-                        result.insert(i, Char(0x1D))
+                        result.insert(i, Rune(0x1D))
                     }
                 }
             }
@@ -345,7 +348,7 @@ public class DecodedBitStreamParser {
 
     private static func decodeNumericSegment(
         bits: BitSource,
-        result: ArrayList<Char>,
+        result: ArrayList<Rune>,
         count: Int64
     ) {
         var count_: Int64 = count

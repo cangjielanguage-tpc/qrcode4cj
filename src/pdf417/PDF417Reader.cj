@@ -2,27 +2,27 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package pdf417
+package QRCode4cj.pdf417
 
-import common.BarcodeFormat
-import common.BinaryBitmap
-import common.Qrcoder4cjChecksumException
-import common.DecodeHintType
-import common.Qrcoder4cjFormatException
-import common.Qrcoder4cjNotFoundException
-import common.Reader
-import common.Result
-import common.ResultMetadataType
-import common.ResultPoint
-import common.DecoderResult
-import multi.MultipleBarcodeReader
-import pdf417.decoder.PDF417ScanningDecoder
-import pdf417.detector.Detector
-import pdf417.detector.PDF417DetectorResult
-import pdf417.common.PDF417ResultMetadata
-import pdf417.common.PDF417Common
-from std import collection.*
-from std import math.*
+import QRCode4cj.common.BarcodeFormat
+import QRCode4cj.common.BinaryBitmap
+import QRCode4cj.common.Qrcoder4cjChecksumException
+import QRCode4cj.common.DecodeHintType
+import QRCode4cj.common.Qrcoder4cjFormatException
+import QRCode4cj.common.Qrcoder4cjNotFoundException
+import QRCode4cj.common.Reader
+import QRCode4cj.common.Result
+import QRCode4cj.common.ResultMetadataType
+import QRCode4cj.common.ResultPoint
+import QRCode4cj.common.DecoderResult
+import QRCode4cj.multi.MultipleBarcodeReader
+import QRCode4cj.pdf417.decoder.PDF417ScanningDecoder
+import QRCode4cj.pdf417.detector.Detector
+import QRCode4cj.pdf417.detector.PDF417DetectorResult
+import QRCode4cj.pdf417.common.PDF417ResultMetadata
+import QRCode4cj.pdf417.common.PDF417Common
+import std.collection.*
+import std.math.*
 
 /**
  * This implementation can detect and decode PDF417 codes in an image.

@@ -2,20 +2,23 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package common
+package QRCode4cj.common
+
+import std.collection.*
+import QRCode4cj.tools.*
 
 public class ECIStringBuilder <: ToString {
-    private var currentBytes: ArrayList<Char>
-    private var result: ArrayList<Char>
+    private var currentBytes: ArrayList<Rune>
+    private var result: ArrayList<Rune>
     private var currentCharset: MyCharset = StandardCharsets.ISO_8859_1
 
     public init() {
-        currentBytes = ArrayList<Char>()
-        result = ArrayList<Char>()
+        currentBytes = ArrayList<Rune>()
+        result = ArrayList<Rune>()
     }
     public init(_: Int64) {
-        currentBytes = ArrayList<Char>()
-        result = ArrayList<Char>()
+        currentBytes = ArrayList<Rune>()
+        result = ArrayList<Rune>()
     }
 
     /**
@@ -23,8 +26,8 @@ public class ECIStringBuilder <: ToString {
      *
      * @param value character whose lowest byte is to be appended
      */
-    public func append(value: Char) {
-        currentBytes.append(Char(UInt32(value) & 0xff))
+    public func append(value: Rune) {
+        currentBytes.append(Rune(UInt32(value) & 0xff))
     }
 
     /**
@@ -33,7 +36,7 @@ public class ECIStringBuilder <: ToString {
      * @param value byte to append
      */
     public func append(value: Byte) {
-        currentBytes.append(Char(UInt32(value) & 0xff))
+        currentBytes.append(Rune(UInt32(value) & 0xff))
     }
 
     /**
@@ -74,18 +77,18 @@ public class ECIStringBuilder <: ToString {
             if (currentBytes.size > 0) {
                 if (result.size == 0) {
                     result = currentBytes
-                    currentBytes = ArrayList<Char>()
+                    currentBytes = ArrayList<Rune>()
                 } else {
                     result.appendAll(currentBytes);
-                    currentBytes = ArrayList<Char>()
+                    currentBytes = ArrayList<Rune>()
                 }
             }
         } else if (currentBytes.size > 0) {
             var bytes: Array<Byte> = StandardCharsets.ISO_8859_1.newEncoder().getBytes(UTF32String(currentBytes));
-            currentBytes = ArrayList<Char>()
+            currentBytes = ArrayList<Rune>()
             if (result.size == 0) {
                 var resultdata: String = currentCharset.newDecoder().decode(bytes);
-                result = ArrayList<Char>(resultdata.toRuneArray())
+                result = ArrayList<Rune>(resultdata.toRuneArray())
             } else {
                 var resultdata: String = currentCharset.newDecoder().decode(bytes);
                 result.appendAll(resultdata.toRuneArray());
@@ -98,7 +101,7 @@ public class ECIStringBuilder <: ToString {
      *
      * @param value characters to append
      */
-    public func appendCharacters(value: ArrayList<Char>) {
+    public func appendCharacters(value: ArrayList<Rune>) {
         encodeCurrentBytesIfAny();
         result.appendAll(value);
     }

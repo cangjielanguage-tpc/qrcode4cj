@@ -1,4 +1,9 @@
-from std import math.*
+import QRCode4cj.common.*
+import QRCode4cj.common.reader.*
+import QRCode4cj.common.writer.*
+import QRCode4cj.tools.UTF32String
+import QRCode4cj.aztec.common.*
+import std.math.*
 
 public func bitMatrixToBinaryBitmap(bitMatrix: BitMatrix, width: Int64, height: Int64): BinaryBitmap {
     var image = Gray_p(Rectangle_p(0, 0, width, height))

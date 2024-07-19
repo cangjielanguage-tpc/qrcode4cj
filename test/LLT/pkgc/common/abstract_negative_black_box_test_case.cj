@@ -1,34 +1,16 @@
-/*
- * Copyright 2008 ZXing authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+import QRCode4cj.common.reader.*
+import std.convert.*
+import std.fs.*
+import std.collection.*
+import std.random.*
+import std.log.*
+import std.io.*
+import QRCode4cj.tools.UTF32String
+import QRCode4cj.common.*
+import QRCode4cj.common.writer.*
+import std.unittest.*
+import std.unittest.testmacro.*
 
-from QRCode4cj import common.reader.*
-from std import convert.*
-from std import fs.*
-from std import collection.*
-from std import random.*
-from std import log.*
-from std import io.*
-from QRCode4cj import tools.UTF32String
-
-/**
- * This abstract class looks for negative results, i.e. it only allows a certain number of false
- * positives in images which should not decode. This helps ensure that we are not too lenient.
- *
- * @author dswitkin@google.com (Daniel Switkin)
- */
 public class ATestResult {
     private let falsePositivesAllowed: Int64
     private let rotation: Float32
@@ -56,7 +38,7 @@ public class AbstractNegativeBlackBoxTestCase <: AbstractBlackBoxTestCase {
         super(testBasePathSuffix, MultiFormatReader(), BarcodeFormat.NONE);
     }
 
-    public init(testBasePathSuffix: String, barcodeReader: common.Reader, expectedFormat: BarcodeFormat) {
+    public init(testBasePathSuffix: String, barcodeReader: Reader, expectedFormat: BarcodeFormat) {
         super(testBasePathSuffix, barcodeReader, expectedFormat);
     }
 

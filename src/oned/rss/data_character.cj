@@ -2,9 +2,9 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned.rss
+package QRCode4cj.oned.rss
 
-import common.*
+import QRCode4cj.common.*
 
 /**
  * Encapsulates a since character value in an RSS barcode, including its checksum information.

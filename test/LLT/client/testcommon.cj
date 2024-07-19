@@ -1,26 +1,25 @@
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 
-from std import unittest.*
-from std import unittest.testmacro.*
-from std import collection.*
-from QRCode4cj import common.*
-from QRCode4cj import common.writer.*
-from QRCode4cj import tools.*
-from QRCode4cj import common.detector.*
-from QRCode4cj import common.ResultPoint
-from QRCode4cj import client.result.*
-from QRCode4cj import oned.rss.expanded.*
-from charset import charset.*
-from QRCode4cj import tools.UTF32String
-from charset import charset.encoding.*
-from charset import charset.exception.*
+import std.unittest.*
+import std.unittest.testmacro.*
+import std.collection.*
+import QRCode4cj.common.*
+import QRCode4cj.common.writer.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.detector.*
+import QRCode4cj.common.ResultPoint
+import QRCode4cj.client.result.*
+import QRCode4cj.oned.rss.expanded.*
+import charset4cj.charset.*
+import QRCode4cj.tools.UTF32String
+import charset4cj.charset.encoding.*
+import charset4cj.charset.exception.*
 
 main(): Int64 {
     let tester = Tester()
-    tester.execute()
-    tester.printResult()
-    0
+    let test = tester.asTestSuite().runTests()
+    test.failedCount + test.errorCount
 }
 
 @Test

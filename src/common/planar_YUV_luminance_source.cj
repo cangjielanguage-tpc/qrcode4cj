@@ -2,7 +2,9 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package common
+package QRCode4cj.common
+
+import QRCode4cj.tools.*
 
 public open class PlanarYUVLuminanceSource <: LuminanceSource {
     private static let THUMBNAIL_SCALE_FACTOR: Int64 = 2

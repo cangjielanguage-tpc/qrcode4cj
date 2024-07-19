@@ -2,15 +2,15 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package datamatrix.detector
+package QRCode4cj.datamatrix.detector
 
-from std import math.*
-import common.Qrcoder4cjNotFoundException
-import common.ResultPoint
-import common.BitMatrix
-import common.DetectorResult
-import common.GridSampler
-import common.detector.WhiteRectangleDetector
+import std.math.*
+import QRCode4cj.common.Qrcoder4cjNotFoundException
+import QRCode4cj.common.ResultPoint
+import QRCode4cj.common.BitMatrix
+import QRCode4cj.common.DetectorResult
+import QRCode4cj.common.GridSampler
+import QRCode4cj.common.detector.WhiteRectangleDetector
 
 /**
  * Encapsulates logic that can detect a Data Matrix Code in an image, even if the Data Matrix Code
@@ -63,7 +63,7 @@ public class Detector {
 
         if (4 * dimensionTop < 6 * dimensionRight && 4 * dimensionRight < 6 * dimensionTop) {
             // The matrix is square
-            dimensionRight = math.max(dimensionTop, dimensionRight)
+            dimensionRight = max(dimensionTop, dimensionRight)
             dimensionTop = dimensionRight
         }
 
@@ -355,9 +355,9 @@ public class Detector {
         var fromX: Int64 = Int64(fromr.getX())
         var fromY: Int64 = Int64(fromr.getY())
         var toX: Int64 = Int64(to.getX())
-        var toY: Int64 = math.min(image.getHeight() - 1, Int64(to.getY()))
+        var toY: Int64 = min(image.getHeight() - 1, Int64(to.getY()))
 
-        var steep: Bool = math.abs(toY - fromY) > math.abs(toX - fromX)
+        var steep: Bool = abs(toY - fromY) > abs(toX - fromX)
         if (steep) {
             var temp: Int64 = fromX
             fromX = fromY
@@ -367,8 +367,8 @@ public class Detector {
             toY = temp
         }
 
-        let dx: Int64 = math.abs(toX - fromX);
-        let dy: Int64 = math.abs(toY - fromY);
+        let dx: Int64 = abs(toX - fromX);
+        let dy: Int64 = abs(toY - fromY);
         var error = -dx / 2
         let ystep = if (fromY < toY) {
             1

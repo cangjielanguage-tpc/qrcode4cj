@@ -1,9 +1,10 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package qrcode.decoder
+package QRCode4cj.qrcode.decoder
 
-from std import collection.*
+import std.collection.*
+import QRCode4cj.common.*
 
 public class BitMatrixParser {
     public var bitMatrix: BitMatrix

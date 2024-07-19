@@ -2,11 +2,13 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package multi.qrcode.detector
+package QRCode4cj.multi.qrcode.detector
 
-import common.Qrcoder4cjReaderException
-import common.DetectorResult
-import qrcode.detector.Detector
+import QRCode4cj.qrcode.detector.*
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.math.*
 
 /**
  * Encapsulates logic that can detect one or more QR Codes in an image, even if the QR Code

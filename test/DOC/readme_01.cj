@@ -2,19 +2,18 @@
 // EXEC: cjc %import-path %L %l %f libs.cj
 // EXEC: ./main
 
-from QRCode4cj import common.*
-from QRCode4cj import common.reader.*
-from QRCode4cj import common.writer.*
-from QRCode4cj import tools.UTF32String
-from std import collection.*
-from std import unittest.*
-from std import unittest.testmacro.*
+import QRCode4cj.common.*
+import QRCode4cj.common.reader.*
+import QRCode4cj.common.writer.*
+import QRCode4cj.tools.UTF32String
+import std.collection.*
+import std.unittest.*
+import std.unittest.testmacro.*
 
 main(): Int64 {
     let tester = DecoderTestCase()
-    tester.execute()
-    tester.printResult()
-    tester.getTestInfo().errorCount + tester.getTestInfo().failedCount
+    let test = tester.asTestSuite().runTests()
+    test.failedCount + test.errorCount
 }
 
 @Test

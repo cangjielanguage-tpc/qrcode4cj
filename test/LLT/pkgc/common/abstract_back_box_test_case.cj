@@ -1,32 +1,24 @@
-/*
- * Copyright 2008 ZXing authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+import std.convert.*
+import std.fs.*
+import std.log.*
+import std.os.posix.*
 
+import QRCode4cj.common.*
+import std.unittest.*
+import std.unittest.testmacro.*
+import std.fs.*
+import std.time.*
+import std.collection.*
+import std.math.*
+import std.convert.*
+import std.log.*
+import std.os.posix.*
+import QRCode4cj.aztec.common.*
 
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+import QRCode4cj.common as common
+import QRCode4cj.common.reader.MultiFormatReader
+import QRCode4cj.common.writer.MultiFormatWriter
 
-from std import convert.*
-from std import fs.*
-from std import log.*
-from std import os.posix.*
-
-from QRCode4cj import common.*
-
-/**
- * @author Sean Owen
- * @author dswitkin@google.com (Daniel Switkin)
- */
 public open class AbstractBlackBoxTestCase {
     // private static let log: SimpleLogger = SimpleLogger.getLogger(AbstractBlackBoxTestCase);
     public var log: SimpleLogger = SimpleLogger()
