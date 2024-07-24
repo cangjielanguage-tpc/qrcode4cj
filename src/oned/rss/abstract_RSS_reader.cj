@@ -2,9 +2,12 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned.rss
+package QRCode4cj.oned.rss
 
-import common.detector.*
+import QRCode4cj.common.detector.*
+import QRCode4cj.common.*
+import std.math.*
+import std.collection.*
 
 /**
  * Superclass of {@link OneDReader} implementations that read barcodes in the RSS family

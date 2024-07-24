@@ -2,7 +2,10 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned.rss.expanded.decoders
+package QRCode4cj.oned.rss.expanded.decoders
+
+import std.collection.*
+import QRCode4cj.common.*
 
 class AI01392xDecoder <: AI01decoder {
     private static var HEADER_SIZE: Int64 = 5 + 1 + 2
@@ -17,7 +20,7 @@ class AI01392xDecoder <: AI01decoder {
             throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
 
-        var buf: ArrayList<Char> = ArrayList<Char>();
+        var buf: ArrayList<Rune> = ArrayList<Rune>();
 
         encodeCompressedGtin(buf, HEADER_SIZE);
 
@@ -27,7 +30,7 @@ class AI01392xDecoder <: AI01decoder {
         );
         buf.appendAll("(392".toRuneArray());
         buf.appendAll(lastAIdigit.toString().toRuneArray());
-        buf.append(')');
+        buf.append(r')');
 
         var decodedInformation: DecodedInformation = this.getGeneralDecoder().decodeGeneralPurposeField(
             HEADER_SIZE + GTIN_SIZE + LAST_DIGIT_SIZE, "");

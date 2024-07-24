@@ -3,10 +3,20 @@
 // dependence: ../image.cj
 // dependence: ../LogicEnAndDe.cj
 
-from std import fs.*
-from std import time.*
-from QRCode4cj import oned.*
-from QRCode4cj import common.*
+import QRCode4cj.aztec.decoder.*
+import QRCode4cj.aztec.detector.*
+import QRCode4cj.aztec.common.*
+import QRCode4cj.multi.*
+import QRCode4cj.common.*
+import QRCode4cj.common.reader.*
+import QRCode4cj.common.writer.*
+import QRCode4cj.oned.*
+import std.collection.*
+
+import std.fs.*
+import std.time.*
+import QRCode4cj.oned.*
+import QRCode4cj.common.*
 @Test
 public class TestQRCode4cjCode93Encode01{
     var cur_en_hints=Option<HashMap<EncodeHintType, Any>>.None
@@ -49,7 +59,7 @@ public class TestQRCode4cjCode93Encode01{
                                             "】"])
 
         for(encode_src in encode_src_illegal){
-            @Assert(testEncodeException(BarcodeFormat.CODE_93,encode_src,120,120,cur_en_hints,"Requested content contains a non-encodable character: '"+encode_src+"'"),0)
+            @Assert(testEncodeException(BarcodeFormat.CODE_93,encode_src,120,120,cur_en_hints,"Requested content contains a non-encodable character: r'"+encode_src+"'"),0)
         }
     }
     @TestCase

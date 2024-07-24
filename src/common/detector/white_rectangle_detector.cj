@@ -2,9 +2,9 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package common.detector
+package QRCode4cj.common.detector
 
-import common.*
+import QRCode4cj.common.*
 
 public class WhiteRectangleDetector {
     private static let INIT_SIZE = 10

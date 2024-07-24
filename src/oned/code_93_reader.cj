@@ -2,7 +2,14 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned
+package QRCode4cj.oned
+
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.math.*
+import std.convert.*
+import QRCode4cj.oned.rss.*
 
 /**
  * Decodes Code 93 barcodes.
@@ -69,7 +76,7 @@ public open class Code93Reader <: OneDReader {
     ]
     static let ASTERISK_ENCODING: Int64 = CHARACTER_ENCODINGS[47]
 
-    private var decodeRowResult: ArrayList<Char> = ArrayList<Char>( /*Array<Char>(20,item:' ') */ )
+    private var decodeRowResult: ArrayList<Rune> = ArrayList<Rune>( /*Array<Rune>(20,item:' ') */ )
     private var counters: Array<Int64> = Array<Int64>(6, item: 0)
 
     public init() {
@@ -83,8 +90,8 @@ public open class Code93Reader <: OneDReader {
         var end: Int64 = row.getSize();
         counters = Array<Int64>(6, item: 0)
         var theCounters: Array<Int64> = counters
-        var result: ArrayList<Char> = decodeRowResult
-        var decodedChar: Char
+        var result: ArrayList<Rune> = decodeRowResult
+        var decodedChar: Rune
         var lastStart: Int64
         do {
             recordPattern(row, nextStart, theCounters);
@@ -102,7 +109,7 @@ public open class Code93Reader <: OneDReader {
 
             // Read off white space
             nextStart = row.getNextSet(nextStart)
-        } while (decodedChar != '*')
+        } while (decodedChar != r'*')
         result.remove(result.size - 1);
 
         // remove asterisk
@@ -209,7 +216,7 @@ public open class Code93Reader <: OneDReader {
         return pattern
     }
 
-    private static func patternToChar(pattern: Int64): Char {
+    private static func patternToChar(pattern: Int64): Rune {
         for (i in 0..CHARACTER_ENCODINGS.size) {
             if (CHARACTER_ENCODINGS[i] == pattern) {
                 return ALPHABET_STRING[i]
@@ -220,40 +227,40 @@ public open class Code93Reader <: OneDReader {
 
     private static func decodeExtended(encoded: UTF32String): String {
         var length: Int64 = encoded.size;
-        var decoded: ArrayList<Char> = ArrayList<Char>();
+        var decoded: ArrayList<Rune> = ArrayList<Rune>();
 
         var i: Int64 = 0
         while (i < length) {
-            var c: Char = encoded.get(i);
+            var c: Rune = encoded.get(i);
 
-            if (c >= 'a' && c <= 'd') {
+            if (c >= r'a' && c <= r'd') {
                 if (i >= length - 1) {
                     throw Qrcoder4cjFormatException.getFormatInstance();
                 }
-                var next: Char = encoded.get(i + 1);
-                var decodedChar: Char = '\0';
-                if (c == 'd') {
+                var next: Rune = encoded.get(i + 1);
+                var decodedChar: Rune = r'\0';
+                if (c == r'd') {
                     // +A to +Z map to a to z
-                    if (next >= 'A' && next <= 'Z') {
-                        decodedChar = Char(next.hashCode() + 32)
+                    if (next >= r'A' && next <= r'Z') {
+                        decodedChar = Rune(next.hashCode() + 32)
                     } else {
                         throw Qrcoder4cjFormatException.getFormatInstance();
                     }
-                } else if (c == 'a') {
+                } else if (c == r'a') {
                     // $A to $Z map to control codes SH to SB
-                    if (next >= 'A' && next <= 'Z') {
-                        decodedChar = Char(next.hashCode() - 64)
+                    if (next >= r'A' && next <= r'Z') {
+                        decodedChar = Rune(next.hashCode() - 64)
                     } else {
                         throw Qrcoder4cjFormatException.getFormatInstance();
                     }
-                } else if (c == 'b') {
+                } else if (c == r'b') {
                     decodedChar = getDecoded93Char(next)
-                } else if (c == 'c') {
+                } else if (c == r'c') {
                     // /A to /O map to ! to , and /Z maps to :
-                    if (next >= 'A' && next <= 'O') {
-                        decodedChar = Char(next.hashCode() - 32)
-                    } else if (next == 'Z') {
-                        decodedChar = ':'
+                    if (next >= r'A' && next <= r'O') {
+                        decodedChar = Rune(next.hashCode() - 32)
+                    } else if (next == r'Z') {
+                        decodedChar = r':'
                     } else {
                         throw Qrcoder4cjFormatException.getFormatInstance();
                     }
@@ -270,32 +277,32 @@ public open class Code93Reader <: OneDReader {
         return String(decoded);
     }
 
-    private static func getDecoded93Char(next: Char) {
-        var decodedChar = ' '
-        if (next >= 'A' && next <= 'E') {
+    private static func getDecoded93Char(next: Rune) {
+        var decodedChar = r' '
+        if (next >= r'A' && next <= r'E') {
             /* %A to %E map to control codes ESC to USep */
-            decodedChar = Char(next.hashCode() - 38)
-        } else if (next >= 'F' && next <= 'J') {
+            decodedChar = Rune(next.hashCode() - 38)
+        } else if (next >= r'F' && next <= r'J') {
             //* %F to %J map to ; < = > ? */
-            decodedChar = Char(next.hashCode() - 11)
-        } else if (next >= 'K' && next <= 'O') {
+            decodedChar = Rune(next.hashCode() - 11)
+        } else if (next >= r'K' && next <= r'O') {
             /* %K to %O map to [ \ ] ^ _ */
-            decodedChar = Char(next.hashCode() + 16)
-        } else if (next >= 'P' && next <= 'T') {
+            decodedChar = Rune(next.hashCode() + 16)
+        } else if (next >= r'P' && next <= r'T') {
             /* %P to %T map to { | } ~ DEL */
-            decodedChar = Char(next.hashCode() + 43)
-        } else if (next == 'U') {
+            decodedChar = Rune(next.hashCode() + 43)
+        } else if (next == r'U') {
             /* %U map to NUL */
-            decodedChar = '\0'
-        } else if (next == 'V') {
+            decodedChar = r'\0'
+        } else if (next == r'V') {
             /* %V map to @ */
-            decodedChar = '@'
-        } else if (next == 'W') {
+            decodedChar = r'@'
+        } else if (next == r'W') {
             /* %W map to ` */
-            decodedChar = '`'
-        } else if (next >= 'X' && next <= 'Z') {
+            decodedChar = r'`'
+        } else if (next >= r'X' && next <= r'Z') {
             /* %X to %Z all map to DEL (127) */
-            decodedChar = Char(127)
+            decodedChar = Rune(127)
         } else {
             throw Qrcoder4cjFormatException.getFormatInstance();
         }

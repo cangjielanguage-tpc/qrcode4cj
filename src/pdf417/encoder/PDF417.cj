@@ -3,7 +3,12 @@
  */
 
 
-package pdf417.encoder
+package QRCode4cj.pdf417.encoder
+
+import QRCode4cj.tools.*
+import std.collection.*
+import QRCode4cj.common.*
+import std.math.*
 
 /**
  * Top-level class for the logic part of the PDF417 implementation.
@@ -3000,11 +3005,11 @@ public open class PDF417 {
                 "Encoded message contains too many code words, message too big (" + msg.charSize.toString() + " bytes)")
         }
         var n: Int64 = sourceCodeWords + pad + 1
-        var sb: ArrayList<Char> = ArrayList<Char>()
-        sb.append(Char(n))
+        var sb: ArrayList<Rune> = ArrayList<Rune>()
+        sb.append(Rune(n))
         sb.appendAll(highLevel.toString().toRuneArray())
         for (i in 0..pad) {
-            sb.append(Char(900))
+            sb.append(Rune(900))
             //PAD characters
         }
         var dataCodewords: UTF32String = UTF32String(sb)

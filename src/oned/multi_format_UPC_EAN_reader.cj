@@ -2,7 +2,13 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned
+package QRCode4cj.oned
+
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.math.*
+import QRCode4cj.oned.rss.*
 
 /**
  * A reader that can read all available UPC/EAN formats. If a caller wants to try to
@@ -71,7 +77,7 @@ public open class MultiFormatUPCEANReader <: OneDReader {
                 //
                 // But, don't return UPC-A if UPC-A was not a requested format!
                 var ean13MayBeUPCA: Bool = result.getBarcodeFormat() == BarcodeFormat.EAN_13 &&
-                    Char(result.getText()[0]) == '0'
+                    Rune(result.getText()[0]) == r'0'
 
                 var possibleFormats: ArrayList<BarcodeFormat>
                 if (hints.size == 0) {

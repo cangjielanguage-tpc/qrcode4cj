@@ -1,7 +1,7 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package qrcode.decoder
+package QRCode4cj.qrcode.decoder
 
 /**
  * See ISO 18004:2006, 6.5.1. This enum encapsulates the four error correction levels

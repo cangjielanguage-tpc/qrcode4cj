@@ -2,7 +2,12 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned
+package QRCode4cj.oned
+
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.math.*
 
 open class UPCEANExtensionSupport {
     private static let EXTENSION_START_PATTERN: Array<Int64> = [1, 1, 2]

@@ -2,7 +2,10 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned.rss.expanded.decoders
+package QRCode4cj.oned.rss.expanded.decoders
+
+import std.collection.*
+import QRCode4cj.common.*
 
 abstract class AI01decoder <: AbstractExpandedDecoder {
     static let GTIN_SIZE: Int64 = 40;
@@ -11,22 +14,22 @@ abstract class AI01decoder <: AbstractExpandedDecoder {
         super(information);
     }
 
-    func encodeCompressedGtin(buf: ArrayList<Char>, currentPos: Int64) {
+    func encodeCompressedGtin(buf: ArrayList<Rune>, currentPos: Int64) {
         buf.appendAll("(01)".toRuneArray());
         var initialPosition: Int64 = buf.size;
-        buf.append('9');
+        buf.append(r'9');
 
         encodeCompressedGtinWithoutAI(buf, currentPos, initialPosition);
     }
 
-    func encodeCompressedGtinWithoutAI(buf: ArrayList<Char>, currentPos: Int64, initialBufferPosition: Int64) {
+    func encodeCompressedGtinWithoutAI(buf: ArrayList<Rune>, currentPos: Int64, initialBufferPosition: Int64) {
         for (i in 0..4) {
             var currentBlock: Int64 = this.getGeneralDecoder().extractNumericValueFromBitArray(currentPos + 10 * i, 10);
             if (currentBlock / 100 == 0) {
-                buf.append('0');
+                buf.append(r'0');
             }
             if (currentBlock / 10 == 0) {
-                buf.append('0');
+                buf.append(r'0');
             }
             buf.appendAll(currentBlock.toString().toRuneArray());
         }
@@ -34,11 +37,11 @@ abstract class AI01decoder <: AbstractExpandedDecoder {
         appendCheckDigit(buf, initialBufferPosition);
     }
 
-    private static func appendCheckDigit(buf: ArrayList<Char>, currentPos: Int64) {
+    private static func appendCheckDigit(buf: ArrayList<Rune>, currentPos: Int64) {
         var checkDigit: Int64 = 0;
 
         for (i in 0..13) {
-            var digit: Int64 = buf[i + currentPos].hashCode() - '0'.hashCode()
+            var digit: Int64 = buf[i + currentPos].hashCode() - r'0'.hashCode()
             checkDigit += if ((i & 0x01) == 0) {
                 3 * digit
             } else {

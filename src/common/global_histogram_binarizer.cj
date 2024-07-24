@@ -2,9 +2,9 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package common
+package QRCode4cj.common
 
-from std import fs.*
+import std.fs.*
 
 public open class GlobalHistogramBinarizer <: Binarizer {
     static let LUMINANCE_BITS: UInt8 = 5

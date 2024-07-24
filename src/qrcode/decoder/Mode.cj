@@ -1,7 +1,7 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package qrcode.decoder
+package QRCode4cj.qrcode.decoder
 
 /**
  * See ISO 18004:2006, 6.4.1, Tables 2 and 3. This enum encapsulates the various modes in which

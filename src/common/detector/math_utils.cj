@@ -2,9 +2,9 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package common.detector
+package QRCode4cj.common.detector
 
-from std import math.*
+import std.math.*
 
 /**
  * General math-related and numeric utility functions.
@@ -47,7 +47,7 @@ public class MathUtils {
      */
     public static func distance(aX: Float32, aY: Float32, bX: Float32, bY: Float32): Float32 {
         let (xDiff, yDiff) = (aX - bX, aY - bY)
-        return math.sqrt(xDiff * xDiff + yDiff * yDiff)
+        return sqrt(xDiff * xDiff + yDiff * yDiff)
     }
 
     /**
@@ -59,7 +59,7 @@ public class MathUtils {
      */
     public static func distance(aX: Int64, aY: Int64, bX: Int64, bY: Int64): Float32 {
         let (xDiff, yDiff) = (aX - bX, aY - bY)
-        return math.sqrt(Float32(xDiff * xDiff + yDiff * yDiff))
+        return sqrt(Float32(xDiff * xDiff + yDiff * yDiff))
     }
 
     /**

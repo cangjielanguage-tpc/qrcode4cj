@@ -2,12 +2,12 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package aztec.common
+package QRCode4cj.aztec.common
 
-from std import collection.*
-import common.ResultPoint
-import common.BitMatrix
-import common.DetectorResult
+import std.collection.*
+import QRCode4cj.common.ResultPoint
+import QRCode4cj.common.BitMatrix
+import QRCode4cj.common.DetectorResult
 
 public class AztecDetectorResult <: DetectorResult {
     private var compact: Bool

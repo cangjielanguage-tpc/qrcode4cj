@@ -2,9 +2,9 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package qrcode.encoder
+package QRCode4cj.qrcode.encoder
 
-from std import collection.*
+import std.collection.*
 
 /**
  * JAVAPORT: The original code was a 2D array of ints, but since it only ever gets assigned
@@ -66,7 +66,7 @@ public class ByteMatrix <: ToString & Equatable<ByteMatrix> {
     }
 
     public func toString(): String {
-        var result: ArrayList<Char> = ArrayList<Char>();
+        var result: ArrayList<Rune> = ArrayList<Rune>();
         for (y in 0..height) {
             let bytesY: Array<Byte> = bytes[y]
             for (x in 0..width) {
@@ -76,7 +76,7 @@ public class ByteMatrix <: ToString & Equatable<ByteMatrix> {
                     case _ => result.appendAll("  ".toRuneArray());
                 }
             }
-            result.append('\n');
+            result.append(r'\n');
         }
         return String(result);
     }

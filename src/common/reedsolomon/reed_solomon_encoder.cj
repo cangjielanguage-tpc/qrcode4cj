@@ -2,10 +2,11 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package common.reedsolomon
+package QRCode4cj.common.reedsolomon
 
-from std import random.*
-from std import format.*
+import std.random.*
+import std.format.*
+import std.collection.*
 
 public class ReedSolomonEncoder {
     private var field: ?GenericGF = None

@@ -2,12 +2,12 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package common
+package QRCode4cj.common
 
-from std import collection.*
-from std import math.*
-import tools.numberOfTrailingZeros
-import tools.intArraysHashCode
+import std.collection.*
+import std.math.*
+import QRCode4cj.tools.numberOfTrailingZeros
+import QRCode4cj.tools.intArraysHashCode
 
 public class BitArray <: Hashable & ToString & Equatable<BitArray> {
     let EMPTY_BITS: Array<Int32> = []
@@ -44,7 +44,7 @@ public class BitArray <: Hashable & ToString & Equatable<BitArray> {
             let newBits = this.bits
             let newBitsSize = newBits.size
 
-            let newSize = Int64(math.ceil(Float64(newSize) / LOAD_FACTOR))
+            let newSize = Int64(ceil(Float64(newSize) / LOAD_FACTOR))
             this.bits = Array<Int32>((newSize + 31) >> 5, {
                 n => if (n < newBitsSize) {
                     newBits[n]
@@ -109,7 +109,7 @@ public class BitArray <: Hashable & ToString & Equatable<BitArray> {
             currentBits = Int64(bits[bitsOffset])
         }
         var result = (bitsOffset * 32) + numberOfTrailingZeros(Int64(currentBits))
-        return math.min(result, size);
+        return min(result, size);
     }
 
     /**
@@ -136,7 +136,7 @@ public class BitArray <: Hashable & ToString & Equatable<BitArray> {
             currentBits = Int32(!(this.bits[bitsOffset]))
         }
         var result = (bitsOffset * 32) + numberOfTrailingZeros(Int64(currentBits))
-        return math.min(result, size)
+        return min(result, size)
     }
 
     /**

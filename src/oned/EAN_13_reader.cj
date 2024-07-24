@@ -2,7 +2,12 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned
+package QRCode4cj.oned
+
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.math.*
 
 /**
  * Implements decoding of the EAN-13 format.
@@ -45,7 +50,7 @@ public open class EAN13Reader <: UPCEANReader {
         decodeMiddleCounters = Array<Int64>(4, item: 0)
     }
 
-    protected override func decodeMiddle(row: BitArray, startRange: Array<Int64>, resultString: ArrayList<Char>): Int64 {
+    protected override func decodeMiddle(row: BitArray, startRange: Array<Int64>, resultString: ArrayList<Rune>): Int64 {
         var counters: Array<Int64> = decodeMiddleCounters
         counters[0] = 0
         counters[1] = 0
@@ -59,7 +64,7 @@ public open class EAN13Reader <: UPCEANReader {
         var x = 0;
         while (x < 6 && rowOffset < end) {
             var bestMatch: Int64 = decodeDigit(row, counters, rowOffset, L_AND_G_PATTERNS);
-            resultString.append(Char('0'.hashCode() + bestMatch % 10));
+            resultString.append(Rune(r'0'.hashCode() + bestMatch % 10));
 
             for (i in 0..counters.size) {
                 rowOffset += counters[i]
@@ -78,7 +83,7 @@ public open class EAN13Reader <: UPCEANReader {
         x = 0
         while (x < 6 && rowOffset < end) {
             var bestMatch: Int64 = decodeDigit(row, counters, rowOffset, L_PATTERNS);
-            resultString.append(Char('0'.hashCode() + bestMatch));
+            resultString.append(Rune(r'0'.hashCode() + bestMatch));
 
             for (i in 0..counters.size) {
                 rowOffset += counters[i]
@@ -103,10 +108,10 @@ public open class EAN13Reader <: UPCEANReader {
      * encode digits
      * @throws Qrcoder4cjNotFoundException if first digit cannot be determined
      */
-    private static func determineFirstDigit(resultString: ArrayList<Char>, lgPatternFound: Int64) {
+    private static func determineFirstDigit(resultString: ArrayList<Rune>, lgPatternFound: Int64) {
         for (d in 0..10) {
             if (lgPatternFound == FIRST_DIGIT_ENCODINGS[d]) {
-                resultString.insert(0, Char('0'.hashCode() + d));
+                resultString.insert(0, Rune(r'0'.hashCode() + d));
                 return;
             }
         }

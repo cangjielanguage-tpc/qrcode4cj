@@ -2,7 +2,10 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package common
+package QRCode4cj.common
+
+import std.collection.*
+import QRCode4cj.tools.*
 
 public class StringUtils {
     public static let PLATFORM_DEFAULT_ENCODING: MyCharset = MyCharset.forName("UTF-8");
@@ -68,7 +71,7 @@ public class StringUtils {
 
         // First try UTF-16, assuming anything with its BOM is UTF-16
         if (bytes.size > 2 && ((bytes[0] == 0xFE && bytes[1] == 0xFF) || (bytes[0] == 0xFF && bytes[1] == 0xFE))) {
-            let CURRENT_ENDIAN: Endian = getCurrentEndian()
+            let CURRENT_ENDIAN: Endian = Endian.Platform
             let returndata: MyCharset = match (CURRENT_ENDIAN) {
                 case Endian.Big => return StandardCharsets.UTF_16BE
                 case _ => return StandardCharsets.UTF_16LE

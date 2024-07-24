@@ -2,12 +2,13 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package aztec.encoder
+package QRCode4cj.aztec.encoder
 
-import common.reedsolomon.GenericGF
-import common.reedsolomon.ReedSolomonEncoder
-import common.StandardCharsets
-import common.MyCharset
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import QRCode4cj.common.reedsolomon.*
+import std.math.*
 
 /**
  * Generates Aztec 2D barcodes.

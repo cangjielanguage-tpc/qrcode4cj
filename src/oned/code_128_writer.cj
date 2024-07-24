@@ -2,7 +2,13 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned
+package QRCode4cj.oned
+
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.math.*
+import std.convert.*
 
 // Results of minimal lookahead for code C
 enum CType <: ToString & Equatable<CType> {
@@ -47,10 +53,10 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
     private static let CODE_STOP: Int64 = 106
 
     // Dummy characters used to specify control characters in input
-    private static let ESCAPE_FNC_1: Char = '\u{00f1}'
-    private static let ESCAPE_FNC_2: Char = '\u{00f2}'
-    private static let ESCAPE_FNC_3: Char = '\u{00f3}'
-    private static let ESCAPE_FNC_4: Char = '\u{00f4}'
+    private static let ESCAPE_FNC_1: Rune = '\u{00f1}'
+    private static let ESCAPE_FNC_2: Rune = '\u{00f2}'
+    private static let ESCAPE_FNC_3: Rune = '\u{00f3}'
+    private static let ESCAPE_FNC_4: Rune = '\u{00f4}'
 
     private static let CODE_FNC_1: Int64 = 102 // Code A, Code B, Code C
     private static let CODE_FNC_2: Int64 = 97 // Code A, Code B
@@ -96,7 +102,7 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
 
         /* Check content */
         for (i in 0..length) {
-            var c: Char = contents.get(i)
+            var c: Rune = contents.get(i)
 
             // check for non ascii characters that are not special GS1 characters
 
@@ -184,7 +190,7 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
             var patternIndex: Int64 = 0
             if (newCodeSet == codeSet) {
                 // Encode the current character, First handle escapes
-                var data: Char = contents.get(position)
+                var data: Rune = contents.get(position)
                 (patternIndex, position) = extencodeFast(patternIndex, data, codeSet, contents, position, length)
                 position++
             } else {
@@ -218,7 +224,7 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
         return produceResult(patterns, checkSum)
     }
 
-    private static func extencodeFast(patternIndex: Int64, data: Char, codeSet: Int64, contents: UTF32String,
+    private static func extencodeFast(patternIndex: Int64, data: Rune, codeSet: Int64, contents: UTF32String,
         position: Int64, length: Int64): (Int64, Int64) {
         var patternIndex_p = patternIndex
         var position_p = position
@@ -237,13 +243,13 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
         } else {
             // Then handle normal characters otherwise
             if (codeSet == CODE_CODE_A) {
-                patternIndex_p = contents.get(position_p).hashCode() - ' '.hashCode()
+                patternIndex_p = contents.get(position_p).hashCode() - r' '.hashCode()
                 if (patternIndex_p < 0) {
                     // everything below a space character comes behind the underscore in the code patterns table
-                    patternIndex_p += '`'.hashCode()
+                    patternIndex_p += r'`'.hashCode()
                 }
             } else if (codeSet == CODE_CODE_B) {
-                patternIndex_p = contents.get(position_p).hashCode() - ' '.hashCode()
+                patternIndex_p = contents.get(position_p).hashCode() - r' '.hashCode()
             } else {
                 // CODE_CODE_C
                 if (position_p + 1 == length) {
@@ -292,18 +298,18 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
         if (start >= last) {
             return CType.UNCODABLE
         }
-        var c_: Char = value.get(start)
+        var c_: Rune = value.get(start)
         if (c_ == ESCAPE_FNC_1) {
             return CType.FNC_1
         }
-        if (c_ < '0' || c_ > '9') {
+        if (c_ < r'0' || c_ > r'9') {
             return CType.UNCODABLE
         }
         if (start + 1 >= last) {
             return CType.ONE_DIGIT
         }
         c_ = value.get(start + 1)
-        if (c_ < '0' || c_ > '9') {
+        if (c_ < r'0' || c_ > r'9') {
             return CType.ONE_DIGIT
         }
         return CType.TWO_DIGITS
@@ -367,8 +373,8 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
 
     private static func exchooseCode(start: Int64, value: UTF32String, oldCode: Int64) {
         if (start < value.size) {
-            var c: Char = value.get(start)
-            if (c < ' ' || (oldCode == CODE_CODE_A && (c < '`' || (c >= ESCAPE_FNC_1 && c <= ESCAPE_FNC_4)))) {
+            var c: Rune = value.get(start)
+            if (c < r' ' || (oldCode == CODE_CODE_A && (c < r'`' || (c >= ESCAPE_FNC_1 && c <= ESCAPE_FNC_4)))) {
                 // can continue in code A, encodes ASCII 0 to 95 or FNC1 to FNC4
                 return CODE_CODE_A
             }
@@ -483,10 +489,10 @@ open class MinimalEncoder <: OneDimensionalCodeWriter {
     private static let CODE_STOP: Int64 = 106
 
     // Dummy characters used to specify control characters in input
-    private static let ESCAPE_FNC_1: Char = '\u{00f1}'
-    private static let ESCAPE_FNC_2: Char = '\u{00f2}'
-    private static let ESCAPE_FNC_3: Char = '\u{00f3}'
-    private static let ESCAPE_FNC_4: Char = '\u{00f4}'
+    private static let ESCAPE_FNC_1: Rune = r'\u{00f1}'
+    private static let ESCAPE_FNC_2: Rune = r'\u{00f2}'
+    private static let ESCAPE_FNC_3: Rune = r'\u{00f3}'
+    private static let ESCAPE_FNC_4: Rune = r'\u{00f4}'
 
     private static let CODE_FNC_1: Int64 = 102 // Code A, Code B, Code C
     private static let CODE_FNC_2: Int64 = 97 // Code A, Code B
@@ -576,11 +582,11 @@ open class MinimalEncoder <: OneDimensionalCodeWriter {
                             patternIndex = CODE_FNC_4_B
                         }
                     } else {
-                        patternIndex = contentsUtf.get(i).hashCode() - ' '.hashCode()
+                        patternIndex = contentsUtf.get(i).hashCode() - r' '.hashCode()
                     }
                     if ((charset == Charset.A && latch != Latch.SHIFT || charset == Charset.B && latch == Latch.SHIFT) &&
                         patternIndex < 0) {
-                        patternIndex += '`'.hashCode()
+                        patternIndex += r'`'.hashCode()
                     }
                     addPattern(patterns, patternIndex, checkSum, checkWeight, i)
             }
@@ -636,12 +642,12 @@ open class MinimalEncoder <: OneDimensionalCodeWriter {
         checkSum[0] += patternIndex * checkWeight[0]
     }
 
-    private static func isDigit(c: Char): Bool {
-        return c >= '0' && c <= '9'
+    private static func isDigit(c: Rune): Bool {
+        return c >= r'0' && c <= r'9'
     }
 
     private func canEncode(contents: UTF32String, charset: Charset, position: Int64): Bool {
-        var c: Char = contents.get(position)
+        var c: Rune = contents.get(position)
 
         match (charset) {
             case A => if (c == ESCAPE_FNC_1 || c == ESCAPE_FNC_2 || c == ESCAPE_FNC_3 || c == ESCAPE_FNC_4) {

@@ -1,19 +1,3 @@
-/*
- * Copyright 2008 ZXing authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 // DEPENDENCE: ../common/abstract_back_box_test_case.cj
 // DEPENDENCE: ../common/test_result.cj
 // DEPENDENCE: ../../test_common.cj
@@ -22,32 +6,27 @@
 // EXEC: cjc %import-path %L %l %f ./abstract_back_box_test_case.cj ./test_result.cj ./test_common.cj
 // EXEC: ./main
 
-from QRCode4cj import common.BarcodeFormat
-from QRCode4cj import common.reader.MultiFormatReader
-from QRCode4cj import common.EncodeHintType
-from QRCode4cj import common.Writer
-from QRCode4cj import common.Qrcoder4cjWriterException
-from QRCode4cj import common.BitMatrix
-from QRCode4cj import qrcode.decoder.ErrorCorrectionLevel
-from QRCode4cj import qrcode.QRCodeWriter
-from std import unittest.*
-from std import unittest.testmacro.*
-from std import collection.*
-from std import unicode.*
-from std import collection.*
-from std import fs.*
+import QRCode4cj.common.BarcodeFormat
+import QRCode4cj.common.reader.MultiFormatReader
+import QRCode4cj.common.EncodeHintType
+import QRCode4cj.common.Writer
+import QRCode4cj.common.Qrcoder4cjWriterException
+import QRCode4cj.common.BitMatrix
+import QRCode4cj.qrcode.decoder.ErrorCorrectionLevel
+import QRCode4cj.qrcode.QRCodeWriter
+import std.unittest.*
+import std.unittest.testmacro.*
+import std.collection.*
+import std.unicode.*
+import std.collection.*
+import std.fs.*
 
 main(): Int64 {
     let tester = QRCodeWriterTestCase()
-    tester.execute()
-    tester.printResult()
-    0
+    let test = tester.asTestSuite().runTests()
+    test.failedCount + test.errorCount
 }
 
-/**
- * @author satorux@google.com (Satoru Takabayashi) - creator
- * @author dswitkin@google.com (Daniel Switkin) - ported and expanded from C++
- */
 @Test
 public class QRCodeWriterTestCase {
     private static var BASE_IMAGE_PATH: Path = Path("./qrcode/");

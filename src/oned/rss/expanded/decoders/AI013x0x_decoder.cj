@@ -2,7 +2,10 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned.rss.expanded.decoders
+package QRCode4cj.oned.rss.expanded.decoders
+
+import std.collection.*
+import QRCode4cj.common.*
 
 abstract class AI013x0xDecoder <: AI01weightDecoder {
     private static var HEADER_SIZE: Int64 = 4 + 1
@@ -17,7 +20,7 @@ abstract class AI013x0xDecoder <: AI01weightDecoder {
             throw Qrcoder4cjNotFoundException()
         }
 
-        var buf: ArrayList<Char> = ArrayList<Char>();
+        var buf: ArrayList<Rune> = ArrayList<Rune>();
 
         encodeCompressedGtin(buf, HEADER_SIZE);
         encodeCompressedWeight(buf, HEADER_SIZE + GTIN_SIZE, WEIGHT_SIZE);

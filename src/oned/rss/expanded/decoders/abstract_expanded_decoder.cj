@@ -2,7 +2,10 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned.rss.expanded.decoders
+package QRCode4cj.oned.rss.expanded.decoders
+
+import std.collection.*
+import QRCode4cj.common.*
 
 public abstract class AbstractExpandedDecoder {
     private var information: BitArray = BitArray()

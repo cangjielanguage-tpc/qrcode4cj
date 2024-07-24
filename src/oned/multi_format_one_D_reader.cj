@@ -2,7 +2,14 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned
+package QRCode4cj.oned
+
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.math.*
+import QRCode4cj.oned.rss.*
+import QRCode4cj.oned.rss.expanded.*
 
 public open class MultiFormatOneDReader <: OneDReader {
     private static let EMPTY_ONED_ARRAY: Array<OneDReader> = Array<OneDReader>()

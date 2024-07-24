@@ -2,9 +2,9 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package datamatrix.encoder
+package QRCode4cj.datamatrix.encoder
 
-import common.Dimension
+import QRCode4cj.common.Dimension
 
 /**
  * Symbol info table for DataMatrix.

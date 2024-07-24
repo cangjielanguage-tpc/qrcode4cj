@@ -2,7 +2,9 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package client.result
+package QRCode4cj.client.result
+
+import std.collection.*
 
 public open class AddressBookParsedResult <: ParsedResult {
     private var names: Array<String> = Array<String>()
@@ -177,7 +179,7 @@ public open class AddressBookParsedResult <: ParsedResult {
     }
 
     public override func getDisplayResult(): String {
-        var result_: ArrayList<Char> = ArrayList<Char>()
+        var result_: ArrayList<Rune> = ArrayList<Rune>()
         maybeAppend(names, result_)
         maybeAppend(nicknames, result_)
         maybeAppend(pronunciation, result_)

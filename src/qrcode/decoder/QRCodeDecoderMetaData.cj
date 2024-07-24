@@ -2,9 +2,9 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package qrcode.decoder
+package QRCode4cj.qrcode.decoder
 
-import common.ResultPoint
+import QRCode4cj.common.ResultPoint
 
 /**
  * Meta-data container for QR Code decoding. Instances of this class may be used to convey information back to the

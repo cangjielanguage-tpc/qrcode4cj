@@ -2,7 +2,7 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package pdf417.encoder
+package QRCode4cj.pdf417.encoder
 
 /**
  * Holds all of the information for a barcode in a format where it can be easily accessible

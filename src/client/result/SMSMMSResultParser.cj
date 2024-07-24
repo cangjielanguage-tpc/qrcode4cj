@@ -2,7 +2,11 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package client.result
+package QRCode4cj.client.result
+
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
 
 /**
  * Parses an "sms:" URI result, which specifies a number to SMS.
@@ -37,12 +41,12 @@ public open class SMSMMSResultParser <: ResultParser {
         }
 
         // Drop sms, query portion
-        var obj = rawText.indexOf('?'.toString(), start: 4)
+        var obj = rawText.indexOf(r'?'.toString(), start: 4)
         var queryStart = 0
         if (let None <- obj) {
             queryStart = -1
         } else {
-            queryStart = rawText.indexOf('?'.toString(), start: 4).getOrThrow()
+            queryStart = rawText.indexOf(r'?'.toString(), start: 4).getOrThrow()
         }
         var smsURIWithoutQuery: UTF32String
 
@@ -57,7 +61,7 @@ public open class SMSMMSResultParser <: ResultParser {
         var numbers: ArrayList<String> = ArrayList<String>();
         var vias: ArrayList<String> = ArrayList<String>();
         for (i in 0..smsURIWithoutQuery.charSize) {
-            if (smsURIWithoutQuery.get(i) == ',') {
+            if (smsURIWithoutQuery.get(i) == r',') {
                 var numberPart: UTF32String = smsURIWithoutQuery.substring(lastComma + 1, i - (lastComma + 1));
                 addNumberVia(numbers, vias, numberPart);
                 lastComma = i
@@ -74,7 +78,7 @@ public open class SMSMMSResultParser <: ResultParser {
     }
 
     private static func addNumberVia(numbers: ArrayList<String>, vias: ArrayList<String>, numberPart: UTF32String) {
-        var u = numberPart.indexOf(';'.toString())
+        var u = numberPart.indexOf(r';'.toString())
         var numberEnd = 0
         if (let Some(v) <- u) {
             numberEnd = v

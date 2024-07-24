@@ -2,13 +2,14 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package common
+package QRCode4cj.common
 
-from std import io.*
-from charset import charset.*
-import tools.UTF32String
-from charset import charset.encoding.*
-from charset import charset.exception.*
+import std.io.*
+import std.collection.*
+import charset4cj.charset.*
+import QRCode4cj.tools.UTF32String
+import charset4cj.charset.encoding.*
+import charset4cj.charset.exception.*
 
 /**
  * Encapsulates a Character Set ECI, according to "Extended Channel Interpretations
@@ -57,7 +58,7 @@ public open class CharsetDecoder {
         if (!diff.isEmpty()) {
             var resutlArray = result.toRuneArray();
             for (i in diff.keys()) {
-                resutlArray[i] = Char(src[i])
+                resutlArray[i] = Rune(src[i])
             }
             result = String(resutlArray)
         }
@@ -78,7 +79,7 @@ public open class CharsetEncoder {
     public func charset(): MyCharset {
         return this.mycharset
     }
-    public func canEncode(c: Char): Bool {
+    public func canEncode(c: Rune): Bool {
         try {
             var result = this.encode.encode(c.toString());
             return true

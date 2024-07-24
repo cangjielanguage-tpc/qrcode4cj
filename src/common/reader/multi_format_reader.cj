@@ -2,16 +2,16 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package common.reader
+package QRCode4cj.common.reader
 
-import aztec.AztecReader
-import datamatrix.DataMatrixReader
-import maxicode.MaxiCodeReader
-import oned.MultiFormatOneDReader
-import pdf417.PDF417Reader
-import qrcode.QRCodeReader
-import common.*
-from std import collection.*
+import QRCode4cj.aztec.AztecReader
+import QRCode4cj.datamatrix.DataMatrixReader
+import QRCode4cj.maxicode.MaxiCodeReader
+import QRCode4cj.oned.MultiFormatOneDReader
+import QRCode4cj.pdf417.PDF417Reader
+import QRCode4cj.qrcode.QRCodeReader
+import QRCode4cj.common.*
+import std.collection.*
 
 /**
  * MultiFormatReader is a convenience class and the main entry point into the library for most uses.

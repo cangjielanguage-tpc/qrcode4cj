@@ -2,7 +2,11 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package client.result
+package QRCode4cj.client.result
+
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
 
 public open class BizcardResultParser <: AbstractDoCoMoResultParser {
     // Yes, we extend AbstractDoCoMoResultParser since the format is very much

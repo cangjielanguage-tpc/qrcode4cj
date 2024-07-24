@@ -2,9 +2,9 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned.rss.expanded.decoders
+package QRCode4cj.oned.rss.expanded.decoders
 
-// import common.Qrcoder4cjFormatException
+import QRCode4cj.common.*
 
 class DecodedNumeric <: DecodedObject {
     private var firstDigit: Int64 = 0

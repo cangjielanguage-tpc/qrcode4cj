@@ -1850,14 +1850,14 @@ public abstract class ParsedResult {
      * 参数 value - 值
      * 参数 result - 结果
      */ 
-    public static func maybeAppend(value: String, result: ArrayList<Char>)
+    public static func maybeAppend(value: String, result: ArrayList<Rune>)
 
     /*
      * 添加结果
      * 参数 value - 值
      * 参数 result - 结果
      */ 
-    public static func maybeAppend(values: Array<String>, result: ArrayList<Char>)
+    public static func maybeAppend(values: Array<String>, result: ArrayList<Rune>)
 }
 
 public enum ParsedResultType <: ToString {
@@ -2076,7 +2076,7 @@ public open class VINParsedResult <: ParsedResult {
      * 参数 countryCode - Array<String>
      * 参数 vehicleAttributes - Array<String>
      * 参数 modelYear - Int64
-     * 参数 plantCode - Char
+     * 参数 plantCode - Rune
      * 参数 sequentialNumber - String
      */ 
     public init(
@@ -2087,7 +2087,7 @@ public open class VINParsedResult <: ParsedResult {
         countryCode: String,
         vehicleAttributes: String,
         modelYear: Int64,
-        plantCode: Char,
+        plantCode: Rune,
         sequentialNumber: String
     )
 
@@ -2135,9 +2135,9 @@ public open class VINParsedResult <: ParsedResult {
 
     /*
      * 获取 PlantCode
-     * 返回值 Char   - PlantCode
+     * 返回值 Rune   - PlantCode
      */ 
-    public func getPlantCode(): Char
+    public func getPlantCode(): Rune
 
     /*
      * 获取 SequentialNumber
@@ -3238,10 +3238,10 @@ public open class CharsetEncoder {
 
     /*
      * 是否可编码
-     * 参数 c - Char
+     * 参数 c - Rune
      * 返回值 Bool - 是否可编码
      */
-    public func canEncode(c: Char): Bool
+    public func canEncode(c: Rune): Bool
 
     /*
      * 获取字节
@@ -3703,19 +3703,19 @@ public class ECIEncoderSet {
 
     /*
      * 获取 canEncode
-     * 参数 c - Char
+     * 参数 c - Rune
      * 参数 encoderIndex - Int64
      * 返回值 Bool - Bool
      */
-    public func canEncode(c: Char, encoderIndex: Int64): Bool
+    public func canEncode(c: Rune, encoderIndex: Int64): Bool
 
     /*
      * 编码
-     * 参数 c - Char
+     * 参数 c - Rune
      * 参数 encoderIndex - Int64
      * 返回值 Array<UInt8> - Array<UInt8>
      */
-    public func encode(c: Char, encoderIndex: Int64): Array<UInt8>
+    public func encode(c: Rune, encoderIndex: Int64): Array<UInt8>
 
     /*
      * 编码
@@ -3740,9 +3740,9 @@ public class ECIStringBuilder <: ToString {
 
     /*
      * 添加值
-     * 参数 value - Char
+     * 参数 value - Rune
      */
-    public func append(value: Char)
+    public func append(value: Rune)
 
     /*
      * 添加值
@@ -3770,9 +3770,9 @@ public class ECIStringBuilder <: ToString {
 
     /*
      * 添加值
-     * 参数 value - ArrayList<Char>
+     * 参数 value - ArrayList<Rune>
      */
-    public func appendCharacters(value: ArrayList<Char>)
+    public func appendCharacters(value: ArrayList<Rune>)
 
     /*
      * 获取长度
@@ -4152,9 +4152,9 @@ public open class MinimalECIInput <: ECIInput {
     /*
      * 获取 charAt
      * 参数 index - Int64
-     * 返回值 Char - Char
+     * 返回值 Rune - Rune
      */
-    public func charAt(index: Int64): Char
+    public func charAt(index: Int64): Rune
 
     /*
      * 获取 charAt
@@ -4731,17 +4731,17 @@ public open class C40Encoder <: Encoder {
     /*
      * 编码
      * 参数 context - EncoderContext
-     * 参数 buffer - ArrayList<Char>
+     * 参数 buffer - ArrayList<Rune>
      */
-    public open func handleEOD(context: EncoderContext, buffer: ArrayList<Char>) 
+    public open func handleEOD(context: EncoderContext, buffer: ArrayList<Rune>) 
 
     /*
-     * 编码 Char
-     * 参数 c - Char
-     * 参数 sb - ArrayList<Char>
+     * 编码 Rune
+     * 参数 c - Rune
+     * 参数 sb - ArrayList<Rune>
      * 返回值 Int64 - Int64
      */
-    public open func encodeChar(c: Char, sb: ArrayList<Char>): Int64
+    public open func encodeChar(c: Rune, sb: ArrayList<Rune>): Int64
 }
 
 public open class DefaultPlacement {
@@ -4810,21 +4810,21 @@ public class EncoderContext {
 
     /*
      * 获取 CurrentChar
-     * 返回值 Char - Char
+     * 返回值 Rune - Rune
      */
-    public func getCurrentChar(): Char
+    public func getCurrentChar(): Rune
 
     /*
      * 获取 Current
-     * 返回值 Char - Char
+     * 返回值 Rune - Rune
      */
-    public func getCurrent(): Char
+    public func getCurrent(): Rune
 
     /*
      * 获取 Codewords
-     * 返回值 ArrayList<Char> - ArrayList<Char>
+     * 返回值 ArrayList<Rune> - ArrayList<Rune>
      */
-    public func getCodewords(): ArrayList<Char>
+    public func getCodewords(): ArrayList<Rune>
 
     /*
      * 设置 Codewords
@@ -4834,9 +4834,9 @@ public class EncoderContext {
 
     /*
      * 设置 codeword
-     * 参数 codeword - Char
+     * 参数 codeword - Rune
      */
-    public func writeCodeword(codeword: Char)
+    public func writeCodeword(codeword: Rune)
 
     /*
      * 获取 CodewordCount
@@ -5002,41 +5002,41 @@ public class Input <: MinimalECIInput {
 public class MinimalEncoder {
     /*
      * 判断 ExtendedASCII
-     * 参数 ch - Char
+     * 参数 ch - Rune
      * 参数 fnc1 - Int64
      * 返回值 Bool - 是否相等
      */
-    public static func isExtendedASCII(ch: Char, fnc1: Int64): Bool
+    public static func isExtendedASCII(ch: Rune, fnc1: Int64): Bool
 
     /*
      * 判断 InC40Shift1Set
-     * 参数 ch - Char
+     * 参数 ch - Rune
      * 返回值 Bool - 是否相等
      */
-    public static func isInC40Shift1Set(ch: Char): Bool
+    public static func isInC40Shift1Set(ch: Rune): Bool
 
     /*
      * 判断 isInC40Shift2Set
-     * 参数 ch - Char
+     * 参数 ch - Rune
      * 参数 fnc1 - Int64
      * 返回值 Bool - 是否相等
      */
-    public static func isInC40Shift2Set(ch: Char, fnc1: Int64): Bool
+    public static func isInC40Shift2Set(ch: Rune, fnc1: Int64): Bool
 
     /*
      * 判断 isInTextShift1Set
-     * 参数 ch - Char
+     * 参数 ch - Rune
      * 返回值 Bool - 是否相等
      */
-    public static func isInTextShift1Set(ch: Char): Bool
+    public static func isInTextShift1Set(ch: Rune): Bool
 
     /*
      * 判断 isInTextShift2Set
-     * 参数 ch - Char
+     * 参数 ch - Rune
      * 参数 fnc1 - Int64
      * 返回值 Bool - 是否相等
      */
-    public static func isInTextShift2Set(ch: Char, fnc1: Int64): Bool
+    public static func isInTextShift2Set(ch: Rune, fnc1: Int64): Bool
 
     /*
      * 编码
@@ -5061,7 +5061,7 @@ public class MinimalEncoder {
 
     /*
      * 获取 NumberOfC40Words
-     * 参数 ch - Char
+     * 参数 ch - Rune
      * 返回值 Int64 - Int64
      */
     public static func getNumberOfC40Words(input: Input, start: Int64, c40: Bool, characterLength: Array<Int64>): Int64
@@ -5258,12 +5258,12 @@ public class TextEncoder <: C40Encoder {
     public func getEncodingMode(): Int64
 
     /*
-     * 编码 Char
-     * 参数 c - Char
-     * 参数 sb - ArrayList<Char>
+     * 编码 Rune
+     * 参数 c - Rune
+     * 参数 sb - ArrayList<Rune>
      * 返回值 Int64 - Int64
      */
-    public func encodeChar(c: Char, sb: ArrayList<Char>): Int64
+    public func encodeChar(c: Rune, sb: ArrayList<Rune>): Int64
 }
 
 public class BitMatrixParser {

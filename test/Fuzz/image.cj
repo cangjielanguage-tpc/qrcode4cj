@@ -1,13 +1,13 @@
-from image import color.*
-from image import image.*
-from image import drawer.*
-from image import internals.model.*
-from image import internals.imageutil.*
-from image import png.*
-from image import png.zlib.*
-from image import jpeg.*
-from std import collection.*
-from std import log.*
+import image.color.*
+import image.image.*
+import image.drawer.*
+import image.internals.model.*
+import image.internals.imageutil.*
+import image.png.*
+import image.png.zlib.*
+import image.jpeg.*
+import std.collection.*
+import std.log.*
 
 public class CvImageForZxing {
     var width: Int64 = 0
@@ -220,8 +220,8 @@ public func rotate(src: ImageI, rotateAngle: Int64): ImageI {
     let hH = Float64(sH) * 0.5
 
     let angle = Float64(rotateAngle) * Float64.PI / 180.0
-    let sin = math.sin(angle)
-    let cos = math.cos(angle)
+    let sin = sin(angle)
+    let cos = cos(angle)
 
     let (ltX, ltY) = (-hW * cos + hH * sin, hW * sin + hH * cos)
     let (rtX, rtY) = (hW * cos + hH * sin, -hW * sin + hH * cos)
@@ -236,8 +236,8 @@ public func rotate(src: ImageI, rotateAngle: Int64): ImageI {
     let halfWidth = Float64(maxWidth) * 0.5
     let halfHeight = Float64(maxHeight) * 0.5
     let subAngle = Float64(360 - rotateAngle % 360) * Float64.PI / 180.0
-    let sinR = math.sin(subAngle)
-    let cosR = math.cos(subAngle)
+    let sinR = sin(subAngle)
+    let cosR = cos(subAngle)
 
     for (y in 0..maxHeight) {
         for (x in 0..maxWidth) {
@@ -908,12 +908,12 @@ public open class BufferedImageLuminanceSource <: LuminanceSource {
         var oldCenterY: Int64 = top + height / 2
 
         let rotatedImage = rotate(this.image, 45)
-        var sourceDimension: Int64 = math.max(this.image.bounds().size().x, this.image.bounds().size().y);
-        var halfDimension: Int64 = math.max(width, height) / 2
-        var newLeft: Int64 = math.max(0, oldCenterX - halfDimension);
-        var newTop: Int64 = math.max(0, oldCenterY - halfDimension);
-        var newRight: Int64 = math.min(sourceDimension - 1, oldCenterX + halfDimension);
-        var newBottom: Int64 = math.min(sourceDimension - 1, oldCenterY + halfDimension);
+        var sourceDimension: Int64 = max(this.image.bounds().size().x, this.image.bounds().size().y);
+        var halfDimension: Int64 = max(width, height) / 2
+        var newLeft: Int64 = max(0, oldCenterX - halfDimension);
+        var newTop: Int64 = max(0, oldCenterY - halfDimension);
+        var newRight: Int64 = min(sourceDimension - 1, oldCenterX + halfDimension);
+        var newBottom: Int64 = min(sourceDimension - 1, oldCenterY + halfDimension);
 
         return BufferedImageLuminanceSource(rotatedImage, newLeft, newTop, newRight - newLeft, newBottom - newTop);
     }

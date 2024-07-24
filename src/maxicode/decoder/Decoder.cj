@@ -2,18 +2,18 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package maxicode.decoder
+package QRCode4cj.maxicode.decoder
 
-import common.Qrcoder4cjChecksumException
-import common.DecodeHintType
-import common.Qrcoder4cjFormatException
-import common.BitMatrix
-import common.DecoderResult
-import common.reedsolomon.GenericGF
-import common.reedsolomon.ReedSolomonDecoder
-import common.reedsolomon.Qrcoder4cjReedSolomonException
-import tools.System
-from std import collection.*
+import QRCode4cj.common.Qrcoder4cjChecksumException
+import QRCode4cj.common.DecodeHintType
+import QRCode4cj.common.Qrcoder4cjFormatException
+import QRCode4cj.common.BitMatrix
+import QRCode4cj.common.DecoderResult
+import QRCode4cj.common.reedsolomon.GenericGF
+import QRCode4cj.common.reedsolomon.ReedSolomonDecoder
+import QRCode4cj.common.reedsolomon.Qrcoder4cjReedSolomonException
+import QRCode4cj.tools.System
+import std.collection.*
 
 //import java.util.Map;
 

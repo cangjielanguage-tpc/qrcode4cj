@@ -2,7 +2,10 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package datamatrix.encoder
+package QRCode4cj.datamatrix.encoder
+
+import std.collection.*
+import QRCode4cj.tools.*
 
 class Base256Encoder <: Encoder {
     public func getEncodingMode(): Int64 {
@@ -10,11 +13,11 @@ class Base256Encoder <: Encoder {
     }
 
     public func encode(context: EncoderContext) {
-        var buffer: ArrayList<Char> = ArrayList<Char>();
-        buffer.append('\0');
+        var buffer: ArrayList<Rune> = ArrayList<Rune>();
+        buffer.append(r'\0');
         //Initialize length field
         while (context.hasMoreCharacters()) {
-            var c: Char = context.getCurrentChar();
+            var c: Rune = context.getCurrentChar();
             buffer.append(c);
 
             context.pos++
@@ -34,11 +37,11 @@ class Base256Encoder <: Encoder {
         if (context.hasMoreCharacters() || mustPad) {
             if (dataCount <= 249) {
                 buffer.remove(0)
-                buffer.insert(0, Char(dataCount))
+                buffer.insert(0, Rune(dataCount))
             } else if (dataCount <= 1555) {
                 buffer.remove(0)
-                buffer.insert(0, Char((dataCount / 250 + 249)));
-                buffer.insert(1, Char(dataCount % 250));
+                buffer.insert(0, Rune((dataCount / 250 + 249)));
+                buffer.insert(1, Rune(dataCount % 250));
             } else {
                 throw IllegalArgumentException("Message length not in valid ranges: " + dataCount.toString());
             }
@@ -48,14 +51,14 @@ class Base256Encoder <: Encoder {
         }
     }
 
-    private static func randomize255State(ch: Char, codewordPosition: Int64): Char {
+    private static func randomize255State(ch: Rune, codewordPosition: Int64): Rune {
         let pseudoRandom = ((149 * codewordPosition) % 255) + 1
         let t: UInt32 = UInt32(ch)
         let tempVariable = UInt32(ch) + UInt32(pseudoRandom)
         if (tempVariable <= 255) {
-            return Char(tempVariable)
+            return Rune(tempVariable)
         } else {
-            return Char(tempVariable - 256)
+            return Rune(tempVariable - 256)
         }
     }
 }

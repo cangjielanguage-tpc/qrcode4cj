@@ -2,11 +2,12 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package qrcode.encoder
+package QRCode4cj.qrcode.encoder
 
-import qrcode.decoder.ErrorCorrectionLevel
-import qrcode.decoder.Mode
-import qrcode.decoder.Version
+import QRCode4cj.qrcode.decoder.ErrorCorrectionLevel
+import QRCode4cj.qrcode.decoder.Mode
+import QRCode4cj.qrcode.decoder.Version
+import std.collection.*
 
 public class QRCode {
     public static let NUM_MASK_PATTERNS: Int64 = 8;
@@ -45,7 +46,7 @@ public class QRCode {
     }
 
     public func toString(): String {
-        var result: ArrayList<Char> = ArrayList<Char>();
+        var result: ArrayList<Rune> = ArrayList<Rune>();
         result.appendAll("<<\n".toRuneArray());
         result.appendAll(" mode: ".toRuneArray());
         if (mode == Mode.TERMINATOR([0, 0, 0], 0x00)) {

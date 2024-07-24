@@ -5,7 +5,7 @@
 <p align="center">
 <img alt="" src="https://img.shields.io/badge/release-v0.0.1-brightgreen" style="display: inline-block;" />
 <img alt="" src="https://img.shields.io/badge/build-pass-brightgreen" style="display: inline-block;" />
-<img alt="" src="https://img.shields.io/badge/cjc-v0.51.4-brightgreen" style="display: inline-block;" />
+<img alt="" src="https://img.shields.io/badge/cjc-v0.53.4-brightgreen" style="display: inline-block;" />
 <img alt="" src="https://img.shields.io/badge/cjcov-90.2%25-brightgreen" style="display: inline-block;" />
 <img alt="" src="https://img.shields.io/badge/project-open-brightgreen" style="display: inline-block;" />
 </p>
@@ -80,13 +80,13 @@ cjpm build
 额外依赖 bitMatrixToBinaryBitmap 转换代码在 test/DOC/libs.cj
 
 ```cangjie
-from QRCode4cj import common.*
-from QRCode4cj import common.reader.*
-from QRCode4cj import common.writer.*
-from QRCode4cj import tools.UTF32String
-from std import collection.*
-from std import unittest.*
-from std import unittest.testmacro.*
+import QRCode4cj.common.*
+import QRCode4cj.common.reader.*
+import QRCode4cj.common.writer.*
+import QRCode4cj.tools.UTF32String
+import std.collection.*
+import std.unittest.*
+import std.unittest.testmacro.*
 
 main(): Int64 {
     let tester = DecoderTestCase()
@@ -126,10 +126,10 @@ public class DecoderTestCase {
 示例代码如下：
 
 ```cangjie
-from QRCode4cj import common.*
-from QRCode4cj import common.writer.*
-from std import unittest.*
-from std import unittest.testmacro.*
+import QRCode4cj.common.*
+import QRCode4cj.common.writer.*
+import std.unittest.*
+import std.unittest.testmacro.*
 
 main(): Int64 {
     let tester = EncoderTestCase()

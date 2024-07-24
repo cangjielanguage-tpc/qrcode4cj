@@ -1,9 +1,9 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package datamatrix.decoder
+package QRCode4cj.datamatrix.decoder
 
-import common.BitMatrix
+import QRCode4cj.common.*
 
 class BitMatrixParser {
     private var mappingBitMatrix: BitMatrix

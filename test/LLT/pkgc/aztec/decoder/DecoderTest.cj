@@ -1,42 +1,24 @@
-/*
- * Copyright 2014 ZXing authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 
-from QRCode4cj import common.Qrcoder4cjFormatException
-from QRCode4cj import common.ResultPoint
-from QRCode4cj import aztec.common.AztecDetectorResult
-from QRCode4cj import common.BitArray
-from QRCode4cj import common.BitMatrix
-from QRCode4cj import common.DecoderResult
-from QRCode4cj import aztec.decoder.Decoder
-from QRCode4cj import tools.UTF32String
-from std import unittest.*
-from std import unittest.testmacro.*
-from std import collection.*
-from std import unicode.*
-from std import regex.*
+import QRCode4cj.common.Qrcoder4cjFormatException
+import QRCode4cj.common.ResultPoint
+import QRCode4cj.aztec.common.AztecDetectorResult
+import QRCode4cj.common.BitArray
+import QRCode4cj.common.BitMatrix
+import QRCode4cj.common.DecoderResult
+import QRCode4cj.aztec.decoder.Decoder
+import QRCode4cj.tools.UTF32String
+import std.unittest.*
+import std.unittest.testmacro.*
+import std.collection.*
+import std.unicode.*
+import std.regex.*
 
 main(): Int64 {
     let tester = DecoderTest()
-    tester.execute()
-    tester.printResult()
-    tester.getTestInfo().errorCount + tester.getTestInfo().failedCount
-    0
+    let test = tester.asTestSuite().runTests()
+    test.failedCount + test.errorCount
 }
 
 /**
@@ -80,10 +62,10 @@ public class DecoderTest {
     }
     public static func toBitArray(bits: String): BitArray {
         var start: BitArray = BitArray()
-        var str: Array<Char> = DOTX.matcher(bits).replaceAll("").toRuneArray()
+        var str: Array<Rune> = DOTX.matcher(bits).replaceAll("").toRuneArray()
         for (aStrN in 0..str.size) {
             var aStr = str[aStrN]
-            start.appendBit(aStr == 'X')
+            start.appendBit(aStr == r'X')
         }
         return start
     }

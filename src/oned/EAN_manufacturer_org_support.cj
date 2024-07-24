@@ -2,9 +2,14 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned
+package QRCode4cj.oned
 
-from std import sync.*
+import std.sync.*
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.math.*
+import std.convert.*
 
 /**
  * Records EAN prefix to GS1 Member Organization, where the member organization

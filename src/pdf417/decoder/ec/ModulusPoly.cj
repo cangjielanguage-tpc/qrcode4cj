@@ -2,11 +2,11 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package pdf417.decoder.ec
+package QRCode4cj.pdf417.decoder.ec
 
-import tools.System
-import tools.UTF32String
-from std import collection.*
+import QRCode4cj.tools.System
+import QRCode4cj.tools.UTF32String
+import std.collection.*
 
 open class ModulusPoly <: ToString {
     public var field: ModulusGF
@@ -188,7 +188,7 @@ open class ModulusPoly <: ToString {
     }
 
     public override func toString(): String {
-        var result: ArrayList<Char> = ArrayList<Char>()
+        var result: ArrayList<Rune> = ArrayList<Rune>()
         for (degree in getDegree()..-1) {
             var coefficient: Int64 = getCoefficient(degree);
             if (coefficient != 0) {
@@ -205,7 +205,7 @@ open class ModulusPoly <: ToString {
                 }
                 if (degree != 0) {
                     if (degree == 1) {
-                        result.append('x');
+                        result.append(r'x');
                     } else {
                         result.appendAll("x^".toRuneArray());
                         result.appendAll(degree.toString().toRuneArray());

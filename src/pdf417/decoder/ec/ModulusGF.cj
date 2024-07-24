@@ -2,9 +2,9 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package pdf417.decoder.ec
+package QRCode4cj.pdf417.decoder.ec
 
-import pdf417.common.PDF417Common
+import QRCode4cj.pdf417.common.PDF417Common
 
 /**
  * A field based on powers of a generatoreger:Int64 modulo some modulus.

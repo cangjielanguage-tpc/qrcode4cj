@@ -2,7 +2,10 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package datamatrix.encoder
+package QRCode4cj.datamatrix.encoder
+
+import std.collection.*
+import QRCode4cj.tools.*
 
 /**
  * Error Correction Code for ECC200.
@@ -939,7 +942,7 @@ public class ErrorCorrection {
         if (codewords.charSize != symbolInfo.getDataCapacity()) {
             throw IllegalArgumentException("The number of codewords does not match the selected symbol");
         }
-        var sb: ArrayList<Char> = ArrayList<Char>();
+        var sb: ArrayList<Rune> = ArrayList<Rune>();
         sb.appendAll(codewords.toRuneArray());
         var blockCount: Int64 = symbolInfo.getInterleavedBlockCount();
         if (blockCount == 1) {
@@ -956,14 +959,14 @@ public class ErrorCorrection {
             }
 
             for (block in 0..blockCount) {
-                var temp: ArrayList<Char> = ArrayList<Char>();
+                var temp: ArrayList<Rune> = ArrayList<Rune>();
                 for (d in block..symbolInfo.getDataCapacity() : blockCount) {
                     temp.append(codewords.get(d));
                 }
                 var ecc: String = createECCBlock(UTF32String(temp), errorSizes[block]);
                 var pos: Int64 = 0;
                 for (e in block..errorSizes[block] * blockCount : blockCount) {
-                    sb.insert(symbolInfo.getDataCapacity() + e, Char(ecc[pos]));
+                    sb.insert(symbolInfo.getDataCapacity() + e, Rune(ecc[pos]));
                     pos++
                 }
             }
@@ -985,27 +988,27 @@ public class ErrorCorrection {
                 "Illegal number of error correction codewords specified: " + numECWords.toString());
         }
         var poly: Array<Int64> = FACTORS[table]
-        var ecc: Array<Char> = Array<Char>(numECWords, item: ' ')
+        var ecc: Array<Rune> = Array<Rune>(numECWords, item: r' ')
 
         for (i in 0..numECWords) {
-            ecc[i] = Char(0)
+            ecc[i] = Rune(0)
         }
         for (i in 0..codewords.charSize) {
             var m: Int64 = ecc[numECWords - 1].hashCode() ^ codewords.get(i).hashCode()
             for (k in numECWords - 1..0 : -1) {
                 if (m != 0 && poly[k] != 0) {
-                    ecc[k] = Char(ecc[k - 1].hashCode() ^ ALOG[(LOG[m] + LOG[poly[k]]) % 255])
+                    ecc[k] = Rune(ecc[k - 1].hashCode() ^ ALOG[(LOG[m] + LOG[poly[k]]) % 255])
                 } else {
                     ecc[k] = ecc[k - 1]
                 }
             }
             if (m != 0 && poly[0] != 0) {
-                ecc[0] = Char(ALOG[(LOG[m] + LOG[poly[0]]) % 255])
+                ecc[0] = Rune(ALOG[(LOG[m] + LOG[poly[0]]) % 255])
             } else {
-                ecc[0] = Char(0)
+                ecc[0] = Rune(0)
             }
         }
-        var eccReversed: Array<Char> = Array<Char>(numECWords, item: ' ')
+        var eccReversed: Array<Rune> = Array<Rune>(numECWords, item: r' ')
 
         for (i in 0..numECWords) {
             eccReversed[i] = ecc[numECWords - i - 1]

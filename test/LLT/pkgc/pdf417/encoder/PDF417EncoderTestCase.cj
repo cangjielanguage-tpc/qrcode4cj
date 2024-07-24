@@ -1,42 +1,24 @@
-/*
- * Copyright (C) 2014 ZXing authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 
-from QRCode4cj import common.Qrcoder4cjWriterException
-from QRCode4cj import common.StandardCharsets
-from QRCode4cj import pdf417.encoder.*
-from QRCode4cj import pdf417.decoder.*
-from QRCode4cj import common.MyCharset
-from QRCode4cj import tools.UTF32String
-from std import unittest.* //testfame
-from std import unittest.testmacro.* //macro_Defintion
-from std import fs.*
-from std import math.*
-from std import random.*
-from std import collection.*
-from std import convert.*
+import QRCode4cj.common.Qrcoder4cjWriterException
+import QRCode4cj.common.StandardCharsets
+import QRCode4cj.pdf417.encoder.*
+import QRCode4cj.pdf417.decoder.*
+import QRCode4cj.common.MyCharset
+import QRCode4cj.tools.UTF32String
+import std.unittest.* //testfame
+import std.unittest.testmacro.* //macro_Defintion
+import std.fs.*
+import std.math.*
+import std.random.*
+import std.collection.*
+import std.convert.*
 
 main(): Int64 {
     let tester = PDF417EncoderTestCase()
-    tester.execute()
-    tester.printResult()
-    tester.getTestInfo().errorCount + tester.getTestInfo().failedCount
-    0
+    let test = tester.asTestSuite().runTests()
+    test.failedCount + test.errorCount
 }
 
 /**

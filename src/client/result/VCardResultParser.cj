@@ -2,12 +2,16 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package client.result
+package QRCode4cj.client.result
 
-from std import io.*
-from encoding import url.*
-import common.StandardCharsets
-import common.MyCharset
+import std.io.*
+import encoding.url.*
+import QRCode4cj.common.StandardCharsets
+import QRCode4cj.common.MyCharset
+import std.regex.*
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
 
 /**
  * Parses contact information formatted according to the VCard (2.1) format. This is not a complete
@@ -146,17 +150,17 @@ public open class VCardResultParser <: ResultParser {
             var matchStart: Int64 = i
 
             /* Found the start of a match here */
-            while (let Some(v) <- rawText.indexOf('\n'.toString(), start: i)) { /* Really, end in \r\n */
+            while (let Some(v) <- rawText.indexOf(r'\n'.toString(), start: i)) { /* Really, end in \r\n */
                 i = v
                 if (i < rawText.charSize - 1 && /* But if followed by tab or space, */
-                    (rawText.get(i + 1) == ' ' || /* this is only a continuation */
-                    rawText.get(i + 1) == '\t')) {
+                    (rawText.get(i + 1) == r' ' || /* this is only a continuation */
+                    rawText.get(i + 1) == r'\t')) {
                     i = i + 2
                 /* Skip \n and continutation whitespace */
                 } else if (quotedPrintable && /* If preceded by = in quoted printable */
-                    ((i >= 1 && rawText.get(i - 1) == '=') || /* this is a continuation */
+                    ((i >= 1 && rawText.get(i - 1) == r'=') || /* this is a continuation */
                     (i >= 2 && rawText.get(i - 2) ==
-                    '='))) {
+                    r'='))) {
                     i++
                 /* Skip \n */
                 } else {
@@ -173,23 +177,23 @@ public open class VCardResultParser <: ResultParser {
                     matches = ArrayList()
                     /* lazy init */
                 }
-                if (i >= 1 && rawText.get(i - 1) == '\r') {
+                if (i >= 1 && rawText.get(i - 1) == r'\r') {
                     i--
                     /* Back up over \r, which really should be there */
                 }
                 var element_: String = rawText.substring(matchStart, i - matchStart).toString();
                 if (trim) {
-                    element_ = element_.trim()
+                    element_ = element_.trimAscii()
                 }
                 if (quotedPrintable) {
                     element_ = decodeQuotedPrintable(UTF32String(element_), quotedPrintableCharset)
 
                     if (parseFieldDivider == true) {
-                        element_ = UNESCAPED_SEMICOLONS.matcher(element_).replaceAll("\n").trim()
+                        element_ = UNESCAPED_SEMICOLONS.matcher(element_).replaceAll("\n").trimAscii()
                     }
                 } else {
                     if (parseFieldDivider) {
-                        element_ = UNESCAPED_SEMICOLONS.matcher(element_).replaceAll("\n").trim()
+                        element_ = UNESCAPED_SEMICOLONS.matcher(element_).replaceAll("\n").trimAscii()
                     }
                     element_ = CR_LF_SPACE_TAB.matcher(element_).replaceAll("")
                     element_ = NEWLINE_ESCAPE.matcher(element_).replaceAll("\n")
@@ -230,16 +234,16 @@ public open class VCardResultParser <: ResultParser {
 
     private static func decodeQuotedPrintable(value: UTF32String, charset: String): String {
         var length: Int64 = value.charSize;
-        var result: ArrayList<Char> = ArrayList<Char>();
+        var result: ArrayList<Rune> = ArrayList<Rune>();
         var fragmentBuffer: ByteArrayStream = ByteArrayStream();
         var i = 0
         while (i < length) {
-            var c: Char = value.get(i);
-            if (c == '\r' || c == '\n') {}
-            else if (c == '=') {
+            var c: Rune = value.get(i);
+            if (c == r'\r' || c == r'\n') {}
+            else if (c == r'=') {
                 if (i < length - 2) {
                     var nextChar = value.get(i + 1);
-                    if (nextChar != '\r' && nextChar != '\n') {
+                    if (nextChar != r'\r' && nextChar != r'\n') {
                         var nextNextChar = value.get(i + 2);
 
                         var firstDigit = parseHexDigit(nextChar);
@@ -264,7 +268,7 @@ public open class VCardResultParser <: ResultParser {
     private static func maybeAppendFragment(
         fragmentBuffer: ByteArrayStream,
         charset: String,
-        result: ArrayList<Char>
+        result: ArrayList<Rune>
     ) {
         if (fragmentBuffer.length > 0) {
             var fragmentBytes: Array<Byte> = fragmentBuffer.bytes()
@@ -331,7 +335,7 @@ public open class VCardResultParser <: ResultParser {
                 var typeData: UTF32String = UTF32String("");
                 for (i in 1..list.size) {
                     var metadatum: UTF32String = UTF32String(list[i])
-                    var equals = metadatum.indexOf('='.toString())
+                    var equals = metadatum.indexOf(r'='.toString())
                     if (equals == None) {
                         // take the whole thing as a usable label
                         typeData = metadatum
@@ -370,9 +374,9 @@ public open class VCardResultParser <: ResultParser {
                 var components: Array<UTF32String> = Array<UTF32String>(5, item: UTF32String())
                 var end: Int64
                 var componentIndex: Int64 = 0;
-                if (let Some(v) <- name.indexOf(';'.toString(), start: start)) {
-                    while (componentIndex < components.size - 1 && (name.indexOf(';'.toString(), start: start)) != None) {
-                        end = name.indexOf(';'.toString(), start: start).getOrThrow()
+                if (let Some(v) <- name.indexOf(r';'.toString(), start: start)) {
+                    while (componentIndex < components.size - 1 && (name.indexOf(r';'.toString(), start: start)) != None) {
+                        end = name.indexOf(r';'.toString(), start: start).getOrThrow()
                         components[componentIndex] = name.substring(start, end - start)
                         componentIndex++
                         start = end + 1
@@ -380,21 +384,21 @@ public open class VCardResultParser <: ResultParser {
                 }
 
                 components[componentIndex] = name.substring(start)
-                var newName: ArrayList<Char> = ArrayList<Char>();
+                var newName: ArrayList<Rune> = ArrayList<Rune>();
                 maybeAppendComponent(components, 3, newName);
                 maybeAppendComponent(components, 1, newName);
                 maybeAppendComponent(components, 2, newName);
                 maybeAppendComponent(components, 0, newName);
                 maybeAppendComponent(components, 4, newName);
-                list.set(0, String(newName).trim());
+                list.set(0, String(newName).trimAscii());
             }
         }
     }
 
-    private static func maybeAppendComponent(components: Array<UTF32String>, i: Int64, newName: ArrayList<Char>) {
+    private static func maybeAppendComponent(components: Array<UTF32String>, i: Int64, newName: ArrayList<Rune>) {
         if (components[i].size != 0 && !components[i].isEmpty()) {
             if (newName.size > 0) {
-                newName.append(' ');
+                newName.append(r' ');
             }
             newName.appendAll(components[i].toRuneArray());
         }

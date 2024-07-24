@@ -2,20 +2,22 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned.rss.expanded.decoders
+package QRCode4cj.oned.rss.expanded.decoders
 
-import common.*
+import QRCode4cj.common.*
+import std.collection.*
+import QRCode4cj.tools.*
 
 public class GeneralAppIdDecoder {
     private var information: BitArray = BitArray();
     private var current_: CurrentParsingState = CurrentParsingState();
-    private var buffer: ArrayList<Char> = ArrayList<Char>();
+    private var buffer: ArrayList<Rune> = ArrayList<Rune>();
 
     init(information: BitArray) {
         this.information = information
     }
 
-    func decodeAllCodes(buff: ArrayList<Char>, initialPosition: Int64): String {
+    func decodeAllCodes(buff: ArrayList<Rune>, initialPosition: Int64): String {
         var currentPosition: Int64 = initialPosition
         var remaining: String = String();
         do {
@@ -93,7 +95,7 @@ public class GeneralAppIdDecoder {
     }
 
     func decodeGeneralPurposeField(pos: Int64, remaining: String): DecodedInformation {
-        this.buffer = ArrayList<Char>()
+        this.buffer = ArrayList<Rune>()
 
         if (!remaining.isEmpty()) {
             this.buffer.appendAll(remaining.toRuneArray());
@@ -258,43 +260,43 @@ public class GeneralAppIdDecoder {
         }
 
         if (fiveBitValue >= 5 && fiveBitValue < 15) {
-            return DecodedChar(pos + 5, Char('0'.hashCode() + fiveBitValue - 5));
+            return DecodedChar(pos + 5, Rune(r'0'.hashCode() + fiveBitValue - 5));
         }
 
         var sevenBitValue: Int64 = extractNumericValueFromBitArray(pos, 7);
 
         if (sevenBitValue >= 64 && sevenBitValue < 90) {
-            return DecodedChar(pos + 7, Char(sevenBitValue + 1));
+            return DecodedChar(pos + 7, Rune(sevenBitValue + 1));
         }
 
         if (sevenBitValue >= 90 && sevenBitValue < 116) {
-            return DecodedChar(pos + 7, Char(sevenBitValue + 7));
+            return DecodedChar(pos + 7, Rune(sevenBitValue + 7));
         }
 
         var eightBitValue: Int64 = extractNumericValueFromBitArray(pos, 8);
-        var c: Char = ' ';
+        var c: Rune = r' ';
         match (eightBitValue) {
-            case 232 => c = '!'
-            case 233 => c = '"'
-            case 234 => c = '%'
-            case 235 => c = '&'
-            case 236 => c = '\''
-            case 237 => c = '('
-            case 238 => c = ')'
-            case 239 => c = '*'
-            case 240 => c = '+'
-            case 241 => c = ','
-            case 242 => c = '-'
-            case 243 => c = '.'
-            case 244 => c = '/'
-            case 245 => c = ':'
-            case 246 => c = ';'
-            case 247 => c = '<'
-            case 248 => c = '='
-            case 249 => c = '>'
-            case 250 => c = '?'
-            case 251 => c = '_'
-            case 252 => c = ' '
+            case 232 => c = r'!'
+            case 233 => c = r'"'
+            case 234 => c = r'%'
+            case 235 => c = r'&'
+            case 236 => c = r'\''
+            case 237 => c = r'('
+            case 238 => c = r')'
+            case 239 => c = r'*'
+            case 240 => c = r'+'
+            case 241 => c = r','
+            case 242 => c = r'-'
+            case 243 => c = r'.'
+            case 244 => c = r'/'
+            case 245 => c = r':'
+            case 246 => c = r';'
+            case 247 => c = r'<'
+            case 248 => c = r'='
+            case 249 => c = r'>'
+            case 250 => c = r'?'
+            case 251 => c = r'_'
+            case 252 => c = r' '
             case _ => throw Qrcoder4cjFormatException.getFormatInstance();
         }
         return DecodedChar(pos + 8, c);
@@ -327,22 +329,22 @@ public class GeneralAppIdDecoder {
         }
 
         if (fiveBitValue >= 5 && fiveBitValue < 15) {
-            return DecodedChar(pos + 5, Char('0'.hashCode() + fiveBitValue - 5));
+            return DecodedChar(pos + 5, Rune(r'0'.hashCode() + fiveBitValue - 5));
         }
 
         var sixBitValue: Int64 = extractNumericValueFromBitArray(pos, 6);
 
         if (sixBitValue >= 32 && sixBitValue < 58) {
-            return DecodedChar(pos + 6, Char(sixBitValue + 33));
+            return DecodedChar(pos + 6, Rune(sixBitValue + 33));
         }
 
-        var c: Char = ' ';
+        var c: Rune = r' ';
         match (sixBitValue) {
-            case 58 => c = '*'
-            case 59 => c = ','
-            case 60 => c = '-'
-            case 61 => c = '.'
-            case 62 => c = '/'
+            case 58 => c = r'*'
+            case 59 => c = r','
+            case 60 => c = r'-'
+            case 61 => c = r'.'
+            case 62 => c = r'/'
             case _ => throw Exception("Decoding invalid alphanumeric value: ${sixBitValue}");
         }
         return DecodedChar(pos + 6, c);

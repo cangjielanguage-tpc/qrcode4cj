@@ -2,7 +2,13 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package pdf417.decoder
+package QRCode4cj.pdf417.decoder
+
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import QRCode4cj.pdf417.common.*
+import std.math.*
 
 open class DetectionResultRowIndicatorColumn <: DetectionResultColumn {
     private let isLeft_: Bool

@@ -2,11 +2,12 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned.rss.expanded.decoders
+package QRCode4cj.oned.rss.expanded.decoders
 
-from std import collection.*
-from std import math.*
-import tools.UTF32String
+import std.collection.*
+import std.math.*
+import QRCode4cj.tools.UTF32String
+import QRCode4cj.common.*
 
 class DataLength {
     var variable: Bool = false;

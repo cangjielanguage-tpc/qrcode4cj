@@ -1,47 +1,29 @@
-/*
- * Copyright 2009 ZXing authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 // DEPENDENCE: ../decoder
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 
-from QRCode4cj import common.Qrcoder4cjFormatException
-from QRCode4cj import common.Qrcoder4cjWriterException
-from QRCode4cj import pdf417.common.PDF417ResultMetadata
-from QRCode4cj import common.DecoderResult
-from QRCode4cj import pdf417.encoder.Compaction
-from QRCode4cj import pdf417.encoder.PDF417HighLevelEncoderTestAdapter
-from QRCode4cj import common.MyCharset
-from QRCode4cj import pdf417.decoder.*
-from QRCode4cj import common.StandardCharsets
-from QRCode4cj import tools.UTF32String
-from std import unittest.* //testfame
-from std import unittest.testmacro.* //macro_Defintion
-from std import fs.*
-from std import math.*
-from std import random.*
-from std import collection.*
-from std import convert.*
+import QRCode4cj.common.Qrcoder4cjFormatException
+import QRCode4cj.common.Qrcoder4cjWriterException
+import QRCode4cj.pdf417.common.PDF417ResultMetadata
+import QRCode4cj.common.DecoderResult
+import QRCode4cj.pdf417.encoder.Compaction
+import QRCode4cj.pdf417.encoder.PDF417HighLevelEncoderTestAdapter
+import QRCode4cj.common.MyCharset
+import QRCode4cj.pdf417.decoder.*
+import QRCode4cj.common.StandardCharsets
+import QRCode4cj.tools.UTF32String
+import std.unittest.* //testfame
+import std.unittest.testmacro.* //macro_Defintion
+import std.fs.*
+import std.math.*
+import std.random.*
+import std.collection.*
+import std.convert.*
 
 main(): Int64 {
     let tester = PDF417DecoderTestCase()
-    tester.execute()
-    tester.printResult()
-    tester.getTestInfo().errorCount + tester.getTestInfo().failedCount
-    0
+    let test = tester.asTestSuite().runTests()
+    test.failedCount + test.errorCount
 }
 
 /**
@@ -328,17 +310,17 @@ public class PDF417DecoderTestCase {
 
     @TestCase
     public func testUppercase(): Unit {
-        performEncodeTest('A', [3, 4, 5, 6, 4, 4, 5, 5]);
+        performEncodeTest(r'A', [3, 4, 5, 6, 4, 4, 5, 5]);
     }
 
     @TestCase
     public func testNumeric(): Unit {
-        performEncodeTest('1', [2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 7, 7, 8, 8, 8, 9, 9, 9, 10, 10]);
+        performEncodeTest(r'1', [2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 7, 7, 8, 8, 8, 9, 9, 9, 10, 10]);
     }
 
     @TestCase
     public func testByte(): Unit {
-        performEncodeTest('\u{00c4}', [3, 4, 5, 6, 7, 7, 8]);
+        performEncodeTest(r'\u{00c4}', [3, 4, 5, 6, 7, 7, 8]);
     }
 
     @TestCase
@@ -357,62 +339,62 @@ public class PDF417DecoderTestCase {
 
     @TestCase
     public func testPunctuation(): Unit {
-        performEncodeTest(';', [3, 4, 5, 6, 6, 7, 8]);
+        performEncodeTest(r';', [3, 4, 5, 6, 6, 7, 8]);
         encodeDecode(";;;;;;;;;;;;;;;;", 17);
     }
 
     @TestCase
     public func testUppercaseLowercaseMix2(): Unit {
-        performPermutationTest(['A', 'a'], 10, 8972);
+        performPermutationTest([r'A', r'a'], 10, 8972);
     }
 
     @TestCase
     public func testUppercaseNumericMix(): Unit {
-        performPermutationTest(['A', '1'], 14, 192510);
+        performPermutationTest([r'A', r'1'], 14, 192510);
     }
 
     @TestCase
     public func testUppercaseMixedMix(): Unit {
-        performPermutationTest(['A', '1', ' ', ';'], 7, 106060);
+        performPermutationTest([r'A', r'1', r' ', r';'], 7, 106060);
     }
 
     @TestCase
     public func testUppercasePunctuationMix(): Unit {
-        performPermutationTest(['A', ';'], 10, 8967);
+        performPermutationTest([r'A', r';'], 10, 8967);
     }
 
     @TestCase
     public func testUppercaseByteMix(): Unit {
-        performPermutationTest(['A', '\u{00c4}'], 10, 11222);
+        performPermutationTest([r'A', r'\u{00c4}'], 10, 11222);
     }
 
     @TestCase
     public func testLowercaseByteMix(): Unit {
-        performPermutationTest(['a', '\u{00c4}'], 10, 11233);
+        performPermutationTest([r'a', r'\u{00c4}'], 10, 11233);
     }
 
     public func testUppercaseLowercaseNumericMix(): Unit {
-        performPermutationTest(['A', 'a', '1'], 7, 15491);
+        performPermutationTest([r'A', r'a', r'1'], 7, 15491);
     }
 
     @TestCase
     public func testUppercaseLowercasePunctuationMix(): Unit {
-        performPermutationTest(['A', 'a', ';'], 7, 15491);
+        performPermutationTest([r'A', r'a', r';'], 7, 15491);
     }
 
     @TestCase
     public func testUppercaseLowercaseByteMix(): Unit {
-        performPermutationTest(['A', 'a', '\u{00c4}'], 7, 17288);
+        performPermutationTest([r'A', r'a', r'\u{00c4}'], 7, 17288);
     }
 
     @TestCase
     public func testLowercasePunctuationByteMix(): Unit {
-        performPermutationTest(['a', ';', '\u{00c4}'], 7, 17427);
+        performPermutationTest([r'a', r';', r'\u{00c4}'], 7, 17427);
     }
 
     @TestCase
     public func testUppercaseLowercaseNumericPunctuationMix(): Unit {
-        performPermutationTest(['A', 'a', '1', ';'], 7, 120479);
+        performPermutationTest([r'A', r'a', r'1', r';'], 7, 120479);
     }
 
     @TestCase
@@ -934,7 +916,7 @@ public class PDF417DecoderTestCase {
 
         //multi ECI UTF-8, UTF-16 and ISO-8859-1
         performECITest(
-            ['a', '1', '\u{3040}'],
+            [r'a', r'1', r'\u{3040}'],
             [20.0, 1.0, 10.0],
             1055,
             1101
@@ -947,7 +929,7 @@ public class PDF417DecoderTestCase {
 
         //multi ECI UTF-8, UTF-16 and ISO-8859-1
         performECITest(
-            ['a', '1', '\u{30a0}'],
+            [r'a', r'1', r'\u{30a0}'],
             [20.0, 1.0, 10.0],
             1079,
             1101
@@ -960,7 +942,7 @@ public class PDF417DecoderTestCase {
 
         //single ECI
         performECITest(
-            ['a', '1', '\u{ff80}'],
+            [r'a', r'1', r'\u{ff80}'],
             [20.0, 1.0, 10.0],
             793,
             1101
@@ -973,7 +955,7 @@ public class PDF417DecoderTestCase {
 
         //single ECI
         performECITest(
-            ['a', '1', '\u{4e00}'],
+            [r'a', r'1', r'\u{4e00}'],
             [20.0, 1.0, 10.0],
             947,
             1101
@@ -986,7 +968,7 @@ public class PDF417DecoderTestCase {
 
         //single ECI since the German Umlaut is in ISO-8859-1
         performECITest(
-            ['a', '1', '\u{00c4}', '\u{042f}'],
+            [r'a', r'1', r'\u{00c4}', r'\u{042f}'],
             [20.0, 1.0, 1.0, 10.0],
             802,
             989
@@ -999,7 +981,7 @@ public class PDF417DecoderTestCase {
 
         //multi ECI between ISO-8859-2 and ISO-8859-5
         performECITest(
-            ['a', '1', '\u{010c}', '\u{042f}'],
+            [r'a', r'1', r'\u{010c}', r'\u{042f}'],
             [10.0, 1.0, 10.0, 10.0],
             1040,
             1219
@@ -1012,7 +994,7 @@ public class PDF417DecoderTestCase {
 
         //multi ECI between ISO-8859-2 and ISO-8859-5
         performECITest(
-            ['a', '1', '\u{010c}', '\u{042f}'],
+            [r'a', r'1', r'\u{010c}', r'\u{042f}'],
             [40.0, 1.0, 10.0, 10.0],
             810,
             885
@@ -1025,7 +1007,7 @@ public class PDF417DecoderTestCase {
 
         //multi ECI between UTF-8 (ISO-8859-6 is excluded in CharacterSetECI) and ISO-8859-5
         performECITest(
-            ['a', '1', '\u{0620}', '\u{042f}'],
+            [r'a', r'1', r'\u{0620}', r'\u{042f}'],
             [10.0, 1.0, 10.0, 10.0],
             1182,
             1219
@@ -1049,43 +1031,43 @@ public class PDF417DecoderTestCase {
         );
     }
 
-    static var digits: Array<Char> = [
-        '0',
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '7',
-        '8',
-        '9',
-        'a',
-        'b',
-        'c',
-        'd',
-        'e',
-        'f',
-        'g',
-        'h',
-        'i',
-        'j',
-        'k',
-        'l',
-        'm',
-        'n',
-        'o',
-        'p',
-        'q',
-        'r',
-        's',
-        't',
-        'u',
-        'v',
-        'w',
-        'x',
-        'y',
-        'z'
+    static var digits: Array<Rune> = [
+        r'0',
+        r'1',
+        r'2',
+        r'3',
+        r'4',
+        r'5',
+        r'6',
+        r'7',
+        r'8',
+        r'9',
+        r'a',
+        r'b',
+        r'c',
+        r'd',
+        r'e',
+        r'f',
+        r'g',
+        r'h',
+        r'i',
+        r'j',
+        r'k',
+        r'l',
+        r'm',
+        r'n',
+        r'o',
+        r'p',
+        r'q',
+        r'r',
+        r's',
+        r't',
+        r'u',
+        r'v',
+        r'w',
+        r'x',
+        r'y',
+        r'z'
     ]
 
     public static func toString(i_: Int64, radix_: Int64): String {
@@ -1100,7 +1082,7 @@ public class PDF417DecoderTestCase {
             return i.toString();
         }
 
-        var buf: Array<Char> = Array<Char>(33, item: ' ');
+        var buf: Array<Rune> = Array<Rune>(33, item: r' ');
         var negative: Bool = (i < 0)
         var charPos: Int64 = 32;
 
@@ -1116,7 +1098,7 @@ public class PDF417DecoderTestCase {
         buf[charPos] = digits[-i]
 
         if (negative) {
-            buf[charPos] = '-'
+            buf[charPos] = r'-'
             charPos--
         }
 
@@ -1145,12 +1127,12 @@ public class PDF417DecoderTestCase {
         return s.charSize + 1
     }
 
-    private static func getEndIndex(length: Int64, chars: Array<Char>): Int64 {
+    private static func getEndIndex(length: Int64, chars: Array<Rune>): Int64 {
         var decimalLength: Float64 = log10(Float64(chars.size));
         return Int64(ceil(pow(Float64(10), decimalLength * Float64(length))))
     }
 
-    private static func generatePermutation(index: Int64, length: Int64, chars: Array<Char>): String {
+    private static func generatePermutation(index: Int64, length: Int64, chars: Array<Rune>): String {
         var N: Int64 = chars.size;
         var baseNNumber: UTF32String = UTF32String(toString(index, N));
         while (baseNNumber.charSize < length) {
@@ -1158,12 +1140,12 @@ public class PDF417DecoderTestCase {
         }
         var prefix: String = "";
         for (i in 0..baseNNumber.charSize) {
-            prefix += String(chars[baseNNumber.get(i).hashCode() - '0'.hashCode()])
+            prefix += String(chars[baseNNumber.get(i).hashCode() - r'0'.hashCode()])
         }
         return prefix
     }
 
-    private static func performPermutationTest(chars: Array<Char>, length: Int64, expectedTotal: Int64) {
+    private static func performPermutationTest(chars: Array<Rune>, length: Int64, expectedTotal: Int64) {
         var endIndex: Int64 = getEndIndex(length, chars);
         var total: Int64 = 0;
         for (i in 0..endIndex) {
@@ -1172,9 +1154,9 @@ public class PDF417DecoderTestCase {
         @Assert(expectedTotal, total)
     }
 
-    private static func performEncodeTest(c: Char, expectedLengths: Array<Int64>) {
+    private static func performEncodeTest(c: Rune, expectedLengths: Array<Int64>) {
         for (i in 0..expectedLengths.size) {
-            var sb: ArrayList<Char> = ArrayList<Char>();
+            var sb: ArrayList<Rune> = ArrayList<Rune>();
 
             for (j in 0..=i) {
                 sb.append(c);
@@ -1189,7 +1171,7 @@ public class PDF417DecoderTestCase {
     }
 
     private static func performECITest(
-        chars: Array<Char>,
+        chars: Array<Rune>,
         weights: Array<Float32>,
         expectedMinLength: Int64,
         expectedUTFLength: Int64
@@ -1207,8 +1189,8 @@ public class PDF417DecoderTestCase {
         @Assert(expectedUTFLength, utfLength)
     }
 
-    private static func generateText(random: Random, maxWidth: Int64, chars: Array<Char>, weights: Array<Float32>): String {
-        var result: ArrayList<Char> = ArrayList<Char>();
+    private static func generateText(random: Random, maxWidth: Int64, chars: Array<Rune>, weights: Array<Float32>): String {
+        var result: ArrayList<Rune> = ArrayList<Rune>();
         let maxWordWidth: Int64 = 7;
         var total: Float32 = 0.0;
 
@@ -1233,21 +1215,21 @@ public class PDF417DecoderTestCase {
             }
             let wordLength: Float32 = Float32(maxWordWidth) * nextFloat()
             if (wordLength > 0.0 && result.size > 0) {
-                result.append(' ');
+                result.append(r' ');
             }
 
             var j = 0;
             while (Float32(j) < wordLength) {
-                var c: Char = chars[maxIndex]
-                if (j == 0 && c.hashCode() >= 'a'.hashCode() && c.hashCode() <= 'z'.hashCode() && nextBool()) {
-                    c = Char(c.hashCode() - 'a'.hashCode() + 'A'.hashCode())
+                var c: Rune = chars[maxIndex]
+                if (j == 0 && c.hashCode() >= r'a'.hashCode() && c.hashCode() <= r'z'.hashCode() && nextBool()) {
+                    c = Rune(c.hashCode() - r'a'.hashCode() + r'A'.hashCode())
                 }
                 result.append(c);
                 j++
             }
 
             if (cnt % 2 != 0 && nextBool()) {
-                result.append('.');
+                result.append(r'.');
             }
             cnt++
         } while (result.size < maxWidth - maxWordWidth)
@@ -1297,27 +1279,27 @@ public class PDF417DecoderTestCase {
         file.close();
         file_bool.close();
 
-        var item = ArrayList<Char>();
+        var item = ArrayList<Rune>();
         var str = String();
         for (i in 0..size) {
-            if (Char(UInt8(info[i])) == ' ' || Char(UInt8(info[i])) == '\n' || Char(UInt8(info[i])) == '\r') {
+            if (Rune(UInt8(info[i])) == r' ' || Rune(UInt8(info[i])) == r'\n' || Rune(UInt8(info[i])) == r'\r') {
                 str = String(item)
                 floatList.append(Float32.parse(str));
                 item.clear();
             } else {
-                item.append(Char(UInt8(info[i])));
+                item.append(Rune(UInt8(info[i])));
             }
         }
         item.clear();
         for (i in 0..size_bool) {
-            if (Char(UInt8(info_bool[i])) == ' ' || Char(UInt8(info_bool[i])) == '\n' || Char(UInt8(info_bool[i])) ==
-                '\r') {
+            if (Rune(UInt8(info_bool[i])) == r' ' || Rune(UInt8(info_bool[i])) == r'\n' || Rune(UInt8(info_bool[i])) ==
+                r'\r') {
                 str = String(item)
                 boolList.append(Bool.parse(str));
 
                 item.clear();
             } else {
-                item.append(Char(UInt8(info_bool[i])));
+                item.append(Rune(UInt8(info_bool[i])));
             }
         }
     }

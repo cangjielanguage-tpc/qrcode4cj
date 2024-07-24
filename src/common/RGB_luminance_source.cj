@@ -2,7 +2,9 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package common
+package QRCode4cj.common
+
+import QRCode4cj.tools.*
 
 public open class RGBLuminanceSource <: LuminanceSource {
     private var luminances: Array<UInt8>

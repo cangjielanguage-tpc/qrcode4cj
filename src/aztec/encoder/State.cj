@@ -2,7 +2,11 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package aztec.encoder
+package QRCode4cj.aztec.encoder
+
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
 
 /**
  * State represents all information about a sequence necessary to generate the current output.
@@ -63,7 +67,7 @@ public class State {
             var eciDigits: Array<UInt8> = StandardCharsets.ISO_8859_1.newEncoder().getBytes(UTF32String(eci.toString()))
             token = token.add(eciDigits.size, 3) // 1-6: number of ECI digits
             for (i in 0..eciDigits.size) {
-                token = token.add(Int64(eciDigits[i] - UInt8(UInt32('0'))) + 2, 4)
+                token = token.add(Int64(eciDigits[i] - UInt8(UInt32(r'0'))) + 2, 4)
             }
             bitsAdded += eciDigits.size * 4
         }

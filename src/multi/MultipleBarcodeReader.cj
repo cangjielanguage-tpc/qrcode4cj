@@ -2,9 +2,10 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package multi
+package QRCode4cj.multi
 
-from std import collection.*
+import std.collection.*
+import QRCode4cj.common.*
 
 /**
  * Implementation of this interface attempt to read several barcodes from one image.

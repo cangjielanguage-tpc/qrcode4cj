@@ -3,6 +3,16 @@
 // dependence: ../image.cj
 // dependence: ../LogicEnAndDe.cj
 
+import QRCode4cj.aztec.decoder.*
+import QRCode4cj.aztec.detector.*
+import QRCode4cj.aztec.common.*
+import QRCode4cj.multi.*
+import QRCode4cj.common.*
+import QRCode4cj.common.reader.*
+import QRCode4cj.common.writer.*
+import QRCode4cj.oned.*
+import std.collection.*
+
 @Test
 public class TestQRCode4cjUPCAEncode01{
     var cur_en_hints=Option<HashMap<EncodeHintType, Any>>.None

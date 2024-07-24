@@ -2,7 +2,7 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package datamatrix.encoder
+package QRCode4cj.datamatrix.encoder
 
 class DataMatrixSymbolInfo144 <: SymbolInfo {
     init() {

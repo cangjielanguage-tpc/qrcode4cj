@@ -1,9 +1,9 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package qrcode.decoder
+package QRCode4cj.qrcode.decoder
 
-from std import math.*
+import std.math.*
 
 /**
  * Encapsulates a QR Code's format information, including the data mask used and

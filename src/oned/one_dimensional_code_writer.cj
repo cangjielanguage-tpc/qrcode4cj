@@ -3,9 +3,14 @@
  */
 
 
-package oned
+package QRCode4cj.oned
 
-from std import regex.*
+import std.regex.*
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.math.*
+import std.convert.*
 
 /**
  * Encapsulates functionality and implementation that is common to one-dimensional barcodes.

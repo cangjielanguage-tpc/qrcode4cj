@@ -2,9 +2,12 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package client.result
+package QRCode4cj.client.result
 
-from std import core.*
+import std.core.*
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
 
 /**
  * Parses strings of digits that represent a RSS Extended code.
@@ -81,22 +84,22 @@ public open class ExpandedProductResultParser <: ResultParser {
     }
 
     private static func findAIvalue(i: Int64, rawText: UTF32String): UTF32String {
-        var c: Char = rawText.get(i);
+        var c: Rune = rawText.get(i);
 
         // First character must be a open parenthesis.If not, ERROR
-        if (c != '(') {
+        if (c != r'(') {
             return UTF32String("");
         }
 
         var rawTextAux: UTF32String = rawText.substring(i + 1);
 
-        var buf: ArrayList<Char> = ArrayList<Char>();
+        var buf: ArrayList<Rune> = ArrayList<Rune>();
         for (index in 0..rawTextAux.charSize) {
-            var currentChar: Char = rawTextAux.get(index);
-            if (currentChar == ')') {
+            var currentChar: Rune = rawTextAux.get(index);
+            if (currentChar == r')') {
                 return UTF32String(buf);
             }
-            if (currentChar < '0' || currentChar > '9') {
+            if (currentChar < r'0' || currentChar > r'9') {
                 return UTF32String("");
             }
             buf.append(currentChar);
@@ -105,18 +108,18 @@ public open class ExpandedProductResultParser <: ResultParser {
     }
 
     private static func findValue(i: Int64, rawText: UTF32String): UTF32String {
-        var buf: ArrayList<Char> = ArrayList<Char>();
+        var buf: ArrayList<Rune> = ArrayList<Rune>();
         var rawTextAux: UTF32String = rawText.substring(i);
 
         for (index in 0..rawTextAux.charSize) {
-            var c: Char = rawTextAux.get(index);
-            if (c == '(') {
+            var c: Rune = rawTextAux.get(index);
+            if (c == r'(') {
                 // We look for a new AI. If it doesn't exist (ERROR), we continue
                 // with the iteration
                 if (findAIvalue(index, rawTextAux) != UTF32String("")) {
                     break
                 }
-                buf.append('(');
+                buf.append(r'(');
             } else {
                 buf.append(c);
             }

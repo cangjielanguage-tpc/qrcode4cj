@@ -2,11 +2,13 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned.rss
+package QRCode4cj.oned.rss
 
-from std import collection.*
-from std import convert.*
-import tools.UTF32String
+import std.convert.*
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.math.*
 
 /**
  * Decodes RSS-14, including truncated and stacked variants. See ISO/IEC 24724:2006.
@@ -94,10 +96,10 @@ public class RSS14Reader <: AbstractRSSReader {
         var symbolValue: Int64 = 4537077i64 * leftPair.getValue() + rightPair.getValue()
         var text: UTF32String = UTF32String(symbolValue.toString());
 
-        var buffer: ArrayList<Char> = ArrayList<Char>();
+        var buffer: ArrayList<Rune> = ArrayList<Rune>();
         var i: Int64 = 13 - text.charSize
         while (i > 0) {
-            buffer.append('0');
+            buffer.append(r'0');
             i--
         }
         buffer.appendAll(text.toRuneArray());

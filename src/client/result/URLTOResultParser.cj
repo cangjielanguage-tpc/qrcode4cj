@@ -1,7 +1,11 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package client.result
+package QRCode4cj.client.result
+
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
 
 /**
  * Parses the "URLTO" result format, which is of the form "URLTO:[title]:[url]".
@@ -14,7 +18,7 @@ public open class URLTOResultParser <: ResultParser {
         if (!rawText.startsWith(UTF32String("urlto:")) && !rawText.startsWith(UTF32String("URLTO:"))) {
             return None
         }
-        var titleEnd: Int64 = rawText.indexOf(':'.toString(), start: 6).getOrThrow();
+        var titleEnd: Int64 = rawText.indexOf(r':'.toString(), start: 6).getOrThrow();
         if (titleEnd < 0) {
             return None
         }

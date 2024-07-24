@@ -2,18 +2,24 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned
+package QRCode4cj.oned
 
-import tools.UTF32String
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.math.*
+import std.convert.*
+
+import QRCode4cj.tools.UTF32String
 
 /**
  * This class renders CodaBar as Array<Bool>.
  */
 public open class CodaBarWriter <: OneDimensionalCodeWriter {
-    private static let START_END_CHARS: Array<Char> = ['A', 'B', 'C', 'D']
-    private static let ALT_START_END_CHARS: Array<Char> = ['T', 'N', '*', 'E']
-    private static let CHARS_WHICH_ARE_TEN_LENGTH_EACH_AFTER_DECODED: Array<Char> = ['/', ':', '+', '.']
-    private static let DEFAULT_GUARD: Char = START_END_CHARS[0]
+    private static let START_END_CHARS: Array<Rune> = [r'A', r'B', r'C', r'D']
+    private static let ALT_START_END_CHARS: Array<Rune> = [r'T', r'N', r'*', r'E']
+    private static let CHARS_WHICH_ARE_TEN_LENGTH_EACH_AFTER_DECODED: Array<Rune> = [r'/', r':', r'+', r'.']
+    private static let DEFAULT_GUARD: Rune = START_END_CHARS[0]
 
     protected override func getSupportedWriteFormats(): ArrayList<BarcodeFormat> {
         var returnData: ArrayList<BarcodeFormat> = ArrayList<BarcodeFormat>()
@@ -28,12 +34,12 @@ public open class CodaBarWriter <: OneDimensionalCodeWriter {
         // The start character and the end character are decoded to 10 length each.
         var resultLength: Int64 = 20;
         for (i in 1..contents.charSize - 1) {
-            if (contents.get(i).isAsciiNumber() || contents.get(i) == '-' || contents.get(i) == '$') {
+            if (contents.get(i).isAsciiNumber() || contents.get(i) == r'-' || contents.get(i) == r'$') {
                 resultLength += 9
             } else if (CodaBarReader.arrayContains(CHARS_WHICH_ARE_TEN_LENGTH_EACH_AFTER_DECODED, contents.get(i))) {
                 resultLength += 10
             } else {
-                throw IllegalArgumentException("Cannot encode : '" + contents.get(i).toString() + '\''.toString())
+                throw IllegalArgumentException("Cannot encode : '" + contents.get(i).toString() + r'\''.toString())
             }
         }
 
@@ -43,7 +49,7 @@ public open class CodaBarWriter <: OneDimensionalCodeWriter {
         var result: Array<Bool> = Array<Bool>(resultLength, item: false)
         var position: Int64 = 0;
         for (index in 0..contents.charSize) {
-            var c: Char = contents.get(index).toAsciiUpperCase();
+            var c: Rune = contents.get(index).toAsciiUpperCase();
             if (index == 0 || index == contents.charSize - 1) {
                 // The start/end chars are not in the CodaBarReader.ALPHABET_STRING.
                 c = exencode2(c, contents, index)
@@ -82,12 +88,12 @@ public open class CodaBarWriter <: OneDimensionalCodeWriter {
         return result
     }
 
-    private func exencode2(c: Char, contents: UTF32String, index: Int64): Char {
+    private func exencode2(c: Rune, contents: UTF32String, index: Int64): Rune {
         match (c) {
-            case 'T' => return 'A'
-            case 'N' => return 'B'
-            case '*' => return 'C'
-            case 'E' => return 'D'
+            case r'T' => return r'A'
+            case r'N' => return r'B'
+            case r'*' => return r'C'
+            case r'E' => return r'D'
             case _ => return contents.get(index).toAsciiUpperCase()
         }
     }
@@ -99,8 +105,8 @@ public open class CodaBarWriter <: OneDimensionalCodeWriter {
             contents_p = UTF32String(DEFAULT_GUARD.toString() + contentsin + DEFAULT_GUARD.toString())
         } else {
             // Verify input and calculate decoded length.
-            var firstChar: Char = contents_p.get(0).toAsciiUpperCase();
-            var lastChar: Char = contents_p.get(contents_p.charSize - 1).toAsciiUpperCase();
+            var firstChar: Rune = contents_p.get(0).toAsciiUpperCase();
+            var lastChar: Rune = contents_p.get(contents_p.charSize - 1).toAsciiUpperCase();
             var startsNormal: Bool = CodaBarReader.arrayContains(START_END_CHARS, firstChar);
             var endsNormal: Bool = CodaBarReader.arrayContains(START_END_CHARS, lastChar);
             var startsAlt: Bool = CodaBarReader.arrayContains(ALT_START_END_CHARS, firstChar);

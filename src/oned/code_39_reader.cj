@@ -2,7 +2,14 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned
+package QRCode4cj.oned
+
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.math.*
+import std.convert.*
+import QRCode4cj.oned.rss.*
 
 /**
  * <Decodes Code 39 barcodes. Supports "Full ASCII Code 39" if USE_CODE_39_EXTENDED_MODE is set.
@@ -67,7 +74,7 @@ public open class Code39Reader <: OneDReader {
 
     private var usingCheckDigit: Bool = false
     private var extendedMode: Bool = false
-    private var decodeRowResult: ArrayList<Char> = ArrayList<Char>()
+    private var decodeRowResult: ArrayList<Rune> = ArrayList<Rune>()
     private var counters: Array<Int64> = Array<Int64>()
 
     /**
@@ -102,15 +109,15 @@ public open class Code39Reader <: OneDReader {
     public init(usingCheckDigit: Bool, extendedMode: Bool) {
         this.usingCheckDigit = usingCheckDigit
         this.extendedMode = extendedMode
-        decodeRowResult = ArrayList<Char>()
+        decodeRowResult = ArrayList<Rune>()
         counters = Array<Int64>(9, item: 0)
     }
 
     public override func decodeRow(rowNumber: Int64, row: BitArray, _: HashMap<DecodeHintType, Any>): Result {
         counters = Array<Int64>(9, item: 0)
-        decodeRowResult = ArrayList<Char>()
+        decodeRowResult = ArrayList<Rune>()
         var theCounters: Array<Int64> = counters
-        var result: ArrayList<Char> = decodeRowResult
+        var result: ArrayList<Rune> = decodeRowResult
 
         var start: Array<Int64> = findAsteriskPattern(row, theCounters)
 
@@ -118,11 +125,11 @@ public open class Code39Reader <: OneDReader {
         var nextStart: Int64 = row.getNextSet(start[1])
         var end: Int64 = row.getSize()
 
-        var decodedChar: Char
+        var decodedChar: Rune
         var lastStart: Int64
         do {
             (decodedChar, lastStart, nextStart) = exdecodeRow(row, nextStart, theCounters, result)
-        } while (decodedChar != '*')
+        } while (decodedChar != r'*')
 
         result = result[Range<Int64>(0, result.size - 1, 1, true, true, false)]
 
@@ -149,7 +156,7 @@ public open class Code39Reader <: OneDReader {
             for (i in 0..max) {
                 total += ALPHABET_STRING.indexOf(UInt8(decodeRowResult.get(i).getOrThrow().hashCode())).getOrThrow()
             }
-            if (result.get(max).getOrThrow() != Char(ALPHABET_STRING[total % 43])) {
+            if (result.get(max).getOrThrow() != Rune(ALPHABET_STRING[total % 43])) {
                 throw Qrcoder4cjChecksumException.getChecksumInstance()
             }
         }
@@ -177,7 +184,7 @@ public open class Code39Reader <: OneDReader {
         return resultObject
     }
 
-    private func exdecodeRow(row: BitArray, nextStart: Int64, theCounters: Array<Int64>, result: ArrayList<Char>) {
+    private func exdecodeRow(row: BitArray, nextStart: Int64, theCounters: Array<Int64>, result: ArrayList<Rune>) {
         var nextStart_p = nextStart
         recordPattern(row, nextStart_p, theCounters)
         var pattern: Int64 = toNarrowWidePattern(theCounters)
@@ -282,50 +289,50 @@ public open class Code39Reader <: OneDReader {
         return -1
     }
 
-    private static func patternToChar(pattern: Int64): Char {
+    private static func patternToChar(pattern: Int64): Rune {
         for (i in 0..CHARACTER_ENCODINGS.size) {
             if (CHARACTER_ENCODINGS[i] == pattern) {
-                return Char(ALPHABET_STRING[i])
+                return Rune(ALPHABET_STRING[i])
             }
         }
         if (pattern == ASTERISK_ENCODING) {
-            return '*'
+            return r'*'
         }
         throw Qrcoder4cjNotFoundException.getNotFoundInstance()
     }
 
     private static func decodeExtended(encoded: UTF32String): String {
         var length: Int64 = encoded.size
-        var decoded: ArrayList<Char> = ArrayList<Char>()
+        var decoded: ArrayList<Rune> = ArrayList<Rune>()
 
         var i: Int64 = 0
         while (i < length) {
-            var c: Char = encoded.get(i)
-            if (c == '+' || c == '$' || c == '%' || c == '/') {
-                var next: Char = encoded.get(i + 1)
-                var decodedChar: Char = '\0'
+            var c: Rune = encoded.get(i)
+            if (c == r'+' || c == r'$' || c == r'%' || c == r'/') {
+                var next: Rune = encoded.get(i + 1)
+                var decodedChar: Rune = r'\0'
                 match (c) {
-                    case '+' =>
+                    case r'+' =>
                         /* +A to +Z map to a to z */
-                        if (next >= 'A' && next <= 'Z') {
-                        decodedChar = Char(next.hashCode() + 32)
+                        if (next >= r'A' && next <= r'Z') {
+                        decodedChar = Rune(next.hashCode() + 32)
                     } else {
                         throw Qrcoder4cjFormatException.getFormatInstance()
                     }
-                    case '$' =>
+                    case r'$' =>
                         /* $A to $Z map to control codes SH to SB */
-                        if (next >= 'A' && next <= 'Z') {
-                        decodedChar = Char(next.hashCode() - 64)
+                        if (next >= r'A' && next <= r'Z') {
+                        decodedChar = Rune(next.hashCode() - 64)
                     } else {
                         throw Qrcoder4cjFormatException.getFormatInstance()
                     }
-                    case '%' => decodedChar = getDecodedChar(next)
-                    case '/' =>
+                    case r'%' => decodedChar = getDecodedChar(next)
+                    case r'/' =>
                         /* /A to /O map to ! to , and /Z maps to : */
-                        if (next >= 'A' && next <= 'O') {
-                        decodedChar = Char(next.hashCode() - 32)
-                    } else if (next == 'Z') {
-                        decodedChar = ':'
+                        if (next >= r'A' && next <= r'O') {
+                        decodedChar = Rune(next.hashCode() - 32)
+                    } else if (next == r'Z') {
+                        decodedChar = r':'
                     } else {
                         throw Qrcoder4cjFormatException.getFormatInstance()
                     }
@@ -343,24 +350,24 @@ public open class Code39Reader <: OneDReader {
         return String(decoded)
     }
 
-    private static func getDecodedChar(next: Char) {
-        var decodedChar = ' '
-        if (next >= 'A' && next <= 'E') {
-            decodedChar = Char(next.hashCode() - 38)
-        } else if (next >= 'F' && next <= 'J') {
-            decodedChar = Char(next.hashCode() - 11)
-        } else if (next >= 'K' && next <= 'O') {
-            decodedChar = Char(next.hashCode() + 16)
-        } else if (next >= 'P' && next <= 'T') {
-            decodedChar = Char(next.hashCode() + 43)
-        } else if (next == 'U') {
-            decodedChar = Char(0)
-        } else if (next == 'V') {
-            decodedChar = '@'
-        } else if (next == 'W') {
-            decodedChar = '`'
-        } else if (next == 'X' || next == 'Y' || next == 'Z') {
-            decodedChar = Char(127)
+    private static func getDecodedChar(next: Rune) {
+        var decodedChar = r' '
+        if (next >= r'A' && next <= r'E') {
+            decodedChar = Rune(next.hashCode() - 38)
+        } else if (next >= r'F' && next <= r'J') {
+            decodedChar = Rune(next.hashCode() - 11)
+        } else if (next >= r'K' && next <= r'O') {
+            decodedChar = Rune(next.hashCode() + 16)
+        } else if (next >= r'P' && next <= r'T') {
+            decodedChar = Rune(next.hashCode() + 43)
+        } else if (next == r'U') {
+            decodedChar = Rune(0)
+        } else if (next == r'V') {
+            decodedChar = r'@'
+        } else if (next == r'W') {
+            decodedChar = r'`'
+        } else if (next == r'X' || next == r'Y' || next == r'Z') {
+            decodedChar = Rune(127)
         } else {
             throw Qrcoder4cjFormatException.getFormatInstance()
         }

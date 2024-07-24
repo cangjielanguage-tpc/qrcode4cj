@@ -1,19 +1,3 @@
-/*
- * Copyright 2008 ZXing authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 // DEPENDENCE: ../common/abstract_negative_black_box_test_case.cj
 // DEPENDENCE: ../common/abstract_back_box_test_case.cj
 // DEPENDENCE: ../common/test_result.cj
@@ -23,25 +7,19 @@
 // EXEC: ./main
 
 
-from std import unittest.*
-from std import unittest.testmacro.*
-from QRCode4cj import tools.UTF32String
-from std import collection.*
-from QRCode4cj import multi.qrcode.QRCodeMultiReader
-from QRCode4cj import multi.*
+import std.unittest.*
+import std.unittest.testmacro.*
+import QRCode4cj.tools.UTF32String
+import std.collection.*
+import QRCode4cj.multi.qrcode.QRCodeMultiReader
+import QRCode4cj.multi.*
 
 main(): Int64 {
     let tester = FalsePositives2BlackBoxTestCase()
-    tester.execute()
-    tester.printResult()
-    tester.getTestInfo().errorCount + tester.getTestInfo().failedCount
-    0
+    let test = tester.asTestSuite().runTests()
+    test.failedCount + test.errorCount
 }
-/**
- * Additional random images with high contrast patterns which should not find any barcodes.
- *
- * @author dswitkin@google.com (Daniel Switkin)
- */
+
 @Test
 public class FalsePositives2BlackBoxTestCase {
     @TestCase

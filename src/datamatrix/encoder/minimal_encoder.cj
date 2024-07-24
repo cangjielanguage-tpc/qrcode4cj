@@ -2,12 +2,14 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package datamatrix.encoder
+package QRCode4cj.datamatrix.encoder
 
-import common.MinimalECIInput
-import common.MyCharset
-from std import unittest.* //testfame
-from std import unittest.testmacro.* //macro_Defintion
+import std.unittest.* //testfame
+import std.unittest.testmacro.* //macro_Defintion
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.math.*
 
 public enum Mode <: Equatable<Mode> {
     | ASCII
@@ -405,7 +407,7 @@ public class Edge {
         bytes[offset + 1] = UInt8(val16 % 256)
     }
 
-    private static func getX12Value(c: Char): Int64 {
+    private static func getX12Value(c: Rune): Int64 {
         if (c.hashCode() == 13) {
             return 0;
         } else if (c.hashCode() == 42) {
@@ -439,7 +441,7 @@ public class Edge {
         return result
     }
 
-    static func getShiftValue(c: Char, c40: Bool, fnc1: Int64): Int64 {
+    static func getShiftValue(c: Rune, c40: Bool, fnc1: Int64): Int64 {
         return if (c40 && MinimalEncoder.isInC40Shift1Set(c) || !c40 && MinimalEncoder.isInTextShift1Set(c)) {
             0
         } else {
@@ -451,7 +453,7 @@ public class Edge {
         }
     }
 
-    private static func getC40Value(c40: Bool, setIndex: Int64, c: Char, fnc1: Int64): Int64 {
+    private static func getC40Value(c40: Bool, setIndex: Int64, c: Rune, fnc1: Int64): Int64 {
         if (c.hashCode() == fnc1) {
             @Assert(setIndex ==  2)
             return 27;
@@ -481,7 +483,7 @@ public class Edge {
         }
     }
 
-    private static func returnhashCode(c: Char, setIndex: Int64): Int64 {
+    private static func returnhashCode(c: Rune, setIndex: Int64): Int64 {
         if (c.hashCode() == 0) {
             return 0;
         }
@@ -512,7 +514,7 @@ public class Edge {
         return exreturnhashCode(c)
     }
 
-    private static func exreturnhashCode(c: Char): Int64 {
+    private static func exreturnhashCode(c: Rune): Int64 {
         if (c.hashCode() == 96) {
             return 0;
         }
@@ -529,7 +531,7 @@ public class Edge {
         var c40Values: ArrayList<UInt8> = ArrayList<UInt8>();
 
         for (i in 0..characterLength) {
-            var ci: Char = input.charAt(fromPosition + i);
+            var ci: Rune = input.charAt(fromPosition + i);
             if (c40 && HighLevelEncoder.isNativeC40(ci) || !c40 && HighLevelEncoder.isNativeText(ci)) {
                 c40Values.append(UInt8(getC40Value(c40, 0, ci, fnc1)));
             } else if (!MinimalEncoder.isExtendedASCII(ci, fnc1)) {
@@ -539,7 +541,7 @@ public class Edge {
                 //Shift[123]
                 c40Values.append(UInt8(getC40Value(c40, shiftValue, ci, fnc1)));
             } else {
-                var asciiValue: Char = Char(ci.hashCode() & 0xff - 128)
+                var asciiValue: Rune = Rune(ci.hashCode() & 0xff - 128)
                 if (c40 && HighLevelEncoder.isNativeC40(asciiValue) || !c40 && HighLevelEncoder.isNativeText(asciiValue)) {
                     c40Values.append(UInt8(1));
 
@@ -652,8 +654,8 @@ public class Edge {
                 return getBytes(235, input.charAt(fromPosition).hashCode() - 127);
             } else if (characterLength == 2) {
                 return getBytes(
-                    (input.charAt(fromPosition).hashCode() - '0'.hashCode()) * 10 +
-                    input.charAt(fromPosition + 1).hashCode() - '0'.hashCode() + 130);
+                    (input.charAt(fromPosition).hashCode() - r'0'.hashCode()) * 10 +
+                    input.charAt(fromPosition + 1).hashCode() - r'0'.hashCode() + 130);
             } else if (input.isFNC1(fromPosition)) {
                 return getBytes(232);
             } else {
@@ -810,46 +812,46 @@ public class Result {
 
 public class MinimalEncoder {
     static let C40_SHIFT2_CHARS = [
-        '!',
-        '"',
-        '#',
-        '$',
-        '%',
-        '&',
-        '\'',
-        '(',
-        ')',
-        '*',
-        '+',
-        ',',
-        '-',
-        '.',
-        '/',
-        ':',
-        ';',
-        '<',
-        '=',
-        '>',
-        '?',
-        '@',
-        '[',
-        '\\',
-        ']',
-        '^',
-        '_'
+        r'!',
+        r'"',
+        r'#',
+        r'$',
+        r'%',
+        r'&',
+        r'\'',
+        r'(',
+        r')',
+        r'*',
+        r'+',
+        r',',
+        r'-',
+        r'.',
+        r'/',
+        r':',
+        r';',
+        r'<',
+        r'=',
+        r'>',
+        r'?',
+        r'@',
+        r'[',
+        r'\\',
+        r']',
+        r'^',
+        r'_'
     ]
 
     init() {}
 
-    public static func isExtendedASCII(ch: Char, fnc1: Int64): Bool {
-        return ch.hashCode() != fnc1 && ch.hashCode() >= 128 && ch <= Char(255)
+    public static func isExtendedASCII(ch: Rune, fnc1: Int64): Bool {
+        return ch.hashCode() != fnc1 && ch.hashCode() >= 128 && ch <= Rune(255)
     }
 
-    public static func isInC40Shift1Set(ch: Char): Bool {
-        return ch <= Char(31)
+    public static func isInC40Shift1Set(ch: Rune): Bool {
+        return ch <= Rune(31)
     }
 
-    public static func isInC40Shift2Set(ch: Char, fnc1: Int64): Bool {
+    public static func isInC40Shift2Set(ch: Rune, fnc1: Int64): Bool {
         for (i in 0..C40_SHIFT2_CHARS.size) {
             if (C40_SHIFT2_CHARS[i] == ch) {
                 return true;
@@ -858,11 +860,11 @@ public class MinimalEncoder {
         return ch.hashCode() == fnc1
     }
 
-    public static func isInTextShift1Set(ch: Char): Bool {
+    public static func isInTextShift1Set(ch: Rune): Bool {
         return isInC40Shift1Set(ch);
     }
 
-    public static func isInTextShift2Set(ch: Char, fnc1: Int64): Bool {
+    public static func isInTextShift2Set(ch: Rune, fnc1: Int64): Bool {
         return isInC40Shift2Set(ch, fnc1);
     }
 
@@ -963,7 +965,7 @@ public class MinimalEncoder {
                 characterLength[0] = 0
                 return 0;
             }
-            var ci: Char = input.charAt(i);
+            var ci: Rune = input.charAt(i);
             if (c40 && HighLevelEncoder.isNativeC40(ci) || !c40 && HighLevelEncoder.isNativeText(ci)) {
                 thirdsCount++
             //native
@@ -972,8 +974,8 @@ public class MinimalEncoder {
             //shift
             } else {
                 var asciiValue: Int64 = ci.hashCode() & 0xff
-                if (asciiValue >= 128 && (c40 && HighLevelEncoder.isNativeC40(Char(asciiValue - 128)) || !c40 &&
-                    HighLevelEncoder.isNativeText(Char(asciiValue - 128)))) {
+                if (asciiValue >= 128 && (c40 && HighLevelEncoder.isNativeC40(Rune(asciiValue - 128)) || !c40 &&
+                    HighLevelEncoder.isNativeText(Rune(asciiValue - 128)))) {
                     thirdsCount += 3
                 // shift, Upper shift
                 } else {
@@ -997,7 +999,7 @@ public class MinimalEncoder {
             return;
         }
 
-        var ch: Char = input.charAt(start);
+        var ch: Rune = input.charAt(start);
         var flag: Bool = false;
         if (let Some(p) <- previous) {
             flag = true

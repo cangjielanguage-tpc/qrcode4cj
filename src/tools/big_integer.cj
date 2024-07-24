@@ -2,10 +2,10 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package tools
+package QRCode4cj.tools
 
-from std import math.*
-from std import collection.*
+import std.math.*
+import std.collection.*
 
 public class BigInteger {
     var number: String = "0"
@@ -22,7 +22,7 @@ public class BigInteger {
             this.sign = false
         } else {
             setNumber(number[Range<Int64>(0, 1, 1, true, true, false)])
-            this.sign = (Char(number[0]) == '-')
+            this.sign = (Rune(number[0]) == r'-')
         }
     }
 
@@ -38,7 +38,7 @@ public class BigInteger {
             this.sign = false
         } else {
             setNumber(s[Range<Int64>(0, 1, 1, true, true, false)])
-            this.sign = (Char(s[0]) == '-')
+            this.sign = (Rune(s[0]) == r'-')
         }
     }
 
@@ -211,26 +211,26 @@ public class BigInteger {
         return Int64(UInt32(c))
     }
 
-    private func charToNumber(c: Char): Int64 {
+    private func charToNumber(c: Rune): Int64 {
         return Int64(UInt32(c)) - 48
     }
 
-    private func numberToChar(n: Int64): Char {
-        return Char(n + 48)
+    private func numberToChar(n: Int64): Rune {
+        return Rune(n + 48)
     }
 
     private func add(n1: String, n2: String) {
-        let number1 = ArrayList<Char>(n1.toRuneArray())
-        let number2 = ArrayList<Char>(n2.toRuneArray())
-        let add = ArrayList<Char>()
+        let number1 = ArrayList<Rune>(n1.toRuneArray())
+        let number2 = ArrayList<Rune>(n2.toRuneArray())
+        let add = ArrayList<Rune>()
         var carry = 0
 
         if (n1.size >= n2.size) {
             add.appendAll(number1)
-            number2.insertAll(0, StringBuilder('0', n1.size - n2.size).toString().toRuneArray())
+            number2.insertAll(0, StringBuilder(r'0', n1.size - n2.size).toString().toRuneArray())
         } else {
             add.appendAll(number2)
-            number1.insertAll(0, StringBuilder('0', n2.size - n1.size).toString().toRuneArray())
+            number1.insertAll(0, StringBuilder(r'0', n2.size - n1.size).toString().toRuneArray())
         }
 
         for (i in number1.size - 1..-1 : -1) {
@@ -241,7 +241,7 @@ public class BigInteger {
                 continue
             }
 
-            if (add[i] > '9') {
+            if (add[i] > r'9') {
                 add[i] = numberToChar(charToNumber(add[i]) - 10)
                 carry = 1
             } else {
@@ -249,25 +249,25 @@ public class BigInteger {
             }
         }
 
-        if (add[0] > '9') {
+        if (add[0] > r'9') {
             add[0] = numberToChar(charToNumber(add[0]) - 10)
-            add.insert(0, '1')
+            add.insert(0, r'1')
         }
 
         return String(add)
     }
 
     private func subtract(n1: String, n2: String) {
-        let number1 = ArrayList<Char>(n1.toRuneArray())
-        let number2 = ArrayList<Char>(n2.toRuneArray())
-        let sub = ArrayList<Char>()
+        let number1 = ArrayList<Rune>(n1.toRuneArray())
+        let number2 = ArrayList<Rune>(n2.toRuneArray())
+        let sub = ArrayList<Rune>()
 
         if (n1.size >= n2.size) {
             sub.appendAll(number1)
-            number2.insertAll(0, StringBuilder('0', n1.size - n2.size).toString().toRuneArray())
+            number2.insertAll(0, StringBuilder(r'0', n1.size - n2.size).toString().toRuneArray())
         } else {
             sub.appendAll(number2)
-            number1.insertAll(0, StringBuilder('0', n2.size - n1.size).toString().toRuneArray())
+            number1.insertAll(0, StringBuilder(r'0', n2.size - n1.size).toString().toRuneArray())
         }
 
         for (i in number1.size - 1..-1 : -1) {
@@ -278,7 +278,7 @@ public class BigInteger {
             sub[i] = numberToChar(charToNumber(number1[i]) - charToNumber(number2[i]))
         }
 
-        while (sub[0] == '0' && sub.size != 1) {
+        while (sub[0] == r'0' && sub.size != 1) {
             sub.remove(0)
         }
 
@@ -286,8 +286,8 @@ public class BigInteger {
     }
 
     private func multiply(n1: String, n2: String) {
-        let number1 = ArrayList<Char>()
-        let number2 = ArrayList<Char>()
+        let number1 = ArrayList<Rune>()
+        let number2 = ArrayList<Rune>()
         var res = "0"
 
         if (n1.size > n2.size) {
@@ -299,12 +299,12 @@ public class BigInteger {
         }
 
         for (i in number1.size - 1..-1 : -1) {
-            let tmp = ArrayList<Char>(number2)
+            let tmp = ArrayList<Rune>(number2)
             var carry = 0
 
             for (j in tmp.size - 1..-1 : -1) {
                 tmp[j] = numberToChar(charToNumber(tmp[j]) * charToNumber(number1[i]) + carry)
-                if (tmp[j] > '9') {
+                if (tmp[j] > r'9') {
                     carry = charToNumber(tmp[j]) / 10
                     tmp[j] = numberToChar(charToNumber(tmp[j]) - carry * 10)
                 } else {
@@ -316,12 +316,12 @@ public class BigInteger {
                 tmp.insert(0, numberToChar(carry))
             }
 
-            tmp.appendAll(StringBuilder('0', number1.size - i - 1).toString().toRuneArray())
+            tmp.appendAll(StringBuilder(r'0', number1.size - i - 1).toString().toRuneArray())
             res = add(res, String(tmp))
         }
 
-        let arr = ArrayList<Char>(res.toRuneArray())
-        while (arr[0] == '0' && arr.size != 1) {
+        let arr = ArrayList<Rune>(res.toRuneArray())
+        while (arr[0] == r'0' && arr.size != 1) {
             arr.remove(0)
         }
 
@@ -330,20 +330,20 @@ public class BigInteger {
 
     private func divide(n: String, den: Int64): (String, Int64) {
         var rem = 0
-        let result = ArrayList<Char>()
+        let result = ArrayList<Rune>()
 
         for (i in 0..n.size) {
-            rem = rem * 10 + charToNumber(Char(n[i]))
+            rem = rem * 10 + charToNumber(Rune(n[i]))
             result.append(numberToChar(rem / den))
             rem %= den
         }
 
-        while (result[0] == '0' && result.size != 1) {
+        while (result[0] == r'0' && result.size != 1) {
             result.remove(0)
         }
 
         if (result.size == 0) {
-            result.append('0')
+            result.append(r'0')
         }
 
         return (String(result), rem)
@@ -352,7 +352,7 @@ public class BigInteger {
     private func toInt64(n: String) {
         var sum = 0
         for (i in 0..n.size) {
-            sum = sum * 10 + charToNumber(Char(n[i]))
+            sum = sum * 10 + charToNumber(Rune(n[i]))
         }
         return sum
     }

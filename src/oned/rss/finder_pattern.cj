@@ -2,7 +2,9 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned.rss
+package QRCode4cj.oned.rss
+
+import QRCode4cj.common.*
 
 /**
  * Encapsulates an RSS barcode finder pattern, including its start/end position and row.

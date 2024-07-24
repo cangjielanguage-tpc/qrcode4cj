@@ -1,40 +1,20 @@
-/*
- * Copyright 2007 ZXing authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 
-from QRCode4cj import common.*
-from std import unittest.* //testfame
-from std import unittest.testmacro.* //macro_Defintion
-from std import math.*
-from std import format.*
-from std import collection.*
-from QRCode4cj import tools.UTF32String
+import QRCode4cj.common.*
+import std.unittest.* //testfame
+import std.unittest.testmacro.* //macro_Defintion
+import std.math.*
+import std.format.*
+import std.collection.*
+import QRCode4cj.tools.UTF32String
 
 main(): Int64 {
     let tester = PerspectiveTransformTestCase()
-    tester.execute()
-    tester.printResult()
-    0
+    let test = tester.asTestSuite().runTests()
+    test.failedCount + test.errorCount
 }
 
-/**
- * @author Sean Owen
- */
 @Test
 public class PerspectiveTransformTestCase {
     private static let EPSILON: Float64 = 1.0E-4f64;

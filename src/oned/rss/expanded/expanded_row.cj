@@ -2,7 +2,11 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned.rss.expanded
+package QRCode4cj.oned.rss.expanded
+
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
 
 /**
  * One row of an RSS Expanded Stacked symbol, consisting of 1+ expanded pairs.

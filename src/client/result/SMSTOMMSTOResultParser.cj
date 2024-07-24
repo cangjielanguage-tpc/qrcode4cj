@@ -1,7 +1,11 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package client.result
+package QRCode4cj.client.result
+
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
 
 public open class SMSTOMMSTOResultParser <: ResultParser {
     public func parse(result: Result): ?ParsedResult {
@@ -15,7 +19,7 @@ public open class SMSTOMMSTOResultParser <: ResultParser {
         // smsto:number:body URIs
         var number: UTF32String = rawText.substring(6);
         var body: UTF32String = UTF32String("");
-        var bodyStart = number.indexOf(':'.toString());
+        var bodyStart = number.indexOf(r':'.toString());
         if (bodyStart != None) {
             body = number.substring(bodyStart.getOrThrow() + 1)
             number = number.substring(0, bodyStart.getOrThrow())

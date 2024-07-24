@@ -1,27 +1,27 @@
-from std import fs.*
-from std import math.*
-from std import os.*
-from std import time.*
-from std import collection.*
+import std.fs.*
+import std.math.*
+import std.os.*
+import std.time.*
+import std.collection.*
 
-from QRCode4cj import aztec.decoder.*
-from QRCode4cj import aztec.detector.*
-from QRCode4cj import aztec.common.*
-from QRCode4cj import common.*
-from QRCode4cj import multi.*
-from QRCode4cj import common.BitMatrix
-from QRCode4cj import common.LuminanceSource
-from QRCode4cj import common.BinaryBitmap
-from QRCode4cj import common.BarcodeFormat
-from QRCode4cj import common.EncodeHintType
-from QRCode4cj import common.DecodeHintType
-from QRCode4cj import common.Result
-from QRCode4cj import common.ResultPoint
-from QRCode4cj import common.DecoderResult
-from QRCode4cj import common.HybridBinarizer
-from QRCode4cj import common.reader.MultiFormatReader
-from QRCode4cj import common.writer.MultiFormatWriter
-from QRCode4cj import oned.MultiFormatOneDReader
+import QRCode4cj.aztec.decoder.*
+import QRCode4cj.aztec.detector.*
+import QRCode4cj.aztec.common.*
+import QRCode4cj.common.*
+import QRCode4cj.multi.*
+import QRCode4cj.common.BitMatrix
+import QRCode4cj.common.LuminanceSource
+import QRCode4cj.common.BinaryBitmap
+import QRCode4cj.common.BarcodeFormat
+import QRCode4cj.common.EncodeHintType
+import QRCode4cj.common.DecodeHintType
+import QRCode4cj.common.Result
+import QRCode4cj.common.ResultPoint
+import QRCode4cj.common.DecoderResult
+import QRCode4cj.common.HybridBinarizer
+import QRCode4cj.common.reader.MultiFormatReader
+import QRCode4cj.common.writer.MultiFormatWriter
+import QRCode4cj.oned.MultiFormatOneDReader
 public func stringToBinaryBitmap(binaryBitmap: String): BarcodeFormat {
     match (binaryBitmap) {
         case "AZTEC" => BarcodeFormat.AZTEC

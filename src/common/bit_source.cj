@@ -1,7 +1,9 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package common
+package QRCode4cj.common
+
+import std.math.*
 
 /**
  * This provides an easy abstraction to read bits at a time from a sequence of bytes, where the
@@ -54,7 +56,7 @@ public class BitSource {
 
         if (bitOffset > 0) {
             let bitsLeft = 8 - bitOffset
-            let toRead = math.min(numBits, bitsLeft)
+            let toRead = min(numBits, bitsLeft)
             let bitsToNotRead = bitsLeft - toRead
             let mask = (0xFF >> (8 - toRead)) << bitsToNotRead
             result = (Int64(bytes[byteOffset]) & mask) >> bitsToNotRead

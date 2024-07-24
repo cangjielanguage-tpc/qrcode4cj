@@ -2,9 +2,11 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package client.result
+package QRCode4cj.client.result
 
-import tools.UTF32String
+import QRCode4cj.tools.UTF32String
+import QRCode4cj.common.*
+import std.collection.*
 
 public open class AddressBookAUResultParser <: ResultParser {
     public func parse(result: Result): ?ParsedResult {
@@ -17,13 +19,13 @@ public open class AddressBookAUResultParser <: ResultParser {
 
         // NAME1 and NAME2 have specific uses, namely written name and pronunciation, respectively.
         // Therefore we treat them specially instead of as an array of names.
-        var name: String = matchSinglePrefixedField("NAME1:", rawText, '\r', true);
-        var pronunciation: String = matchSinglePrefixedField("NAME2:", rawText, '\r', true);
+        var name: String = matchSinglePrefixedField("NAME1:", rawText, r'\r', true);
+        var pronunciation: String = matchSinglePrefixedField("NAME2:", rawText, r'\r', true);
 
         var phoneNumbers: Array<String> = matchMultipleValuePrefix("TEL", rawText);
         var emails: Array<String> = matchMultipleValuePrefix("MAIL", rawText);
-        var note: String = matchSinglePrefixedField("MEMORY:", rawText, '\r', false);
-        var address: String = matchSinglePrefixedField("ADD:", rawText, '\r', true);
+        var note: String = matchSinglePrefixedField("MEMORY:", rawText, r'\r', false);
+        var address: String = matchSinglePrefixedField("ADD:", rawText, r'\r', true);
         var addresses: Array<String> = Array<String>()
         if (address.isEmpty()) {
             addresses.isEmpty;
@@ -55,7 +57,7 @@ public open class AddressBookAUResultParser <: ResultParser {
 
         // For now, always 3, and always trim
         for (i in 1..4) {
-            var value: String = matchSinglePrefixedField(prefix + i.toString() + ":", rawText, '\r', true);
+            var value: String = matchSinglePrefixedField(prefix + i.toString() + ":", rawText, r'\r', true);
             if (value.isEmpty()) {
                 break
             }
@@ -73,19 +75,19 @@ public open class AddressBookAUResultParser <: ResultParser {
     }
 
     static func isBasicallyValidURI(uri: String): Bool {
-        if (uri.isEmpty() || uri.indexOf(' '.toString()).getOrThrow() >= 0 ||
-            uri.indexOf('\n'.toString()).getOrThrow() >= 0) {
+        if (uri.isEmpty() || uri.indexOf(r' '.toString()).getOrThrow() >= 0 ||
+            uri.indexOf(r'\n'.toString()).getOrThrow() >= 0) {
             return false;
         }
 
         // Look for period in a domain but followed by at least a two-char TLD
         // Forget strings that don't have a valid-looking protocol
-        let period: Int64 = uri.indexOf('.'.toString()).getOrThrow();
+        let period: Int64 = uri.indexOf(r'.'.toString()).getOrThrow();
         var charArray = uri.toRuneArray()
         if (period >= charArray.size - 2) {
             return false;
         }
-        let colon: Int64 = uri.indexOf(':'.toString()).getOrThrow();
+        let colon: Int64 = uri.indexOf(r':'.toString()).getOrThrow();
         if (period < 0 && colon < 0) {
             return false;
         }
@@ -93,8 +95,8 @@ public open class AddressBookAUResultParser <: ResultParser {
             if (period < 0 || period > colon) {
                 // colon ends the protocol
                 for (i in 0..colon) {
-                    let c: Char = charArray[i]
-                    if ((c < 'a' || c > 'z') && (c < 'A' || c > 'Z')) {
+                    let c: Rune = charArray[i]
+                    if ((c < r'a' || c > r'z') && (c < r'A' || c > r'Z')) {
                         return false;
                     }
                 }
@@ -104,8 +106,8 @@ public open class AddressBookAUResultParser <: ResultParser {
                     return false;
                 }
                 for (i in colon + 1..colon + 3) {
-                    let c: Char = charArray[i]
-                    if (c < '0' || c > '9') {
+                    let c: Rune = charArray[i]
+                    if (c < r'0' || c > r'9') {
                         return false;
                     }
                 }

@@ -3,6 +3,16 @@
 // dependence: ../image.cj
 // dependence: ../LogicEnAndDe.cj
 
+import QRCode4cj.aztec.decoder.*
+import QRCode4cj.aztec.detector.*
+import QRCode4cj.aztec.common.*
+import QRCode4cj.multi.*
+import QRCode4cj.common.*
+import QRCode4cj.common.reader.*
+import QRCode4cj.common.writer.*
+import QRCode4cj.oned.*
+import std.collection.*
+
 @Test
 public class TestQRCode4cjAztecEncode02{
     var cur_en_hints=Option<HashMap<EncodeHintType, Any>>.None
@@ -19,7 +29,7 @@ public class TestQRCode4cjAztecEncode02{
             encode_src+=encode_src
         }
         encode_src=encode_src[0..2846]
-        @Assert(testNormal(BarcodeFormat.AZTEC,encode_src,480,360,cur_en_hints,cur_de_hints,encode_src),0)
+        @Assert(testEncodeException(BarcodeFormat.AZTEC,encode_src,480,360,cur_en_hints,"Data too large for an Aztec code"),0)
     }
     @TestCase
     func test_Aztec_Encode_03():Unit {

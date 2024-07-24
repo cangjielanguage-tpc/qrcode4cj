@@ -1,7 +1,11 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package client.result
+package QRCode4cj.client.result
+
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
 
 /**
  * A simple result type encapsulating a URI that has no further interpretation.
@@ -39,7 +43,7 @@ public open class URIParsedResult <: ParsedResult {
     }
 
     public override func getDisplayResult(): String {
-        var result: ArrayList<Char> = ArrayList<Char>();
+        var result: ArrayList<Rune> = ArrayList<Rune>();
         maybeAppend(title, result);
         maybeAppend(uri, result);
         return String(result);
@@ -51,10 +55,10 @@ public open class URIParsedResult <: ParsedResult {
      */
     private static func massageURI(uria: String): String {
         var uri = uria
-        uri = uri.trim()
+        uri = uri.trimAscii()
         var protocolEnd: Int64 = 0
-        if (uri.indexOf(':'.toString()) != None) {
-            protocolEnd = uri.indexOf(':'.toString()).getOrThrow()
+        if (uri.indexOf(r':'.toString()) != None) {
+            protocolEnd = uri.indexOf(r':'.toString()).getOrThrow()
         } else {
             protocolEnd = -1
         }
@@ -70,8 +74,8 @@ public open class URIParsedResult <: ParsedResult {
         var uriin = UTF32String(uri)
         var start: Int64 = protocolEnd + 1
         var nextSlash = 0
-        if (uriin.indexOf('/'.toString(), start: start) != None) {
-            nextSlash = uriin.indexOf('/'.toString(), start: start).getOrThrow()
+        if (uriin.indexOf(r'/'.toString(), start: start) != None) {
+            nextSlash = uriin.indexOf(r'/'.toString(), start: start).getOrThrow()
         } else {
             nextSlash = -1
         }

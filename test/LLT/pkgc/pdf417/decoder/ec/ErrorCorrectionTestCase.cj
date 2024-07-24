@@ -1,43 +1,22 @@
-/*
- * Copyright 2012 ZXing authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 // DEPENDENCE: ./info.txt
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 
-from QRCode4cj import common.Qrcoder4cjChecksumException
-from QRCode4cj import pdf417.decoder.ec.*
-from std import random.*
-from std import collection.*
-from std import convert.*
-from std import fs.*
-from std import unittest.* //testfame
-from std import unittest.testmacro.* //macro_Defintion
+import QRCode4cj.common.Qrcoder4cjChecksumException
+import QRCode4cj.pdf417.decoder.ec.*
+import std.random.*
+import std.collection.*
+import std.convert.*
+import std.fs.*
+import std.unittest.* //testfame
+import std.unittest.testmacro.* //macro_Defintion
 
 main(): Int64 {
     let tester = ErrorCorrectionTestCase()
-    tester.execute()
-    tester.printResult()
-    tester.getTestInfo().errorCount + tester.getTestInfo().failedCount
-    0
+    let test = tester.asTestSuite().runTests()
+    test.failedCount + test.errorCount
 }
 
-/**
- * @author Sean Owen
- */
 @Test
 public class ErrorCorrectionTestCase {
     static var fileNum = 0;
@@ -335,11 +314,11 @@ public class ErrorCorrectionTestCase {
         var info = Array<Byte>(file.length, item: 0);
         var size = file.read(info);
         file.close();
-        var item = ArrayList<Char>();
+        var item = ArrayList<Rune>();
         var str = String();
         var fileName = String();
         for (i in 0..size) {
-            if (Char(UInt8(info[i])) == ' ' || Char(UInt8(info[i])) == '\n' || Char(UInt8(info[i])) == '\r') {
+            if (Rune(UInt8(info[i])) == r' ' || Rune(UInt8(info[i])) == r'\n' || Rune(UInt8(info[i])) == r'\r') {
                 str = String(item)
                 if (Int64.tryParse(str) != Option<Int64>.None) {
                     match (fileName) {
@@ -354,7 +333,7 @@ public class ErrorCorrectionTestCase {
                 }
                 item.clear();
             } else {
-                item.append(Char(UInt8(info[i])));
+                item.append(Rune(UInt8(info[i])));
             }
         }
     }

@@ -2,11 +2,18 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package pdf417.decoder
+package QRCode4cj.pdf417.decoder
 
-import common.Qrcoder4cjChecksumException
-import pdf417.decoder.ec.ErrorCorrection
-from std import time.*
+import QRCode4cj.common.Qrcoder4cjChecksumException
+import QRCode4cj.pdf417.decoder.ec.ErrorCorrection
+import std.time.*
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import QRCode4cj.common.detector.*
+import std.math.*
+import QRCode4cj.pdf417.common.*
+import std.format.*
 
 public open class PDF417ScanningDecoder {
     private static let CODEWORD_SKEW_SIZE: Int64 = 2

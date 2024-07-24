@@ -2,10 +2,14 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package client.result
+package QRCode4cj.client.result
 
-import common.Qrcoder4cjFormatException
-from std import convert.*
+import QRCode4cj.common.Qrcoder4cjFormatException
+import std.convert.*
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.math.*
 
 public open class VEventResultParser <: ResultParser {
     public func parse(result: Result): ?ParsedResult {
@@ -41,10 +45,10 @@ public open class VEventResultParser <: ResultParser {
             longitude = Float64.NaN
         } else {
             var semicolon: Int64
-            if (geoString.indexOf(';'.toString()) == None) {
+            if (geoString.indexOf(r';'.toString()) == None) {
                 return None
             } else {
-                semicolon = geoString.indexOf(';'.toString()).getOrThrow()
+                semicolon = geoString.indexOf(r';'.toString()).getOrThrow()
             }
             try {
                 latitude = Float64.parse(geoString.substring(0, semicolon).toString())

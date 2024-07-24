@@ -1,21 +1,15 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package qrcode
+package QRCode4cj.qrcode
 
-import common.BinaryBitmap
-import common.Qrcoder4cjChecksumException
-import common.Qrcoder4cjFormatException
-import common.Qrcoder4cjNotFoundException
-import common.Reader
-import common.Result
-import common.ResultMetadataType
-import common.ResultPoint
-import common.DecoderResult
-import common.DetectorResult
-import qrcode.decoder.Decoder
-import qrcode.decoder.QRCodeDecoderMetaData
-import qrcode.detector.Detector
+import QRCode4cj.qrcode.decoder.Decoder
+import QRCode4cj.qrcode.decoder.QRCodeDecoderMetaData
+import QRCode4cj.qrcode.detector.Detector
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.math.*
 
 /**
  * This implementation can detect and decode QR Codes in an image.

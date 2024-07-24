@@ -1,7 +1,12 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package client.result
+package QRCode4cj.client.result
+
+import std.regex.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.collection.*
 
 /**
  * Represents a result that encodes an e-mail address, either as a plain address
@@ -15,10 +20,10 @@ public open class EmailAddressResultParser <: ResultParser {
             // If it starts with mailto:, assume it is definitely trying to be an email address
             var hostEmail: String = rawText.substring(7).toString();
             var queryStart: Int64
-            if (let None <- hostEmail.indexOf('?'.toString())) {
+            if (let None <- hostEmail.indexOf(r'?'.toString())) {
                 queryStart = -1
             } else {
-                queryStart = hostEmail.indexOf('?'.toString()).getOrThrow()
+                queryStart = hostEmail.indexOf(r'?'.toString()).getOrThrow()
             }
             if (queryStart >= 0) {
                 hostEmail = UTF32String(hostEmail).substring(0, queryStart).toString()

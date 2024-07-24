@@ -2,7 +2,9 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package datamatrix.encoder
+package QRCode4cj.datamatrix.encoder
+
+import std.collection.*
 
 class X12Encoder <: C40Encoder {
     public func getEncodingMode(): Int64 {
@@ -11,9 +13,9 @@ class X12Encoder <: C40Encoder {
 
     public func encode(context: EncoderContext) {
         //step C
-        var buffer: ArrayList<Char> = ArrayList<Char>();
+        var buffer: ArrayList<Rune> = ArrayList<Rune>();
         while (context.hasMoreCharacters()) {
-            var c: Char = context.getCurrentChar();
+            var c: Rune = context.getCurrentChar();
             context.pos++
 
             encodeChar(c, buffer);
@@ -34,16 +36,16 @@ class X12Encoder <: C40Encoder {
         handleEOD(context, buffer);
     }
 
-    public func encodeChar(c: Char, sb: ArrayList<Char>): Int64 {
+    public func encodeChar(c: Rune, sb: ArrayList<Rune>): Int64 {
         match (c) {
-            case '\r' => sb.append('\0');
-            case '*' => sb.append(Char(1));
-            case '>' => sb.append(Char(2));
-            case ' ' => sb.append(Char(3));
-            case _ => if (c >= '0' && c <= '9') {
-                sb.append(Char(c.hashCode() - 48 + 4));
-            } else if (c >= 'A' && c <= 'Z') {
-                sb.append(Char(c.hashCode() - 65 + 14));
+            case r'\r' => sb.append(r'\0');
+            case r'*' => sb.append(Rune(1));
+            case r'>' => sb.append(Rune(2));
+            case r' ' => sb.append(Rune(3));
+            case _ => if (c >= r'0' && c <= r'9') {
+                sb.append(Rune(c.hashCode() - 48 + 4));
+            } else if (c >= r'A' && c <= r'Z') {
+                sb.append(Rune(c.hashCode() - 65 + 14));
             } else {
                 HighLevelEncoder.illegalCharacter(c);
             }
@@ -51,7 +53,7 @@ class X12Encoder <: C40Encoder {
         return 1;
     }
 
-    public func handleEOD(context: EncoderContext, buffer: ArrayList<Char>) {
+    public func handleEOD(context: EncoderContext, buffer: ArrayList<Rune>) {
         context.updateSymbolInfo();
         var available: Int64 = context.getSymbolInfo().getOrThrow().getDataCapacity() - context.getCodewordCount()
         var count: Int64 = buffer.size;

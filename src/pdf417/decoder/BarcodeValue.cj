@@ -2,10 +2,10 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package pdf417.decoder
+package QRCode4cj.pdf417.decoder
 
-import pdf417.common.PDF417Common
-from std import collection.*
+import QRCode4cj.pdf417.common.PDF417Common
+import std.collection.*
 
 open class BarcodeValue {
     private let values: HashMap<Int64, Int64> = HashMap<Int64, Int64>(1)

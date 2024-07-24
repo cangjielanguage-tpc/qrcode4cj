@@ -2,14 +2,17 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned.rss.expanded.decoders
+package QRCode4cj.oned.rss.expanded.decoders
+
+import std.collection.*
+import QRCode4cj.common.*
 
 class AI01320xDecoder <: AI013x0xDecoder {
     init(information: BitArray) {
         super(information);
     }
 
-    protected func addWeightCode(buf: ArrayList<Char>, weight: Int64): Unit {
+    protected func addWeightCode(buf: ArrayList<Rune>, weight: Int64): Unit {
         if (weight < 10000) {
             buf.appendAll("(3202)".toRuneArray());
         } else {

@@ -2,9 +2,9 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package aztec.encoder
+package QRCode4cj.aztec.encoder
 
-import common.BitMatrix
+import QRCode4cj.common.BitMatrix
 
 public class AztecCode {
     private var compact: Bool = false;

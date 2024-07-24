@@ -2,9 +2,14 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package pdf417.decoder
+package QRCode4cj.pdf417.decoder
 
-import common.detector.MathUtils
+import QRCode4cj.common.detector.MathUtils
+import QRCode4cj.pdf417.common.*
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+import std.math.*
 
 open class PDF417CodewordDecoder {
     private static var RATIOS_TABLE: Array<Array<Float32>> = Array<Array<Float32>>()

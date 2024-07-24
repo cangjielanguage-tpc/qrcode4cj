@@ -6,20 +6,23 @@
  * This file has been modified from its original form in Barcode4J.
  */
 
-package pdf417.encoder
+package QRCode4cj.pdf417.encoder
 
-from std import convert.*
-import common.CharacterSetECI
-import common.ECIInput
-import common.MinimalECIInput
-import common.MyCharset
-import common.CharsetEncoder
-import common.StandardCharsets
-import tools.BigInteger
-import tools.UTF32String
-from std import unittest.* //testfame
-from std import unittest.testmacro.* //macro_Defintion
-from std import math.*
+import std.convert.*
+import QRCode4cj.common.CharacterSetECI
+import QRCode4cj.common.ECIInput
+import QRCode4cj.common.MinimalECIInput
+import QRCode4cj.common.MyCharset
+import QRCode4cj.common.CharsetEncoder
+import QRCode4cj.common.StandardCharsets
+import QRCode4cj.tools.BigInteger
+import QRCode4cj.tools.UTF32String
+import std.unittest.* //testfame
+import std.unittest.testmacro.* //macro_Defintion
+import std.math.*
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.Qrcoder4cjWriterException
 
 /**
  * PDF417 high-level encoder following the algorithm described in ISO/IEC 15438:2001(E) in
@@ -466,7 +469,7 @@ public open class PDF417HighLevelEncoder {
      * if a different encoding would lead to a more compact encoding. When no {@code encoding} is specified
      * then charsets will be chosen so that the byte representation is minimal.
      *
-     * @return the encoded message (the Char values range from 0 to 928)
+     * @return the encoded message (the Rune values range from 0 to 928)
      */
     public static func encodeHighLevel(msg: UTF32String, compaction: Compaction, encoding: MyCharset, autoECI: Bool): UTF32String {
         var encoding_ = encoding
@@ -485,7 +488,7 @@ public open class PDF417HighLevelEncoder {
         }
 
         //the codewords 0..928 are encoded as Unicode characters
-        var sb: ArrayList<Char> = ArrayList<Char>()
+        var sb: ArrayList<Rune> = ArrayList<Rune>()
         var input: ECIInput
         if (autoECI) {
             input = MinimalECIInput(msg, encoding_, -1)
@@ -517,7 +520,7 @@ public open class PDF417HighLevelEncoder {
             }
 
             case NUMERIC =>
-                sb.append(Char(LATCH_TO_NUMERIC))
+                sb.append(Rune(LATCH_TO_NUMERIC))
                 encodeNumeric(input, p_, len, sb)
             case _ =>
                 var encodingMode: Int64 = TEXT_COMPACTION
@@ -533,7 +536,7 @@ public open class PDF417HighLevelEncoder {
                     }
                     var n: Int64 = determineConsecutiveDigitCount(input, p_)
                     if (n >= 13) {
-                        sb.append(Char(LATCH_TO_NUMERIC))
+                        sb.append(Rune(LATCH_TO_NUMERIC))
                         encodingMode = NUMERIC_COMPACTION
                         textSubMode = SUBMODE_ALPHA
 
@@ -544,7 +547,7 @@ public open class PDF417HighLevelEncoder {
                         var t: Int64 = determineConsecutiveTextCount(input, p_)
                         if (t >= 5 || n == len) {
                             if (encodingMode != TEXT_COMPACTION) {
-                                sb.append(Char(LATCH_TO_TEXT))
+                                sb.append(Rune(LATCH_TO_TEXT))
                                 encodingMode = TEXT_COMPACTION
                                 textSubMode = SUBMODE_ALPHA
                                 //start with submode alpha after latch
@@ -611,10 +614,10 @@ public open class PDF417HighLevelEncoder {
         input: ECIInput,
         startpos: Int64,
         count: Int64,
-        sb: ArrayList<Char>,
+        sb: ArrayList<Rune>,
         initialSubmode: Int64
     ): Int64 {
-        var tmp: ArrayList<Char> = ArrayList<Char>()
+        var tmp: ArrayList<Rune> = ArrayList<Rune>()
         var submode: Int64 = initialSubmode
         var idx: Int64 = 0
         while (true) {
@@ -622,87 +625,87 @@ public open class PDF417HighLevelEncoder {
                 encodingECI(input.getECIValue(startpos + idx), sb)
                 idx++
             } else {
-                var ch: Char = input.charAt(startpos + idx)
+                var ch: Rune = input.charAt(startpos + idx)
                 if (submode == SUBMODE_ALPHA) {
                     if (isAlphaUpper(ch)) {
-                        if (ch == ' ') {
-                            tmp.append(Char(26))
+                        if (ch == r' ') {
+                            tmp.append(Rune(26))
                             //space
                         } else {
-                            tmp.append(Char(ch.hashCode() - 65))
+                            tmp.append(Rune(ch.hashCode() - 65))
                         }
                     } else {
                         if (isAlphaLower(ch)) {
                             submode = SUBMODE_LOWER
-                            tmp.append(Char(27))
+                            tmp.append(Rune(27))
                             continue
                         } else if (isMixed(ch)) {
                             submode = SUBMODE_MIXED
-                            tmp.append(Char(28))
+                            tmp.append(Rune(28))
                             continue
                         } else {
-                            tmp.append(Char(29))
+                            tmp.append(Rune(29))
 
                             //ps
-                            tmp.append(Char(PUNCTUATION[ch.hashCode()]))
+                            tmp.append(Rune(PUNCTUATION[ch.hashCode()]))
                         }
                     }
                 } else if (submode == SUBMODE_LOWER) {
                     if (isAlphaLower(ch)) {
-                        if (ch == ' ') {
-                            tmp.append(Char(26))
+                        if (ch == r' ') {
+                            tmp.append(Rune(26))
                             //space
                         } else {
-                            tmp.append(Char(ch.hashCode() - 97))
+                            tmp.append(Rune(ch.hashCode() - 97))
                         }
                     } else {
                         if (isAlphaUpper(ch)) {
-                            tmp.append(Char(27))
+                            tmp.append(Rune(27))
 
                             //as
-                            tmp.append(Char(ch.hashCode() - 65))
+                            tmp.append(Rune(ch.hashCode() - 65))
                         } else if (isMixed(ch)) {
                             submode = SUBMODE_MIXED
-                            tmp.append(Char(28))
+                            tmp.append(Rune(28))
                             continue
                         } else {
-                            tmp.append(Char(29))
+                            tmp.append(Rune(29))
 
                             //ps
-                            tmp.append(Char(PUNCTUATION[ch.hashCode()]))
+                            tmp.append(Rune(PUNCTUATION[ch.hashCode()]))
                         }
                     }
                 } else if (submode == SUBMODE_MIXED) {
                     if (isMixed(ch)) {
-                        tmp.append(Char(MIXED[ch.hashCode()]))
+                        tmp.append(Rune(MIXED[ch.hashCode()]))
                     } else {
                         if (isAlphaUpper(ch)) {
                             submode = SUBMODE_ALPHA
-                            tmp.append(Char(28))
+                            tmp.append(Rune(28))
                             continue
                         } else if (isAlphaLower(ch)) {
                             submode = SUBMODE_LOWER
-                            tmp.append(Char(27))
+                            tmp.append(Rune(27))
                             continue
                         } else {
                             if (startpos + idx + 1 < count && !input.isECI(startpos + idx + 1) && isPunctuation(
                                 input.charAt(startpos + idx + 1))) {
                                 submode = SUBMODE_PUNCTUATION
-                                tmp.append(Char(25))
+                                tmp.append(Rune(25))
                                 continue
                             }
-                            tmp.append(Char(29))
+                            tmp.append(Rune(29))
 
                             //ps
-                            tmp.append(Char(PUNCTUATION[ch.hashCode()]))
+                            tmp.append(Rune(PUNCTUATION[ch.hashCode()]))
                         }
                     }
                 } else {
                     if (isPunctuation(ch)) {
-                        tmp.append(Char(PUNCTUATION[ch.hashCode()]))
+                        tmp.append(Rune(PUNCTUATION[ch.hashCode()]))
                     } else {
                         submode = SUBMODE_ALPHA
-                        tmp.append(Char(29))
+                        tmp.append(Rune(29))
                         continue
                     }
                 }
@@ -712,20 +715,20 @@ public open class PDF417HighLevelEncoder {
                 }
             }
         }
-        var h: Char = '\u{00}'
+        var h: Rune = r'\u{00}'
         var str = UTF32String(tmp)
         var len: Int64 = str.charSize
         for (i in 0..len) {
             var odd: Bool = (i % 2) != 0
             if (odd) {
-                h = Char((h.hashCode() * 30) + str[i].hashCode())
+                h = Rune((h.hashCode() * 30) + str[i].hashCode())
                 sb.append(h)
             } else {
                 h = str[i]
             }
         }
         if ((len % 2) != 0) {
-            sb.append(Char((h.hashCode() * 30) + 29))
+            sb.append(Rune((h.hashCode() * 30) + 29))
             //ps
         }
         return submode
@@ -745,7 +748,7 @@ public open class PDF417HighLevelEncoder {
         startpos: Int64,
         count: Int64,
         startmode: Int64,
-        sb: ArrayList<Char>
+        sb: ArrayList<Rune>
     ) {
         let end: Int64 = min(startpos + count, input.length())
         var localStart: Int64 = startpos
@@ -802,15 +805,15 @@ public open class PDF417HighLevelEncoder {
         startpos: Int64,
         count: Int64,
         startmode: Int64,
-        sb: ArrayList<Char>
+        sb: ArrayList<Rune>
     ) {
         if (count == 1 && startmode == TEXT_COMPACTION) {
-            sb.append(Char(SHIFT_TO_BYTE))
+            sb.append(Rune(SHIFT_TO_BYTE))
         } else {
             if ((count % 6) == 0) {
-                sb.append(Char(LATCH_TO_BYTE))
+                sb.append(Rune(LATCH_TO_BYTE))
             } else {
-                sb.append(Char(LATCH_TO_BYTE_PADDED))
+                sb.append(Rune(LATCH_TO_BYTE_PADDED))
             }
         }
 
@@ -818,7 +821,7 @@ public open class PDF417HighLevelEncoder {
 
         // Encode sixpacks
         if (count >= 6) {
-            var chars: Array<Char> = Array<Char>(5, item: Char(0x00))
+            var chars: Array<Rune> = Array<Rune>(5, item: Rune(0x00))
             while ((startpos + count - idx) >= 6) {
                 var t: Int64 = 0
                 for (i in 0..6) {
@@ -826,7 +829,7 @@ public open class PDF417HighLevelEncoder {
                     t += bytes[idx + i].hashCode() & 0xff
                 }
                 for (i in 0..5) {
-                    chars[i] = Char(t % 900)
+                    chars[i] = Rune(t % 900)
                     t /= 900
                 }
                 for (i in chars.size - 1..=0 : -1) {
@@ -839,22 +842,22 @@ public open class PDF417HighLevelEncoder {
         //Encode rest (remaining n<5 bytes if any)
         for (i in idx..startpos + count) {
             var ch: Int64 = bytes[i].hashCode() & 0xff
-            sb.append(Char(ch))
+            sb.append(Rune(ch))
         }
     }
 
-    private static func encodeNumeric(input: ECIInput, startpos: Int64, count: Int64, sb: ArrayList<Char>) {
+    private static func encodeNumeric(input: ECIInput, startpos: Int64, count: Int64, sb: ArrayList<Rune>) {
         var idx: Int64 = 0
-        var tmp: ArrayList<Char> = ArrayList<Char>()
+        var tmp: ArrayList<Rune> = ArrayList<Rune>()
         var num900: BigInteger = BigInteger(900)
         var num0: BigInteger = BigInteger(0)
         while (idx < count) {
-            tmp = ArrayList<Char>()
+            tmp = ArrayList<Rune>()
             var len: Int64 = min(44, count - idx)
             var part: String = "1" + input.subSequence(startpos + idx, startpos + idx + len).toString()
             var bigint: BigInteger = BigInteger(part)
             do {
-                tmp.append(Char(Int32.parse((bigint % num900).getNumber())))
+                tmp.append(Rune(Int32.parse((bigint % num900).getNumber())))
                 bigint = bigint / num900
                 var a = bigint.toString()
             } while (bigint != num0)
@@ -868,28 +871,28 @@ public open class PDF417HighLevelEncoder {
         }
     }
 
-    private static func isDigit(ch: Char): Bool {
-        return ch >= '0' && ch <= '9'
+    private static func isDigit(ch: Rune): Bool {
+        return ch >= r'0' && ch <= r'9'
     }
 
-    private static func isAlphaUpper(ch: Char): Bool {
-        return ch == ' ' || (ch >= 'A' && ch <= 'Z')
+    private static func isAlphaUpper(ch: Rune): Bool {
+        return ch == r' ' || (ch >= r'A' && ch <= r'Z')
     }
 
-    private static func isAlphaLower(ch: Char): Bool {
-        return ch == ' ' || (ch >= 'a' && ch <= 'z')
+    private static func isAlphaLower(ch: Rune): Bool {
+        return ch == r' ' || (ch >= r'a' && ch <= r'z')
     }
 
-    private static func isMixed(ch: Char): Bool {
+    private static func isMixed(ch: Rune): Bool {
         return Int64(MIXED[ch.hashCode()]) != 128
     }
 
-    private static func isPunctuation(ch: Char): Bool {
+    private static func isPunctuation(ch: Rune): Bool {
         return Int64(PUNCTUATION[ch.hashCode()]) != 128
     }
 
-    private static func isText(ch: Char): Bool {
-        return ch == '\t' || ch == '\n' || ch == '\r' || (ch.hashCode() >= 32 && ch.hashCode() <= 126)
+    private static func isText(ch: Rune): Bool {
+        return ch == r'\t' || ch == r'\n' || ch == r'\r' || (ch.hashCode() >= 32 && ch.hashCode() <= 126)
     }
 
     /**
@@ -982,7 +985,7 @@ public open class PDF417HighLevelEncoder {
                 if (!e.canEncode(input.charAt(idx_))) {
                     @Assert(input is NoECIInput)
 
-                    var ch: Char = input.charAt(idx_)
+                    var ch: Rune = input.charAt(idx_)
                     throw Qrcoder4cjWriterException("Non-encodable character detected: ${ch} (Unicode: ${ch.hashCode()})")
                 }
             }
@@ -991,17 +994,17 @@ public open class PDF417HighLevelEncoder {
         return idx_ - startpos
     }
 
-    private static func encodingECI(eci: Int64, sb: ArrayList<Char>) {
+    private static func encodingECI(eci: Int64, sb: ArrayList<Rune>) {
         if (eci >= 0 && eci < 900) {
-            sb.append(Char(ECI_CHARSET))
-            sb.append(Char(eci))
+            sb.append(Rune(ECI_CHARSET))
+            sb.append(Rune(eci))
         } else if (eci < 810900) {
-            sb.append(Char(ECI_GENERAL_PURPOSE))
-            sb.append(Char(eci / 900 - 1))
-            sb.append(Char(eci % 900))
+            sb.append(Rune(ECI_GENERAL_PURPOSE))
+            sb.append(Rune(eci / 900 - 1))
+            sb.append(Rune(eci % 900))
         } else if (eci < 811800) {
-            sb.append(Char(ECI_USER_DEFINED))
-            sb.append(Char(810900 - eci))
+            sb.append(Rune(ECI_USER_DEFINED))
+            sb.append(Rune(810900 - eci))
         } else {
             throw Qrcoder4cjWriterException("ECI number not in valid range from 0..811799, but was " + eci.toString())
         }
@@ -1019,7 +1022,7 @@ class NoECIInput <: ECIInput {
         return input.charSize
     }
 
-    public func charAt(index: Int64): Char {
+    public func charAt(index: Int64): Rune {
         return input[index]
     }
 

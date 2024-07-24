@@ -2,19 +2,19 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package aztec.detector
+package QRCode4cj.aztec.detector
 
-import common.Qrcoder4cjNotFoundException
-import common.ResultPoint
-import aztec.common.AztecDetectorResult
-import common.BitMatrix
-import common.GridSampler
-import common.detector.MathUtils
-import common.detector.WhiteRectangleDetector
-import common.reedsolomon.GenericGF
-import common.reedsolomon.ReedSolomonDecoder
-import common.reedsolomon.Qrcoder4cjReedSolomonException
-from std import math.*
+import QRCode4cj.common.Qrcoder4cjNotFoundException
+import QRCode4cj.common.ResultPoint
+import QRCode4cj.aztec.common.AztecDetectorResult
+import QRCode4cj.common.BitMatrix
+import QRCode4cj.common.GridSampler
+import QRCode4cj.common.detector.MathUtils
+import QRCode4cj.common.detector.WhiteRectangleDetector
+import QRCode4cj.common.reedsolomon.GenericGF
+import QRCode4cj.common.reedsolomon.ReedSolomonDecoder
+import QRCode4cj.common.reedsolomon.Qrcoder4cjReedSolomonException
+import std.math.*
 
 /**
  * Encapsulates logic that can detect an Aztec Code in an image, even if the Aztec Code

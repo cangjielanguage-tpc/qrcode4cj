@@ -2,7 +2,7 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned.rss
+package QRCode4cj.oned.rss
 
 /** Adapted from listings in ISO/IEC 24724 Appendix B and Appendix G. */
 public class RSSUtils {

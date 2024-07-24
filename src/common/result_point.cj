@@ -1,9 +1,10 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package common
+package QRCode4cj.common
 
-import tools.floatToIntBits
+import QRCode4cj.tools.floatToIntBits
+import std.math.*
 
 /**
  * <p>Encapsulates a point of interest in an image containing a barcode. Typically, this
@@ -94,7 +95,7 @@ public open class ResultPoint {
      */
     public static func distance(pattern1: ResultPoint, pattern2: ResultPoint): Float32 {
         let (xDiff, yDiff) = (pattern1.x - pattern2.x, pattern1.y - pattern2.y)
-        var num = math.sqrt(Float32(xDiff * xDiff + yDiff * yDiff))
+        var num = sqrt(Float32(xDiff * xDiff + yDiff * yDiff))
         return num
     }
 

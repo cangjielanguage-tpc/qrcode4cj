@@ -1,7 +1,9 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package common
+package QRCode4cj.common
+
+import std.collection.*
 
 public abstract class LuminanceSource {
     private var width: Int64 = 0
@@ -112,25 +114,25 @@ public abstract class LuminanceSource {
 
     public func toString(): String {
         var row: Array<UInt8> = Array<UInt8>(width, item: 0)
-        var result: ArrayList<Char> = ArrayList<Char>()
+        var result: ArrayList<Rune> = ArrayList<Rune>()
         for (y in 0..height) {
             row = getRow(y, row)
             for (x in 0..width) {
                 let luminance: Int64 = Int64(row[x] & 0xFF)
 
-                var c_: Char = ' ';
+                var c_: Rune = r' ';
                 if (luminance < 0x40) {
-                    c_ = '#'
+                    c_ = r'#'
                 } else if (luminance < 0x80) {
-                    c_ = '+'
+                    c_ = r'+'
                 } else if (luminance < 0xC0) {
-                    c_ = '.'
+                    c_ = r'.'
                 } else {
-                    c_ = ' '
+                    c_ = r' '
                 }
                 result.append(c_)
             }
-            result.append('\n')
+            result.append(r'\n')
         }
         return String(result)
     }

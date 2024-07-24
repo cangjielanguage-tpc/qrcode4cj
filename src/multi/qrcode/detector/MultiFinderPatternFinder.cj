@@ -2,18 +2,18 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package multi.qrcode.detector
+package QRCode4cj.multi.qrcode.detector
 
-import common.DecodeHintType
-import common.Qrcoder4cjNotFoundException
-import common.ResultPoint
-import common.ResultPointCallback
-import common.BitMatrix
-import qrcode.detector.FinderPattern
-import qrcode.detector.FinderPatternFinder
-import qrcode.detector.FinderPatternInfo
-from std import math.*
-from std import collection.*
+import QRCode4cj.common.DecodeHintType
+import QRCode4cj.common.Qrcoder4cjNotFoundException
+import QRCode4cj.common.ResultPoint
+import QRCode4cj.common.ResultPointCallback
+import QRCode4cj.common.BitMatrix
+import QRCode4cj.qrcode.detector.FinderPattern
+import QRCode4cj.qrcode.detector.FinderPatternFinder
+import QRCode4cj.qrcode.detector.FinderPatternInfo
+import std.math.*
+import std.collection.*
 
 public class MultiFinderPatternFinder <: FinderPatternFinder {
     // TODO MIN_MODULE_COUNT and MAX_MODULE_COUNT would be great hints to ask the user for since

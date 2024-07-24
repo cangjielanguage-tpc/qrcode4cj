@@ -2,17 +2,17 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
  
-package tools
+package QRCode4cj.tools
 
-from std import collection.*
-from std import unicode.*
+import std.collection.*
+import std.unicode.*
 
 public open class UTF32String <: ToString & Hashable & Equatable<UTF32String> {
     private var wsize: Int64 = 0
-    var wval: Array<Char>
+    var wval: Array<Rune>
 
     public init() {
-        wval = Array<Char>()
+        wval = Array<Rune>()
         wsize = 0
     }
     public init(str: String) {
@@ -20,22 +20,22 @@ public open class UTF32String <: ToString & Hashable & Equatable<UTF32String> {
         wsize = wval.size
     }
 
-    public init(str: Char) {
+    public init(str: Rune) {
         wval = [str]
         wsize = 1
     }
 
-    public init(str: Collection<Char>) {
+    public init(str: Collection<Rune>) {
         wval = str.toArray()
         wsize = str.size
     }
 
     public init(size: Int64) {
-        wval = Array<Char>(size, item: ' ')
+        wval = Array<Rune>(size, item: r' ')
         wsize = size
     }
-    public func toRuneArray(): Array<Char> {
-        return Array<Char>(wval)
+    public func toRuneArray(): Array<Rune> {
+        return Array<Rune>(wval)
     }
     public func toString(): String {
         return String(wval)
@@ -51,7 +51,7 @@ public open class UTF32String <: ToString & Hashable & Equatable<UTF32String> {
             return wsize
         }
     }
-    public func get(idx: Int64): Char {
+    public func get(idx: Int64): Rune {
         return wval[idx]
     }
 
@@ -159,7 +159,7 @@ public open class UTF32String <: ToString & Hashable & Equatable<UTF32String> {
         return false
     }
 
-    private static func computeLPS(subArray: Array<Char>): Array<Int64> {
+    private static func computeLPS(subArray: Array<Rune>): Array<Int64> {
         var m: Int64 = subArray.size;
         var lps: Array<Int64> = Array<Int64>(m, item: 0)
 
@@ -357,7 +357,7 @@ public open class UTF32String <: ToString & Hashable & Equatable<UTF32String> {
         return h;
     }
 
-    public operator func [](arg1: Int64): Char {
+    public operator func [](arg1: Int64): Rune {
         return wval[arg1]
     }
 
@@ -435,7 +435,7 @@ public open class UTF32String <: ToString & Hashable & Equatable<UTF32String> {
     public operator func +(arg1: UTF32String): UTF32String {
         var data1 = this.toRuneArray()
         var data2 = arg1.toRuneArray()
-        var newArray = Array<Char>(data1.size + data2.size, item: ' ')
+        var newArray = Array<Rune>(data1.size + data2.size, item: r' ')
 
         data1.copyTo(newArray, 0, 0, data1.size)
         data2.copyTo(newArray, 0, data1.size, data2.size)

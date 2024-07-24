@@ -2,14 +2,13 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package pdf417.detector
+package QRCode4cj.pdf417.detector
 
-import common.BinaryBitmap
-import common.DecodeHintType
-import common.Qrcoder4cjNotFoundException
-import common.EncodeHintType
-import tools.System
-from std import math.*
+import QRCode4cj.common.*
+import QRCode4cj.tools.System
+import std.math.*
+import QRCode4cj.tools.*
+import std.collection.*
 
 /**
  * Encapsulates logic that can detect a PDF417 Code in an image, even if the

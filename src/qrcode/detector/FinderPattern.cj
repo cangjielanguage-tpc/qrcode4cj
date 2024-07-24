@@ -1,7 +1,10 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package qrcode.detector
+package QRCode4cj.qrcode.detector
+
+import std.math.*
+import QRCode4cj.common.*
 
 /**
  * Encapsulates a finder pattern, which are the three square patterns found in

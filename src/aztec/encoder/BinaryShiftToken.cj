@@ -2,10 +2,10 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package aztec.encoder
+package QRCode4cj.aztec.encoder
 
-import common.BitArray
-from std import math.*
+import QRCode4cj.common.BitArray
+import std.math.*
 
 public class BinaryShiftToken <: Token {
     private var binaryShiftStart: Int64

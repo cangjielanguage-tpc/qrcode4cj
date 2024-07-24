@@ -1,9 +1,12 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package client.result
+package QRCode4cj.client.result
 
-import tools.UTF32String
+import QRCode4cj.tools.UTF32String
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
 
 /**
  * Represents a parsed result that encodes an SMS message, including recipients, subject
@@ -36,14 +39,14 @@ public open class SMSParsedResult <: ParsedResult {
     }
 
     public func getSMSURI(): String {
-        var result: ArrayList<Char> = ArrayList<Char>();
+        var result: ArrayList<Rune> = ArrayList<Rune>();
         result.appendAll("sms:".toRuneArray());
         var first: Bool = true;
         for (i in 0..numbers.size) {
             if (first) {
                 first = false
             } else {
-                result.append(',');
+                result.append(r',');
             }
             result.appendAll(numbers[i].toRuneArray());
             if (vias.size != 0 && !vias[i].isEmpty()) {
@@ -54,14 +57,14 @@ public open class SMSParsedResult <: ParsedResult {
         var hasBody: Bool = body != ""
         var hasSubject: Bool = subject != ""
         if (hasBody || hasSubject) {
-            result.append('?');
+            result.append(r'?');
             if (hasBody) {
                 result.appendAll("body=".toRuneArray());
                 result.appendAll(body.toRuneArray());
             }
             if (hasSubject) {
                 if (hasBody) {
-                    result.append('&');
+                    result.append(r'&');
                 }
                 result.appendAll("subject=".toRuneArray());
                 result.appendAll(subject.toRuneArray());
@@ -87,7 +90,7 @@ public open class SMSParsedResult <: ParsedResult {
     }
 
     public override func getDisplayResult(): String {
-        var result: ArrayList<Char> = ArrayList<Char>();
+        var result: ArrayList<Rune> = ArrayList<Rune>();
         maybeAppend(numbers, result);
         maybeAppend(subject, result);
         maybeAppend(body, result);

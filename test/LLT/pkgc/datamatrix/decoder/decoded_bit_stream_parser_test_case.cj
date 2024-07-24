@@ -1,48 +1,28 @@
-/*
- * Copyright 2008 ZXing authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 
-from QRCode4cj import datamatrix.decoder.*
-from std import unittest.*
-from std import unittest.testmacro.*
+import QRCode4cj.datamatrix.decoder.*
+import std.unittest.*
+import std.unittest.testmacro.*
 
 main(): Int64 {
     let tester = DecodedBitStreamParserTestCase()
-    tester.execute()
-    tester.printResult()
-    tester.getTestInfo().errorCount + tester.getTestInfo().failedCount
-    0
+    let test = tester.asTestSuite().runTests()
+    test.failedCount + test.errorCount
 }
 
-/**
- * @author bbrown@google.com (Brian Brown)
- */
 @Test
 public class DecodedBitStreamParserTestCase {
     @TestCase
     public func testAsciiStandardDecode(): Unit {
         // ASCII characters 0-127 are encoded as the value + 1
         let bytes = [
-            UInt8('a'.hashCode() + 1),
-            UInt8('b'.hashCode() + 1),
-            UInt8('c'.hashCode() + 1),
-            UInt8('A'.hashCode() + 1),
-            UInt8('B'.hashCode() + 1),
-            UInt8('C'.hashCode() + 1)
+            UInt8(r'a'.hashCode() + 1),
+            UInt8(r'b'.hashCode() + 1),
+            UInt8(r'c'.hashCode() + 1),
+            UInt8(r'A'.hashCode() + 1),
+            UInt8(r'B'.hashCode() + 1),
+            UInt8(r'C'.hashCode() + 1)
         ]
         let decodedString = DecodedBitStreamParser.decode(bytes).getText();
         @Assert("abcABC", decodedString)

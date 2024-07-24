@@ -1,21 +1,12 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package datamatrix
+package QRCode4cj.datamatrix
 
-import common.BinaryBitmap
-import common.Qrcoder4cjChecksumException
-import common.DecodeHintType
-import common.Qrcoder4cjFormatException
-import common.Qrcoder4cjNotFoundException
-import common.Reader
-import common.Result
-import common.ResultMetadataType
-import common.ResultPoint
-import common.DecoderResult
-import common.DetectorResult
-import datamatrix.decoder.Decoder
-import datamatrix.detector.Detector
+import std.collection.*
+import QRCode4cj.common.*
+import QRCode4cj.datamatrix.decoder.Decoder
+import QRCode4cj.datamatrix.detector.Detector
 
 /**
  * This implementation can detect and decode Data Matrix codes in an image.

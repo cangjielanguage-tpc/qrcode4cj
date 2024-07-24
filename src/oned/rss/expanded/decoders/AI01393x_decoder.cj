@@ -2,7 +2,10 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package oned.rss.expanded.decoders
+package QRCode4cj.oned.rss.expanded.decoders
+
+import std.collection.*
+import QRCode4cj.common.*
 
 class AI01393xDecoder <: AI01decoder {
     private static var HEADER_SIZE: Int64 = 5 + 1 + 2
@@ -18,7 +21,7 @@ class AI01393xDecoder <: AI01decoder {
             throw Qrcoder4cjNotFoundException.getNotFoundInstance();
         }
 
-        var buf: ArrayList<Char> = ArrayList<Char>();
+        var buf: ArrayList<Rune> = ArrayList<Rune>();
 
         encodeCompressedGtin(buf, HEADER_SIZE);
 
@@ -29,15 +32,15 @@ class AI01393xDecoder <: AI01decoder {
 
         buf.appendAll("(393".toRuneArray());
         buf.appendAll(lastAIdigit.toString().toRuneArray());
-        buf.append(')');
+        buf.append(r')');
 
         var firstThreeDigits: Int64 = this.getGeneralDecoder().extractNumericValueFromBitArray(
             HEADER_SIZE + GTIN_SIZE + LAST_DIGIT_SIZE, FIRST_THREE_DIGITS_SIZE);
         if (firstThreeDigits / 100 == 0) {
-            buf.append('0');
+            buf.append(r'0');
         }
         if (firstThreeDigits / 10 == 0) {
-            buf.append('0');
+            buf.append(r'0');
         }
         buf.appendAll(firstThreeDigits.toString().toRuneArray());
 

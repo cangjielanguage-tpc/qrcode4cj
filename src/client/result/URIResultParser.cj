@@ -1,9 +1,13 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package client.result
+package QRCode4cj.client.result
 
-from std import unicode.*
+import std.unicode.*
+import std.regex.*
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
 
 /**
  * Tries to parse results that are a URI of some kind.

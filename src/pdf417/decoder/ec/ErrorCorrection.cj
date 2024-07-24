@@ -2,9 +2,9 @@
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-package pdf417.decoder.ec
+package QRCode4cj.pdf417.decoder.ec
 
-import common.Qrcoder4cjChecksumException
+import QRCode4cj.common.Qrcoder4cjChecksumException
 
 /**
  * PDF417 error correction implementation.

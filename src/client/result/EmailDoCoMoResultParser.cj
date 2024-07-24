@@ -1,7 +1,11 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package client.result
+package QRCode4cj.client.result
+
+import std.regex.*
+import QRCode4cj.common.*
+import QRCode4cj.tools.*
 
 /**
  * Implements the "MATMSG" email message entry format.
@@ -46,7 +50,7 @@ public open class EmailDoCoMoResultParser <: AbstractDoCoMoResultParser {
             return false;
         }
 
-        var index = email.indexOf('@'.toString());
+        var index = email.indexOf(r'@'.toString());
         if (index == None) {
             return false;
         }

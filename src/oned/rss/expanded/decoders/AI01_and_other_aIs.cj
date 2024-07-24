@@ -1,9 +1,11 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
-package oned.rss.expanded.decoders
+package QRCode4cj.oned.rss.expanded.decoders
 
-import tools.UTF32String
+import std.collection.*
+import QRCode4cj.tools.UTF32String
+import QRCode4cj.common.*
 
 class AI01AndOtherAIs <: AI01decoder {
     private static var HEADER_SIZE: Int64 = 1 + 1 + 2
@@ -15,7 +17,7 @@ class AI01AndOtherAIs <: AI01decoder {
     }
 
     public func parseInformation(): String {
-        var buff: ArrayList<Char> = ArrayList<Char>();
+        var buff: ArrayList<Rune> = ArrayList<Rune>();
 
         buff.appendAll("(01)".toRuneArray());
         var initialGtinPosition: Int64 = buff.size;
