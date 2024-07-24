@@ -1,0 +1,11 @@
+[
+    {
+        "Name": " ZXing ",
+        "License": " Apache License 2.0 ",
+        "License File": " LICENSE ",
+        "Version Number": " v3.5.2 ",
+        "Owner": "Srikanth Reddy Lingala"
+        "Upstream URL": " https://github.com/zxing/zxing ",
+        "Description": "  barcode scanning library for Java, Android "
+    }
+]

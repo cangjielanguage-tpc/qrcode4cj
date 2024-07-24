@@ -1,0 +1,76 @@
+/*
+ * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
+ */
+package QRCode4cj.client.result
+
+import std.unicode.*
+import std.regex.*
+import std.collection.*
+import QRCode4cj.tools.*
+import QRCode4cj.common.*
+
+/**
+ * Tries to parse results that are a URI of some kind.
+ */
+public open class URIResultParser <: ResultParser {
+    private static let ALLOWED_URI_CHARS_PATTERN: Regex = Regex("[-._~:/?#\\[\\]@!$&'()*+,;=%A-Za-z0-9]+");
+    private static let USER_IN_HOST: Regex = Regex(":/*([^/@]+)@[^/]+");
+
+    private static let URL_WITH_PROTOCOL_PATTERN: Regex = Regex("[a-zA-Z][a-zA-Z0-9+-.]+:");
+    private static let URL_WITHOUT_PROTOCOL_PATTERN: Regex = Regex(
+        "([a-zA-Z0-9\\-]+\\.){1,6}[a-zA-Z]{2,}" + // host name elements; allow up to say 6 domain elements
+        "(:\\d{1,5})?" + // maybe port
+        "(/|\\?|$)"
+    );
+
+    static func isPossiblyMaliciousURI(uri: String): Bool {
+        var u = ALLOWED_URI_CHARS_PATTERN.matcher(uri).fullMatch()
+        var n = USER_IN_HOST.matcher(uri).find()
+        if (let None <- u) {
+            true
+        } else if (let None <- n) {
+            false
+        } else {
+            true
+        }
+    }
+
+    static func isBasicallyValidURI(uri: String): Bool {
+        if (uri.contains(" ")) {
+            // Quick hack check for a common case
+            return false;
+        }
+        var m: Matcher = URL_WITH_PROTOCOL_PATTERN.matcher(uri);
+        var n = m.find()
+        if (let None <- n) {
+            m = URL_WITHOUT_PROTOCOL_PATTERN.matcher(uri)
+            n = m.find()
+            if (let Some(v) <- n) {
+                if ((uri.indexOf(n.getOrThrow().matchStr()) == 0)) {
+                    return true
+                }
+            }
+        } else {
+            if ((uri.indexOf(n.getOrThrow().matchStr()) == 0)) {
+                return true
+            }
+        }
+        return false
+    }
+
+    // query, path or nothing
+    public func parse(result: Result): ?ParsedResult {
+        var rawText: UTF32String = getMassagedText(result);
+
+        // We specifically handle the odd "URL" scheme here for simplicity and add "URI" for fun
+        // Assume anything starting this way really means to be a URI
+        if (rawText.startsWith(UTF32String("URL:")) || rawText.startsWith(UTF32String("URI:"))) {
+            return URIParsedResult(rawText.substring(4).trim().toString(), "");
+        }
+        rawText = rawText.trim()
+        if (isBasicallyValidURI(rawText.toString()) == false || isPossiblyMaliciousURI(rawText.toString()) == true) {
+            return None
+        }
+        return URIParsedResult(rawText.toString(), "");
+    }
+}
