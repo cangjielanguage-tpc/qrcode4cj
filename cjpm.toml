@@ -6,7 +6,7 @@
   image = {branch = "qrcode_lib", git = "https://gitee.com/HW-PLLab/image.git", version = "0.0.1"}
 
 [package]
-  cjc-version = "0.53.4"
+  cjc-version = "0.54.3"
   compile-option = "-O2 --int-overflow=wrapping --warn-off all"
   description = "CangjieUI Application"
   link-option = ""
