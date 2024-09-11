@@ -949,7 +949,6 @@ public class ErrorCorrection {
             var ecc: String = createECCBlock(codewords, symbolInfo.getErrorCodewords());
             sb.appendAll(ecc.toRuneArray());
         } else {
-            //sb.setLength(sb.capacity());
             var dataSizes: Array<Int64> = Array<Int64>(blockCount, item: 0)
             var errorSizes: Array<Int64> = Array<Int64>(blockCount, item: 0)
 

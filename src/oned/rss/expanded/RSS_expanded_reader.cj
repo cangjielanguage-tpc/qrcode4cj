@@ -299,7 +299,6 @@ public class RSSExpandedReader <: AbstractRSSReader {
 
     // Remove all the rows that contains only specified pairs
     private static func removePartialRows(pairs: ArrayList<ExpandedPair>, rows: ArrayList<ExpandedRow>) {
-        // var iterator: ArrayListIterator<ExpandedRow> = rows.iterator();
         var i = 0
         var iteratorall = rows.iterator()
         while (let Some(iterator) <- iteratorall.next()) {

@@ -87,7 +87,6 @@ public open class MultiFormatReader <: Reader {
 
         var formats: ArrayList<BarcodeFormat> = ArrayList<BarcodeFormat>()
         if (hints.size == 0) {
-            // formats = (hints.get(DecodeHintType.POSSIBLE_FORMATS) as ArrayList<BarcodeFormat>).getOrThrow();
             if (let Some(possibleFormatsData) <- hints.get(DecodeHintType.POSSIBLE_FORMATS)) {
                 formats = ArrayList<BarcodeFormat>((possibleFormatsData as BarcodeFormat).getOrThrow())
             } else {
