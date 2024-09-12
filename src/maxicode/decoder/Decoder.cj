@@ -15,8 +15,6 @@ import QRCode4cj.common.reedsolomon.Qrcoder4cjReedSolomonException
 import QRCode4cj.tools.System
 import std.collection.*
 
-//import java.util.Map;
-
 /**
  * The main class which implements MaxiCode decoding -- as opposed to locating and extracting
  * the MaxiCode from an image.

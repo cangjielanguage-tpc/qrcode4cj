@@ -64,7 +64,6 @@ class DataBlock {
         // TODO(bbrown): There is only one case where there is a difference for Data Matrix for size 144
         var longerBlocksTotalCodewords: Int64 = result[0].codewords.size;
 
-        //int shorterBlocksTotalCodewords = longerBlocksTotalCodewords - 1;
         var longerBlocksNumDataCodewords: Int64 = longerBlocksTotalCodewords - ecBlocks.getECCodewords()
         var shorterBlocksNumDataCodewords: Int64 = longerBlocksNumDataCodewords - 1
 

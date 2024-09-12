@@ -73,7 +73,6 @@ public open class EAN8Writer <: UPCEANWriter {
         pos += appendPattern(result, pos, UPCEANReader.MIDDLE_PATTERN, false)
 
         for (i in 4..8) {
-            // var digit: Int64 = Character.digit(contents.get(i).getOrThrow(), 10);
             var digit: Int64 = -1
             if (contents[i].isAsciiNumber()) {
                 digit = contents.get(i).hashCode() - 48
