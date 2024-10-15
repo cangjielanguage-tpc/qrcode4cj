@@ -47,7 +47,7 @@ public open class EAN13Reader <: UPCEANReader {
     private let decodeMiddleCounters: Array<Int64>
 
     public init() {
-        decodeMiddleCounters = Array<Int64>(4, item: 0)
+        decodeMiddleCounters = Array<Int64>(4, repeat: 0)
     }
 
     protected override func decodeMiddle(row: BitArray, startRange: Array<Int64>, resultString: ArrayList<Rune>): Int64 {

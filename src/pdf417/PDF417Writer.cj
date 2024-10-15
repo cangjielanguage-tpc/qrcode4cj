@@ -174,7 +174,7 @@ public open class PDF417Writer <: Writer {
     private static func rotateArray(bitarray: Array<Array<UInt8>>): Array<Array<UInt8>> {
         var temp: Array<Array<UInt8>> = Array<Array<UInt8>>(
             bitarray[0].size,
-            {int: Int64 => Array<UInt8>(bitarray.size, item: 0)}
+            {int: Int64 => Array<UInt8>(bitarray.size, repeat: 0)}
         )
         let bit_size = bitarray[0].size
         for (ii in 0..bitarray.size) {

@@ -46,7 +46,7 @@ public class BitMatrix <: Equatable<BitMatrix> & ToString {
         this.width = dimension
         this.height = dimension
         this.rowSize = (dimension + 31) >> 5
-        this.bits = Array<Int32>(this.rowSize * this.height, item: 0)
+        this.bits = Array<Int32>(this.rowSize * this.height, repeat: 0)
         this.flag = true
     }
 
@@ -57,7 +57,7 @@ public class BitMatrix <: Equatable<BitMatrix> & ToString {
         this.width = width
         this.height = height
         this.rowSize = (width + 31) >> 5
-        this.bits = Array<Int32>(this.rowSize * this.height, item: 0)
+        this.bits = Array<Int32>(this.rowSize * this.height, repeat: 0)
         this.flag = true
     }
 
@@ -94,7 +94,7 @@ public class BitMatrix <: Equatable<BitMatrix> & ToString {
         if (stringRepresentation.charSize == 0) {
             throw IllegalArgumentException()
         }
-        let bits = Array<Bool>(stringRepresentation.charSize, item: false)
+        let bits = Array<Bool>(stringRepresentation.charSize, repeat: false)
         var bitsPos = 0
         var rowStartPos = 0
         var rowLength = -1
@@ -254,7 +254,7 @@ public class BitMatrix <: Equatable<BitMatrix> & ToString {
             }
         }
 
-        var arr = Array<Int32>(L, item: 0)
+        var arr = Array<Int32>(L, repeat: 0)
         for (x in left..right) {
             arr[(x >> 5) - xl] |= 1 << (x & 0x1f)
         }
@@ -349,7 +349,7 @@ public class BitMatrix <: Equatable<BitMatrix> & ToString {
         let newWidth = height
         let newHeight = width
         let newRowSize = (newWidth + 31) >> 5
-        let newBits = Array<Int32>(newRowSize * newHeight, item: 0)
+        let newBits = Array<Int32>(newRowSize * newHeight, repeat: 0)
         for (y in 0..height) {
             for (x in 0..width) {
                 let offset = y * rowSize + (x >> 5)

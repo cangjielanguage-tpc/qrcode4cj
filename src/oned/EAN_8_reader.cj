@@ -13,7 +13,7 @@ import std.math.*
  * Implements decoding of the EAN-8 format.
  */
 public open class EAN8Reader <: UPCEANReader {
-    private var decodeMiddleCounters: Array<Int64> = Array<Int64>(4, item: 0)
+    private var decodeMiddleCounters: Array<Int64> = Array<Int64>(4, repeat: 0)
 
     public init() {}
 

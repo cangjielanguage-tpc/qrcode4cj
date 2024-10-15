@@ -753,7 +753,7 @@ public class MinimalEncoder {
         // function getCompactedOrdinal(Mode)
         var edges: Array<Array<Array<?Edge>>> = Array<Array<Array<?Edge>>>(
             inputLength + 1,
-            {a: Int64 => Array<Array<?Edge>>(encoders.length(), {b: Int64 => Array<?Edge>(4, item: None)})}
+            {a: Int64 => Array<Array<?Edge>>(encoders.length(), {b: Int64 => Array<?Edge>(4, repeat: None)})}
         )
 
         addEdges(version, edges, 0, Option<Edge>.None);

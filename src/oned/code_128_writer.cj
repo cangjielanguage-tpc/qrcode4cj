@@ -283,7 +283,7 @@ public open class Code128Writer <: OneDimensionalCodeWriter {
         }
 
         // Compute result
-        var result: Array<Bool> = Array<Bool>(codeWidth, item: false)
+        var result: Array<Bool> = Array<Bool>(codeWidth, repeat: false)
         var pos: Int64 = 0
 
         for (i in 0..patterns.size) {
@@ -529,7 +529,7 @@ open class MinimalEncoder <: OneDimensionalCodeWriter {
         }
 
         // Compute result
-        var result: Array<Bool> = Array<Bool>(codeWidth, item: false)
+        var result: Array<Bool> = Array<Bool>(codeWidth, repeat: false)
         var pos: Int64 = 0
 
         for (i in 0..patterns.size) {
@@ -541,14 +541,14 @@ open class MinimalEncoder <: OneDimensionalCodeWriter {
 
     public func encode(contents: String): Array<Bool> {
         let contentsUtf = UTF32String(contents)
-        memoizedCost = Array<Array<Int64>>(4, {a: Int64 => Array<Int64>(contentsUtf.charSize, item: 0)})
-        minPath = Array<Array<Latch>>(4, {b: Int64 => Array<Latch>(contentsUtf.charSize, item: LNONE)})
+        memoizedCost = Array<Array<Int64>>(4, {a: Int64 => Array<Int64>(contentsUtf.charSize, repeat: 0)})
+        minPath = Array<Array<Latch>>(4, {b: Int64 => Array<Latch>(contentsUtf.charSize, repeat: LNONE)})
 
         encode(contentsUtf, Charset.CNONE, 0)
 
         var patterns: ArrayList<Array<Int64>> = ArrayList<Array<Int64>>()
-        var checkSum: Array<Int64> = Array<Int64>(1, item: 0)
-        var checkWeight: Array<Int64> = Array<Int64>(1, item: 1)
+        var checkSum: Array<Int64> = Array<Int64>(1, repeat: 0)
+        var checkWeight: Array<Int64> = Array<Int64>(1, repeat: 1)
         var length: Int64 = contentsUtf.charSize
         var charset: Charset = Charset.CNONE
 
@@ -688,7 +688,7 @@ open class MinimalEncoder <: OneDimensionalCodeWriter {
         var minLatch: Latch = Latch.LNONE
         var atEnd: Bool = position + 1 >= contents.charSize
 
-        var sets: Array<Charset> = Array<Charset>([Charset.A, Charset.B])
+        var sets: Array<Charset> = [Charset.A, Charset.B]
 
         for (i in 0..2) {
             if (canEncode(contents, sets[i], position)) {

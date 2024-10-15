@@ -75,7 +75,7 @@ public class QRCodeMultiReader <: QRCodeReader & MultipleBarcodeReader {
                     ResultMetadataType.BYTE_SEGMENTS) as ArrayList<Array<UInt8>>).getOrThrow()
                 if (byteSegments.size != 0) {
                     for (segmentN in 0..byteSegments.size) {
-                        var segment: Array<UInt8> = Array<UInt8>(byteSegments[segmentN])
+                        var segment: Array<UInt8> = byteSegments[segmentN]
                         newByteSegment.write(segment)
                     }
                 }

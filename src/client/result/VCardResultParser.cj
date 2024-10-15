@@ -371,7 +371,7 @@ public open class VCardResultParser <: ResultParser {
             for (list in names) {
                 var name: UTF32String = UTF32String(list.get(0).getOrThrow())
                 var start: Int64 = 0;
-                var components: Array<UTF32String> = Array<UTF32String>(5, item: UTF32String())
+                var components: Array<UTF32String> = Array<UTF32String>(5, repeat: UTF32String())
                 var end: Int64
                 var componentIndex: Int64 = 0;
                 if (let Some(v) <- name.indexOf(r';'.toString(), start: start)) {

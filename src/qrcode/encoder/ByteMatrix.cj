@@ -16,7 +16,7 @@ public class ByteMatrix <: ToString & Equatable<ByteMatrix> {
     private var height: Int64
 
     public init(width: Int64, height: Int64) {
-        bytes = Array<Array<Byte>>(height, {a: Int64 => Array<Byte>(width, item: 255)})
+        bytes = Array<Array<Byte>>(height, {a: Int64 => Array<Byte>(width, repeat: 255)})
         this.width = width
         this.height = height
     }

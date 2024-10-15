@@ -57,7 +57,7 @@ public open class EAN8Writer <: UPCEANWriter {
 
         checkNumeric(contents.toString());
 
-        var result: Array<Bool> = Array<Bool>(CODE_WIDTH, item: false)
+        var result: Array<Bool> = Array<Bool>(CODE_WIDTH, repeat: false)
         var pos: Int64 = 0;
 
         pos += appendPattern(result, pos, UPCEANReader.START_END_PATTERN, true)

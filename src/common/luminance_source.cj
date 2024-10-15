@@ -113,7 +113,7 @@ public abstract class LuminanceSource {
     }
 
     public func toString(): String {
-        var row: Array<UInt8> = Array<UInt8>(width, item: 0)
+        var row: Array<UInt8> = Array<UInt8>(width, repeat: 0)
         var result: ArrayList<Rune> = ArrayList<Rune>()
         for (y in 0..height) {
             row = getRow(y, row)

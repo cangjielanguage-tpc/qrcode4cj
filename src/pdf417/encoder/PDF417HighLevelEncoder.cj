@@ -783,7 +783,7 @@ public open class PDF417HighLevelEncoder {
 
     public static func subBytes(input: ECIInput, start: Int64, end: Int64): Array<UInt8> {
         let count: Int64 = end - start
-        var result: Array<UInt8> = Array<UInt8>(count, item: 0)
+        var result: Array<UInt8> = Array<UInt8>(count, repeat: 0)
         for (i in start..end) {
             result[i - start] = UInt8(input.charAt(i).hashCode() & 0xff)
         }
@@ -821,7 +821,7 @@ public open class PDF417HighLevelEncoder {
 
         // Encode sixpacks
         if (count >= 6) {
-            var chars: Array<Rune> = Array<Rune>(5, item: Rune(0x00))
+            var chars: Array<Rune> = Array<Rune>(5, repeat: Rune(0x00))
             while ((startpos + count - idx) >= 6) {
                 var t: Int64 = 0
                 for (i in 0..6) {

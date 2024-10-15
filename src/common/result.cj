@@ -152,7 +152,7 @@ public class Result {
         } else if (newPoints.size > 0) {
             var allPoints: Array<ResultPoint> = Array<ResultPoint>(
                 oldPoints.size + newPoints.size,
-                item: ResultPoint()
+                repeat: ResultPoint()
             );
 
             System.arraycopy(oldPoints, 0, allPoints, 0, oldPoints.size)

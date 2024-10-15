@@ -949,8 +949,8 @@ public class ErrorCorrection {
             var ecc: String = createECCBlock(codewords, symbolInfo.getErrorCodewords());
             sb.appendAll(ecc.toRuneArray());
         } else {
-            var dataSizes: Array<Int64> = Array<Int64>(blockCount, item: 0)
-            var errorSizes: Array<Int64> = Array<Int64>(blockCount, item: 0)
+            var dataSizes: Array<Int64> = Array<Int64>(blockCount, repeat: 0)
+            var errorSizes: Array<Int64> = Array<Int64>(blockCount, repeat: 0)
 
             for (i in 0..blockCount) {
                 dataSizes[i] = symbolInfo.getDataLengthForInterleavedBlock(i + 1)
@@ -987,7 +987,7 @@ public class ErrorCorrection {
                 "Illegal number of error correction codewords specified: " + numECWords.toString());
         }
         var poly: Array<Int64> = FACTORS[table]
-        var ecc: Array<Rune> = Array<Rune>(numECWords, item: r' ')
+        var ecc: Array<Rune> = Array<Rune>(numECWords, repeat: r' ')
 
         for (i in 0..numECWords) {
             ecc[i] = Rune(0)
@@ -1007,7 +1007,7 @@ public class ErrorCorrection {
                 ecc[0] = Rune(0)
             }
         }
-        var eccReversed: Array<Rune> = Array<Rune>(numECWords, item: r' ')
+        var eccReversed: Array<Rune> = Array<Rune>(numECWords, repeat: r' ')
 
         for (i in 0..numECWords) {
             eccReversed[i] = ecc[numECWords - i - 1]

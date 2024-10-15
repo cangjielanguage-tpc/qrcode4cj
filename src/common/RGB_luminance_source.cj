@@ -26,7 +26,7 @@ public open class RGBLuminanceSource <: LuminanceSource {
         //
         // Total number of pixels suffices, can ignore shape
         let size: Int64 = width * height
-        luminances = Array<UInt8>(size, item: 0)
+        luminances = Array<UInt8>(size, repeat: 0)
         for (offset in 0..size) {
             var pixel: Int64 = pixels[offset]
             let r: Int64 = (pixel >> 16) & 0xff
@@ -70,7 +70,7 @@ public open class RGBLuminanceSource <: LuminanceSource {
         }
         let width: Int64 = getWidth()
         if (row.size == 0 || row.size < width) {
-            row = Array<UInt8>(width, item: 0)
+            row = Array<UInt8>(width, repeat: 0)
         }
         let offset: Int64 = (y + top) * dataWidth + left
         System.arraycopy(luminances, offset, row, 0, width)
@@ -88,7 +88,7 @@ public open class RGBLuminanceSource <: LuminanceSource {
         }
 
         let area: Int64 = width * height
-        var matrix: Array<UInt8> = Array<UInt8>(area, item: 0)
+        var matrix: Array<UInt8> = Array<UInt8>(area, repeat: 0)
         var inputOffset: Int64 = top * dataWidth + left
 
         // If the width matches the full width of the underlying data, perform a single copy.

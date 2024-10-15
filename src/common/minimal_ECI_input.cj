@@ -17,7 +17,7 @@ public open class MinimalECIInput <: ECIInput {
         this.fnc1 = fnc1
         var encoderSet: ECIEncoderSet = ECIEncoderSet(stringToEncode, priorityCharset, fnc1);
         if (encoderSet.length() == 1) { //optimization for the case when all can be encoded without ECI in ISO-8859-1
-            bytes = Array<Int64>(stringToEncode.charSize, item: 0)
+            bytes = Array<Int64>(stringToEncode.charSize, repeat: 0)
             for (i in 0..bytes.size) {
                 var c: Rune = stringToEncode[i];
                 if (c.hashCode() == fnc1) {
@@ -189,7 +189,7 @@ public open class MinimalECIInput <: ECIInput {
         // Array that represents vertices. There is a vertex for every character and encoding.
         var edges: Array<Array<?InputEdge>> = Array<Array<?InputEdge>>(
             inputLength + 1,
-            {int: Int64 => Array<?InputEdge>(encoderSet.length(), item: None)}
+            {int: Int64 => Array<?InputEdge>(encoderSet.length(), repeat: None)}
         )
 
         addEdges(stringToEncode, encoderSet, edges, 0, None, fnc1);
@@ -230,7 +230,7 @@ public open class MinimalECIInput <: ECIInput {
         while (currentFlag) {
             (current, currentFlag) = exencodeMinimally(current, intsAL, encoderSet)
         }
-        var ints: Array<Int64> = Array<Int64>(intsAL.size, item: 0)
+        var ints: Array<Int64> = Array<Int64>(intsAL.size, repeat: 0)
         for (i in 0..ints.size) {
             ints[i] = intsAL.get(i).getOrThrow()
         }

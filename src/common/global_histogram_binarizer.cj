@@ -18,7 +18,7 @@ public open class GlobalHistogramBinarizer <: Binarizer {
     public init(source: LuminanceSource) {
         super(source)
         luminances = EMPTY
-        buckets = Array<Int64>(LUMINANCE_BUCKETS, item: 0)
+        buckets = Array<Int64>(LUMINANCE_BUCKETS, repeat: 0)
     }
 
     // Applies simple sharpening to the row data to improve performance of the 1D Readers.
@@ -105,7 +105,7 @@ public open class GlobalHistogramBinarizer <: Binarizer {
 
     func initArrays(luminanceSize: Int64) {
         if (luminances.size < luminanceSize) {
-            luminances = Array<UInt8>(luminanceSize, item: 0)
+            luminances = Array<UInt8>(luminanceSize, repeat: 0)
         }
         for (x in 0..LUMINANCE_BUCKETS) {
             buckets[x] = 0

@@ -558,13 +558,13 @@ public class Encoder {
         var blocks: ArrayList<BlockPair> = ArrayList<BlockPair>(numRSBlocks);
 
         for (i in 0..numRSBlocks) {
-            var numDataBytesInBlock: Array<Int64> = Array<Int64>(1, item: 0)
-            var numEcBytesInBlock: Array<Int64> = Array<Int64>(1, item: 0)
+            var numDataBytesInBlock: Array<Int64> = Array<Int64>(1, repeat: 0)
+            var numEcBytesInBlock: Array<Int64> = Array<Int64>(1, repeat: 0)
             getNumDataBytesAndNumECBytesForBlockID(numTotalBytes, numDataBytes, numRSBlocks, i, numDataBytesInBlock,
                 numEcBytesInBlock);
 
             var size: Int64 = numDataBytesInBlock[0]
-            var dataBytes: Array<UInt8> = Array<UInt8>(size, item: 0)
+            var dataBytes: Array<UInt8> = Array<UInt8>(size, repeat: 0)
             bits.toBytes(8 * dataBytesOffset, dataBytes, 0, size);
             var ecBytes: Array<UInt8> = generateECBytes(dataBytes, numEcBytesInBlock[0]);
             blocks.append(BlockPair(dataBytes, ecBytes));
@@ -609,14 +609,14 @@ public class Encoder {
 
     public static func generateECBytes(dataBytes: Array<UInt8>, numEcBytesInBlock: Int64): Array<UInt8> {
         var numDataBytes: Int64 = dataBytes.size;
-        var toEncode: Array<Int64> = Array<Int64>(numDataBytes + numEcBytesInBlock, item: 0);
+        var toEncode: Array<Int64> = Array<Int64>(numDataBytes + numEcBytesInBlock, repeat: 0);
 
         for (i in 0..numDataBytes) {
             toEncode[i] = Int64(dataBytes[i]) & 0xFF
         }
         ReedSolomonEncoder(GenericGF.QR_CODE_FIELD_256).encode(toEncode, numEcBytesInBlock);
 
-        var ecBytes: Array<UInt8> = Array<UInt8>(numEcBytesInBlock, item: 0)
+        var ecBytes: Array<UInt8> = Array<UInt8>(numEcBytesInBlock, repeat: 0)
 
         for (i in 0..numEcBytesInBlock) {
             ecBytes[i] = UInt8(toEncode[numDataBytes + i])

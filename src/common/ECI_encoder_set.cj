@@ -55,7 +55,7 @@ public class ECIEncoderSet {
             // we need more than one single byte encoder or we need a Unicode encoder.
             // In this case we append a UTF-8 and UTF-16 encoder to the list
             let data = CharacterSetECI(CharacterSetECI.NO).getCharset().newEncoder()
-            encoders = Array<CharsetEncoder>(neededEncoders.size + 2, item: data)
+            encoders = Array<CharsetEncoder>(neededEncoders.size + 2, repeat: data)
             var index: Int64 = 0;
             for (i in 0..neededEncoders.size) {
                 encoders[index] = neededEncoders[i]

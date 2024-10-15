@@ -73,7 +73,7 @@ public class HighLevelEncoder {
 
     // A reverse mapping from [mode][char] to the encoding for that character in that mode. 
     // An entry of 0 indicates no mapping exists.
-    private static var CHAR_MAP: Array<Array<Int64>> = Array<Array<Int64>>(5, {int: Int64 => Array<Int64>(256, item: 0)}
+    private static var CHAR_MAP: Array<Array<Int64>> = Array<Array<Int64>>(5, {int: Int64 => Array<Int64>(256, repeat: 0)}
     )
     private static var mixedTable: Array<Int64> = [
         r'\0'.hashCode(),
@@ -139,7 +139,7 @@ public class HighLevelEncoder {
         r'}'.hashCode()
     ]
 
-    public static var SHIFT_TABLE_: Array<Array<Int64>> = Array<Array<Int64>>(6, {int: Int64 => Array<Int64>(6, item: -1)}
+    public static var SHIFT_TABLE_: Array<Array<Int64>> = Array<Array<Int64>>(6, {int: Int64 => Array<Int64>(6, repeat: -1)}
     )
 
     private func initSomeTables() {

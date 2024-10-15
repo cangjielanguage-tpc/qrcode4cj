@@ -169,7 +169,7 @@ public class Edge {
                 if (mode == Mode.X12) {
                     size += 2
                 } else {
-                    var charLen: Array<Int64> = Array<Int64>(1, item: 0)
+                    var charLen: Array<Int64> = Array<Int64>(1, repeat: 0)
                     size += MinimalEncoder.getNumberOfC40Words(input, fromPosition, mode == Mode.C40, charLen) * 2
                 }
 
@@ -387,13 +387,13 @@ public class Edge {
 
     @OverflowWrapping
     static func getBytes(c: Int64): Array<UInt8> {
-        var result: Array<UInt8> = Array<UInt8>(1, item: 0)
+        var result: Array<UInt8> = Array<UInt8>(1, repeat: 0)
         result[0] = UInt8(c)
         return result
     }
 
     static func getBytes(c1: Int64, c2: Int64): Array<UInt8> {
-        var result: Array<UInt8> = Array<UInt8>(2, item: 0)
+        var result: Array<UInt8> = Array<UInt8>(2, repeat: 0)
         result[0] = UInt8(c1)
         result[1] = UInt8(c2)
         return result
@@ -427,7 +427,7 @@ public class Edge {
 
     func getX12Words(): Array<UInt8> {
         @Assert(characterLength % 3 == 0)
-        var result: Array<UInt8> = Array<UInt8>(characterLength / 3 * 2, item: 0);
+        var result: Array<UInt8> = Array<UInt8>(characterLength / 3 * 2, repeat: 0);
 
         for (i in 0..result.size : 2) {
             setC40Word(
@@ -571,7 +571,7 @@ public class Edge {
             c40Values.append(0);
         }
 
-        var result: Array<UInt8> = Array<UInt8>(c40Values.size / 3 * 2, item: 0);
+        var result: Array<UInt8> = Array<UInt8>(c40Values.size / 3 * 2, repeat: 0);
         var byteIndex: Int64 = 0;
         for (i in 0..c40Values.size : 3) {
             setC40Word(
@@ -588,12 +588,12 @@ public class Edge {
 
     func getEDFBytes(): Array<UInt8> {
         var numberOfThirds: Int64 = Int64(ceil(Float64(characterLength) / 4.0))
-        var result: Array<UInt8> = Array<UInt8>(numberOfThirds * 3, item: 0)
+        var result: Array<UInt8> = Array<UInt8>(numberOfThirds * 3, repeat: 0)
         var pos: Int64 = fromPosition
         var endPos: Int64 = min(fromPosition + characterLength - 1, input.length() - 1);
 
         for (i in 0..numberOfThirds) {
-            var edfValues: Array<Int64> = Array<Int64>(4, item: 0)
+            var edfValues: Array<Int64> = Array<Int64>(4, repeat: 0)
 
             for (j in 0..4) {
                 if (pos <= endPos) {
@@ -713,7 +713,7 @@ public class Result {
             bytesAL.append(UInt8(randomize253State(bytesAL.size + 1)));
         }
 
-        this.bytes = Array<UInt8>(bytesAL.size, item: 0)
+        this.bytes = Array<UInt8>(bytesAL.size, repeat: 0)
 
         for (i in 0..bytes.size) {
             bytes[i] = bytesAL[i]
@@ -1019,7 +1019,7 @@ public class MinimalEncoder {
             var modes: Array<Mode> = [Mode.C40, Mode.TEXT]
 
             for (i in 0..modes.size) {
-                var characterLength: Array<Int64> = Array<Int64>(1, item: 0)
+                var characterLength: Array<Int64> = Array<Int64>(1, repeat: 0)
                 if (getNumberOfC40Words(input, start, modes[i] == Mode.C40, characterLength) > 0) {
                     addEdge(edges, Edge(input, modes[i], start, characterLength[0], previous));
                 }
@@ -1244,7 +1244,7 @@ public class MinimalEncoder {
 
         // Array that represents vertices. There is a vertex for every character and mode.
         // The last dimension in the array below encodes the 6 modes ASCII, C40, TEXT, X12, EDF and B256
-        var edges: Array<Array<?Edge>> = Array<Array<?Edge>>(inputLength + 1, {int: Int64 => Array<?Edge>(6, item: None)}
+        var edges: Array<Array<?Edge>> = Array<Array<?Edge>>(inputLength + 1, {int: Int64 => Array<?Edge>(6, repeat: None)}
         );
 
         addEdges(input, edges, 0, None);

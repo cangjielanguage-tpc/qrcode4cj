@@ -47,7 +47,7 @@ public abstract class ResultParser {
     private static let EQUALS: Regex = Regex("=");
     private static let BYTE_ORDER_MARK: UTF32String = UTF32String("\\ufeff");
 
-    static let EMPTY_STR_ARRAY: Array<String> = Array<String>(0, item: "")
+    static let EMPTY_STR_ARRAY: Array<String> = Array<String>(0, repeat: "")
 
     /**
      * Attempts to parse the raw {@link Result}'s contents as a particular type

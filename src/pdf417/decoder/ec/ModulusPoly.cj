@@ -25,9 +25,9 @@ open class ModulusPoly <: ToString {
                 firstNonZero++
             }
             if (firstNonZero == coefficientsLength) {
-                this.coefficients = Array<Int64>(1, item: 0)
+                this.coefficients = Array<Int64>(1, repeat: 0)
             } else {
-                this.coefficients = Array<Int64>(coefficientsLength - firstNonZero, item: 0)
+                this.coefficients = Array<Int64>(coefficientsLength - firstNonZero, repeat: 0)
                 System.arraycopy(
                     coefficients,
                     firstNonZero,
@@ -107,7 +107,7 @@ open class ModulusPoly <: ToString {
             smallerCoefficients = largerCoefficients
             largerCoefficients = temp
         }
-        var sumDiff: Array<Int64> = Array<Int64>(largerCoefficients.size, item: 0);
+        var sumDiff: Array<Int64> = Array<Int64>(largerCoefficients.size, repeat: 0);
         var lengthDiff: Int64 = largerCoefficients.size - smallerCoefficients.size
 
         // Copy high-order terms only found in higher-degree polynomial's coefficients
@@ -138,7 +138,7 @@ open class ModulusPoly <: ToString {
         var aLength: Int64 = aCoefficients.size;
         var bCoefficients: Array<Int64> = other.coefficients;
         var bLength: Int64 = bCoefficients.size;
-        var product: Array<Int64> = Array<Int64>(aLength + bLength - 1, item: 0);
+        var product: Array<Int64> = Array<Int64>(aLength + bLength - 1, repeat: 0);
         for (i in 0..aLength) {
             var aCoeff: Int64 = aCoefficients[i]
             for (j in 0..bLength) {
@@ -150,7 +150,7 @@ open class ModulusPoly <: ToString {
 
     func negative(): ModulusPoly {
         var size: Int64 = coefficients.size;
-        var negativeCoefficients: Array<Int64> = Array<Int64>(size, item: 0);
+        var negativeCoefficients: Array<Int64> = Array<Int64>(size, repeat: 0);
         for (i in 0..size) {
             negativeCoefficients[i] = field.subtract(0, coefficients[i])
         }
@@ -165,7 +165,7 @@ open class ModulusPoly <: ToString {
             return this
         }
         var size: Int64 = coefficients.size;
-        var product: Array<Int64> = Array<Int64>(size, item: 0);
+        var product: Array<Int64> = Array<Int64>(size, repeat: 0);
         for (i in 0..size) {
             product[i] = field.multiply(coefficients[i], scalar)
         }
@@ -180,7 +180,7 @@ open class ModulusPoly <: ToString {
             return field.getZero();
         }
         var size: Int64 = coefficients.size;
-        var product: Array<Int64> = Array<Int64>(size + degree, item: 0);
+        var product: Array<Int64> = Array<Int64>(size + degree, repeat: 0);
         for (i in 0..size) {
             product[i] = field.multiply(coefficients[i], coefficient)
         }

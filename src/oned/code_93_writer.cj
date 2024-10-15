@@ -39,7 +39,7 @@ public class Code93Writer <: OneDimensionalCodeWriter {
         //length of code + 2 start/stop characters + 2 checksums, each of 9 bits, plus a termination bar
         var codeWidth: Int64 = (contents.charSize + 2 + 2) * 9 + 1
 
-        var result: Array<Bool> = Array<Bool>(codeWidth, item: false)
+        var result: Array<Bool> = Array<Bool>(codeWidth, repeat: false)
 
         //start character (*)
         var pos: Int64 = appendPattern(result, 0, Code93Reader.ASTERISK_ENCODING);

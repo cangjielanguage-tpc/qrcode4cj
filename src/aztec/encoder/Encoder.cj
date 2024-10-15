@@ -224,7 +224,7 @@ public class Encoder {
         if (compact) {
             baseMatrixSize = 11 + layers * 4
         }
-        var alignmentMap: Array<Int64> = Array<Int64>(baseMatrixSize, item: 0)
+        var alignmentMap: Array<Int64> = Array<Int64>(baseMatrixSize, repeat: 0)
         var matrixSize: Int64
         if (compact) {
             // no alignment marks in compact mode, alignmentMap is a no-op
@@ -397,7 +397,7 @@ public class Encoder {
     }
 
     private static func bitsToWords(stuffedBits: BitArray, wordSize: Int64, totalWords: Int64): Array<Int64> {
-        var message: Array<Int64> = Array<Int64>(totalWords, item: 0)
+        var message: Array<Int64> = Array<Int64>(totalWords, repeat: 0)
         var i: Int64
         var n: Int64 = stuffedBits.getSize() / wordSize
         for (i in 0..n) {

@@ -182,7 +182,7 @@ public class RSS14Reader <: AbstractRSSReader {
     }
 
     private func decodeDataCharacter(row: BitArray, pattern: FinderPattern, outsideChar: Bool): DataCharacter {
-        var counters: Array<Int64> = Array<Int64>(getDataCharacterCounters().size, item: 0);
+        var counters: Array<Int64> = Array<Int64>(getDataCharacterCounters().size, repeat: 0);
 
         if (outsideChar) {
             recordPatternInReverse(row, pattern.getStartEnd()[0], counters);

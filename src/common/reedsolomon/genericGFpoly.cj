@@ -27,7 +27,7 @@ public class GenericGFPoly <: Equatable<GenericGFPoly> & ToString {
             if (firstNonZero == coefficientsLength) {
                 this.coefficients = [0]
             } else {
-                this.coefficients = Array<Int64>(coefficientsLength - firstNonZero, item: 0)
+                this.coefficients = Array<Int64>(coefficientsLength - firstNonZero, repeat: 0)
 
                 coefficients.copyTo(this.coefficients, firstNonZero, 0, this.coefficients.size)
             }
@@ -103,7 +103,7 @@ public class GenericGFPoly <: Equatable<GenericGFPoly> & ToString {
             smallerCoefficients = largerCoefficients
             largerCoefficients = temp
         }
-        var sumDiff = Array<Int64>(largerCoefficients.size, item: 0)
+        var sumDiff = Array<Int64>(largerCoefficients.size, repeat: 0)
         let lengthDiff = largerCoefficients.size - smallerCoefficients.size
 
         // Copy high-order terms only found in higher-degree polynomial's coefficients
@@ -126,7 +126,7 @@ public class GenericGFPoly <: Equatable<GenericGFPoly> & ToString {
         let aLength = aCoefficients.size
         let bCoefficients: Array<Int64> = other.coefficients
         let bLength = bCoefficients.size
-        let product: Array<Int64> = Array<Int64>(aLength + bLength - 1, item: 0)
+        let product: Array<Int64> = Array<Int64>(aLength + bLength - 1, repeat: 0)
         for (i in 0..aLength) {
             let aCoeff = aCoefficients[i]
             for (j in 0..bLength) {
@@ -147,7 +147,7 @@ public class GenericGFPoly <: Equatable<GenericGFPoly> & ToString {
             return this
         }
         let size = coefficients.size
-        let product = Array<Int64>(size, item: 0)
+        let product = Array<Int64>(size, repeat: 0)
         for (i in 0..size) {
             product[i] = field.getOrThrow().multiply(coefficients[i], scalar)
         }
@@ -162,7 +162,7 @@ public class GenericGFPoly <: Equatable<GenericGFPoly> & ToString {
             return field.getOrThrow().getZero()
         }
         let size = coefficients.size
-        let product: Array<Int64> = Array<Int64>(size + degree, item: 0)
+        let product: Array<Int64> = Array<Int64>(size + degree, repeat: 0)
         for (i in 0..size) {
             product[i] = field.getOrThrow().multiply(coefficients[i], coefficient)
         }

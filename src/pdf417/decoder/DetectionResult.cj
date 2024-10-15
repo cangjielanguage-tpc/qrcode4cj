@@ -19,7 +19,7 @@ open class DetectionResult <: ToString {
         this.barcodeMetadata = barcodeMetadata
         this.barcodeColumnCount = barcodeMetadata.getColumnCount()
         this.boundingBox = boundingBox
-        this.detectionResultColumns = Array<DetectionResultColumn>(barcodeColumnCount + 2, item: DetectionResultColumn()
+        this.detectionResultColumns = Array<DetectionResultColumn>(barcodeColumnCount + 2, repeat: DetectionResultColumn()
         )
     }
 
@@ -197,7 +197,7 @@ open class DetectionResult <: ToString {
             nextColumnCodewords = detectionResultColumns[barcodeColumn + 1].getCodewords()
         }
 
-        var otherCodewords_: Array<Codeword> = Array<Codeword>(14, item: Codeword())
+        var otherCodewords_: Array<Codeword> = Array<Codeword>(14, repeat: Codeword())
 
         otherCodewords_[2] = previousColumnCodewords[codewordsRow]
         otherCodewords_[3] = nextColumnCodewords[codewordsRow]

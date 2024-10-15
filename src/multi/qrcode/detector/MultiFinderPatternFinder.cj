@@ -209,7 +209,7 @@ public class MultiFinderPatternFinder <: FinderPatternFinder {
             iSkip = MIN_SKIP
         }
 
-        var stateCount: Array<Int64> = Array<Int64>(5, item: 0)
+        var stateCount: Array<Int64> = Array<Int64>(5, repeat: 0)
 
         var i: Int64 = iSkip - 1
         while (i < maxI) {

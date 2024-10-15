@@ -42,12 +42,12 @@ public open class Code39Writer <: OneDimensionalCodeWriter {
             }
         }
 
-        var widths: Array<Int64> = Array<Int64>(9, item: 0)
+        var widths: Array<Int64> = Array<Int64>(9, repeat: 0)
         var codeWidth: Int64 = 24 + 1 + (13 * length)
-        var result_: Array<Bool> = Array<Bool>(codeWidth, item: false)
+        var result_: Array<Bool> = Array<Bool>(codeWidth, repeat: false)
         toIntArray(Code39Reader.ASTERISK_ENCODING, widths)
         var pos: Int64 = appendPattern(result_, 0, widths, true)
-        var narrowWhite: Array<Int64> = Array<Int64>(1, item: 1)
+        var narrowWhite: Array<Int64> = Array<Int64>(1, repeat: 1)
         pos += appendPattern(result_, pos, narrowWhite, false)
 
         //append next character to byte matrix

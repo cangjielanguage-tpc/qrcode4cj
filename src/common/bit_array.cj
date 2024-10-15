@@ -56,7 +56,7 @@ public class BitArray <: Hashable & ToString & Equatable<BitArray> {
     }
 
     private static func makeArray(size: Int64): Array<Int32> {
-        return Array<Int32>((size + 31) >> 5, item: 0)
+        return Array<Int32>((size + 31) >> 5, repeat: 0)
     }
 
     /**
@@ -327,7 +327,7 @@ public class BitArray <: Hashable & ToString & Equatable<BitArray> {
      * Reverses all bits in the array.
      */
     public func reverse() {
-        let newBits = Array<Int32>(this.bits.size, item: 0)
+        let newBits = Array<Int32>(this.bits.size, repeat: 0)
         let len = (this.size - 1) >> 5
         let oldBitsLen = len + 1
         for (i in 0..oldBitsLen) {

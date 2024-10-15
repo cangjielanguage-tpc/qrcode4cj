@@ -14,7 +14,7 @@ import std.math.*
  * @see UPCEANExtension5Support
  */
 open class UPCEANExtension2Support {
-    private let decodeMiddleCounters: Array<Int64> = Array<Int64>(4, item: 0)
+    private let decodeMiddleCounters: Array<Int64> = Array<Int64>(4, repeat: 0)
 
     func decodeRow(rowNumber: Int64, row: BitArray, extensionStartRange: Array<Int64>): Result {
         var result: ArrayList<Rune> = ArrayList<Rune>()
@@ -27,12 +27,8 @@ open class UPCEANExtension2Support {
         var extensionResult: Result = Result(
             resultString,
             Array<UInt8>(),
-            Array<ResultPoint>(
-                [
-                    ResultPoint(Float32(extensionStartRange[0] + extensionStartRange[1]) / 2.0, Float32(rowNumber)),
-                    ResultPoint(Float32(end), Float32(rowNumber))
-                ]
-            ),
+            [ResultPoint(Float32(extensionStartRange[0] + extensionStartRange[1]) / 2.0, Float32(rowNumber)),
+                ResultPoint(Float32(end), Float32(rowNumber))],
             BarcodeFormat.UPC_EAN_EXTENSION
         );
         if (extensionData.size != 0) {

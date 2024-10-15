@@ -368,7 +368,7 @@ public class DecodedBitStreamParser {
         // TODO(bbrown): The Upper Shift with C40 doesn't work in the 4 value scenario all the time
         var upperShift: Bool = false;
 
-        var cValues: Array<Int64> = Array<Int64>(3, item: 0)
+        var cValues: Array<Int64> = Array<Int64>(3, repeat: 0)
         var shift: Int64 = 0;
 
         do {
@@ -461,7 +461,7 @@ public class DecodedBitStreamParser {
 
         var upperShift: Bool = false;
 
-        var cValues: Array<Int64> = Array<Int64>(3, item: 0)
+        var cValues: Array<Int64> = Array<Int64>(3, repeat: 0)
         var shift: Int64 = 0;
         do {
             // If there is only one byte left then it will be encoded as ASCII
@@ -556,7 +556,7 @@ public class DecodedBitStreamParser {
     private static func decodeAnsiX12Segment(bits: BitSource, result: ECIStringBuilder) {
         // Three ANSI X12 values are encoded in a 16-bit value as
         // (1600 * C1) + (40 * C2) + C3 + 1
-        var cValues: Array<Int64> = Array<Int64>(3, item: 0)
+        var cValues: Array<Int64> = Array<Int64>(3, repeat: 0)
         do {
             // If there is only one byte left then it will be encoded as ASCII
             if (bits.available() == 8) {
@@ -664,7 +664,7 @@ public class DecodedBitStreamParser {
             throw Qrcoder4cjFormatException.getFormatInstance();
         }
 
-        var bytes: Array<UInt8> = Array<UInt8>(count, item: 0)
+        var bytes: Array<UInt8> = Array<UInt8>(count, repeat: 0)
 
         for (i in 0..count) {
             // Have seen this particular error in the wild

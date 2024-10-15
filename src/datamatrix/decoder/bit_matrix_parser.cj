@@ -57,7 +57,7 @@ class BitMatrixParser {
      * @throws Qrcoder4cjFormatException if the exact number of bytes expected is not read
      */
     func readCodewords(): Array<UInt8> {
-        var result = Array<Byte>(version.getTotalCodewords(), item: 0)
+        var result = Array<Byte>(version.getTotalCodewords(), repeat: 0)
         var (resultOffset, row_, column, numRows, numColumns): (Int64, Int64, Int64, Int64, Int64) = (0, 4, 0,
             mappingBitMatrix.getHeight(), mappingBitMatrix.getWidth())
 

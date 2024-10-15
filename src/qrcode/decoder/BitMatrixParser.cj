@@ -161,7 +161,7 @@ public class BitMatrixParser {
         let functionPattern: BitMatrix = version.buildFunctionPattern();
 
         var readingUp: Bool = true;
-        var result: Array<UInt8> = Array<UInt8>(version.getTotalCodewords(), item: 0);
+        var result: Array<UInt8> = Array<UInt8>(version.getTotalCodewords(), repeat: 0);
         var resultOffset: Int64 = 0;
         var currentByte: Int64 = 0;
         var bitsRead: Int64 = 0;

@@ -440,7 +440,7 @@ public class Decoder {
         }
         var offset: Int64 = rawbits.size % codewordSize
 
-        var dataWords: Array<Int64> = Array<Int64>(numCodewords, item: 0)
+        var dataWords: Array<Int64> = Array<Int64>(numCodewords, repeat: 0)
         for (i in 0..numCodewords) {
             dataWords[i] = readCode(rawbits, offset, codewordSize)
             offset += codewordSize
@@ -467,7 +467,7 @@ public class Decoder {
         }
 
         // Now, actually unpack the bits and remove the stuffing
-        var correctedBits: Array<Bool> = Array<Bool>(numDataCodewords * codewordSize - stuffedBits, item: false)
+        var correctedBits: Array<Bool> = Array<Bool>(numDataCodewords * codewordSize - stuffedBits, repeat: false)
         extracted(numDataCodewords, dataWords, mask, correctedBits, codewordSize)
         return CorrectedBitsResult(correctedBits, 100 * (numCodewords - numDataCodewords) / numCodewords)
     }
@@ -479,7 +479,7 @@ public class Decoder {
             var dataWord: Int64 = dataWords[i]
             if (dataWord == 1 || dataWord == mask - 1) {
                 // next codewordSize-1 bits are all zeros or all ones
-                correctedBits[index_..index_ + codewordSize - 1] = dataWord > 1
+                correctedBits[index_..index_ + codewordSize - 1] = Array<Bool>(index_ + codewordSize - 1 - index_,repeat: dataWord > 1)
                 index_ += codewordSize - 1
             } else {
                 var bit: Int64 = codewordSize - 1
@@ -501,8 +501,8 @@ public class Decoder {
         var compact: Bool = ddata.getOrThrow().isCompact()
         var layers: Int64 = ddata.getOrThrow().getNbLayers()
         var baseMatrixSize: Int64 = getbaseMatrixSize(compact, layers) // not including alignment lines
-        var alignmentMap: Array<Int64> = Array<Int64>(baseMatrixSize, item: 0)
-        var rawbits: Array<Bool> = Array<Bool>(totalBitsInLayer(layers, compact), item: true)
+        var alignmentMap: Array<Int64> = Array<Int64>(baseMatrixSize, repeat: 0)
+        var rawbits: Array<Bool> = Array<Bool>(totalBitsInLayer(layers, compact), repeat: true)
 
         if (compact) {
             for (i in 0..alignmentMap.size) {
@@ -600,7 +600,7 @@ public class Decoder {
      * Packs a bit array into bytes, most significant bit first
      */
     public static func convertBoolArrayToByteArray(boolArr: Array<Bool>): Array<UInt8> {
-        var byteArr: Array<UInt8> = Array<UInt8>((boolArr.size + 7) / 8, item: 0)
+        var byteArr: Array<UInt8> = Array<UInt8>((boolArr.size + 7) / 8, repeat: 0)
         for (i in 0..byteArr.size) {
             byteArr[i] = readByte(boolArr, 8 * i)
         }

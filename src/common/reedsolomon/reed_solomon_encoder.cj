@@ -43,7 +43,7 @@ public class ReedSolomonEncoder {
             throw IllegalArgumentException("No data bytes provided")
         }
         let generator: GenericGFPoly = buildGenerator(ecBytes)
-        let infoCoefficients: Array<Int64> = Array<Int64>(dataBytes, item: 0)
+        let infoCoefficients: Array<Int64> = Array<Int64>(dataBytes, repeat: 0)
         toEncode.copyTo(infoCoefficients, 0, 0, dataBytes)
         var info: GenericGFPoly = GenericGFPoly(field.getOrThrow(), infoCoefficients)
         info = info.multiplyByMonomial(ecBytes, 1)

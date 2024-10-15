@@ -21,7 +21,7 @@ open class DetectionResultColumn <: ToString {
     init(boundingBox: BoundingBox) {
         this.flag = true
         this.boundingBox = BoundingBox(boundingBox)
-        codewords = Array<Codeword>(boundingBox.getMaxY() - boundingBox.getMinY() + 1, item: Codeword())
+        codewords = Array<Codeword>(boundingBox.getMaxY() - boundingBox.getMinY() + 1, repeat: Codeword())
     }
 
     func getCodewordNearby(imageRow: Int64): Codeword {

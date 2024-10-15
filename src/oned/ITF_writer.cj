@@ -53,7 +53,7 @@ public open class ITFWriter <: OneDimensionalCodeWriter {
 
         checkNumeric(contents);
 
-        var result: Array<Bool> = Array<Bool>(9 + 9 * length, item: false);
+        var result: Array<Bool> = Array<Bool>(9 + 9 * length, repeat: false);
         var pos: Int64 = appendPattern(result, 0, START_PATTERN, true);
         var i: Int64 = 0
 
@@ -67,7 +67,7 @@ public open class ITFWriter <: OneDimensionalCodeWriter {
                 two = contestsutf32.get(i + 1).hashCode() - 48
             }
 
-            var encoding: Array<Int64> = Array<Int64>(10, item: 0)
+            var encoding: Array<Int64> = Array<Int64>(10, repeat: 0)
             for (j in 0..5) {
                 encoding[2 * j] = PATTERNS[one][j]
                 encoding[2 * j + 1] = PATTERNS[two][j]

@@ -40,7 +40,7 @@ public open class FinderPatternFinder {
     public init(image: BitMatrix, resultPointCallback: ?ResultPointCallback) {
         this.image = image
         this.possibleCenters = ArrayList<FinderPattern>()
-        this.crossCheckStateCount = Array<Int64>(5, item: 0)
+        this.crossCheckStateCount = Array<Int64>(5, repeat: 0)
         this.resultPointCallback = resultPointCallback
     }
 
@@ -67,7 +67,7 @@ public open class FinderPatternFinder {
         var iSkip: Int64 = exfind4(maxI, tryHarder)
 
         var done: Bool = false;
-        var stateCount: Array<Int64> = Array<Int64>(5, item: 0);
+        var stateCount: Array<Int64> = Array<Int64>(5, repeat: 0);
         var i: Int64 = iSkip - 1
         while (i < maxI && !done) {
 
@@ -280,7 +280,7 @@ public open class FinderPatternFinder {
 
     protected static func doClearCounts(counts: Array<Int64>) {
         let b: Range<Int64> = Range<Int64>(0, counts.size, 1, true, true, false);
-        counts[b] = 0
+        counts[b] = Array<Int64>(counts.size, repeat:0)
     }
 
     protected static func doShiftCounts2(stateCount: Array<Int64>) {
@@ -728,7 +728,7 @@ public open class FinderPatternFinder {
 
         possibleCenters.sortBy(stable: true, comparator: moduleSizeComparator)
         var distortion: Float32 = Float32.Max;
-        var bestPatterns: Array<FinderPattern> = Array<FinderPattern>(3, item: FinderPattern(0.0, 0.0, 0.0));
+        var bestPatterns: Array<FinderPattern> = Array<FinderPattern>(3, repeat: FinderPattern(0.0, 0.0, 0.0));
 
         for (i in 0..possibleCenters.size - 2) {
             let fpi: FinderPattern = possibleCenters[i]

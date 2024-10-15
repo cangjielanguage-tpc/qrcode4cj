@@ -108,7 +108,7 @@ public class RSSExpandedReader <: AbstractRSSReader {
 
     private var pairs: ArrayList<ExpandedPair> = ArrayList<ExpandedPair>(MAX_PAIRS);
     private var rows: ArrayList<ExpandedRow> = ArrayList<ExpandedRow>();
-    private var startEnd: Array<Int64> = Array<Int64>(2, item: 0)
+    private var startEnd: Array<Int64> = Array<Int64>(2, repeat: 0)
     private var startFromEven: Bool = false;
 
     public func decodeRow(rowNumber: Int64, row: BitArray, _: HashMap<DecodeHintType, Any>): Result {
@@ -596,7 +596,7 @@ public class RSSExpandedReader <: AbstractRSSReader {
     }
 
     public func decodeDataCharacter(row: BitArray, pattern: FinderPattern, isOddPattern: Bool, leftChar: Bool): DataCharacter {
-        var counters: Array<Int64> = Array<Int64>(this.getDataCharacterCounters().size, item: 0);
+        var counters: Array<Int64> = Array<Int64>(this.getDataCharacterCounters().size, repeat: 0);
 
         //counters[] has the pixels of the module
         exdecodeDataCharacter(leftChar, row, pattern, counters)

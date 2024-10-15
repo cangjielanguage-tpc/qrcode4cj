@@ -197,7 +197,7 @@ public class DecodedBitStreamParser {
         // Each character will require 2 bytes. Read the characters as 2-byte pairs
         // and decode as GB2312 afterwards
         let bufferSize: Int64 = 2i64 * count_
-        var buffer: Array<Byte> = Array<Byte>(bufferSize, item: 0);
+        var buffer: Array<Byte> = Array<Byte>(bufferSize, repeat: 0);
         var offset: Int64 = 0;
         while (count_ > 0) {
             // Each 13 bits encodes a 2-byte character
@@ -235,7 +235,7 @@ public class DecodedBitStreamParser {
         // Each character will require 2 bytes. Read the characters as 2-byte pairs
         // and decode as Shift_JIS afterwards
         let bufferSize: Int64 = 2i64 * count_
-        var buffer: Array<Byte> = Array<Byte>(bufferSize, item: 0);
+        var buffer: Array<Byte> = Array<Byte>(bufferSize, repeat: 0);
         var offset: Int64 = 0;
         while (count_ > 0) {
             // Each 13 bits encodes a 2-byte character
@@ -271,7 +271,7 @@ public class DecodedBitStreamParser {
             throw Qrcoder4cjFormatException.getFormatInstance();
         }
 
-        var readBytes: Array<Byte> = Array<Byte>(count, item: 0);
+        var readBytes: Array<Byte> = Array<Byte>(count, repeat: 0);
         for (i in 0..count) {
             let bitItem: Int64 = bits.readBits(8);
             readBytes[i] = UInt8(bitItem)

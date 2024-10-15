@@ -59,7 +59,7 @@ public class Decoder {
         for (i in 0..dataBlocks.size) {
             totalBytes += dataBlocks[i].getNumDataCodewords()
         }
-        var resultBytes: Array<UInt8> = Array<UInt8>(totalBytes, item: 0)
+        var resultBytes: Array<UInt8> = Array<UInt8>(totalBytes, repeat: 0)
 
         var dataBlocksCount: Int64 = dataBlocks.size;
 
@@ -92,7 +92,7 @@ public class Decoder {
         let numCodewords: Int64 = codewordBytes.size;
 
         // First read into an array of ints
-        var codewordsInts: Array<Int64> = Array<Int64>(numCodewords, item: 0)
+        var codewordsInts: Array<Int64> = Array<Int64>(numCodewords, repeat: 0)
 
         for (i in 0..numCodewords) {
             codewordsInts[i] = Int64(codewordBytes[i]) & 0xFF

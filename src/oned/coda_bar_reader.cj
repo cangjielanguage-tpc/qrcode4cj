@@ -70,7 +70,7 @@ public open class CodaBarReader <: OneDReader {
 
     public init() {
         decodeRowResult = ArrayList<Rune>()
-        counters = Array<Int64>(80, item: 0)
+        counters = Array<Int64>(80, repeat: 0)
         counterLength = 0
     }
 
@@ -140,7 +140,7 @@ public open class CodaBarReader <: OneDReader {
         var right: Float32 = Float32(runningCount)
 
         var result: Result = Result(String(decodeRowResult), Array<UInt8>(),
-            Array<ResultPoint>([ResultPoint(left, Float32(rowNumber)), ResultPoint(right, Float32(rowNumber))]),
+            [ResultPoint(left, Float32(rowNumber)), ResultPoint(right, Float32(rowNumber))],
             BarcodeFormat.CODABAR)
 
         result.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]F0")
@@ -173,8 +173,8 @@ public open class CodaBarReader <: OneDReader {
 
     private func validatePattern(start: Int64) {
         // First, sum up the total size of our four categories of stripe sizes;
-        var sizes: Array<Int64> = Array<Int64>(4, item: 0);
-        var counts: Array<Int64> = Array<Int64>(4, item: 0);
+        var sizes: Array<Int64> = Array<Int64>(4, repeat: 0);
+        var counts: Array<Int64> = Array<Int64>(4, repeat: 0);
         var end: Int64 = decodeRowResult.size - 1
 
         // We break out of this loop in the middle, in order to handle
@@ -198,8 +198,8 @@ public open class CodaBarReader <: OneDReader {
         }
 
         // Calculate our allowable size thresholds using fixed-point math.
-        var maxes: Array<Float32> = Array<Float32>(4, item: 0.0)
-        var mins: Array<Float32> = Array<Float32>(4, item: 0.0)
+        var maxes: Array<Float32> = Array<Float32>(4, repeat: 0.0)
+        var mins: Array<Float32> = Array<Float32>(4, repeat: 0.0)
 
         // Define the threshold of acceptability to be the midpoint between the
         // average small stripe and the average large stripe. No stripe lengths
@@ -270,7 +270,7 @@ public open class CodaBarReader <: OneDReader {
         counters[counterLength] = e
         counterLength++
         if (counterLength >= counters.size) {
-            var temp: Array<Int64> = Array<Int64>(counterLength * 2, item: 0)
+            var temp: Array<Int64> = Array<Int64>(counterLength * 2, repeat: 0)
             System.arraycopy(counters, 0, temp, 0, counterLength);
             counters = temp
         }

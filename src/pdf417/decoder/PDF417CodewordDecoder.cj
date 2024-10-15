@@ -26,7 +26,7 @@ open class PDF417CodewordDecoder {
 
     private static func sampleBitCounts(moduleBitCount: Array<Int64>): Array<Int64> {
         var bitCountSum: Float32 = Float32(MathUtils.sum(moduleBitCount))
-        var result: Array<Int64> = Array<Int64>(PDF417Common.BARS_IN_MODULE, item: 0)
+        var result: Array<Int64> = Array<Int64>(PDF417Common.BARS_IN_MODULE, repeat: 0)
         var bitCountIndex: Int64 = 0
         var sumPreviousBits: Int64 = 0
         for (i in 0..PDF417Common.MODULES_IN_CODEWORD) {
@@ -73,7 +73,7 @@ open class PDF417CodewordDecoder {
         if (RATIOS_TABLE.size == 0) {
             RATIOS_TABLE = Array<Array<Float32>>(
                 PDF417Common.SYMBOL_TABLE.size,
-                {int: Int64 => Array<Float32>(PDF417Common.BARS_IN_MODULE, item: 0.0)}
+                {int: Int64 => Array<Float32>(PDF417Common.BARS_IN_MODULE, repeat: 0.0)}
             )
 
             // Pre-computes the symbol ratio table.
@@ -95,7 +95,7 @@ open class PDF417CodewordDecoder {
         }
 
         var bitCountSum: Int64 = MathUtils.sum(moduleBitCount);
-        var bitCountRatios: Array<Float32> = Array<Float32>(PDF417Common.BARS_IN_MODULE, item: 0.0)
+        var bitCountRatios: Array<Float32> = Array<Float32>(PDF417Common.BARS_IN_MODULE, repeat: 0.0)
         if (bitCountSum > 1) {
             for (i in 0..bitCountRatios.size) {
                 bitCountRatios[i] = (Float32(moduleBitCount[i]) / Float32(bitCountSum))

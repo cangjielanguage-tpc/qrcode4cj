@@ -45,11 +45,11 @@ public class Decoder {
             case 2 | 3 | 4 =>
                 correctErrors(codewords, 20, 84, 40, EVEN)
                 correctErrors(codewords, 20, 84, 40, ODD)
-                datawords = Array<UInt8>(94, item: 0)
+                datawords = Array<UInt8>(94, repeat: 0)
             case 5 =>
                 correctErrors(codewords, 20, 68, 56, EVEN)
                 correctErrors(codewords, 20, 68, 56, ODD)
-                datawords = Array<UInt8>(78, item: 0)
+                datawords = Array<UInt8>(78, repeat: 0)
             case _ => throw Qrcoder4cjFormatException.getFormatInstance()
         }
         System.arraycopy(codewords, 0, datawords, 0, 10)
@@ -74,7 +74,7 @@ public class Decoder {
         }
 
         // First read into an array of ints
-        var codewordsInts: Array<Int64> = Array<Int64>(codewords / divisor, item: 0)
+        var codewordsInts: Array<Int64> = Array<Int64>(codewords / divisor, repeat: 0)
         for (i in 0..codewords) {
             if ((mode == ALL) || (i % 2 == (mode - 1))) {
                 codewordsInts[i / divisor] = Int64(UInt8(codewordBytes[i + start])) & 0xFF

@@ -280,13 +280,13 @@ public class HighLevelEncoder {
         }
 
         var charsProcessed = 0;
-        var mins = Array<Byte>(6, item: 0)
-        var intCharCounts = Array<Int64>(6, item: 0)
+        var mins = Array<Byte>(6, repeat: 0)
+        var intCharCounts = Array<Int64>(6, repeat: 0)
         while (true) {
             //step K
             if ((startpos + charsProcessed) == msg.charSize) {
-                mins = Array<Byte>(6, item: 0)
-                intCharCounts = Array<Int64>(6, item: 0)
+                mins = Array<Byte>(6, repeat: 0)
+                intCharCounts = Array<Int64>(6, repeat: 0)
                 var min: Int64 = findMinimums(charCounts, intCharCounts, Int64(Int32.Max), mins);
                 var minCount: Int64 = getMinimumCount(mins);
 
@@ -369,8 +369,8 @@ public class HighLevelEncoder {
 
             //step R
             if (charsProcessed >= 4) {
-                mins = Array<Byte>(6, item: 0)
-                intCharCounts = Array<Int64>(6, item: 0)
+                mins = Array<Byte>(6, repeat: 0)
+                intCharCounts = Array<Int64>(6, repeat: 0)
                 findMinimums(charCounts, intCharCounts, Int64(Int32.Max), mins);
 
                 if (intCharCounts[ASCII_ENCODATION] < min(

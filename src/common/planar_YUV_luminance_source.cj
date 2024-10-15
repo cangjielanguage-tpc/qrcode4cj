@@ -58,9 +58,9 @@ public open class PlanarYUVLuminanceSource <: LuminanceSource {
             throw IllegalArgumentException("Requested row is outside the image: " + y.toString())
         }
         let width: Int64 = getWidth()
-        var row: Array<UInt8> = Array<UInt8>(width, item: 0)
+        var row: Array<UInt8> = Array<UInt8>(width, repeat: 0)
         if (row.size == 0 || row.size < width) {
-            row = Array<UInt8>(width, item: 0)
+            row = Array<UInt8>(width, repeat: 0)
         }
         var offset: Int64 = (y + top) * dataWidth + left
         System.arraycopy(yuvData, offset, row, 0, width);
@@ -79,7 +79,7 @@ public open class PlanarYUVLuminanceSource <: LuminanceSource {
         }
 
         let area: Int64 = width * height
-        var matrix: Array<UInt8> = Array<UInt8>(area, item: 0)
+        var matrix: Array<UInt8> = Array<UInt8>(area, repeat: 0)
         var inputOffset: Int64 = top * dataWidth + left
 
         /* If the width matches the full width of the underlying data, perform a single copy. */
@@ -122,7 +122,7 @@ public open class PlanarYUVLuminanceSource <: LuminanceSource {
     public func renderThumbnail(): Array<Int64> {
         let width: Int64 = getWidth() / THUMBNAIL_SCALE_FACTOR
         let height: Int64 = getHeight() / THUMBNAIL_SCALE_FACTOR
-        var pixels: Array<Int64> = Array<Int64>(width * height, item: 0)
+        var pixels: Array<Int64> = Array<Int64>(width * height, repeat: 0)
         var yuv: Array<UInt8> = yuvData
         var inputOffset: Int64 = top * dataWidth + left
 

@@ -38,7 +38,7 @@ public open class PDF417Common {
         if (list.size == 0 || list.isEmpty()) {
             return EMPTY_INT_ARRAY
         }
-        var result: Array<Int64> = Array<Int64>(list.size, item: 0);
+        var result: Array<Int64> = Array<Int64>(list.size, repeat: 0);
         var i: Int64 = 0
         for (integer in list) {
             result[i] = integer

@@ -143,7 +143,7 @@ public open class DecodedBitStreamParser {
             // we must have at least two bytes left for the segment index
             throw Qrcoder4cjFormatException.getFormatInstance()
         }
-        var segmentIndexArray: Array<Int64> = Array<Int64>(NUMBER_OF_SEQUENCE_CODEWORDS, item: 0)
+        var segmentIndexArray: Array<Int64> = Array<Int64>(NUMBER_OF_SEQUENCE_CODEWORDS, repeat: 0)
         for (i in 0..NUMBER_OF_SEQUENCE_CODEWORDS) {
             segmentIndexArray[i] = codewords[codeIndex_]
             codeIndex_++
@@ -241,7 +241,7 @@ public open class DecodedBitStreamParser {
                 optionalFieldsLength--
             }
             if (optionalFieldsLength > 0) {
-                var newArray: Array<Int64> = Array<Int64>(optionalFieldsLength, item: 0);
+                var newArray: Array<Int64> = Array<Int64>(optionalFieldsLength, repeat: 0);
                 for (i in optionalFieldsStart..optionalFieldsStart + optionalFieldsLength) {
                     if (let Some(num) <- codewords.get(i)) {
                         newArray[i - optionalFieldsStart] = num
@@ -269,10 +269,10 @@ public open class DecodedBitStreamParser {
         var codeIndex_ = codeIndex
 
         // 2 character per codeword
-        var textCompactionData: Array<Int64> = Array<Int64>((codewords[0] - codeIndex) * 2, item: 0)
+        var textCompactionData: Array<Int64> = Array<Int64>((codewords[0] - codeIndex) * 2, repeat: 0)
 
         // Used to hold the byte compaction value if there is a mode shift
-        var byteCompactionData: Array<Int64> = Array<Int64>((codewords[0] - codeIndex) * 2, item: 0)
+        var byteCompactionData: Array<Int64> = Array<Int64>((codewords[0] - codeIndex) * 2, repeat: 0)
 
         var index: Int64 = 0
         var end: Bool = false
@@ -306,8 +306,8 @@ public open class DecodedBitStreamParser {
                     if (codeIndex_ > codewords[0]) {
                         throw Qrcoder4cjFormatException.getFormatInstance()
                     }
-                    textCompactionData = Array<Int64>((codewords[0] - codeIndex_) * 2, item: 0)
-                    byteCompactionData = Array<Int64>((codewords[0] - codeIndex_) * 2, item: 0)
+                    textCompactionData = Array<Int64>((codewords[0] - codeIndex_) * 2, repeat: 0)
+                    byteCompactionData = Array<Int64>((codewords[0] - codeIndex_) * 2, repeat: 0)
                     index = 0
                 }
             }
@@ -557,7 +557,7 @@ public open class DecodedBitStreamParser {
         var end: Bool = false
         var codeIndex_ = codeIndex
 
-        var numericCodewords: Array<Int64> = Array<Int64>(MAX_NUMERIC_CODEWORDS, item: 0)
+        var numericCodewords: Array<Int64> = Array<Int64>(MAX_NUMERIC_CODEWORDS, repeat: 0)
 
         while (codeIndex_ < codewords[0] && !end) {
             var code: Int64 = codewords[codeIndex_]

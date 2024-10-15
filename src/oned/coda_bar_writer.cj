@@ -46,7 +46,7 @@ public open class CodaBarWriter <: OneDimensionalCodeWriter {
         // A blank is placed between each character.
         resultLength += contents.charSize - 1
 
-        var result: Array<Bool> = Array<Bool>(resultLength, item: false)
+        var result: Array<Bool> = Array<Bool>(resultLength, repeat: false)
         var position: Int64 = 0;
         for (index in 0..contents.charSize) {
             var c: Rune = contents.get(index).toAsciiUpperCase();

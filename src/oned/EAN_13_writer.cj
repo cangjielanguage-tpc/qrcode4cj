@@ -61,7 +61,7 @@ public open class EAN13Writer <: UPCEANWriter {
         }
 
         var parities: Int64 = EAN13Reader.FIRST_DIGIT_ENCODINGS[firstDigit]
-        var result: Array<Bool> = Array<Bool>(CODE_WIDTH, item: false)
+        var result: Array<Bool> = Array<Bool>(CODE_WIDTH, repeat: false)
         var pos: Int64 = 0;
 
         pos += appendPattern(result, pos, UPCEANReader.START_END_PATTERN, true)
