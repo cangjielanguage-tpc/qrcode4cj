@@ -146,7 +146,7 @@ public class FormatInformation <: Equatable<FormatInformation> & ToString {
     }
 
     public func equals(o: Any): Bool {
-        if (let Some(other) <- o as FormatInformation) {
+        if (let Some(other) <- (o as FormatInformation)) {
             return this.errorCorrectionLevel == other.errorCorrectionLevel && this.dataMask == other.dataMask
         } else {
             return false;

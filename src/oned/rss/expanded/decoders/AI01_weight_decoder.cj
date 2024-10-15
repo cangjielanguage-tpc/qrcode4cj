@@ -25,11 +25,11 @@ abstract class AI01weightDecoder <: AI01decoder {
 
         for (i in 0..5) {
             if (weightNumeric / currentDivisor == 0) {
-                buf.append(r'0');
+                buf.add(r'0');
             }
             currentDivisor /= 10
         }
-        buf.appendAll(weightNumeric.toString().toRuneArray());
+        buf.add(all:weightNumeric.toString().toRuneArray());
     }
 
     protected func addWeightCode(buf: ArrayList<Rune>, weight: Int64): Unit

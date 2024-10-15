@@ -3,8 +3,6 @@
  */
 package QRCode4cj.common
 
-import std.os.*
-
 public open class Qrcoder4cjReaderException <: Exception {
     public init() {
         super()

@@ -127,7 +127,7 @@ public abstract class OneDReader <: Reader {
                     // that start on the center line.
                     if (hintsuse.size > 0 && hintsuse.contains(DecodeHintType.NEED_RESULT_POINT_CALLBACK)) {
                         var newHints: HashMap<DecodeHintType, Any> = HashMap<DecodeHintType, Any>()
-                        newHints.putAll(hintsuse)
+                        newHints.add(all: hintsuse)
                         newHints.remove(DecodeHintType.NEED_RESULT_POINT_CALLBACK)
                         hintsuse = newHints
                     }

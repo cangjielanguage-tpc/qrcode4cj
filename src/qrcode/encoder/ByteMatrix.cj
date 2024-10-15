@@ -16,7 +16,7 @@ public class ByteMatrix <: ToString & Equatable<ByteMatrix> {
     private var height: Int64
 
     public init(width: Int64, height: Int64) {
-        bytes = Array<Array<Byte>>(height, {a: Int64 => Array<Byte>(width, item: 255)})
+        bytes = Array<Array<Byte>>(height, {a: Int64 => Array<Byte>(width, repeat: 255)})
         this.width = width
         this.height = height
     }
@@ -71,12 +71,12 @@ public class ByteMatrix <: ToString & Equatable<ByteMatrix> {
             let bytesY: Array<Byte> = bytes[y]
             for (x in 0..width) {
                 match (bytesY[x]) {
-                    case 0 => result.appendAll(" 0".toRuneArray());
-                    case 1 => result.appendAll(" 1".toRuneArray());
-                    case _ => result.appendAll("  ".toRuneArray());
+                    case 0 => result.add(all:" 0".toRuneArray());
+                    case 1 => result.add(all:" 1".toRuneArray());
+                    case _ => result.add(all:"  ".toRuneArray());
                 }
             }
-            result.append(r'\n');
+            result.add(r'\n');
         }
         return String(result);
     }

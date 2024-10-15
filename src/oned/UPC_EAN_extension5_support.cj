@@ -16,7 +16,7 @@ import std.convert.*
 open class UPCEANExtension5Support {
     private static let CHECK_DIGIT_ENCODINGS: Array<Int64> = [0x18, 0x14, 0x12, 0x11, 0x0C, 0x06, 0x03, 0x0A, 0x09, 0x05]
 
-    private let decodeMiddleCounters: Array<Int64> = Array<Int64>(4, item: 0)
+    private let decodeMiddleCounters: Array<Int64> = Array<Int64>(4, repeat: 0)
 
     func decodeRow(rowNumber: Int64, row: BitArray, extensionStartRange: Array<Int64>): Result {
         var result: ArrayList<Rune> = ArrayList<Rune>()
@@ -29,12 +29,8 @@ open class UPCEANExtension5Support {
         var extensionResult: Result = Result(
             resultString.toString(),
             Array<UInt8>(),
-            Array<ResultPoint>(
-                [
-                    ResultPoint(Float32(extensionStartRange[0] + extensionStartRange[1]) / 2.0, Float32(rowNumber)),
-                    ResultPoint(Float32(end), Float32(rowNumber))
-                ]
-            ),
+            [ResultPoint(Float32(extensionStartRange[0] + extensionStartRange[1]) / 2.0, Float32(rowNumber)),
+                ResultPoint(Float32(end), Float32(rowNumber))],
             BarcodeFormat.UPC_EAN_EXTENSION
         );
         if (extensionData.size > 0) {
@@ -58,7 +54,7 @@ open class UPCEANExtension5Support {
         var x = 0;
         while (x < 5 && rowOffset < end) {
             var bestMatch: Int64 = UPCEANReader.decodeDigit(row, counters, rowOffset, UPCEANReader.L_AND_G_PATTERNS);
-            resultString.append(Rune(r'0'.hashCode() + bestMatch % 10));
+            resultString.add(Rune(r'0'.hashCode() + bestMatch % 10));
 
             for (i in 0..counters.size) {
                 rowOffset += counters[i]
@@ -127,7 +123,7 @@ open class UPCEANExtension5Support {
             return HashMap<ResultMetadataType, Any>();
         }
         var result: HashMap<ResultMetadataType, Any> = HashMap<ResultMetadataType, Any>();
-        result.put(ResultMetadataType.SUGGESTED_PRICE, value);
+        result.add(ResultMetadataType.SUGGESTED_PRICE, value);
         return result
     }
 

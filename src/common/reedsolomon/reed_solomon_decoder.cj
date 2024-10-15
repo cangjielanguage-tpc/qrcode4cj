@@ -21,7 +21,7 @@ public class ReedSolomonDecoder {
      */
     public func decode(received: Array<Int64>, twoS: Int64) {
         let poly: GenericGFPoly = GenericGFPoly(field, received)
-        let syndromeCoefficients: Array<Int64> = Array<Int64>(twoS, item: 0)
+        let syndromeCoefficients: Array<Int64> = Array<Int64>(twoS, repeat: 0)
         var noError: Bool = true
         for (i in 0..twoS) {
             let eval = poly.evaluateAt(field.exp(i + field.getGeneratorBase()));
@@ -112,7 +112,7 @@ public class ReedSolomonDecoder {
         if (numErrors == 1) { // shortcut
             return [errorLocator.getCoefficient(1)]
         }
-        var result: Array<Int64> = Array<Int64>(numErrors, item: 0)
+        var result: Array<Int64> = Array<Int64>(numErrors, repeat: 0)
         var e = 0
         var i = 1;
         while (i < field.getSize() && e < numErrors) {
@@ -131,7 +131,7 @@ public class ReedSolomonDecoder {
     private func findErrorMagnitudes(errorEvaluator: GenericGFPoly, errorLocations: Array<Int64>): Array<Int64> {
         // This is directly applying Forney's Formula
         let s = errorLocations.size
-        let result = Array<Int64>(s, item: 0)
+        let result = Array<Int64>(s, repeat: 0)
         for (i in 0..s) {
             let xiInverse = field.inverse(errorLocations[i])
             var denominator = 1

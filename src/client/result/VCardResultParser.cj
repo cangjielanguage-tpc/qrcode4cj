@@ -88,9 +88,9 @@ public open class VCardResultParser <: ResultParser {
         for (name in names) {
             var nam: ArrayList<String> = ArrayList<String>()
             for (na in name) {
-                nam.append(na)
+                nam.add(na)
             }
-            namess.append(nam)
+            namess.add(nam)
         }
     }
 
@@ -132,7 +132,7 @@ public open class VCardResultParser <: ResultParser {
                     if (metadata.isEmpty()) {
                         metadata = ArrayList<String>(1)
                     }
-                    metadata.append(metadatum);
+                    metadata.add(metadatum);
                     var metadatumTokens: Array<String> = metadatum.split(EQUALS);
                     if (metadatumTokens.size > 1) {
                         var key: String = metadatumTokens[0]
@@ -218,11 +218,11 @@ public open class VCardResultParser <: ResultParser {
                 }
                 if (metadata.isEmpty()) {
                     var matchData: ArrayList<String> = ArrayList<String>(1);
-                    matchData.append(element_);
-                    matches.append(matchData);
+                    matchData.add(element_);
+                    matches.add(matchData);
                 } else {
-                    metadata.insert(0, element_);
-                    matches.append(metadata);
+                    metadata.add( element_, at: 0);
+                    matches.add(metadata);
                 }
                 i++
             } else {
@@ -235,7 +235,7 @@ public open class VCardResultParser <: ResultParser {
     private static func decodeQuotedPrintable(value: UTF32String, charset: String): String {
         var length: Int64 = value.charSize;
         var result: ArrayList<Rune> = ArrayList<Rune>();
-        var fragmentBuffer: ByteArrayStream = ByteArrayStream();
+        var fragmentBuffer: ByteBuffer = ByteBuffer();
         var i = 0
         while (i < length) {
             var c: Rune = value.get(i);
@@ -258,7 +258,7 @@ public open class VCardResultParser <: ResultParser {
                 }
             } else {
                 maybeAppendFragment(fragmentBuffer, charset, result);
-                result.append(c);
+                result.add(c);
             }
             i++
         }
@@ -266,7 +266,7 @@ public open class VCardResultParser <: ResultParser {
         return String(result);
     }
     private static func maybeAppendFragment(
-        fragmentBuffer: ByteArrayStream,
+        fragmentBuffer: ByteBuffer,
         charset: String,
         result: ArrayList<Rune>
     ) {
@@ -283,7 +283,7 @@ public open class VCardResultParser <: ResultParser {
                 }
             }
             fragmentBuffer.clear()
-            result.appendAll(fragment.toRuneArray())
+            result.add(all:fragment.toRuneArray())
         }
     }
 
@@ -317,7 +317,7 @@ public open class VCardResultParser <: ResultParser {
         for (list in lists) {
             var value: String = list[0]
             if (!value.isEmpty()) {
-                result.append(value);
+                result.add(value);
             }
         }
         return result.toArray();
@@ -345,7 +345,7 @@ public open class VCardResultParser <: ResultParser {
                         typeData = metadatum.substring(equals.getOrThrow() + 1)
                         break
                     }
-                    result.append(typeData.toString());
+                    result.add(typeData.toString());
                 }
             }
         }
@@ -371,7 +371,7 @@ public open class VCardResultParser <: ResultParser {
             for (list in names) {
                 var name: UTF32String = UTF32String(list.get(0).getOrThrow())
                 var start: Int64 = 0;
-                var components: Array<UTF32String> = Array<UTF32String>(5, item: UTF32String())
+                var components: Array<UTF32String> = Array<UTF32String>(5, repeat: UTF32String())
                 var end: Int64
                 var componentIndex: Int64 = 0;
                 if (let Some(v) <- name.indexOf(r';'.toString(), start: start)) {
@@ -390,7 +390,7 @@ public open class VCardResultParser <: ResultParser {
                 maybeAppendComponent(components, 2, newName);
                 maybeAppendComponent(components, 0, newName);
                 maybeAppendComponent(components, 4, newName);
-                list.set(0, String(newName).trimAscii());
+                list[0] =  String(newName).trimAscii();
             }
         }
     }
@@ -398,9 +398,9 @@ public open class VCardResultParser <: ResultParser {
     private static func maybeAppendComponent(components: Array<UTF32String>, i: Int64, newName: ArrayList<Rune>) {
         if (components[i].size != 0 && !components[i].isEmpty()) {
             if (newName.size > 0) {
-                newName.append(r' ');
+                newName.add(r' ');
             }
-            newName.appendAll(components[i].toRuneArray());
+            newName.add(all:components[i].toRuneArray());
         }
     }
 }

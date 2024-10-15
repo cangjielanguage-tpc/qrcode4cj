@@ -5,7 +5,7 @@
 package QRCode4cj.pdf417.decoder
 
 import std.convert.*
-import std.format.*
+
 import QRCode4cj.common.Qrcoder4cjFormatException
 import QRCode4cj.common.ECIStringBuilder
 import QRCode4cj.common.DecoderResult
@@ -104,7 +104,7 @@ public open class DecodedBitStreamParser {
                     result
                 )
             } else if (code == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
-                result.append(Rune(codewords[codeIndex]))
+                result.add(Rune(codewords[codeIndex]))
                 codeIndex++
             } else if (code == NUMERIC_COMPACTION_MODE_LATCH) {
                 codeIndex = numericCompaction(codewords, codeIndex, result)
@@ -143,7 +143,7 @@ public open class DecodedBitStreamParser {
             // we must have at least two bytes left for the segment index
             throw Qrcoder4cjFormatException.getFormatInstance()
         }
-        var segmentIndexArray: Array<Int64> = Array<Int64>(NUMBER_OF_SEQUENCE_CODEWORDS, item: 0)
+        var segmentIndexArray: Array<Int64> = Array<Int64>(NUMBER_OF_SEQUENCE_CODEWORDS, repeat: 0)
         for (i in 0..NUMBER_OF_SEQUENCE_CODEWORDS) {
             segmentIndexArray[i] = codewords[codeIndex_]
             codeIndex_++
@@ -161,7 +161,7 @@ public open class DecodedBitStreamParser {
         var fileId: ArrayList<Rune> = ArrayList<Rune>()
         while (codeIndex_ < codewords[0] && codeIndex_ < codewords.size && codewords[codeIndex_] !=
                 MACRO_PDF417_TERMINATOR && codewords[codeIndex_] != BEGIN_MACRO_PDF417_OPTIONAL_FIELD) {
-            fileId.appendAll(codewords[codeIndex_].format(".3").toRuneArray())
+            fileId.add(all:codewords[codeIndex_].format(".3").toRuneArray())
             codeIndex_++
         }
         if (fileId.size == 0) {
@@ -241,7 +241,7 @@ public open class DecodedBitStreamParser {
                 optionalFieldsLength--
             }
             if (optionalFieldsLength > 0) {
-                var newArray: Array<Int64> = Array<Int64>(optionalFieldsLength, item: 0);
+                var newArray: Array<Int64> = Array<Int64>(optionalFieldsLength, repeat: 0);
                 for (i in optionalFieldsStart..optionalFieldsStart + optionalFieldsLength) {
                     if (let Some(num) <- codewords.get(i)) {
                         newArray[i - optionalFieldsStart] = num
@@ -269,10 +269,10 @@ public open class DecodedBitStreamParser {
         var codeIndex_ = codeIndex
 
         // 2 character per codeword
-        var textCompactionData: Array<Int64> = Array<Int64>((codewords[0] - codeIndex) * 2, item: 0)
+        var textCompactionData: Array<Int64> = Array<Int64>((codewords[0] - codeIndex) * 2, repeat: 0)
 
         // Used to hold the byte compaction value if there is a mode shift
-        var byteCompactionData: Array<Int64> = Array<Int64>((codewords[0] - codeIndex) * 2, item: 0)
+        var byteCompactionData: Array<Int64> = Array<Int64>((codewords[0] - codeIndex) * 2, repeat: 0)
 
         var index: Int64 = 0
         var end: Bool = false
@@ -306,8 +306,8 @@ public open class DecodedBitStreamParser {
                     if (codeIndex_ > codewords[0]) {
                         throw Qrcoder4cjFormatException.getFormatInstance()
                     }
-                    textCompactionData = Array<Int64>((codewords[0] - codeIndex_) * 2, item: 0)
-                    byteCompactionData = Array<Int64>((codewords[0] - codeIndex_) * 2, item: 0)
+                    textCompactionData = Array<Int64>((codewords[0] - codeIndex_) * 2, repeat: 0)
+                    byteCompactionData = Array<Int64>((codewords[0] - codeIndex_) * 2, repeat: 0)
                     index = 0
                 }
             }
@@ -374,7 +374,7 @@ public open class DecodedBitStreamParser {
                         priorToShiftMode = subMode
                         subMode = Mode.PUNCT_SHIFT
                     } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
-                        result.append(Rune(byteCompactionData[i]))
+                        result.add(Rune(byteCompactionData[i]))
                     } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
                         subMode = Mode.ALPHA
                         latchedMode = subMode
@@ -397,7 +397,7 @@ public open class DecodedBitStreamParser {
                         priorToShiftMode = subMode
                         subMode = Mode.PUNCT_SHIFT
                     } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
-                        result.append(Rune(byteCompactionData[i]))
+                        result.add(Rune(byteCompactionData[i]))
                     } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
                         subMode = Mode.ALPHA
                         latchedMode = subMode
@@ -423,7 +423,7 @@ public open class DecodedBitStreamParser {
                         priorToShiftMode = subMode
                         subMode = Mode.PUNCT_SHIFT
                     } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
-                        result.append(Rune(byteCompactionData[i]))
+                        result.add(Rune(byteCompactionData[i]))
                     }
                 }
                 case PUNCT =>
@@ -435,7 +435,7 @@ public open class DecodedBitStreamParser {
                         subMode = Mode.ALPHA
                         latchedMode = subMode
                     } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
-                        result.append(Rune(byteCompactionData[i]))
+                        result.add(Rune(byteCompactionData[i]))
                     }
                 }
                 case ALPHA_SHIFT =>
@@ -459,13 +459,13 @@ public open class DecodedBitStreamParser {
                         if (subModeCh == PAL || subModeCh == TEXT_COMPACTION_MODE_LATCH) {
                             subMode = Mode.ALPHA
                         } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
-                            result.append(Rune(byteCompactionData[i]))
+                            result.add(Rune(byteCompactionData[i]))
                         }
                     }
             }
             if (ch != Rune(0x00)) {
                 // Append decoded character to result
-                result.append(ch)
+                result.add(ch)
             }
             i++
         }
@@ -512,7 +512,7 @@ public open class DecodedBitStreamParser {
                 if (count == 5 && (mode == BYTE_COMPACTION_MODE_LATCH_6 || codeIndex_ < codewords[0] &&
                     codewords[codeIndex_] < TEXT_COMPACTION_MODE_LATCH)) {
                     for (i in 0..6) {
-                        result.append(UInt8(value >> (8 * (5 - i))))
+                        result.add(UInt8(value >> (8 * (5 - i))))
                     }
                 } else {
                     codeIndex_ -= count
@@ -531,7 +531,7 @@ public open class DecodedBitStreamParser {
             var code: Int64 = codewords[codeIndex_p]
             codeIndex_p++
             if (code < TEXT_COMPACTION_MODE_LATCH) {
-                result.append(UInt8(code))
+                result.add(UInt8(code))
             } else if (code == ECI_CHARSET) {
                 result.appendECI(codewords[codeIndex_p])
                 codeIndex_p++
@@ -557,7 +557,7 @@ public open class DecodedBitStreamParser {
         var end: Bool = false
         var codeIndex_ = codeIndex
 
-        var numericCodewords: Array<Int64> = Array<Int64>(MAX_NUMERIC_CODEWORDS, item: 0)
+        var numericCodewords: Array<Int64> = Array<Int64>(MAX_NUMERIC_CODEWORDS, repeat: 0)
 
         while (codeIndex_ < codewords[0] && !end) {
             var code: Int64 = codewords[codeIndex_]
@@ -581,7 +581,7 @@ public open class DecodedBitStreamParser {
                 // while in Numeric Compaction mode) serves  to terminate the current
                 // Numeric Compaction mode grouping as described,
                 // and then to start a new one grouping.
-                result.append(decodeBase900toBase10(numericCodewords, count))
+                result.add(decodeBase900toBase10(numericCodewords, count))
                 count = 0
             }
         }

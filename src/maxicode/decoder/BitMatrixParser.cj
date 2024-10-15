@@ -1076,7 +1076,7 @@ public class BitMatrixParser {
     }
 
     public func readCodewords(): Array<UInt8> {
-        var result: Array<UInt8> = Array<UInt8>(144, item: 0)
+        var result: Array<UInt8> = Array<UInt8>(144, repeat: 0)
         var height: Int64 = bitMatrix.getHeight()
         var width: Int64 = bitMatrix.getWidth()
         for (y in 0..height) {

@@ -1090,7 +1090,7 @@ open class PDF417ErrorCorrection {
      */
     static func generateErrorCorrection(dataCodewords: UTF32String, errorCorrectionLevel: Int64): UTF32String {
         let k: Int64 = getErrorCorrectionCodewordCount(errorCorrectionLevel)
-        var e: Array<Rune> = Array<Rune>(k, item: r'\u{00}')
+        var e: Array<Rune> = Array<Rune>(k, repeat: r'\u{00}')
         let sld: Int64 = dataCodewords.charSize
         for (i in 0..sld) {
             var t1: Int64 = (dataCodewords[i].hashCode() + e[e.size - 1].hashCode()) % 929
@@ -1110,7 +1110,7 @@ open class PDF417ErrorCorrection {
             if (e[j].hashCode() != 0) {
                 e[j] = Rune(929 - e[j].hashCode())
             }
-            sb.append(e[j])
+            sb.add(e[j])
         }
 
         return UTF32String(sb)

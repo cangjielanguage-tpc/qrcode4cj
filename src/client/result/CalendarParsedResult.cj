@@ -230,9 +230,9 @@ public open class CalendarParsedResult <: ParsedResult {
 
         var datareturn: String
         if (allDay) {
-            datareturn = format.toString("yyyy-MM-dd")
+            datareturn = format.toString(DateTimeFormat.of("yyyy-MM-dd"))
         } else {
-            datareturn = format.toString("yyyy-MM-dd HH:mm:ss")
+            datareturn = format.toString(DateTimeFormat.of("yyyy-MM-dd HH:mm:ss"))
         }
 
         return datareturn

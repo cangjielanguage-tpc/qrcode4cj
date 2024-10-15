@@ -83,7 +83,7 @@ public class RSS14Reader <: AbstractRSSReader {
             }
         }
         if (!found) {
-            possiblePairs.append(pair);
+            possiblePairs.add(pair);
         }
     }
 
@@ -99,10 +99,10 @@ public class RSS14Reader <: AbstractRSSReader {
         var buffer: ArrayList<Rune> = ArrayList<Rune>();
         var i: Int64 = 13 - text.charSize
         while (i > 0) {
-            buffer.append(r'0');
+            buffer.add(r'0');
             i--
         }
-        buffer.appendAll(text.toRuneArray());
+        buffer.add(all:text.toRuneArray());
 
         var checkDigit: Int64 = 0;
 
@@ -118,7 +118,7 @@ public class RSS14Reader <: AbstractRSSReader {
         if (checkDigit == 10) {
             checkDigit = 0
         }
-        buffer.appendAll(checkDigit.toString().toRuneArray());
+        buffer.add(all:checkDigit.toString().toRuneArray());
 
         var leftPoints: Array<ResultPoint> = leftPair.getFinderPattern().getResultPoints();
         var rightPoints: Array<ResultPoint> = rightPair.getFinderPattern().getResultPoints();
@@ -182,7 +182,7 @@ public class RSS14Reader <: AbstractRSSReader {
     }
 
     private func decodeDataCharacter(row: BitArray, pattern: FinderPattern, outsideChar: Bool): DataCharacter {
-        var counters: Array<Int64> = Array<Int64>(getDataCharacterCounters().size, item: 0);
+        var counters: Array<Int64> = Array<Int64>(getDataCharacterCounters().size, repeat: 0);
 
         if (outsideChar) {
             recordPatternInReverse(row, pattern.getStartEnd()[0], counters);

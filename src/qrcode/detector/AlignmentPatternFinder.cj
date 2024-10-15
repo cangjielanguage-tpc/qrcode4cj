@@ -46,7 +46,7 @@ public class AlignmentPatternFinder {
         this.width = width
         this.height = height
         this.moduleSize = moduleSize
-        this.crossCheckStateCount = Array<Int64>(3, item: 0)
+        this.crossCheckStateCount = Array<Int64>(3, repeat: 0)
         this.resultPointCallback = resultPointCallback
     }
 
@@ -65,7 +65,7 @@ public class AlignmentPatternFinder {
 
         // We are looking for black/white/black modules in 1:1:1 ratio;
         // this tracks the number of black/white/black modules seen so far
-        var stateCount: Array<Int64> = Array<Int64>(3, item: 0);
+        var stateCount: Array<Int64> = Array<Int64>(3, repeat: 0);
         for (iGen in 0..height) {
             // Search from middle outwards
             let iGenResult: Int64 = if ((iGen & 0x01) == 0) {
@@ -272,7 +272,7 @@ public class AlignmentPatternFinder {
 
             // Hadn't found this before; save it
             let point: AlignmentPattern = AlignmentPattern(centerJ, centerI, estimatedModuleSize);
-            possibleCenters.append(point);
+            possibleCenters.add(point);
             if (let Some(res) <- resultPointCallback) {
                 res.foundPossibleResultPoint(point);
             }

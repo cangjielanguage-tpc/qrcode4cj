@@ -19,7 +19,7 @@ public open class BarcodeMatrix {
      */
     init(height: Int64, width: Int64) {
         var itemrow: BarcodeRow = BarcodeRow(0)
-        matrix = Array<BarcodeRow>(height, item: itemrow)
+        matrix = Array<BarcodeRow>(height, repeat: itemrow)
 
         //Initializes the array to the correct width
         let matrixLength: Int64 = matrix.size
@@ -51,7 +51,7 @@ public open class BarcodeMatrix {
     public func getScaledMatrix(xScale: Int64, yScale: Int64): Array<Array<UInt8>> {
         var matrixOut: Array<Array<UInt8>> = Array<Array<UInt8>>(
             height * yScale,
-            {int: Int64 => Array<UInt8>(width * xScale, item: 0)}
+            {int: Int64 => Array<UInt8>(width * xScale, repeat: 0)}
         )
         let yMax: Int64 = height * yScale
         for (i in 0..yMax) {

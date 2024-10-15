@@ -15,9 +15,9 @@ abstract class AI01decoder <: AbstractExpandedDecoder {
     }
 
     func encodeCompressedGtin(buf: ArrayList<Rune>, currentPos: Int64) {
-        buf.appendAll("(01)".toRuneArray());
+        buf.add(all:"(01)".toRuneArray());
         var initialPosition: Int64 = buf.size;
-        buf.append(r'9');
+        buf.add(r'9');
 
         encodeCompressedGtinWithoutAI(buf, currentPos, initialPosition);
     }
@@ -26,12 +26,12 @@ abstract class AI01decoder <: AbstractExpandedDecoder {
         for (i in 0..4) {
             var currentBlock: Int64 = this.getGeneralDecoder().extractNumericValueFromBitArray(currentPos + 10 * i, 10);
             if (currentBlock / 100 == 0) {
-                buf.append(r'0');
+                buf.add(r'0');
             }
             if (currentBlock / 10 == 0) {
-                buf.append(r'0');
+                buf.add(r'0');
             }
-            buf.appendAll(currentBlock.toString().toRuneArray());
+            buf.add(all:currentBlock.toString().toRuneArray());
         }
 
         appendCheckDigit(buf, initialBufferPosition);
@@ -54,6 +54,6 @@ abstract class AI01decoder <: AbstractExpandedDecoder {
             checkDigit = 0
         }
 
-        buf.appendAll(checkDigit.toString().toRuneArray());
+        buf.add(all:checkDigit.toString().toRuneArray());
     }
 }

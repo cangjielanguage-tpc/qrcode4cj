@@ -108,7 +108,7 @@ public class RSSExpandedReader <: AbstractRSSReader {
 
     private var pairs: ArrayList<ExpandedPair> = ArrayList<ExpandedPair>(MAX_PAIRS);
     private var rows: ArrayList<ExpandedRow> = ArrayList<ExpandedRow>();
-    private var startEnd: Array<Int64> = Array<Int64>(2, item: 0)
+    private var startEnd: Array<Int64> = Array<Int64>(2, repeat: 0)
     private var startFromEven: Bool = false;
 
     public func decodeRow(rowNumber: Int64, row: BitArray, _: HashMap<DecodeHintType, Any>): Result {
@@ -136,7 +136,7 @@ public class RSSExpandedReader <: AbstractRSSReader {
         var done: Bool = false;
         while (!done) {
             try {
-                this.pairs.append(retrieveNextPair(row, this.pairs, rowNumber));
+                this.pairs.add(retrieveNextPair(row, this.pairs, rowNumber));
             } catch (nfe: Exception) {
                 if (this.pairs.isEmpty()) {
                     throw nfe
@@ -210,9 +210,9 @@ public class RSSExpandedReader <: AbstractRSSReader {
             this.pairs.clear();
 
             for (j in 0..collectedRows.size) {
-                this.pairs.appendAll(collectedRows[j].getPairs());
+                this.pairs.add(all:collectedRows[j].getPairs());
             }
-            this.pairs.appendAll(row.getPairs());
+            this.pairs.add(all:row.getPairs());
 
             if (isValidSequence(this.pairs)) {
                 if (checkChecksum()) {
@@ -220,7 +220,7 @@ public class RSSExpandedReader <: AbstractRSSReader {
                 }
 
                 var rs: ArrayList<ExpandedRow> = ArrayList<ExpandedRow>(collectedRows);
-                rs.append(row);
+                rs.add(row);
                 try {
                     // Recursion: try to add more rows
                     return checkRows(rs, i + 1);
@@ -284,7 +284,7 @@ public class RSSExpandedReader <: AbstractRSSReader {
             return;
         }
 
-        this.rows.insert(insertPos, ExpandedRow(this.pairs, rowNumber));
+        this.rows.add(ExpandedRow(this.pairs, rowNumber), at: insertPos);
 
         removePartialRows(this.pairs, this.rows);
     }
@@ -314,7 +314,7 @@ public class RSSExpandedReader <: AbstractRSSReader {
                 }
                 if (allFound) {
                     // 'pairs' contains all the pairs from the row 'r'
-                    rows.remove(i)
+                    rows.remove(at: i)
                     iteratorall = rows.iterator()
                 }
             }
@@ -596,7 +596,7 @@ public class RSSExpandedReader <: AbstractRSSReader {
     }
 
     public func decodeDataCharacter(row: BitArray, pattern: FinderPattern, isOddPattern: Bool, leftChar: Bool): DataCharacter {
-        var counters: Array<Int64> = Array<Int64>(this.getDataCharacterCounters().size, item: 0);
+        var counters: Array<Int64> = Array<Int64>(this.getDataCharacterCounters().size, repeat: 0);
 
         //counters[] has the pixels of the module
         exdecodeDataCharacter(leftChar, row, pattern, counters)

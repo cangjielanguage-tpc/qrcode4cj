@@ -63,18 +63,18 @@ public class HighLevelEncoder {
             (5 << 16) + 30 // MIXED -> PUNCT
         ],
         [
-            (5 << 16) + 31, /* PUNCT -> UPPER */ 
+            (5 << 16) + 31, /* PUNCT -> UPPER */
             (10 << 16) + (31 << 5) + 28, /* PUNCT -> UPPER -> LOWER */
-            (10 << 16) + (31 << 5) + 30, /* PUNCT -> UPPER -> DIGIT */ 
-            (10 << 16) + (31 << 5) + 29, /* PUNCT -> UPPER -> MIXED */ 
+            (10 << 16) + (31 << 5) + 30, /* PUNCT -> UPPER -> DIGIT */
+            (10 << 16) + (31 << 5) + 29, /* PUNCT -> UPPER -> MIXED */
             0
         ]
     ]
 
     // A reverse mapping from [mode][char] to the encoding for that character in that mode. 
     // An entry of 0 indicates no mapping exists.
-    private static var CHAR_MAP: Array<Array<Int64>> = Array<Array<Int64>>(5, {int: Int64 => Array<Int64>(256, item: 0)}
-    )
+    private static var CHAR_MAP: Array<Array<Int64>> = Array<Array<Int64>>(5,
+        {int: Int64 => Array<Int64>(256, repeat: 0)})
     private static var mixedTable: Array<Int64> = [
         r'\0'.hashCode(),
         r' '.hashCode(),
@@ -139,8 +139,8 @@ public class HighLevelEncoder {
         r'}'.hashCode()
     ]
 
-    public static var SHIFT_TABLE_: Array<Array<Int64>> = Array<Array<Int64>>(6, {int: Int64 => Array<Int64>(6, item: -1)}
-    )
+    public static var SHIFT_TABLE_: Array<Array<Int64>> = Array<Array<Int64>>(6,
+        {int: Int64 => Array<Int64>(6, repeat: -1)})
 
     private func initSomeTables() {
         CHAR_MAP[MODE_UPPER][Int64(UInt32(r' '))] = 1
@@ -209,7 +209,7 @@ public class HighLevelEncoder {
         }
 
         var states: ArrayList<State> = ArrayList<State>()
-        states.append(initialState)
+        states.add(initialState)
 
         var index = 0;
         while (index < text.size) {
@@ -255,21 +255,21 @@ public class HighLevelEncoder {
         return minState.toBitArray(text)
     }
 
-    static private func getpairCode1(nextChar: UInt8): Int64 {
+    private static func getpairCode1(nextChar: UInt8): Int64 {
         if (Rune(nextChar) == r'\n') {
             return 2
         }
         return 0
     }
 
-    static private func getpairCode2(nextChar: UInt8): Int64 {
+    private static func getpairCode2(nextChar: UInt8): Int64 {
         if (Rune(nextChar) == r' ') {
             return 3
         }
         return 0
     }
 
-    static private func getpairCode3(nextChar: UInt8): Int64 {
+    private static func getpairCode3(nextChar: UInt8): Int64 {
         if (Rune(nextChar) == r' ') {
             return 4
         }
@@ -313,7 +313,7 @@ public class HighLevelEncoder {
                     // other latch would be equally successful *after* this character, and
                     // so wouldn't save any bits.
                     var latchState: State = stateNoBinary.getOrThrow().latchAndAppend(mode, charInMode)
-                    result.append(latchState)
+                    result.add(latchState)
                 }
 
                 // Try generating the character by switching to its mode.
@@ -321,7 +321,7 @@ public class HighLevelEncoder {
                     // It never makes sense to temporarily shift to another mode if the
                     // character exists in the current mode.  That can never save bits.
                     var shiftState: State = stateNoBinary.getOrThrow().shiftAndAppend(mode, charInMode)
-                    result.append(shiftState)
+                    result.add(shiftState)
                 }
             }
         }
@@ -330,7 +330,7 @@ public class HighLevelEncoder {
             // in binary shift mode, and the character exists in your current mode.
             // That can never save bits over just outputting the char in the current mode.
             var binaryState: State = state.addBinaryShiftChar(index)
-            result.append(binaryState)
+            result.add(binaryState)
         }
     }
 
@@ -346,24 +346,24 @@ public class HighLevelEncoder {
     private static func updateStateForPair(state: State, index: Int64, pairCode: Int64, result: ArrayList<State>) {
         var stateNoBinary: State = state.endBinaryShift(index)
 
-        /* Possibility 1.  Latch to MODE_PUNCT, and then append this code */
-        result.append(stateNoBinary.latchAndAppend(MODE_PUNCT, pairCode))
+        /* Possibility 1.  Latch to MODE_PUNCT, and then add this code */
+        result.add(stateNoBinary.latchAndAppend(MODE_PUNCT, pairCode))
         if (state.getMode() != MODE_PUNCT) {
-            // Possibility 2.  Shift to MODE_PUNCT, and then append this code.
+            // Possibility 2.  Shift to MODE_PUNCT, and then add this code.
             // Every state except MODE_PUNCT (handled above) can shift
-            result.append(stateNoBinary.shiftAndAppend(MODE_PUNCT, pairCode))
+            result.add(stateNoBinary.shiftAndAppend(MODE_PUNCT, pairCode))
         }
         if (pairCode == 3 || pairCode == 4) {
             /* both characters are in DIGITS.  Sometimes better to just add two digits */
             var digitState: State = stateNoBinary.latchAndAppend(MODE_DIGIT, 16 - pairCode).latchAndAppend(MODE_DIGIT, 1
             )
-            result.append(digitState)
+            result.add(digitState)
         }
         if (state.getBinaryShiftByteCount() > 0) {
             // It only makes sense to do the characters as binary if we're already
             // in binary mode.
             var binaryState: State = state.addBinaryShiftChar(index).addBinaryShiftChar(index + 1)
-            result.append(binaryState)
+            result.add(binaryState)
         }
     }
 
@@ -380,13 +380,13 @@ public class HighLevelEncoder {
                     break
                 } else {}
                 if (newState.isBetterThanOrEqualTo(oldState)) {
-                    result.remove(idx)
+                    result.remove(at: idx)
                 } else {
                     idx++
                 }
             }
             if (add) {
-                result.insert(0, newState)
+                result.add(newState, at: 0)
             }
         }
         return result

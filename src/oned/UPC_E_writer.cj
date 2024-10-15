@@ -20,7 +20,7 @@ public open class UPCEWriter <: UPCEANWriter {
     // end guard
     protected override func getSupportedWriteFormats(): ArrayList<BarcodeFormat> {
         var returnData: ArrayList<BarcodeFormat> = ArrayList<BarcodeFormat>()
-        returnData.append(BarcodeFormat.UPC_E)
+        returnData.add(BarcodeFormat.UPC_E)
         return returnData
     }
 
@@ -66,7 +66,7 @@ public open class UPCEWriter <: UPCEANWriter {
         }
 
         var parities: Int64 = UPCEReader.NUMSYS_AND_CHECK_DIGIT_PATTERNS[firstDigit][checkDigit]
-        var result: Array<Bool> = Array<Bool>(CODE_WIDTH, item: false)
+        var result: Array<Bool> = Array<Bool>(CODE_WIDTH, repeat: false)
 
         var pos: Int64 = appendPattern(result, 0, UPCEANReader.START_END_PATTERN, true);
         for (i in 1..7) {

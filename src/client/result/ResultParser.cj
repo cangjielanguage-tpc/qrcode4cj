@@ -47,7 +47,7 @@ public abstract class ResultParser {
     private static let EQUALS: Regex = Regex("=");
     private static let BYTE_ORDER_MARK: UTF32String = UTF32String("\\ufeff");
 
-    static let EMPTY_STR_ARRAY: Array<String> = Array<String>(0, item: "")
+    static let EMPTY_STR_ARRAY: Array<String> = Array<String>(0, repeat: "")
 
     /**
      * Attempts to parse the raw {@link Result}'s contents as a particular type
@@ -78,16 +78,16 @@ public abstract class ResultParser {
 
     protected static func maybeAppend(value: String, result: ArrayList<Rune>) {
         if (!value.isEmpty()) {
-            result.append(r'\n');
-            result.appendAll(value.toRuneArray());
+            result.add(r'\n');
+            result.add(all:value.toRuneArray());
         }
     }
 
     protected static func maybeAppend(value: Array<String>, result: ArrayList<Rune>) {
         if (value.size != 0) {
             for (s in value) {
-                result.append(r'\n');
-                result.appendAll(s.toRuneArray());
+                result.add(r'\n');
+                result.add(all:s.toRuneArray());
             }
         }
     }
@@ -109,13 +109,13 @@ public abstract class ResultParser {
         }
         var max: Int64 = escaped.size;
         var unescaped: ArrayList<Rune> = ArrayList<Rune>();
-        unescaped.appendAll(escaped.substring(0, backslash).toRuneArray());
+        unescaped.add(all:escaped.substring(0, backslash).toRuneArray());
         var nextIsEscaped: Bool = false;
 
         for (i in backslash..max) {
             var c: Rune = escaped.get(i);
             if (nextIsEscaped || c != r'\\') {
-                unescaped.append(c);
+                unescaped.add(c);
                 nextIsEscaped = false
             } else {
                 nextIsEscaped = true
@@ -203,7 +203,7 @@ public abstract class ResultParser {
             var value: String = keyValueTokens[1].toString()
             try {
                 value = urlDecode(value)
-                result.put(key, value);
+                result.add(key, value);
             } catch (iae: IllegalArgumentException) {
                 // continue; invalid data such as an escape like %0t
             }
@@ -257,7 +257,7 @@ public abstract class ResultParser {
                         element = element.trim()
                     }
                     if (!element.isEmpty()) {
-                        matches.append(element.toString());
+                        matches.add(element.toString());
                     }
                     i++
                     more = false

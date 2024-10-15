@@ -41,9 +41,9 @@ class AI013x0x1xDecoder <: AI01weightDecoder {
             return;
         }
 
-        buf.append(r'(');
-        buf.appendAll(this.dateCode.toRuneArray());
-        buf.append(r')');
+        buf.add(r'(');
+        buf.add(all:this.dateCode.toRuneArray());
+        buf.add(r')');
 
         var day: Int64 = numericDate % 32
         numericDate /= 32
@@ -52,25 +52,25 @@ class AI013x0x1xDecoder <: AI01weightDecoder {
         var year: Int64 = numericDate
 
         if (year / 10 == 0) {
-            buf.append(r'0');
+            buf.add(r'0');
         }
-        buf.appendAll(year.toString().toRuneArray());
+        buf.add(all:year.toString().toRuneArray());
         if (month / 10 == 0) {
-            buf.append(r'0');
+            buf.add(r'0');
         }
-        buf.appendAll(month.toString().toRuneArray());
+        buf.add(all:month.toString().toRuneArray());
         if (day / 10 == 0) {
-            buf.append(r'0');
+            buf.add(r'0');
         }
-        buf.appendAll(day.toString().toRuneArray());
+        buf.add(all:day.toString().toRuneArray());
     }
 
     //@Override
     protected func addWeightCode(bufin: ArrayList<Rune>, weight: Int64): Unit {
-        bufin.append(r'(');
-        bufin.appendAll(this.firstAIdigits.toString().toRuneArray());
-        bufin.appendAll((weight / 100000).toString().toRuneArray());
-        bufin.append(r')');
+        bufin.add(r'(');
+        bufin.add(all:this.firstAIdigits.toString().toRuneArray());
+        bufin.add(all:(weight / 100000).toString().toRuneArray());
+        bufin.add(r')');
     }
 
     //@Override

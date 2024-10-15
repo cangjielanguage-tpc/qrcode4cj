@@ -170,7 +170,7 @@ public class State {
         //
         //
         while (let Some(t) <- token) {
-            symbols.append(t)
+            symbols.add(t)
             token = t.getPrevious()
         }
         var bitArray: BitArray = BitArray()

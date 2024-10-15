@@ -13,7 +13,7 @@ class AI013103decoder <: AI013x0xDecoder {
     }
 
     protected func addWeightCode(buf: ArrayList<Rune>, _: Int64): Unit {
-        buf.appendAll("(3103)".toRuneArray());
+        buf.add(all:"(3103)".toRuneArray());
     }
 
     protected func checkWeight(weight: Int64): Int64 {

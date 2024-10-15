@@ -47,31 +47,31 @@ public class QRCode {
 
     public func toString(): String {
         var result: ArrayList<Rune> = ArrayList<Rune>();
-        result.appendAll("<<\n".toRuneArray());
-        result.appendAll(" mode: ".toRuneArray());
+        result.add(all:"<<\n".toRuneArray());
+        result.add(all:" mode: ".toRuneArray());
         if (mode == Mode.TERMINATOR([0, 0, 0], 0x00)) {
-            result.appendAll("null".toRuneArray());
+            result.add(all:"null".toRuneArray());
         } else {
-            result.appendAll(mode.toString().toRuneArray());
+            result.add(all:mode.toString().toRuneArray());
         }
-        result.appendAll("\n ecLevel: ".toRuneArray());
-        result.appendAll(ecLevel.toString().toRuneArray());
+        result.add(all:"\n ecLevel: ".toRuneArray());
+        result.add(all:ecLevel.toString().toRuneArray());
         if (let Some(v) <- version) {
-            result.appendAll("\n version: ".toRuneArray());
-            result.appendAll(v.toString().toRuneArray());
+            result.add(all:"\n version: ".toRuneArray());
+            result.add(all:v.toString().toRuneArray());
         } else {
-            result.appendAll("\n version: null".toRuneArray());
+            result.add(all:"\n version: null".toRuneArray());
         }
 
-        result.appendAll("\n maskPattern: ".toRuneArray());
-        result.appendAll(maskPattern.toString().toRuneArray());
+        result.add(all:"\n maskPattern: ".toRuneArray());
+        result.add(all:maskPattern.toString().toRuneArray());
         if (let Some(m) <- matrix) {
-            result.appendAll("\n matrix:\n".toRuneArray());
-            result.appendAll(m.toString().toRuneArray());
+            result.add(all:"\n matrix:\n".toRuneArray());
+            result.add(all:m.toString().toRuneArray());
         } else {
-            result.appendAll("\n matrix: null\n".toRuneArray());
+            result.add(all:"\n matrix: null\n".toRuneArray());
         }
-        result.appendAll(">>\n".toRuneArray());
+        result.add(all:">>\n".toRuneArray());
         return String(result);
     }
 

@@ -144,16 +144,16 @@ public class ResultList {
             }
 
             if (!hasprevious || previous.getOrThrow().mode != c.mode || needECI) {
-                resultnodelist.insert(
-                    0,
-                    ResultNode(c.mode, c.fromPosition, c.charsetEncoderIndex, length, encoders, stringToEncode, version)
+                resultnodelist.add(
+                
+                    ResultNode(c.mode, c.fromPosition, c.charsetEncoderIndex, length, encoders, stringToEncode, version), at: 0
                 );
                 length = 0
             }
 
             if (needECI) {
-                resultnodelist.insert(
-                    0,
+                resultnodelist.add(
+                
                     ResultNode(
                         Mode.ECI([0, 0, 0], 0x07),
                         c.fromPosition,
@@ -162,7 +162,7 @@ public class ResultList {
                         encoders,
                         stringToEncode,
                         version
-                    )
+                    ), at: 0
                 );
             }
             current = previous
@@ -179,8 +179,8 @@ public class ResultList {
             }
             if (hasFirst && first.getOrThrow().mode != Mode.ECI([0, 0, 0], 0x07) && containsECI) {
                 // prepend a default character set ECI
-                resultnodelist.insert(
-                    0,
+                resultnodelist.add(
+                    
                     ResultNode(
                         Mode.ECI([0, 0, 0], 0x07),
                         0,
@@ -189,19 +189,19 @@ public class ResultList {
                         encoders,
                         stringToEncode,
                         version
-                    )
+                    ), at: 0
                 );
             }
             first = resultnodelist[0]
 
             // prepend or insert a FNC1_FIRST_POSITION after the ECI (if any)
-            resultnodelist.insert(
-                if (first.getOrThrow().mode != Mode.ECI([0, 0, 0], 0x07)) {
+            resultnodelist.add(
+   
+                ResultNode(Mode.FNC1_FIRST_POSITION([0, 0, 0], 0x05), 0, 0, 0, encoders, stringToEncode, version),at:              if (first.getOrThrow().mode != Mode.ECI([0, 0, 0], 0x07)) {
                     0
                 } else {
                     1
-                },
-                ResultNode(Mode.FNC1_FIRST_POSITION([0, 0, 0], 0x05), 0, 0, 0, encoders, stringToEncode, version)
+                }
             );
         }
 
@@ -291,9 +291,9 @@ public class ResultList {
 
         for (i in 0..resultnodelist.size) {
             if (let Some(p) <- previous) {
-                result.append(r',');
+                result.add(r',');
             }
-            result.appendAll(resultnodelist[i].getOrThrow().toString().toRuneArray());
+            result.add(all:resultnodelist[i].getOrThrow().toString().toRuneArray());
             previous = resultnodelist[i]
             flag = true
         }
@@ -388,7 +388,7 @@ public class ResultNode {
         if (mode == Mode.ECI([0, 0, 0], 0x07)) {
             bits.appendBits(encoders.getECIValue(charsetEncoderIndex), 8);
         } else if (characterLength > 0) {
-            // append data
+            // add data
             Encoder.appendBytes(
                 stringToEncode.substring(fromPosition, characterLength),
                 mode,
@@ -400,14 +400,14 @@ public class ResultNode {
 
     public func toString(): String {
         var result: ArrayList<Rune> = ArrayList<Rune>();
-        result.appendAll(mode.toString().toRuneArray());
-        result.append(r'(')
+        result.add(all:mode.toString().toRuneArray());
+        result.add(r'(')
         if (mode == Mode.ECI([0, 0, 0], 0x07)) {
-            result.appendAll(encoders.getCharset(charsetEncoderIndex).name().toString().toRuneArray());
+            result.add(all:encoders.getCharset(charsetEncoderIndex).name().toString().toRuneArray());
         } else {
-            result.appendAll(makePrintable(stringToEncode.substring(fromPosition, characterLength)).toRuneArray());
+            result.add(all:makePrintable(stringToEncode.substring(fromPosition, characterLength)).toRuneArray());
         }
-        result.append(r')');
+        result.add(r')');
         return String(result);
     }
 
@@ -415,9 +415,9 @@ public class ResultNode {
         var result: ArrayList<Rune> = ArrayList<Rune>();
         for (i in 0..s.charSize) {
             if (s.get(i).hashCode() < 32 || s.get(i).hashCode() > 126) {
-                result.append(r'.');
+                result.add(r'.');
             } else {
-                result.append(s.get(i));
+                result.add(s.get(i));
             }
         }
         return String(result);
@@ -753,7 +753,7 @@ public class MinimalEncoder {
         // function getCompactedOrdinal(Mode)
         var edges: Array<Array<Array<?Edge>>> = Array<Array<Array<?Edge>>>(
             inputLength + 1,
-            {a: Int64 => Array<Array<?Edge>>(encoders.length(), {b: Int64 => Array<?Edge>(4, item: None)})}
+            {a: Int64 => Array<Array<?Edge>>(encoders.length(), {b: Int64 => Array<?Edge>(4, repeat: None)})}
         )
 
         addEdges(version, edges, 0, Option<Edge>.None);

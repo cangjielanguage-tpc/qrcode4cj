@@ -28,7 +28,7 @@ public open class SMTPResultParser <: ResultParser {
             }
         }
         return EmailAddressParsedResult(
-            Array<String>([emailAddress.toString()]),
+           [emailAddress.toString()],
             Array<String>(),
             Array<String>(),
             subject.toString(),

@@ -14,11 +14,11 @@ class Base256Encoder <: Encoder {
 
     public func encode(context: EncoderContext) {
         var buffer: ArrayList<Rune> = ArrayList<Rune>();
-        buffer.append(r'\0');
+        buffer.add(r'\0');
         //Initialize length field
         while (context.hasMoreCharacters()) {
             var c: Rune = context.getCurrentChar();
-            buffer.append(c);
+            buffer.add(c);
 
             context.pos++
 
@@ -36,12 +36,12 @@ class Base256Encoder <: Encoder {
         var mustPad: Bool = (context.getSymbolInfo().getOrThrow().getDataCapacity() - currentSize) > 0
         if (context.hasMoreCharacters() || mustPad) {
             if (dataCount <= 249) {
-                buffer.remove(0)
-                buffer.insert(0, Rune(dataCount))
+                buffer.remove(at: 0)
+                buffer.add(Rune(dataCount), at: 0)
             } else if (dataCount <= 1555) {
-                buffer.remove(0)
-                buffer.insert(0, Rune((dataCount / 250 + 249)));
-                buffer.insert(1, Rune(dataCount % 250));
+                buffer.remove(at: 0)
+                buffer.add(Rune((dataCount / 250 + 249)), at: 0);
+                buffer.add( Rune(dataCount % 250), at: 1);
             } else {
                 throw IllegalArgumentException("Message length not in valid ranges: " + dataCount.toString());
             }

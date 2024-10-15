@@ -41,8 +41,8 @@ public class GenericGF {
         this.size = size
         this.generatorBase = b
 
-        expTable = Array<Int64>(size, item: 0)
-        logTable = Array<Int64>(size, item: 0)
+        expTable = Array<Int64>(size, repeat: 0)
+        logTable = Array<Int64>(size, repeat: 0)
         var x = 1
         for (i in 0..size) {
             expTable[i] = x
@@ -82,7 +82,7 @@ public class GenericGF {
         if (coefficient == 0) {
             return zero.getOrThrow()
         }
-        var coefficients = Array<Int64>(degree + 1, item: 0)
+        var coefficients = Array<Int64>(degree + 1, repeat: 0)
         coefficients[0] = coefficient
         return GenericGFPoly(this, coefficients)
     }

@@ -943,14 +943,14 @@ public class ErrorCorrection {
             throw IllegalArgumentException("The number of codewords does not match the selected symbol");
         }
         var sb: ArrayList<Rune> = ArrayList<Rune>();
-        sb.appendAll(codewords.toRuneArray());
+        sb.add(all:codewords.toRuneArray());
         var blockCount: Int64 = symbolInfo.getInterleavedBlockCount();
         if (blockCount == 1) {
             var ecc: String = createECCBlock(codewords, symbolInfo.getErrorCodewords());
-            sb.appendAll(ecc.toRuneArray());
+            sb.add(all:ecc.toRuneArray());
         } else {
-            var dataSizes: Array<Int64> = Array<Int64>(blockCount, item: 0)
-            var errorSizes: Array<Int64> = Array<Int64>(blockCount, item: 0)
+            var dataSizes: Array<Int64> = Array<Int64>(blockCount, repeat: 0)
+            var errorSizes: Array<Int64> = Array<Int64>(blockCount, repeat: 0)
 
             for (i in 0..blockCount) {
                 dataSizes[i] = symbolInfo.getDataLengthForInterleavedBlock(i + 1)
@@ -960,12 +960,12 @@ public class ErrorCorrection {
             for (block in 0..blockCount) {
                 var temp: ArrayList<Rune> = ArrayList<Rune>();
                 for (d in block..symbolInfo.getDataCapacity() : blockCount) {
-                    temp.append(codewords.get(d));
+                    temp.add(codewords.get(d));
                 }
                 var ecc: String = createECCBlock(UTF32String(temp), errorSizes[block]);
                 var pos: Int64 = 0;
                 for (e in block..errorSizes[block] * blockCount : blockCount) {
-                    sb.insert(symbolInfo.getDataCapacity() + e, Rune(ecc[pos]));
+                    sb.add( Rune(ecc[pos]),at: symbolInfo.getDataCapacity() + e);
                     pos++
                 }
             }
@@ -987,7 +987,7 @@ public class ErrorCorrection {
                 "Illegal number of error correction codewords specified: " + numECWords.toString());
         }
         var poly: Array<Int64> = FACTORS[table]
-        var ecc: Array<Rune> = Array<Rune>(numECWords, item: r' ')
+        var ecc: Array<Rune> = Array<Rune>(numECWords, repeat: r' ')
 
         for (i in 0..numECWords) {
             ecc[i] = Rune(0)
@@ -1007,7 +1007,7 @@ public class ErrorCorrection {
                 ecc[0] = Rune(0)
             }
         }
-        var eccReversed: Array<Rune> = Array<Rune>(numECWords, item: r' ')
+        var eccReversed: Array<Rune> = Array<Rune>(numECWords, repeat: r' ')
 
         for (i in 0..numECWords) {
             eccReversed[i] = ecc[numECWords - i - 1]

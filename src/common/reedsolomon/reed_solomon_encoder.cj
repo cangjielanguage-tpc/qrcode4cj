@@ -5,7 +5,7 @@
 package QRCode4cj.common.reedsolomon
 
 import std.random.*
-import std.format.*
+
 import std.collection.*
 
 public class ReedSolomonEncoder {
@@ -14,7 +14,7 @@ public class ReedSolomonEncoder {
 
     public init(field: GenericGF) {
         this.field = field
-        this.cachedGenerators.append(GenericGFPoly(field, [1]))
+        this.cachedGenerators.add(GenericGFPoly(field, [1]))
     }
 
     private func buildGenerator(degree: Int64): GenericGFPoly {
@@ -27,7 +27,7 @@ public class ReedSolomonEncoder {
                         [1, field.getOrThrow().exp(d - 1 + field.getOrThrow().getGeneratorBase())]
                     )
                 );
-                cachedGenerators.append(nextGenerator)
+                cachedGenerators.add(nextGenerator)
                 lastGenerator = nextGenerator
             }
         }
@@ -43,7 +43,7 @@ public class ReedSolomonEncoder {
             throw IllegalArgumentException("No data bytes provided")
         }
         let generator: GenericGFPoly = buildGenerator(ecBytes)
-        let infoCoefficients: Array<Int64> = Array<Int64>(dataBytes, item: 0)
+        let infoCoefficients: Array<Int64> = Array<Int64>(dataBytes, repeat: 0)
         toEncode.copyTo(infoCoefficients, 0, 0, dataBytes)
         var info: GenericGFPoly = GenericGFPoly(field.getOrThrow(), infoCoefficients)
         info = info.multiplyByMonomial(ecBytes, 1)

@@ -22,8 +22,8 @@ public open class ModulusGF {
 
     init(modulus: Int64, generator: Int64) {
         this.modulus = modulus
-        expTable = Array<Int64>(modulus, item: 0)
-        logTable = Array<Int64>(modulus, item: 0)
+        expTable = Array<Int64>(modulus, repeat: 0)
+        logTable = Array<Int64>(modulus, repeat: 0)
         var x: Int64 = 1
         for (i in 0..modulus) {
             expTable[i] = x
@@ -54,7 +54,7 @@ public open class ModulusGF {
         if (coefficient == 0) {
             return zero.getOrThrow()
         }
-        var coefficients: Array<Int64> = Array<Int64>(degree + 1, item: 0);
+        var coefficients: Array<Int64> = Array<Int64>(degree + 1, repeat: 0);
         coefficients[0] = coefficient
         return ModulusPoly(this, coefficients);
     }

@@ -3006,10 +3006,10 @@ public open class PDF417 {
         }
         var n: Int64 = sourceCodeWords + pad + 1
         var sb: ArrayList<Rune> = ArrayList<Rune>()
-        sb.append(Rune(n))
-        sb.appendAll(highLevel.toString().toRuneArray())
+        sb.add(Rune(n))
+        sb.add(all:highLevel.toString().toRuneArray())
         for (i in 0..pad) {
-            sb.append(Rune(900))
+            sb.add(Rune(900))
             //PAD characters
         }
         var dataCodewords: UTF32String = UTF32String(sb)

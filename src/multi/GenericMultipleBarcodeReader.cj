@@ -58,7 +58,7 @@ public class GenericMultipleBarcodeReader <: MultipleBarcodeReader {
             }
         }
         if (!alreadyFound) {
-            results.append(translateResultPoints(result, xOffset, yOffset))
+            results.add(translateResultPoints(result, xOffset, yOffset))
         }
         var resultPoints: Array<ResultPoint> = result.getResultPoints()
         if (resultPoints.size == 0) {

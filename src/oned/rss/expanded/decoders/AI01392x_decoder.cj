@@ -28,13 +28,13 @@ class AI01392xDecoder <: AI01decoder {
             HEADER_SIZE + GTIN_SIZE,
             LAST_DIGIT_SIZE
         );
-        buf.appendAll("(392".toRuneArray());
-        buf.appendAll(lastAIdigit.toString().toRuneArray());
-        buf.append(r')');
+        buf.add(all:"(392".toRuneArray());
+        buf.add(all:lastAIdigit.toString().toRuneArray());
+        buf.add(r')');
 
         var decodedInformation: DecodedInformation = this.getGeneralDecoder().decodeGeneralPurposeField(
             HEADER_SIZE + GTIN_SIZE + LAST_DIGIT_SIZE, "");
-        buf.appendAll(decodedInformation.getNewString().toRuneArray());
+        buf.add(all:decodedInformation.getNewString().toRuneArray());
 
         return String(buf);
     }

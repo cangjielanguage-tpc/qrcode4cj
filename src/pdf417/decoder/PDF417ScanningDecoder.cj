@@ -13,7 +13,7 @@ import QRCode4cj.common.*
 import QRCode4cj.common.detector.*
 import std.math.*
 import QRCode4cj.pdf417.common.*
-import std.format.*
+import std.convert.*
 
 public open class PDF417ScanningDecoder {
     private static let CODEWORD_SKEW_SIZE: Int64 = 2
@@ -371,7 +371,7 @@ public open class PDF417ScanningDecoder {
         adjustCodewordCount(detectionResult, barcodeMatrix);
         var erasures: ArrayList<Int64> = ArrayList<Int64>()
         var codewords: Array<Int64> = Array<Int64>(
-            detectionResult.getBarcodeRowCount() * detectionResult.getBarcodeColumnCount(), item: 0)
+            detectionResult.getBarcodeRowCount() * detectionResult.getBarcodeColumnCount(), repeat: 0)
         var ambiguousIndexValuesList: ArrayList<Array<Int64>> = ArrayList<Array<Int64>>()
         var ambiguousIndexesList: ArrayList<Int64> = ArrayList<Int64>()
         for (row in 0..detectionResult.getBarcodeRowCount()) {
@@ -379,12 +379,12 @@ public open class PDF417ScanningDecoder {
                 var values: Array<Int64> = barcodeMatrix[row][column + 1].getValue();
                 var codewordIndex: Int64 = row * detectionResult.getBarcodeColumnCount() + column
                 if (values.size == 0) {
-                    erasures.append(codewordIndex);
+                    erasures.add(codewordIndex);
                 } else if (values.size == 1) {
                     codewords[codewordIndex] = values[0]
                 } else {
-                    ambiguousIndexesList.append(codewordIndex);
-                    ambiguousIndexValuesList.append(values);
+                    ambiguousIndexesList.add(codewordIndex);
+                    ambiguousIndexValuesList.add(values);
                 }
             }
         }
@@ -425,7 +425,7 @@ public open class PDF417ScanningDecoder {
         ambiguousIndexes: Array<Int64>,
         ambiguousIndexValues: Array<Array<Int64>>
     ): DecoderResult {
-        var ambiguousIndexCount: Array<Int64> = Array<Int64>(ambiguousIndexes.size, item: 0)
+        var ambiguousIndexCount: Array<Int64> = Array<Int64>(ambiguousIndexes.size, repeat: 0)
 
         var tries: Int64 = 100
         tries--
@@ -464,7 +464,7 @@ public open class PDF417ScanningDecoder {
             {
                 int: Int64 => Array<BarcodeValue>(
                     detectionResult.getBarcodeColumnCount() + 2,
-                    item: BarcodeValue()
+                    repeat: BarcodeValue()
                 )
             }
         )
@@ -633,7 +633,7 @@ public open class PDF417ScanningDecoder {
         imageRow: Int64
     ): Array<Int64> {
         var imageColumn: Int64 = startColumn
-        var moduleBitCount: Array<Int64> = Array<Int64>(8, item: 0)
+        var moduleBitCount: Array<Int64> = Array<Int64>(8, repeat: 0)
         var size = moduleBitCount.size
         var moduleNumber: Int64 = 0
 
@@ -791,7 +791,7 @@ public open class PDF417ScanningDecoder {
 
     static func getBitCountForCodeword(codeword: Int64): Array<Int64> {
         var codeword_ = codeword
-        var result: Array<Int64> = Array<Int64>(8, item: 0)
+        var result: Array<Int64> = Array<Int64>(8, repeat: 0)
         var previousValue: Int64 = 0
         var i: Int64 = result.size - 1
         var number = 0;

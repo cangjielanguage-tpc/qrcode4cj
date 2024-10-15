@@ -65,7 +65,7 @@ public open class AddressBookAUResultParser <: ResultParser {
                 values = ArrayList<String>(3)
                 // lazy init
             }
-            values.append(value);
+            values.add(value);
         }
         if (values.isEmpty()) {
             return []

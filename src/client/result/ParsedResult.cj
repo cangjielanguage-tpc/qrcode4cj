@@ -37,9 +37,9 @@ public abstract class ParsedResult {
         if (value != "" && !value.isEmpty()) {
             // Don't add a newline before the first value
             if (result.size > 0) {
-                result.append(r'\n');
+                result.add(r'\n');
             }
-            result.appendAll(value.toRuneArray());
+            result.add(all:value.toRuneArray());
         }
     }
 

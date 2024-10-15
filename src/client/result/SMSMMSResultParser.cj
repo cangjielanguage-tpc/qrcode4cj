@@ -86,10 +86,10 @@ public open class SMSMMSResultParser <: ResultParser {
             numberEnd = -1
         }
         if (numberEnd < 0) {
-            numbers.append(numberPart.toString());
-            vias.append("");
+            numbers.add(numberPart.toString());
+            vias.add("");
         } else {
-            numbers.append(numberPart.substring(0, numberEnd).toString());
+            numbers.add(numberPart.substring(0, numberEnd).toString());
             var maybeVia: UTF32String = numberPart.substring(numberEnd + 1);
             var via: UTF32String
             if (maybeVia.startsWith(UTF32String("via="))) {
@@ -97,7 +97,7 @@ public open class SMSMMSResultParser <: ResultParser {
             } else {
                 via = UTF32String("")
             }
-            vias.append(via.toString());
+            vias.add(via.toString());
         }
     }
 }

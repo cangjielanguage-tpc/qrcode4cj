@@ -197,7 +197,7 @@ public class DecodedBitStreamParser {
         // Each character will require 2 bytes. Read the characters as 2-byte pairs
         // and decode as GB2312 afterwards
         let bufferSize: Int64 = 2i64 * count_
-        var buffer: Array<Byte> = Array<Byte>(bufferSize, item: 0);
+        var buffer: Array<Byte> = Array<Byte>(bufferSize, repeat: 0);
         var offset: Int64 = 0;
         while (count_ > 0) {
             // Each 13 bits encodes a 2-byte character
@@ -216,7 +216,7 @@ public class DecodedBitStreamParser {
             count_--
         }
 
-        result.appendAll(StringUtils.GB2312_CHARSET.newDecoder().decode(buffer).toRuneArray())
+        result.add(all:StringUtils.GB2312_CHARSET.newDecoder().decode(buffer).toRuneArray())
     }
 
     @OverflowWrapping
@@ -235,7 +235,7 @@ public class DecodedBitStreamParser {
         // Each character will require 2 bytes. Read the characters as 2-byte pairs
         // and decode as Shift_JIS afterwards
         let bufferSize: Int64 = 2i64 * count_
-        var buffer: Array<Byte> = Array<Byte>(bufferSize, item: 0);
+        var buffer: Array<Byte> = Array<Byte>(bufferSize, repeat: 0);
         var offset: Int64 = 0;
         while (count_ > 0) {
             // Each 13 bits encodes a 2-byte character
@@ -254,7 +254,7 @@ public class DecodedBitStreamParser {
             count_--
         }
 
-        result.appendAll(StringUtils.SHIFT_JIS_CHARSET.newDecoder().decode(buffer).toRuneArray())
+        result.add(all:StringUtils.SHIFT_JIS_CHARSET.newDecoder().decode(buffer).toRuneArray())
     }
 
     private static func decodeByteSegment(
@@ -271,7 +271,7 @@ public class DecodedBitStreamParser {
             throw Qrcoder4cjFormatException.getFormatInstance();
         }
 
-        var readBytes: Array<Byte> = Array<Byte>(count, item: 0);
+        var readBytes: Array<Byte> = Array<Byte>(count, repeat: 0);
         for (i in 0..count) {
             let bitItem: Int64 = bits.readBits(8);
             readBytes[i] = UInt8(bitItem)
@@ -289,8 +289,8 @@ public class DecodedBitStreamParser {
             encoding = StringUtils.guessCharset(readBytes, hints)
         }
 
-        result.appendAll(encoding.newDecoder().decode(readBytes).toRuneArray())
-        byteSegments.append(readBytes);
+        result.add(all:encoding.newDecoder().decode(readBytes).toRuneArray())
+        byteSegments.add(readBytes);
     }
 
     private static func toAlphaNumericChar(value: Int64): Rune {
@@ -317,8 +317,8 @@ public class DecodedBitStreamParser {
             }
 
             let nextTwoCharsBits: Int64 = bits.readBits(11);
-            result.append(toAlphaNumericChar(nextTwoCharsBits / 45));
-            result.append(toAlphaNumericChar(nextTwoCharsBits % 45));
+            result.add(toAlphaNumericChar(nextTwoCharsBits / 45));
+            result.add(toAlphaNumericChar(nextTwoCharsBits % 45));
             count_ -= 2
         }
         if (count_ == 1) {
@@ -326,7 +326,7 @@ public class DecodedBitStreamParser {
             if (bits.available() < 6) {
                 throw Qrcoder4cjFormatException.getFormatInstance();
             }
-            result.append(toAlphaNumericChar(bits.readBits(6)));
+            result.add(toAlphaNumericChar(bits.readBits(6)));
         }
 
         if (fc1InEffect) {
@@ -335,11 +335,11 @@ public class DecodedBitStreamParser {
                 if (result.get(i).getOrThrow() == r'%') {
                     if (i < result.size - 1 && result.get(i + 1).getOrThrow() == r'%') {
                         // %% is rendered as %
-                        result.remove(i + 1);
+                        result.remove(at: i + 1);
                     } else {
                         // In alpha mode, % should be converted to FNC1 separator 0x1D
-                        result.remove(i);
-                        result.insert(i, Rune(0x1D))
+                        result.remove(at: i);
+                        result.add(Rune(0x1D), at: i)
                     }
                 }
             }
@@ -363,9 +363,9 @@ public class DecodedBitStreamParser {
             if (threeDigitsBits >= 1000) {
                 throw Qrcoder4cjFormatException.getFormatInstance();
             }
-            result.append(toAlphaNumericChar(threeDigitsBits / 100));
-            result.append(toAlphaNumericChar((threeDigitsBits / 10) % 10));
-            result.append(toAlphaNumericChar(threeDigitsBits % 10));
+            result.add(toAlphaNumericChar(threeDigitsBits / 100));
+            result.add(toAlphaNumericChar((threeDigitsBits / 10) % 10));
+            result.add(toAlphaNumericChar(threeDigitsBits % 10));
             count_ -= 3
         }
         if (count_ == 2) {
@@ -377,8 +377,8 @@ public class DecodedBitStreamParser {
             if (twoDigitsBits >= 100) {
                 throw Qrcoder4cjFormatException.getFormatInstance();
             }
-            result.append(toAlphaNumericChar(twoDigitsBits / 10));
-            result.append(toAlphaNumericChar(twoDigitsBits % 10));
+            result.add(toAlphaNumericChar(twoDigitsBits / 10));
+            result.add(toAlphaNumericChar(twoDigitsBits % 10));
         } else if (count_ == 1) {
             // One digit left over to read
             if (bits.available() < 4) {
@@ -388,7 +388,7 @@ public class DecodedBitStreamParser {
             if (digitBits >= 10) {
                 throw Qrcoder4cjFormatException.getFormatInstance();
             }
-            result.append(toAlphaNumericChar(digitBits));
+            result.add(toAlphaNumericChar(digitBits));
         }
     }
 

@@ -24,7 +24,7 @@ public open class InvertedLuminanceSource <: LuminanceSource {
     public override func getMatrix(): Array<UInt8> {
         let matrix: Array<UInt8> = delegate.getMatrix()
         let length: Int64 = getWidth() * getHeight()
-        var invertedMatrix: Array<UInt8> = Array<UInt8>(length, item: 0)
+        var invertedMatrix: Array<UInt8> = Array<UInt8>(length, repeat: 0)
         for (i in 0..length) {
             invertedMatrix[i] = UInt8(255 - (matrix[i] & 0xFF))
         }

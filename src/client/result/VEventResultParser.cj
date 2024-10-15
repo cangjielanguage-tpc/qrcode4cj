@@ -92,7 +92,7 @@ public open class VEventResultParser <: ResultParser {
             return Array<String>();
         }
         var size: Int64 = values.size;
-        var result: Array<String> = Array<String>(size, item: "")
+        var result: Array<String> = Array<String>(size, repeat: "")
 
         for (i in 0..size) {
             var a = values[i]

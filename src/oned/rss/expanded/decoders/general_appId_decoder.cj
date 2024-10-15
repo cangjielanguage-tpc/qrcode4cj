@@ -25,7 +25,7 @@ public class GeneralAppIdDecoder {
 
             var parsedFields: UTF32String = FieldParser.parseFieldsInGeneralPurpose(UTF32String(info.getNewString()));
             if (parsedFields != UTF32String()) {
-                buff.appendAll(parsedFields.toRuneArray());
+                buff.add(all:parsedFields.toRuneArray());
             }
             if (info.isRemaining()) {
                 if (let Some(value) <- info.getRemainingValue()) {
@@ -98,7 +98,7 @@ public class GeneralAppIdDecoder {
         this.buffer = ArrayList<Rune>()
 
         if (!remaining.isEmpty()) {
-            this.buffer.appendAll(remaining.toRuneArray());
+            this.buffer.add(all:remaining.toRuneArray());
         }
 
         this.current_.setPosition(pos);
@@ -154,13 +154,13 @@ public class GeneralAppIdDecoder {
                 }
                 return BlockParsedResult(information, true);
             }
-            buffer.appendAll(numeric.getFirstDigit().toString().toRuneArray());
+            buffer.add(all:numeric.getFirstDigit().toString().toRuneArray());
 
             if (numeric.isSecondDigitFNC1()) {
                 var information: DecodedInformation = DecodedInformation(current_.getPosition(), String(buffer));
                 return BlockParsedResult(information, true);
             }
-            buffer.appendAll(numeric.getSecondDigit().toString().toRuneArray());
+            buffer.add(all:numeric.getSecondDigit().toString().toRuneArray());
         }
 
         if (isNumericToAlphaNumericLatch(current_.getPosition())) {
@@ -179,7 +179,7 @@ public class GeneralAppIdDecoder {
                 var information: DecodedInformation = DecodedInformation(current_.getPosition(), String(buffer));
                 return BlockParsedResult(information, true);
             }
-            buffer.append(iso.getValue())
+            buffer.add(iso.getValue())
         }
 
         if (isAlphaOr646ToNumericLatch(current_.getPosition())) {
@@ -208,7 +208,7 @@ public class GeneralAppIdDecoder {
                 //end of the char block
             }
 
-            buffer.append(alpha.getValue());
+            buffer.add(alpha.getValue());
         }
 
         if (isAlphaOr646ToNumericLatch(current_.getPosition())) {

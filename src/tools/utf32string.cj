@@ -1,7 +1,7 @@
 /*
  * @Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
- 
+
 package QRCode4cj.tools
 
 import std.collection.*
@@ -31,11 +31,11 @@ public open class UTF32String <: ToString & Hashable & Equatable<UTF32String> {
     }
 
     public init(size: Int64) {
-        wval = Array<Rune>(size, item: r' ')
+        wval = Array<Rune>(size, repeat: r' ')
         wsize = size
     }
     public func toRuneArray(): Array<Rune> {
-        return Array<Rune>(wval)
+        return wval
     }
     public func toString(): String {
         return String(wval)
@@ -161,7 +161,7 @@ public open class UTF32String <: ToString & Hashable & Equatable<UTF32String> {
 
     private static func computeLPS(subArray: Array<Rune>): Array<Int64> {
         var m: Int64 = subArray.size;
-        var lps: Array<Int64> = Array<Int64>(m, item: 0)
+        var lps: Array<Int64> = Array<Int64>(m, repeat: 0)
 
         var len = 0;
         var i = 1;
@@ -220,15 +220,15 @@ public open class UTF32String <: ToString & Hashable & Equatable<UTF32String> {
             }
             var posVal: Int64 = pos.getOrThrow()
             if (posVal > lastPos) {
-                result.append(substring(lastPos, posVal - lastPos))
+                result.add(substring(lastPos, posVal - lastPos))
             } else if (posVal == lastPos && !removeEmpty) {
-                result.append(UTF32String(""))
+                result.add(UTF32String(""))
             }
             lastPos = posVal + subwArraySize
             i = lastPos
         }
         if (lastPos < n) {
-            result.append(substring(lastPos, n - lastPos))
+            result.add(substring(lastPos, n - lastPos))
         }
         return result.toArray()
     }
@@ -248,7 +248,7 @@ public open class UTF32String <: ToString & Hashable & Equatable<UTF32String> {
                 break;
             }
             var posVal: Int64 = pos.getOrThrow()
-            posiList.append(posVal)
+            posiList.add(posVal)
             i = posVal + strArraySize
         }
         return posiList
@@ -435,7 +435,7 @@ public open class UTF32String <: ToString & Hashable & Equatable<UTF32String> {
     public operator func +(arg1: UTF32String): UTF32String {
         var data1 = this.toRuneArray()
         var data2 = arg1.toRuneArray()
-        var newArray = Array<Rune>(data1.size + data2.size, item: r' ')
+        var newArray = Array<Rune>(data1.size + data2.size, repeat: r' ')
 
         data1.copyTo(newArray, 0, 0, data1.size)
         data2.copyTo(newArray, 0, data1.size, data2.size)

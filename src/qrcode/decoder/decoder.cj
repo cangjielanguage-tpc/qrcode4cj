@@ -119,7 +119,7 @@ public class Decoder {
         for (i in 0..dataBlocks.size) {
             totalBytes += dataBlocks[i].getNumDataCodewords()
         }
-        var resultBytes: Array<Byte> = Array<Byte>(totalBytes, item: 0);
+        var resultBytes: Array<Byte> = Array<Byte>(totalBytes, repeat: 0);
         var resultOffset: Int64 = 0;
 
         // Error-correct and copy data blocks together into a stream of bytes
@@ -150,7 +150,7 @@ public class Decoder {
         let numCodewords: Int64 = codewordBytes_.size;
 
         // First read into an array of ints
-        var codewordsInts: Array<Int64> = Array<Int64>(numCodewords, item: 0);
+        var codewordsInts: Array<Int64> = Array<Int64>(numCodewords, repeat: 0);
         for (i in 0..numCodewords) {
             codewordsInts[i] = Int64(codewordBytes_[i]) & 0xFF
         }

@@ -32,7 +32,7 @@ public open class UPCEReader <: UPCEANReader {
     private var decodeMiddleCounters: Array<Int64>
 
     public init() {
-        decodeMiddleCounters = Array<Int64>(4, item: 0)
+        decodeMiddleCounters = Array<Int64>(4, repeat: 0)
     }
 
     protected override func decodeMiddle(row: BitArray, startRange: Array<Int64>, result: ArrayList<Rune>): Int64 {
@@ -49,7 +49,7 @@ public open class UPCEReader <: UPCEANReader {
         var x = 0;
         while (x < 6 && rowOffset < end) {
             var bestMatch: Int64 = decodeDigit(row, counters, rowOffset, L_AND_G_PATTERNS);
-            result.append(Rune(r'0'.hashCode() + bestMatch % 10));
+            result.add(Rune(r'0'.hashCode() + bestMatch % 10));
 
             for (i in 0..counters.size) {
                 rowOffset += counters[i]
@@ -77,8 +77,8 @@ public open class UPCEReader <: UPCEANReader {
         for (numSys in 0..2) {
             for (d in 0..10) {
                 if (lgPatternFound == NUMSYS_AND_CHECK_DIGIT_PATTERNS[numSys][d]) {
-                    resultString.insert(0, Rune(r'0'.hashCode() + numSys));
-                    resultString.append(Rune(r'0'.hashCode() + d));
+                    resultString.add(Rune(r'0'.hashCode() + numSys), at: 0);
+                    resultString.add(Rune(r'0'.hashCode() + d));
                     return;
                 }
             }
@@ -99,49 +99,49 @@ public open class UPCEReader <: UPCEANReader {
     public static func convertUPCEtoUPCA(upce: UTF32String): UTF32String {
         var upceChars: Array<Rune> = upce.substring(1, 6).toRuneArray()
         var result: ArrayList<Rune> = ArrayList<Rune>();
-        result.append(upce.get(0))
+        result.add(upce.get(0))
         var lastChar: Rune = upceChars[5]
         match (lastChar) {
             case r'0' | r'1' | r'2' =>
-                result.append(upceChars[0])
-                result.append(upceChars[1])
-                result.append(lastChar);
-                result.appendAll("0000".toRuneArray());
-                result.append(upceChars[2])
-                result.append(upceChars[3])
-                result.append(upceChars[4])
+                result.add(upceChars[0])
+                result.add(upceChars[1])
+                result.add(lastChar);
+                result.add(all:"0000".toRuneArray());
+                result.add(upceChars[2])
+                result.add(upceChars[3])
+                result.add(upceChars[4])
 
             case r'3' =>
-                result.append(upceChars[0])
-                result.append(upceChars[1])
-                result.append(upceChars[2])
+                result.add(upceChars[0])
+                result.add(upceChars[1])
+                result.add(upceChars[2])
 
-                result.appendAll("00000".toRuneArray());
+                result.add(all:"00000".toRuneArray());
 
-                result.append(upceChars[3])
-                result.append(upceChars[4])
+                result.add(upceChars[3])
+                result.add(upceChars[4])
 
             case r'4' =>
-                result.append(upceChars[0])
-                result.append(upceChars[1])
-                result.append(upceChars[2])
-                result.append(upceChars[3])
-                result.appendAll("00000".toRuneArray());
-                result.append(upceChars[4]);
+                result.add(upceChars[0])
+                result.add(upceChars[1])
+                result.add(upceChars[2])
+                result.add(upceChars[3])
+                result.add(all:"00000".toRuneArray());
+                result.add(upceChars[4]);
 
             case _ =>
-                result.append(upceChars[0])
-                result.append(upceChars[1])
-                result.append(upceChars[2])
-                result.append(upceChars[3])
-                result.append(upceChars[4])
-                result.appendAll("0000".toRuneArray());
-                result.append(lastChar);
+                result.add(upceChars[0])
+                result.add(upceChars[1])
+                result.add(upceChars[2])
+                result.add(upceChars[3])
+                result.add(upceChars[4])
+                result.add(all:"0000".toRuneArray());
+                result.add(lastChar);
         }
 
-        // Only append check digit in conversion if supplied
+        // Only add check digit in conversion if supplied
         if (upce.charSize >= 8) {
-            result.append(upce.get(7))
+            result.add(upce.get(7))
         }
 
         return UTF32String(result);

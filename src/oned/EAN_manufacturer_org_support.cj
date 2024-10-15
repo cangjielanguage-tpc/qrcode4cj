@@ -46,11 +46,11 @@ public open class EANManufacturerOrgSupport {
     }
 
     private func add(range: Array<Int64>, id: String) {
-        ranges.append(range)
+        ranges.add(range)
         var reentrantMutex: ReentrantMutex = ReentrantMutex()
         reentrantMutex.lock()
         synchronized(reentrantMutex) {
-            countryIdentifiers.append(id)
+            countryIdentifiers.add(id)
         }
         reentrantMutex.unlock()
     }
