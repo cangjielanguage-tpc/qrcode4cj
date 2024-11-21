@@ -5,7 +5,6 @@
 output/
 tmp/
 charset/
-image/
 *.cjo
 .vscode/
 build/
@@ -22,3 +21,4 @@ report/
 cjpm.lock
 target/
 test_temp/
+*.Identifier

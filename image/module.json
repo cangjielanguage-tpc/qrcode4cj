@@ -1,0 +1,20 @@
+{
+	"cjc_version": "0.47.2",
+	"organization": "changeden",
+	"name": "image",
+	"description": "仓颉图片库",
+	"version": "0.0.1",
+	"requires": {},
+	"package_requires": {
+		"path_option": [],
+		"package_option": {}
+	},
+	"foreign_requires": {},
+	"output_type": "dynamic",
+	"command_option": "",
+	"condition_option": {},
+	"link_option": "",
+	"cross_compile_configuration": {},
+	"package_configuration": {},
+	"build_dir": ""
+}

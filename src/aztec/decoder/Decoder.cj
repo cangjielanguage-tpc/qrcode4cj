@@ -252,7 +252,7 @@ public class Decoder {
 
         var result: ArrayList<Rune> = ArrayList<Rune>()
 
-        var decodedBytes: ByteArrayStream = ByteArrayStream()
+        var decodedBytes: ByteBuffer = ByteBuffer()
         var encoding: MyCharset = DEFAULT_ENCODING
         let ASCIIencoding = MyCharset.forName("ASCII").newEncoder()
 
@@ -310,7 +310,7 @@ public class Decoder {
                     } catch (uee: Exception) {
                         throw IllegalArgumentException()
                     }
-                    decodedBytes = ByteArrayStream()
+                    decodedBytes = ByteBuffer()
                     match (n) {
                         case 0 => result.append(Rune(UInt32(29))) // translate FNC1 as ASCII 29 
                         case 7 => throw Qrcoder4cjFormatException.getFormatInstance() // FLG(7) is reserved and illegal

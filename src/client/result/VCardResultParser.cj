@@ -235,7 +235,7 @@ public open class VCardResultParser <: ResultParser {
     private static func decodeQuotedPrintable(value: UTF32String, charset: String): String {
         var length: Int64 = value.charSize;
         var result: ArrayList<Rune> = ArrayList<Rune>();
-        var fragmentBuffer: ByteArrayStream = ByteArrayStream();
+        var fragmentBuffer: ByteBuffer = ByteBuffer();
         var i = 0
         while (i < length) {
             var c: Rune = value.get(i);
@@ -266,7 +266,7 @@ public open class VCardResultParser <: ResultParser {
         return String(result);
     }
     private static func maybeAppendFragment(
-        fragmentBuffer: ByteArrayStream,
+        fragmentBuffer: ByteBuffer,
         charset: String,
         result: ArrayList<Rune>
     ) {

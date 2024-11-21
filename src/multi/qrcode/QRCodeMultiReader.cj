@@ -62,8 +62,8 @@ public class QRCodeMultiReader <: QRCodeReader & MultipleBarcodeReader {
         // sort and concatenate the SA list items
         saResults.sortBy(stable: true, comparator: SAComparator)
         var newText: ArrayList<Rune> = ArrayList<Rune>()
-        var newRawBytes: ByteArrayStream = ByteArrayStream()
-        var newByteSegment: ByteArrayStream = ByteArrayStream()
+        var newRawBytes: ByteBuffer = ByteBuffer()
+        var newByteSegment: ByteBuffer = ByteBuffer()
         for (saResultN in 0..saResults.size) {
             var saResult: Result = saResults[saResultN]
             newText.appendAll(saResult.getText().toRuneArray())
