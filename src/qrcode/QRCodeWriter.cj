@@ -5,12 +5,7 @@
 package QRCode4cj.qrcode
 
 import std.convert.*
-import QRCode4cj.common.BarcodeFormat
-import QRCode4cj.common.EncodeHintType
-import QRCode4cj.common.Writer
-import QRCode4cj.common.Qrcoder4cjWriterException
-import QRCode4cj.common.BitMatrix
-import QRCode4cj.common.DecodeHintType
+import QRCode4cj.common.*
 import QRCode4cj.qrcode.encoder.ByteMatrix
 import QRCode4cj.qrcode.decoder.ErrorCorrectionLevel
 import QRCode4cj.qrcode.encoder.Encoder

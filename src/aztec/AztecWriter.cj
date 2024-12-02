@@ -7,13 +7,11 @@ package QRCode4cj.aztec
 import std.convert.*
 import std.collection.*
 import std.math.*
-import QRCode4cj.common.BarcodeFormat
-import QRCode4cj.common.EncodeHintType
-import QRCode4cj.common.Writer
+
+import QRCode4cj.common.*
 import QRCode4cj.aztec.encoder.AztecCode
 import QRCode4cj.aztec.encoder.Encoder
-import QRCode4cj.common.BitMatrix
-import QRCode4cj.common.MyCharset
+
 import QRCode4cj.qrcode.decoder.ErrorCorrectionLevel
 import QRCode4cj.tools.*
 

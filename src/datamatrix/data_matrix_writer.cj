@@ -5,11 +5,11 @@
 package QRCode4cj.datamatrix
 
 import std.convert.*
-import QRCode4cj.common.BarcodeFormat
-import QRCode4cj.common.EncodeHintType
-import QRCode4cj.common.Writer
-import QRCode4cj.common.BitMatrix
-import QRCode4cj.common.MyCharset
+//import QRCode4cj.common.BarcodeFormat
+//import QRCode4cj.common.EncodeHintType
+import QRCode4cj.common.*
+//import QRCode4cj.common.BitMatrix
+//import QRCode4cj.common.MyCharset
 import QRCode4cj.datamatrix.encoder.DefaultPlacement
 import QRCode4cj.common.Dimension
 import QRCode4cj.datamatrix.encoder.ErrorCorrection

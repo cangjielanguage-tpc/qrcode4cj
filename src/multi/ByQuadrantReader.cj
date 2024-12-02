@@ -9,9 +9,9 @@ import QRCode4cj.common.Qrcoder4cjChecksumException
 import QRCode4cj.common.DecodeHintType
 import QRCode4cj.common.Qrcoder4cjFormatException
 import QRCode4cj.common.Qrcoder4cjNotFoundException
-import QRCode4cj.common.Reader
-import QRCode4cj.common.Result
-import QRCode4cj.common.ResultPoint
+import QRCode4cj.common.*
+//import QRCode4cj.common.Result
+//import QRCode4cj.common.ResultPoint
 import std.collection.*
 
 public class ByQuadrantReader <: Reader {

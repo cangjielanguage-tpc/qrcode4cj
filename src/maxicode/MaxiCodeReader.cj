@@ -4,18 +4,9 @@
 
 package QRCode4cj.maxicode
 
-import QRCode4cj.common.BarcodeFormat
-import QRCode4cj.common.BinaryBitmap
-import QRCode4cj.common.Qrcoder4cjChecksumException
-import QRCode4cj.common.DecodeHintType
-import QRCode4cj.common.Qrcoder4cjFormatException
-import QRCode4cj.common.Qrcoder4cjNotFoundException
-import QRCode4cj.common.Reader
-import QRCode4cj.common.Result
-import QRCode4cj.common.ResultMetadataType
-import QRCode4cj.common.ResultPoint
-import QRCode4cj.common.BitMatrix
-import QRCode4cj.common.DecoderResult
+
+import QRCode4cj.common.*
+
 import QRCode4cj.maxicode.decoder.Decoder
 import std.math.*
 import std.collection.*
