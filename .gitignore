@@ -5,7 +5,6 @@
 output/
 tmp/
 charset/
-image/
 *.cjo
 .vscode/
 build/
