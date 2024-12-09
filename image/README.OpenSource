@@ -1,0 +1,11 @@
+[
+    {
+        "Name": " image ",
+        "License": " BSD-3-Clause license ",
+        "License File": " LICENSE ",
+        "Version Number": " 1.18.4 ",
+        "Owner": " Go Authors "
+        "Upstream URL": " https://github.com/golang/go ",
+        "Description": " 图像操作库 "
+    }
+]
