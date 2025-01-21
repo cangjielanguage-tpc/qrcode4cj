@@ -40,34 +40,34 @@ public open class SMSParsedResult <: ParsedResult {
 
     public func getSMSURI(): String {
         var result: ArrayList<Rune> = ArrayList<Rune>();
-        result.appendAll("sms:".toRuneArray());
+        result.add(all:"sms:".toRuneArray());
         var first: Bool = true;
         for (i in 0..numbers.size) {
             if (first) {
                 first = false
             } else {
-                result.append(r',');
+                result.add(r',');
             }
-            result.appendAll(numbers[i].toRuneArray());
+            result.add(all:numbers[i].toRuneArray());
             if (vias.size != 0 && !vias[i].isEmpty()) {
-                result.appendAll(";via=".toRuneArray());
-                result.appendAll(vias[i].toRuneArray());
+                result.add(all:";via=".toRuneArray());
+                result.add(all:vias[i].toRuneArray());
             }
         }
         var hasBody: Bool = body != ""
         var hasSubject: Bool = subject != ""
         if (hasBody || hasSubject) {
-            result.append(r'?');
+            result.add(r'?');
             if (hasBody) {
-                result.appendAll("body=".toRuneArray());
-                result.appendAll(body.toRuneArray());
+                result.add(all:"body=".toRuneArray());
+                result.add(all:body.toRuneArray());
             }
             if (hasSubject) {
                 if (hasBody) {
-                    result.append(r'&');
+                    result.add(r'&');
                 }
-                result.appendAll("subject=".toRuneArray());
-                result.appendAll(subject.toRuneArray());
+                result.add(all:"subject=".toRuneArray());
+                result.add(all:subject.toRuneArray());
             }
         }
         return String(result);

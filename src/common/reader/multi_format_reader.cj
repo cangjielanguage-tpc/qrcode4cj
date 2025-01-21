@@ -88,7 +88,7 @@ public open class MultiFormatReader <: Reader {
         var formats: ArrayList<BarcodeFormat> = ArrayList<BarcodeFormat>()
         if (hints.size == 0) {
             if (let Some(possibleFormatsData) <- hints.get(DecodeHintType.POSSIBLE_FORMATS)) {
-                formats = ArrayList<BarcodeFormat>((possibleFormatsData as BarcodeFormat).getOrThrow())
+                formats = ArrayList<BarcodeFormat>([(possibleFormatsData as BarcodeFormat).getOrThrow()])
             } else {
                 formats = ArrayList<BarcodeFormat>()
             }
@@ -108,29 +108,29 @@ public open class MultiFormatReader <: Reader {
 
             // At end in "try harder" mode
             if (addOneDReader && tryHarder) {
-                readers.append(MultiFormatOneDReader(hints))
+                readers.add(MultiFormatOneDReader(hints))
             }
 
             if (formats.contains(BarcodeFormat.PDF_417)) {
-                readers.append(PDF417Reader(2))
+                readers.add(PDF417Reader(2))
             }
         }
         if (readers.isEmpty()) {
             if (!tryHarder) {
-                readers.append(MultiFormatOneDReader(hints))
+                readers.add(MultiFormatOneDReader(hints))
             }
 
-            readers.append(QRCodeReader())
-            readers.append(DataMatrixReader())
-            readers.append(AztecReader())
-            readers.append(PDF417Reader())
-            readers.append(MaxiCodeReader())
+            readers.add(QRCodeReader())
+            readers.add(DataMatrixReader())
+            readers.add(AztecReader())
+            readers.add(PDF417Reader())
+            readers.add(MaxiCodeReader())
 
             if (tryHarder) {
-                readers.append(MultiFormatOneDReader(hints))
+                readers.add(MultiFormatOneDReader(hints))
             }
 
-            readers.append(PDF417Reader(2))
+            readers.add(PDF417Reader(2))
         }
         this.readers = readers
         EMPTY_READER_ARRAY = this.readers
@@ -139,22 +139,22 @@ public open class MultiFormatReader <: Reader {
     public func extracsetHints(addOneDReader: Bool, tryHarder: Bool, readers: ArrayList<Reader>,
         hints: HashMap<DecodeHintType, Any>, formats: ArrayList<BarcodeFormat>) {
         if (addOneDReader && !tryHarder) {
-            readers.append(MultiFormatOneDReader(hints))
+            readers.add(MultiFormatOneDReader(hints))
         }
         if (formats.contains(BarcodeFormat.QR_CODE)) {
-            readers.append(QRCodeReader())
+            readers.add(QRCodeReader())
         }
         if (formats.contains(BarcodeFormat.DATA_MATRIX)) {
-            readers.append(DataMatrixReader())
+            readers.add(DataMatrixReader())
         }
         if (formats.contains(BarcodeFormat.AZTEC)) {
-            readers.append(AztecReader())
+            readers.add(AztecReader())
         }
         if (formats.contains(BarcodeFormat.PDF_417)) {
-            readers.append(PDF417Reader())
+            readers.add(PDF417Reader())
         }
         if (formats.contains(BarcodeFormat.MAXICODE)) {
-            readers.append(MaxiCodeReader())
+            readers.add(MaxiCodeReader())
         }
     }
 

@@ -50,9 +50,9 @@ public class QRCodeMultiReader <: QRCodeReader & MultipleBarcodeReader {
         for (resultN in 0..results.size) {
             var result: Result = results[resultN]
             if (result.getResultMetadata().contains(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE)) {
-                saResults.append(result)
+                saResults.add(result)
             } else {
-                newResults.append(result)
+                newResults.add(result)
             }
         }
         if (saResults.size == 0) {
@@ -62,11 +62,11 @@ public class QRCodeMultiReader <: QRCodeReader & MultipleBarcodeReader {
         // sort and concatenate the SA list items
         saResults.sortBy(stable: true, comparator: SAComparator)
         var newText: ArrayList<Rune> = ArrayList<Rune>()
-        var newRawBytes: ByteArrayStream = ByteArrayStream()
-        var newByteSegment: ByteArrayStream = ByteArrayStream()
+        var newRawBytes: ByteBuffer = ByteBuffer()
+        var newByteSegment: ByteBuffer = ByteBuffer()
         for (saResultN in 0..saResults.size) {
             var saResult: Result = saResults[saResultN]
-            newText.appendAll(saResult.getText().toRuneArray())
+            newText.add(all:saResult.getText().toRuneArray())
             var saBytes: Array<UInt8> = saResult.getRawBytes()
             newRawBytes.write(saBytes)
 
@@ -75,7 +75,7 @@ public class QRCodeMultiReader <: QRCodeReader & MultipleBarcodeReader {
                     ResultMetadataType.BYTE_SEGMENTS) as ArrayList<Array<UInt8>>).getOrThrow()
                 if (byteSegments.size != 0) {
                     for (segmentN in 0..byteSegments.size) {
-                        var segment: Array<UInt8> = Array<UInt8>(byteSegments[segmentN])
+                        var segment: Array<UInt8> = byteSegments[segmentN]
                         newByteSegment.write(segment)
                     }
                 }
@@ -86,7 +86,7 @@ public class QRCodeMultiReader <: QRCodeReader & MultipleBarcodeReader {
         if (newByteSegment.length > 0) {
             newResult.putMetadata(ResultMetadataType.BYTE_SEGMENTS, newByteSegment.bytes())
         }
-        newResults.append(newResult)
+        newResults.add(newResult)
         return newResults.toArray()
     }
 
@@ -133,7 +133,7 @@ public class QRCodeMultiReader <: QRCodeReader & MultipleBarcodeReader {
                         decoderResult.getStructuredAppendParity()
                     )
                 }
-                results.append(result)
+                results.add(result)
             } catch (re: Qrcoder4cjReaderException) {
                 // ignore and continue
             }

@@ -28,12 +28,12 @@ public abstract class AbstractRSSReader <: OneDReader {
     private var evenCounts: Array<Int64> = Array<Int64>();
 
     protected init() {
-        decodeFinderCounters = Array<Int64>(4, item: 0)
-        dataCharacterCounters = Array<Int64>(8, item: 0)
-        oddRoundingErrors = Array<Float32>(4, item: 0.0)
-        evenRoundingErrors = Array<Float32>(4, item: 0.0)
-        oddCounts = Array<Int64>(dataCharacterCounters.size / 2, item: 0)
-        evenCounts = Array<Int64>(dataCharacterCounters.size / 2, item: 0)
+        decodeFinderCounters = Array<Int64>(4, repeat: 0)
+        dataCharacterCounters = Array<Int64>(8, repeat: 0)
+        oddRoundingErrors = Array<Float32>(4, repeat: 0.0)
+        evenRoundingErrors = Array<Float32>(4, repeat: 0.0)
+        oddCounts = Array<Int64>(dataCharacterCounters.size / 2, repeat: 0)
+        evenCounts = Array<Int64>(dataCharacterCounters.size / 2, repeat: 0)
     }
 
     protected func getDecodeFinderCounters(): Array<Int64> {

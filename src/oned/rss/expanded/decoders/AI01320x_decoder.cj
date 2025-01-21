@@ -14,9 +14,9 @@ class AI01320xDecoder <: AI013x0xDecoder {
 
     protected func addWeightCode(buf: ArrayList<Rune>, weight: Int64): Unit {
         if (weight < 10000) {
-            buf.appendAll("(3202)".toRuneArray());
+            buf.add(all:"(3202)".toRuneArray());
         } else {
-            buf.appendAll("(3203)".toRuneArray());
+            buf.add(all:"(3203)".toRuneArray());
         }
     }
 

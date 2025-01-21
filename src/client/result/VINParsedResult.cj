@@ -84,22 +84,22 @@ public open class VINParsedResult <: ParsedResult {
 
     public override func getDisplayResult(): String {
         var result: ArrayList<Rune> = ArrayList<Rune>()
-        result.appendAll(worldManufacturerID.toRuneArray())
-        result.append(r' ')
-        result.appendAll(vehicleDescriptorSection.toRuneArray())
-        result.append(r' ')
-        result.appendAll(vehicleIdentifierSection.toRuneArray())
-        result.append(r'\n')
+        result.add(all:worldManufacturerID.toRuneArray())
+        result.add(r' ')
+        result.add(all:vehicleDescriptorSection.toRuneArray())
+        result.add(r' ')
+        result.add(all:vehicleIdentifierSection.toRuneArray())
+        result.add(r'\n')
         if (countryCode != "") {
-            result.appendAll(countryCode.toRuneArray())
-            result.append(r' ')
+            result.add(all:countryCode.toRuneArray())
+            result.add(r' ')
         }
-        result.appendAll(modelYear.toString().toRuneArray())
-        result.append(r' ')
-        result.append(plantCode)
-        result.append(r' ')
-        result.appendAll(sequentialNumber.toRuneArray())
-        result.append(r'\n')
+        result.add(all:modelYear.toString().toRuneArray())
+        result.add(r' ')
+        result.add(plantCode)
+        result.add(r' ')
+        result.add(all:sequentialNumber.toRuneArray())
+        result.add(r'\n')
         return String(result)
     }
 }

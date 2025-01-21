@@ -520,7 +520,7 @@ public open class PDF417HighLevelEncoder {
             }
 
             case NUMERIC =>
-                sb.append(Rune(LATCH_TO_NUMERIC))
+                sb.add(Rune(LATCH_TO_NUMERIC))
                 encodeNumeric(input, p_, len, sb)
             case _ =>
                 var encodingMode: Int64 = TEXT_COMPACTION
@@ -536,7 +536,7 @@ public open class PDF417HighLevelEncoder {
                     }
                     var n: Int64 = determineConsecutiveDigitCount(input, p_)
                     if (n >= 13) {
-                        sb.append(Rune(LATCH_TO_NUMERIC))
+                        sb.add(Rune(LATCH_TO_NUMERIC))
                         encodingMode = NUMERIC_COMPACTION
                         textSubMode = SUBMODE_ALPHA
 
@@ -547,7 +547,7 @@ public open class PDF417HighLevelEncoder {
                         var t: Int64 = determineConsecutiveTextCount(input, p_)
                         if (t >= 5 || n == len) {
                             if (encodingMode != TEXT_COMPACTION) {
-                                sb.append(Rune(LATCH_TO_TEXT))
+                                sb.add(Rune(LATCH_TO_TEXT))
                                 encodingMode = TEXT_COMPACTION
                                 textSubMode = SUBMODE_ALPHA
                                 //start with submode alpha after latch
@@ -629,83 +629,83 @@ public open class PDF417HighLevelEncoder {
                 if (submode == SUBMODE_ALPHA) {
                     if (isAlphaUpper(ch)) {
                         if (ch == r' ') {
-                            tmp.append(Rune(26))
+                            tmp.add(Rune(26))
                             //space
                         } else {
-                            tmp.append(Rune(ch.hashCode() - 65))
+                            tmp.add(Rune(ch.hashCode() - 65))
                         }
                     } else {
                         if (isAlphaLower(ch)) {
                             submode = SUBMODE_LOWER
-                            tmp.append(Rune(27))
+                            tmp.add(Rune(27))
                             continue
                         } else if (isMixed(ch)) {
                             submode = SUBMODE_MIXED
-                            tmp.append(Rune(28))
+                            tmp.add(Rune(28))
                             continue
                         } else {
-                            tmp.append(Rune(29))
+                            tmp.add(Rune(29))
 
                             //ps
-                            tmp.append(Rune(PUNCTUATION[ch.hashCode()]))
+                            tmp.add(Rune(PUNCTUATION[ch.hashCode()]))
                         }
                     }
                 } else if (submode == SUBMODE_LOWER) {
                     if (isAlphaLower(ch)) {
                         if (ch == r' ') {
-                            tmp.append(Rune(26))
+                            tmp.add(Rune(26))
                             //space
                         } else {
-                            tmp.append(Rune(ch.hashCode() - 97))
+                            tmp.add(Rune(ch.hashCode() - 97))
                         }
                     } else {
                         if (isAlphaUpper(ch)) {
-                            tmp.append(Rune(27))
+                            tmp.add(Rune(27))
 
                             //as
-                            tmp.append(Rune(ch.hashCode() - 65))
+                            tmp.add(Rune(ch.hashCode() - 65))
                         } else if (isMixed(ch)) {
                             submode = SUBMODE_MIXED
-                            tmp.append(Rune(28))
+                            tmp.add(Rune(28))
                             continue
                         } else {
-                            tmp.append(Rune(29))
+                            tmp.add(Rune(29))
 
                             //ps
-                            tmp.append(Rune(PUNCTUATION[ch.hashCode()]))
+                            tmp.add(Rune(PUNCTUATION[ch.hashCode()]))
                         }
                     }
                 } else if (submode == SUBMODE_MIXED) {
                     if (isMixed(ch)) {
-                        tmp.append(Rune(MIXED[ch.hashCode()]))
+                        tmp.add(Rune(MIXED[ch.hashCode()]))
                     } else {
                         if (isAlphaUpper(ch)) {
                             submode = SUBMODE_ALPHA
-                            tmp.append(Rune(28))
+                            tmp.add(Rune(28))
                             continue
                         } else if (isAlphaLower(ch)) {
                             submode = SUBMODE_LOWER
-                            tmp.append(Rune(27))
+                            tmp.add(Rune(27))
                             continue
                         } else {
                             if (startpos + idx + 1 < count && !input.isECI(startpos + idx + 1) && isPunctuation(
                                 input.charAt(startpos + idx + 1))) {
                                 submode = SUBMODE_PUNCTUATION
-                                tmp.append(Rune(25))
+                                tmp.add(Rune(25))
                                 continue
                             }
-                            tmp.append(Rune(29))
+                            tmp.add(Rune(29))
 
                             //ps
-                            tmp.append(Rune(PUNCTUATION[ch.hashCode()]))
+                            tmp.add(Rune(PUNCTUATION[ch.hashCode()]))
                         }
                     }
                 } else {
                     if (isPunctuation(ch)) {
-                        tmp.append(Rune(PUNCTUATION[ch.hashCode()]))
+                        tmp.add(Rune(PUNCTUATION[ch.hashCode()]))
                     } else {
                         submode = SUBMODE_ALPHA
-                        tmp.append(Rune(29))
+                        tmp.add(Rune(29))
                         continue
                     }
                 }
@@ -722,13 +722,13 @@ public open class PDF417HighLevelEncoder {
             var odd: Bool = (i % 2) != 0
             if (odd) {
                 h = Rune((h.hashCode() * 30) + str[i].hashCode())
-                sb.append(h)
+                sb.add(h)
             } else {
                 h = str[i]
             }
         }
         if ((len % 2) != 0) {
-            sb.append(Rune((h.hashCode() * 30) + 29))
+            sb.add(Rune((h.hashCode() * 30) + 29))
             //ps
         }
         return submode
@@ -783,7 +783,7 @@ public open class PDF417HighLevelEncoder {
 
     public static func subBytes(input: ECIInput, start: Int64, end: Int64): Array<UInt8> {
         let count: Int64 = end - start
-        var result: Array<UInt8> = Array<UInt8>(count, item: 0)
+        var result: Array<UInt8> = Array<UInt8>(count, repeat: 0)
         for (i in start..end) {
             result[i - start] = UInt8(input.charAt(i).hashCode() & 0xff)
         }
@@ -808,12 +808,12 @@ public open class PDF417HighLevelEncoder {
         sb: ArrayList<Rune>
     ) {
         if (count == 1 && startmode == TEXT_COMPACTION) {
-            sb.append(Rune(SHIFT_TO_BYTE))
+            sb.add(Rune(SHIFT_TO_BYTE))
         } else {
             if ((count % 6) == 0) {
-                sb.append(Rune(LATCH_TO_BYTE))
+                sb.add(Rune(LATCH_TO_BYTE))
             } else {
-                sb.append(Rune(LATCH_TO_BYTE_PADDED))
+                sb.add(Rune(LATCH_TO_BYTE_PADDED))
             }
         }
 
@@ -821,7 +821,7 @@ public open class PDF417HighLevelEncoder {
 
         // Encode sixpacks
         if (count >= 6) {
-            var chars: Array<Rune> = Array<Rune>(5, item: Rune(0x00))
+            var chars: Array<Rune> = Array<Rune>(5, repeat: Rune(0x00))
             while ((startpos + count - idx) >= 6) {
                 var t: Int64 = 0
                 for (i in 0..6) {
@@ -833,7 +833,7 @@ public open class PDF417HighLevelEncoder {
                     t /= 900
                 }
                 for (i in chars.size - 1..=0 : -1) {
-                    sb.append(chars[i])
+                    sb.add(chars[i])
                 }
                 idx += 6
             }
@@ -842,7 +842,7 @@ public open class PDF417HighLevelEncoder {
         //Encode rest (remaining n<5 bytes if any)
         for (i in idx..startpos + count) {
             var ch: Int64 = bytes[i].hashCode() & 0xff
-            sb.append(Rune(ch))
+            sb.add(Rune(ch))
         }
     }
 
@@ -857,7 +857,7 @@ public open class PDF417HighLevelEncoder {
             var part: String = "1" + input.subSequence(startpos + idx, startpos + idx + len).toString()
             var bigint: BigInteger = BigInteger(part)
             do {
-                tmp.append(Rune(Int32.parse((bigint % num900).getNumber())))
+                tmp.add(Rune(Int32.parse((bigint % num900).getNumber())))
                 bigint = bigint / num900
                 var a = bigint.toString()
             } while (bigint != num0)
@@ -865,7 +865,7 @@ public open class PDF417HighLevelEncoder {
             //Reverse temporary string
             var str = UTF32String(tmp)
             for (i in str.charSize - 1..=0 : -1) {
-                sb.append(str[i])
+                sb.add(str[i])
             }
             idx += len
         }
@@ -996,15 +996,15 @@ public open class PDF417HighLevelEncoder {
 
     private static func encodingECI(eci: Int64, sb: ArrayList<Rune>) {
         if (eci >= 0 && eci < 900) {
-            sb.append(Rune(ECI_CHARSET))
-            sb.append(Rune(eci))
+            sb.add(Rune(ECI_CHARSET))
+            sb.add(Rune(eci))
         } else if (eci < 810900) {
-            sb.append(Rune(ECI_GENERAL_PURPOSE))
-            sb.append(Rune(eci / 900 - 1))
-            sb.append(Rune(eci % 900))
+            sb.add(Rune(ECI_GENERAL_PURPOSE))
+            sb.add(Rune(eci / 900 - 1))
+            sb.add(Rune(eci % 900))
         } else if (eci < 811800) {
-            sb.append(Rune(ECI_USER_DEFINED))
-            sb.append(Rune(810900 - eci))
+            sb.add(Rune(ECI_USER_DEFINED))
+            sb.add(Rune(810900 - eci))
         } else {
             throw Qrcoder4cjWriterException("ECI number not in valid range from 0..811799, but was " + eci.toString())
         }

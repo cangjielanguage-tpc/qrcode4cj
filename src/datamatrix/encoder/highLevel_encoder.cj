@@ -5,7 +5,7 @@
 package QRCode4cj.datamatrix.encoder
 
 import std.math.*
-import std.format.*
+import std.convert.*
 import QRCode4cj.tools.UTF32String
 import QRCode4cj.common.*
 import std.collection.*
@@ -225,10 +225,10 @@ public class HighLevelEncoder {
         //Padding
         var codewords: ArrayList<Rune> = context.getCodewords();
         if (codewords.size < capacity) {
-            codewords.append(PAD);
+            codewords.add(PAD);
         }
         while (codewords.size < capacity) {
-            codewords.append(randomize253State(codewords.size + 1));
+            codewords.add(randomize253State(codewords.size + 1));
         }
 
         return UTF32String(context.getCodewords());
@@ -238,9 +238,9 @@ public class HighLevelEncoder {
         var sb: ArrayList<Rune> = ArrayList<Rune>();
         for (i in 0..codewords.charSize) {
             if (i > 0) {
-                sb.append(r' ');
+                sb.add(r' ');
             }
-            sb.appendAll(codewords.get(i).hashCode().toString().toRuneArray())
+            sb.add(all:codewords.get(i).hashCode().toString().toRuneArray())
         }
         return UTF32String(sb);
     }
@@ -280,13 +280,13 @@ public class HighLevelEncoder {
         }
 
         var charsProcessed = 0;
-        var mins = Array<Byte>(6, item: 0)
-        var intCharCounts = Array<Int64>(6, item: 0)
+        var mins = Array<Byte>(6, repeat: 0)
+        var intCharCounts = Array<Int64>(6, repeat: 0)
         while (true) {
             //step K
             if ((startpos + charsProcessed) == msg.charSize) {
-                mins = Array<Byte>(6, item: 0)
-                intCharCounts = Array<Int64>(6, item: 0)
+                mins = Array<Byte>(6, repeat: 0)
+                intCharCounts = Array<Int64>(6, repeat: 0)
                 var min: Int64 = findMinimums(charCounts, intCharCounts, Int64(Int32.Max), mins);
                 var minCount: Int64 = getMinimumCount(mins);
 
@@ -369,8 +369,8 @@ public class HighLevelEncoder {
 
             //step R
             if (charsProcessed >= 4) {
-                mins = Array<Byte>(6, item: 0)
-                intCharCounts = Array<Int64>(6, item: 0)
+                mins = Array<Byte>(6, repeat: 0)
+                intCharCounts = Array<Int64>(6, repeat: 0)
                 findMinimums(charCounts, intCharCounts, Int64(Int32.Max), mins);
 
                 if (intCharCounts[ASCII_ENCODATION] < min(

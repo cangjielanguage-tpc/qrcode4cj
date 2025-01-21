@@ -57,7 +57,7 @@ public class DefaultGridSampler <: GridSampler {
             throw Qrcoder4cjNotFoundException()
         }
         let bits = BitMatrix(dimensionX, dimensionY)
-        let points: Array<Float64> = Array<Float64>(2 * dimensionX, item: 0.0)
+        let points: Array<Float64> = Array<Float64>(2 * dimensionX, repeat: 0.0)
         for (y in 0..dimensionY) {
             let iValue = Float64(y) + 0.5
             for (x in 0..points.size : 2) {

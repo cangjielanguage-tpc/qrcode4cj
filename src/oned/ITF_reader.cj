@@ -31,8 +31,7 @@ public open class ITFReader <: OneDReader {
      * searching for the END_PATTERN
      */
     private static let START_PATTERN: Array<Int64> = [N, N, N, N]
-    private static let END_PATTERN_REVERSED: Array<Array<Int64>> = [
-        [N, N, w], // 2x
+    private static let END_PATTERN_REVERSED: Array<Array<Int64>> = [[N, N, w], // 2x
         [N, N, W] // 3x
     ]
 
@@ -110,12 +109,8 @@ public open class ITFReader <: OneDReader {
         var resultObject: Result = Result(
             resultString.toString(),
             Array<UInt8>(),
-            Array<ResultPoint>(
-                [
-                    ResultPoint(Float32(startRange[1]), Float32(rowNumber)),
-                    ResultPoint(Float32(endRange[0]), Float32(rowNumber))
-                ]
-            ),
+            [ResultPoint(Float32(startRange[1]), Float32(rowNumber)),
+                ResultPoint(Float32(endRange[0]), Float32(rowNumber))],
             BarcodeFormat.ITF
         )
         resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]I0")
@@ -126,7 +121,7 @@ public open class ITFReader <: OneDReader {
     /**
      * @param row          row of black/white values to search
      * @param payloadStart offset of start pattern
-     * @param resultString {@link StringBuilder} to append decoded chars to
+     * @param resultString {@link StringBuilder} to add decoded chars to
      * @throws Qrcoder4cjNotFoundException if decoding could not complete successfully
      */
     private static func decodeMiddle(
@@ -139,9 +134,9 @@ public open class ITFReader <: OneDReader {
         // interleaved white lines for the second digit.
         // Therefore, need to scan 10 lines and then
         // split these into two arrays
-        var counterDigitPair: Array<Int64> = Array<Int64>(10, item: 0)
-        var counterBlack: Array<Int64> = Array<Int64>(5, item: 0)
-        var counterWhite: Array<Int64> = Array<Int64>(5, item: 0)
+        var counterDigitPair: Array<Int64> = Array<Int64>(10, repeat: 0)
+        var counterBlack: Array<Int64> = Array<Int64>(5, repeat: 0)
+        var counterWhite: Array<Int64> = Array<Int64>(5, repeat: 0)
 
         var payloadStart: Int64 = payloadStartin
 
@@ -157,9 +152,9 @@ public open class ITFReader <: OneDReader {
             }
 
             var bestMatch: Int64 = decodeDigit(counterBlack)
-            resultString.append(Rune(r'0'.hashCode() + bestMatch))
+            resultString.add(Rune(r'0'.hashCode() + bestMatch))
             bestMatch = decodeDigit(counterWhite)
-            resultString.append(Rune(r'0'.hashCode() + bestMatch))
+            resultString.add(Rune(r'0'.hashCode() + bestMatch))
 
             for (i in 0..counterDigitPair.size) {
                 payloadStart += counterDigitPair[i]
@@ -183,7 +178,7 @@ public open class ITFReader <: OneDReader {
          * Determine the width of a narrow line in pixels. We can do this by getting
          * the width of the start pattern and dividing by 4 because its
          * made up of 4 narrow lines.
-         */ 
+         */
         this.narrowLineWidth = (startPattern[1] - startPattern[0]) / 4
 
         validateQuietZone(row, startPattern[0])
@@ -222,7 +217,7 @@ public open class ITFReader <: OneDReader {
             quietCount--
         }
         if (quietCount != 0) {
-            /* Unable to find the necessary number of quiet zone pixels. */ 
+            /* Unable to find the necessary number of quiet zone pixels. */
             throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
     }
@@ -266,20 +261,20 @@ public open class ITFReader <: OneDReader {
             /*
              * The start & end patterns must be pre/post fixed by a quiet zone. This zone
              * must be at least 10 times the width of a narrow line.
-             */ 
+             */
             validateQuietZone(row, endPattern[0])
 
             /*
              * Now recalculate the indices of where the 'endblock' starts & stops to accommodate
              * the reversed nature of the search
-             */ 
+             */
             var temp: Int64 = endPattern[0]
             endPattern[0] = row.getSize() - endPattern[1]
             endPattern[1] = row.getSize() - temp
 
             return endPattern
         } finally {
-            /* Put the row back the right way. */ 
+            /* Put the row back the right way. */
             row.reverse()
         }
     }
@@ -296,7 +291,7 @@ public open class ITFReader <: OneDReader {
      */
     private static func findGuardPattern(row: BitArray, rowOffset: Int64, pattern: Array<Int64>): Array<Int64> {
         var patternLength: Int64 = pattern.size
-        var counters_: Array<Int64> = Array<Int64>(patternLength, item: 0)
+        var counters_: Array<Int64> = Array<Int64>(patternLength, repeat: 0)
         var width: Int64 = row.getSize()
         var isWhite: Bool = false
 

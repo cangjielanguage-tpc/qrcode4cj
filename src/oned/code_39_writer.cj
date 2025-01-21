@@ -16,7 +16,7 @@ import std.convert.*
 public open class Code39Writer <: OneDimensionalCodeWriter {
     protected override func getSupportedWriteFormats(): ArrayList<BarcodeFormat> {
         var returnData: ArrayList<BarcodeFormat> = ArrayList<BarcodeFormat>()
-        returnData.append(BarcodeFormat.CODE_39)
+        returnData.add(BarcodeFormat.CODE_39)
         return returnData
     }
 
@@ -42,15 +42,15 @@ public open class Code39Writer <: OneDimensionalCodeWriter {
             }
         }
 
-        var widths: Array<Int64> = Array<Int64>(9, item: 0)
+        var widths: Array<Int64> = Array<Int64>(9, repeat: 0)
         var codeWidth: Int64 = 24 + 1 + (13 * length)
-        var result_: Array<Bool> = Array<Bool>(codeWidth, item: false)
+        var result_: Array<Bool> = Array<Bool>(codeWidth, repeat: false)
         toIntArray(Code39Reader.ASTERISK_ENCODING, widths)
         var pos: Int64 = appendPattern(result_, 0, widths, true)
-        var narrowWhite: Array<Int64> = Array<Int64>(1, item: 1)
+        var narrowWhite: Array<Int64> = Array<Int64>(1, repeat: 1)
         pos += appendPattern(result_, pos, narrowWhite, false)
 
-        //append next character to byte matrix
+        //add next character to byte matrix
         for (i in 0..length) {
             var indexInString: Int64 = Code39Reader.ALPHABET_STRING.indexOf(contents.get(i).toString()).getOrThrow()
             toIntArray(Code39Reader.CHARACTER_ENCODINGS[indexInString], widths)
@@ -82,37 +82,37 @@ public open class Code39Writer <: OneDimensionalCodeWriter {
         for (i in 0..length) {
             var character: Rune = contents.get(i)
             match (character) {
-                case r'\u{0000}' => extendedContent.appendAll("%U".toRuneArray())
-                case r' ' | r'-' | r'.' => extendedContent.append(character)
-                case r'@' => extendedContent.appendAll("%V".toRuneArray())
+                case r'\u{0000}' => extendedContent.add(all:"%U".toRuneArray())
+                case r' ' | r'-' | r'.' => extendedContent.add(character)
+                case r'@' => extendedContent.add(all:"%V".toRuneArray())
 
-                case r'`' => extendedContent.appendAll("%W".toRuneArray())
+                case r'`' => extendedContent.add(all:"%W".toRuneArray())
 
                 case _ => if (character.hashCode() <= 26) {
-                    extendedContent.append(r'$')
-                    extendedContent.append(Rune(r'A'.hashCode() + (character.hashCode() - 1)))
+                    extendedContent.add(r'$')
+                    extendedContent.add(Rune(r'A'.hashCode() + (character.hashCode() - 1)))
                 } else if (character < r' ') {
-                    extendedContent.append(r'%')
-                    extendedContent.append(Rune(r'A'.hashCode() + (character.hashCode() - 27)))
+                    extendedContent.add(r'%')
+                    extendedContent.add(Rune(r'A'.hashCode() + (character.hashCode() - 27)))
                 } else if (character <= r',' || character == r'/' || character == r':') {
-                    extendedContent.append(r'/')
-                    extendedContent.append(Rune(r'A'.hashCode() + (character.hashCode() - 33)))
+                    extendedContent.add(r'/')
+                    extendedContent.add(Rune(r'A'.hashCode() + (character.hashCode() - 33)))
                 } else if (character <= r'9') {
-                    extendedContent.append(Rune(r'0'.hashCode() + (character.hashCode() - 48)))
+                    extendedContent.add(Rune(r'0'.hashCode() + (character.hashCode() - 48)))
                 } else if (character <= r'?') {
-                    extendedContent.append(r'%')
-                    extendedContent.append(Rune(r'F'.hashCode() + (character.hashCode() - 59)))
+                    extendedContent.add(r'%')
+                    extendedContent.add(Rune(r'F'.hashCode() + (character.hashCode() - 59)))
                 } else if (character <= r'Z') {
-                    extendedContent.append(Rune(r'A'.hashCode() + (character.hashCode() - 65)))
+                    extendedContent.add(Rune(r'A'.hashCode() + (character.hashCode() - 65)))
                 } else if (character <= r'_') {
-                    extendedContent.append(r'%')
-                    extendedContent.append(Rune(r'K'.hashCode() + (character.hashCode() - 91)))
+                    extendedContent.add(r'%')
+                    extendedContent.add(Rune(r'K'.hashCode() + (character.hashCode() - 91)))
                 } else if (character <= r'z') {
-                    extendedContent.append(r'+')
-                    extendedContent.append(Rune(r'A'.hashCode() + (character.hashCode() - 97)))
+                    extendedContent.add(r'+')
+                    extendedContent.add(Rune(r'A'.hashCode() + (character.hashCode() - 97)))
                 } else if (character.hashCode() <= 127) {
-                    extendedContent.append(r'%')
-                    extendedContent.append(Rune(r'P'.hashCode() + (character.hashCode() - 123)))
+                    extendedContent.add(r'%')
+                    extendedContent.add(Rune(r'P'.hashCode() + (character.hashCode() - 123)))
                 } else {
                     throw IllegalArgumentException(
                         "Requested content contains a non-encodable character: '" + contents.get(i).toString() + "'")

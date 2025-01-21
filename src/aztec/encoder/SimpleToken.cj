@@ -4,7 +4,7 @@
 
 package QRCode4cj.aztec.encoder
 
-import std.format.*
+import std.convert.*
 import QRCode4cj.tools.UTF32String
 import QRCode4cj.common.*
 

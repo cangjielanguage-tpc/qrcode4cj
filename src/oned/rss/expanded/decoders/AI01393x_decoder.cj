@@ -30,23 +30,23 @@ class AI01393xDecoder <: AI01decoder {
             LAST_DIGIT_SIZE
         );
 
-        buf.appendAll("(393".toRuneArray());
-        buf.appendAll(lastAIdigit.toString().toRuneArray());
-        buf.append(r')');
+        buf.add(all:"(393".toRuneArray());
+        buf.add(all:lastAIdigit.toString().toRuneArray());
+        buf.add(r')');
 
         var firstThreeDigits: Int64 = this.getGeneralDecoder().extractNumericValueFromBitArray(
             HEADER_SIZE + GTIN_SIZE + LAST_DIGIT_SIZE, FIRST_THREE_DIGITS_SIZE);
         if (firstThreeDigits / 100 == 0) {
-            buf.append(r'0');
+            buf.add(r'0');
         }
         if (firstThreeDigits / 10 == 0) {
-            buf.append(r'0');
+            buf.add(r'0');
         }
-        buf.appendAll(firstThreeDigits.toString().toRuneArray());
+        buf.add(all:firstThreeDigits.toString().toRuneArray());
 
         var generalInformation: DecodedInformation = this.getGeneralDecoder().decodeGeneralPurposeField(
             HEADER_SIZE + GTIN_SIZE + LAST_DIGIT_SIZE + FIRST_THREE_DIGITS_SIZE, "");
-        buf.appendAll(generalInformation.getNewString().toRuneArray());
+        buf.add(all:generalInformation.getNewString().toRuneArray());
 
         return String(buf);
     }

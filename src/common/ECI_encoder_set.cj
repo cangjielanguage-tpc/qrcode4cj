@@ -27,7 +27,7 @@ public class ECIEncoderSet {
         for (i in 0..names.size) {
             if (CharacterSetECI.getCharacterSetECIByName(names[i]).flag) {
                 try {
-                    ENCODERS.append(MyCharset.forName(names[i]).newEncoder());
+                    ENCODERS.add(MyCharset.forName(names[i]).newEncoder());
                 } catch (e: Exception) {
                     // continue
                 }
@@ -37,7 +37,7 @@ public class ECIEncoderSet {
         var neededEncoders: ArrayList<CharsetEncoder> = ArrayList<CharsetEncoder>();
 
         //we always need the ISO-8859-1 encoder. It is the default encoding
-        neededEncoders.append(StandardCharsets.ISO_8859_1.newEncoder());
+        neededEncoders.add(StandardCharsets.ISO_8859_1.newEncoder());
         var needUnicodeEncoder: String = String();
         if (priorityCharset.flag && priorityCharset.name().startsWith("UTF")) {
             needUnicodeEncoder = true.toString()
@@ -53,9 +53,9 @@ public class ECIEncoderSet {
             encoders = [neededEncoders[0]]
         } else {
             // we need more than one single byte encoder or we need a Unicode encoder.
-            // In this case we append a UTF-8 and UTF-16 encoder to the list
+            // In this case we add a UTF-8 and UTF-16 encoder to the list
             let data = CharacterSetECI(CharacterSetECI.NO).getCharset().newEncoder()
-            encoders = Array<CharsetEncoder>(neededEncoders.size + 2, item: data)
+            encoders = Array<CharsetEncoder>(neededEncoders.size + 2, repeat: data)
             var index: Int64 = 0;
             for (i in 0..neededEncoders.size) {
                 encoders[index] = neededEncoders[i]
@@ -103,7 +103,7 @@ public class ECIEncoderSet {
                     if (ENCODERS[j].canEncode(stringToEncodeIn[i])) {
                         //Good, we found an encoder that can encode the character. We add him to the list and continue scanning
                         //the input
-                        neededEncoders.append(ENCODERS[j]);
+                        neededEncoders.add(ENCODERS[j]);
                         canEncode = true
                         break
                     }

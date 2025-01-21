@@ -32,17 +32,17 @@ public open class GeoParsedResult <: ParsedResult {
 
     public func getGeoURI(): String {
         var result: ArrayList<Rune> = ArrayList<Rune>();
-        result.appendAll("geo:".toRuneArray());
-        result.appendAll(latitude.toString().toRuneArray());
-        result.append(r',');
-        result.appendAll(longitude.toString().toRuneArray());
+        result.add(all:"geo:".toRuneArray());
+        result.add(all:latitude.toString().toRuneArray());
+        result.add(r',');
+        result.add(all:longitude.toString().toRuneArray());
         if (altitude > 0.0) {
-            result.append(r',');
-            result.appendAll(altitude.toString().toRuneArray());
+            result.add(r',');
+            result.add(all:altitude.toString().toRuneArray());
         }
         if (query != "") {
-            result.append(r'?');
-            result.appendAll(query.toRuneArray());
+            result.add(r'?');
+            result.add(all:query.toRuneArray());
         }
         return String(result);
     }
@@ -77,18 +77,18 @@ public open class GeoParsedResult <: ParsedResult {
 
     public override func getDisplayResult(): String {
         var result: ArrayList<Rune> = ArrayList<Rune>();
-        result.appendAll(latitude.toString().toRuneArray());
-        result.appendAll(", ".toRuneArray());
-        result.appendAll(longitude.toString().toRuneArray());
+        result.add(all:latitude.toString().toRuneArray());
+        result.add(all:", ".toRuneArray());
+        result.add(all:longitude.toString().toRuneArray());
         if (altitude > 0.0) {
-            result.appendAll(", ".toRuneArray());
-            result.appendAll(altitude.toString().toRuneArray());
-            result.append(r'm');
+            result.add(all:", ".toRuneArray());
+            result.add(all:altitude.toString().toRuneArray());
+            result.add(r'm');
         }
         if (query != "") {
-            result.appendAll(" (".toRuneArray());
-            result.appendAll(query.toRuneArray());
-            result.append(r')');
+            result.add(all:" (".toRuneArray());
+            result.add(all:query.toRuneArray());
+            result.add(r')');
         }
         return String(result);
     }

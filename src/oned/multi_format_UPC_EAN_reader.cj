@@ -26,7 +26,7 @@ public open class MultiFormatUPCEANReader <: OneDReader {
             possibleFormats = ArrayList<BarcodeFormat>()
         } else {
             if (let Some(possibleFormatsData) <- hints.get(DecodeHintType.POSSIBLE_FORMATS)) {
-                possibleFormats = ArrayList<BarcodeFormat>((possibleFormatsData as BarcodeFormat).getOrThrow())
+                possibleFormats = ArrayList<BarcodeFormat>([(possibleFormatsData as BarcodeFormat).getOrThrow()])
             } else {
                 possibleFormats = ArrayList<BarcodeFormat>()
             }
@@ -35,23 +35,23 @@ public open class MultiFormatUPCEANReader <: OneDReader {
         var readers: ArrayList<UPCEANReader> = ArrayList<UPCEANReader>();
         if (possibleFormats.size != 0) {
             if (possibleFormats.contains(BarcodeFormat.EAN_13)) {
-                readers.append(EAN13Reader());
+                readers.add(EAN13Reader());
             } else if (possibleFormats.contains(BarcodeFormat.UPC_A)) {
-                readers.append(UPCAReader());
+                readers.add(UPCAReader());
             }
             if (possibleFormats.contains(BarcodeFormat.EAN_8)) {
-                readers.append(EAN8Reader());
+                readers.add(EAN8Reader());
             }
             if (possibleFormats.contains(BarcodeFormat.UPC_E)) {
-                readers.append(UPCEReader());
+                readers.add(UPCEReader());
             }
         }
         if (readers.isEmpty()) {
-            readers.append(EAN13Reader());
+            readers.add(EAN13Reader());
 
             // UPC-A is covered by EAN-13
-            readers.append(EAN8Reader());
-            readers.append(UPCEReader());
+            readers.add(EAN8Reader());
+            readers.add(UPCEReader());
         }
         this.readers = readers.toArray()
     }
@@ -84,7 +84,7 @@ public open class MultiFormatUPCEANReader <: OneDReader {
                     possibleFormats = ArrayList<BarcodeFormat>()
                 } else {
                     if (let Some(hints_one) <- hints.get(DecodeHintType.POSSIBLE_FORMATS)) {
-                        possibleFormats = ArrayList<BarcodeFormat>((hints_one as BarcodeFormat).getOrThrow())
+                        possibleFormats = ArrayList<BarcodeFormat>([ (hints_one as BarcodeFormat).getOrThrow()])
                     } else {
                         possibleFormats = ArrayList<BarcodeFormat>()
                     }

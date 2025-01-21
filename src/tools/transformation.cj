@@ -13,7 +13,7 @@ public func numberOfTrailingZeros(inData: Int64): Int64 {
     var data: Int64 = inData
     var length: Int64 = 0
     var count: Int64 = 0
-    var array: Array<Int64> = Array<Int64>(32, item: 0)
+    var array: Array<Int64> = Array<Int64>(32, repeat: 0)
 
     while (data / 2 != 0) {
         array[length] = data % 2

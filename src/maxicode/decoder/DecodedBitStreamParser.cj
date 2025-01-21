@@ -6,7 +6,7 @@ package QRCode4cj.maxicode.decoder
 
 import std.math.*
 import std.core.*
-import std.format.*
+import std.convert.*
 import std.collection.*
 import QRCode4cj.common.*
 
@@ -120,22 +120,19 @@ public class DecodedBitStreamParser {
                 }
                 var country: String = getCountry(bytes).format("3.3");
                 var service: String = getServiceClass(bytes).format("3.3");
-                result.appendAll(getMessage(bytes, 10, 84).toRuneArray())
+                result.add(all:getMessage(bytes, 10, 84).toRuneArray())
                 if (String(result).startsWith("[)>" + RS.toString() + "01" + GS.toString())) {
-                    result.insertAll(
-                        9,
-                        (postcode + GS.toString() + country.toString() + GS.toString() + service + GS.toString()).
-                            toRuneArray()
+                    result.add(                        all: (postcode + GS.toString() + country.toString() + GS.toString() + service + GS.toString()).
+                            toRuneArray(), at: 9
                     )
                 } else {
-                    result.insertAll(
-                        0,
-                        (postcode + GS.toString() + country + GS.toString() + service + GS.toString()).toRuneArray()
+                    result.add(
+                        all: (postcode + GS.toString() + country + GS.toString() + service + GS.toString()).toRuneArray(), at: 0
                     )
                 }
-            case 4 => result.appendAll(getMessage(bytes, 1, 93).toRuneArray())
+            case 4 => result.add(all:getMessage(bytes, 1, 93).toRuneArray())
 
-            case 5 => result.appendAll(getMessage(bytes, 1, 77).toRuneArray())
+            case 5 => result.add(all:getMessage(bytes, 1, 77).toRuneArray())
             case _ => throw Exception("Unhandled mode: " + mode.toString())
         }
         var a = DecoderResult(bytes, String(result), ArrayList<Array<UInt8>>(), mode.toString())
@@ -179,7 +176,7 @@ public class DecodedBitStreamParser {
         var sb: ArrayList<Rune> = ArrayList<Rune>()
         for (i in 0..POSTCODE_3_BYTES.size) {
             for (j in 0..POSTCODE_3_BYTES[i].size) {
-                sb.append(SETS[0][getInt(bytes, [POSTCODE_3_BYTES[i][j]])])
+                sb.add(SETS[0][getInt(bytes, [POSTCODE_3_BYTES[i][j]])])
             }
         }
         return String(sb)
@@ -215,11 +212,11 @@ public class DecodedBitStreamParser {
                 var nsval: Int64 = (Int64(bytes[i + 1]) << 24) + (Int64(bytes[i + 2]) << 18) + (Int64(bytes[i + 3]) << 12) +
                     (Int64(bytes[i + 4]) << 6) + Int64(bytes[i + 5])
                 i += 5
-                sb.appendAll(nsval.format("9.9").toRuneArray());
+                sb.add(all:nsval.format("9.9").toRuneArray());
             } else if (c == LOCK) {
                 shift = -1
             } else {
-                sb.append(c)
+                sb.add(c)
             }
             if (shift == 0) {
                 set = lastset
@@ -229,7 +226,7 @@ public class DecodedBitStreamParser {
         }
 
         while (sb.size > 0 && sb[sb.size - 1] == PAD) {
-            sb.remove(sb.size - 1)
+            sb.remove(at: sb.size - 1)
         }
 
         return String(sb);

@@ -30,7 +30,7 @@ public class EncoderContext {
             if (ch == r'?' && msg[i] != r'?') {
                 throw IllegalArgumentException("Message contains characters outside ISO-8859-1 encoding.");
             }
-            sb.append(ch);
+            sb.add(ch);
         }
         this.msg = UTF32String(sb)
 
@@ -70,11 +70,11 @@ public class EncoderContext {
     }
 
     public func writeCodewords(codewords: UTF32String) {
-        this.codewords.appendAll(codewords.toRuneArray());
+        this.codewords.add(all:codewords.toRuneArray());
     }
 
     public func writeCodeword(codeword: Rune) {
-        this.codewords.append(codeword);
+        this.codewords.add(codeword);
     }
 
     public func getCodewordCount(): Int64 {

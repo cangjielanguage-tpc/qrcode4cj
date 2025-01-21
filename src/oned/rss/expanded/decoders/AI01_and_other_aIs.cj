@@ -19,10 +19,10 @@ class AI01AndOtherAIs <: AI01decoder {
     public func parseInformation(): String {
         var buff: ArrayList<Rune> = ArrayList<Rune>();
 
-        buff.appendAll("(01)".toRuneArray());
+        buff.add(all:"(01)".toRuneArray());
         var initialGtinPosition: Int64 = buff.size;
         var firstGtinDigit: Int64 = this.getGeneralDecoder().extractNumericValueFromBitArray(HEADER_SIZE, 4);
-        buff.appendAll(firstGtinDigit.toString().toRuneArray());
+        buff.add(all:firstGtinDigit.toString().toRuneArray());
 
         this.encodeCompressedGtinWithoutAI(buff, HEADER_SIZE + 4, initialGtinPosition);
         var a = this.getGeneralDecoder().decodeAllCodes(buff, HEADER_SIZE + 44)

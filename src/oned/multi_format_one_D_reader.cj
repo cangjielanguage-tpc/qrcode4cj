@@ -22,7 +22,7 @@ public open class MultiFormatOneDReader <: OneDReader {
             possibleFormats = ArrayList<BarcodeFormat>()
         } else {
             if (let Some(possibleFormatsData) <- hints.get(DecodeHintType.POSSIBLE_FORMATS)) {
-                possibleFormats = ArrayList<BarcodeFormat>((possibleFormatsData as BarcodeFormat).getOrThrow())
+                possibleFormats = ArrayList<BarcodeFormat>([(possibleFormatsData as BarcodeFormat).getOrThrow()])
             } else {
                 possibleFormats = ArrayList<BarcodeFormat>()
             }
@@ -34,45 +34,45 @@ public open class MultiFormatOneDReader <: OneDReader {
         if (!possibleFormats.isEmpty()) {
             if (possibleFormats.contains(BarcodeFormat.EAN_13) || possibleFormats.contains(BarcodeFormat.UPC_A) ||
                 possibleFormats.contains(BarcodeFormat.EAN_8) || possibleFormats.contains(BarcodeFormat.UPC_E)) {
-                readers.append(MultiFormatUPCEANReader(hints));
+                readers.add(MultiFormatUPCEANReader(hints));
             }
             if (possibleFormats.contains(BarcodeFormat.CODE_39)) {
-                readers.append(Code39Reader(useCode39CheckDigit));
+                readers.add(Code39Reader(useCode39CheckDigit));
             }
             if (possibleFormats.contains(BarcodeFormat.CODE_93)) {
-                readers.append(Code93Reader());
+                readers.add(Code93Reader());
             }
             if (possibleFormats.contains(BarcodeFormat.CODE_128)) {
-                readers.append(Code128Reader());
+                readers.add(Code128Reader());
             }
             if (possibleFormats.contains(BarcodeFormat.ITF)) {
-                readers.append(ITFReader());
+                readers.add(ITFReader());
             }
             if (possibleFormats.contains(BarcodeFormat.CODABAR)) {
-                readers.append(CodaBarReader());
+                readers.add(CodaBarReader());
             }
             if (possibleFormats.contains(BarcodeFormat.RSS_14)) {
-                readers.append(RSS14Reader());
+                readers.add(RSS14Reader());
             }
             if (possibleFormats.contains(BarcodeFormat.RSS_EXPANDED)) {
-                readers.append(RSSExpandedReader());
+                readers.add(RSSExpandedReader());
             }
         }
         if (readers.isEmpty()) {
-            readers.append(MultiFormatUPCEANReader(hints));
+            readers.add(MultiFormatUPCEANReader(hints));
             appendReader(readers)
         }
         this.readers = readers.toArray()
     }
 
     static func appendReader(readers: ArrayList<OneDReader>) {
-        readers.append(Code39Reader());
-        readers.append(CodaBarReader());
-        readers.append(Code93Reader());
-        readers.append(Code128Reader());
-        readers.append(ITFReader());
-        readers.append(RSS14Reader());
-        readers.append(RSSExpandedReader());
+        readers.add(Code39Reader());
+        readers.add(CodaBarReader());
+        readers.add(Code93Reader());
+        readers.add(Code128Reader());
+        readers.add(ITFReader());
+        readers.add(RSS14Reader());
+        readers.add(RSSExpandedReader());
     }
 
     public override func decodeRow(rowNumber: Int64, row: BitArray, hints: HashMap<DecodeHintType, Any>): Result {

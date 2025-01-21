@@ -169,7 +169,7 @@ public class Edge {
                 if (mode == Mode.X12) {
                     size += 2
                 } else {
-                    var charLen: Array<Int64> = Array<Int64>(1, item: 0)
+                    var charLen: Array<Int64> = Array<Int64>(1, repeat: 0)
                     size += MinimalEncoder.getNumberOfC40Words(input, fromPosition, mode == Mode.C40, charLen) * 2
                 }
 
@@ -387,13 +387,13 @@ public class Edge {
 
     @OverflowWrapping
     static func getBytes(c: Int64): Array<UInt8> {
-        var result: Array<UInt8> = Array<UInt8>(1, item: 0)
+        var result: Array<UInt8> = Array<UInt8>(1, repeat: 0)
         result[0] = UInt8(c)
         return result
     }
 
     static func getBytes(c1: Int64, c2: Int64): Array<UInt8> {
-        var result: Array<UInt8> = Array<UInt8>(2, item: 0)
+        var result: Array<UInt8> = Array<UInt8>(2, repeat: 0)
         result[0] = UInt8(c1)
         result[1] = UInt8(c2)
         return result
@@ -427,7 +427,7 @@ public class Edge {
 
     func getX12Words(): Array<UInt8> {
         @Assert(characterLength % 3 == 0)
-        var result: Array<UInt8> = Array<UInt8>(characterLength / 3 * 2, item: 0);
+        var result: Array<UInt8> = Array<UInt8>(characterLength / 3 * 2, repeat: 0);
 
         for (i in 0..result.size : 2) {
             setC40Word(
@@ -533,45 +533,45 @@ public class Edge {
         for (i in 0..characterLength) {
             var ci: Rune = input.charAt(fromPosition + i);
             if (c40 && HighLevelEncoder.isNativeC40(ci) || !c40 && HighLevelEncoder.isNativeText(ci)) {
-                c40Values.append(UInt8(getC40Value(c40, 0, ci, fnc1)));
+                c40Values.add(UInt8(getC40Value(c40, 0, ci, fnc1)));
             } else if (!MinimalEncoder.isExtendedASCII(ci, fnc1)) {
                 var shiftValue: Int64 = getShiftValue(ci, c40, fnc1);
-                c40Values.append(UInt8(shiftValue));
+                c40Values.add(UInt8(shiftValue));
 
                 //Shift[123]
-                c40Values.append(UInt8(getC40Value(c40, shiftValue, ci, fnc1)));
+                c40Values.add(UInt8(getC40Value(c40, shiftValue, ci, fnc1)));
             } else {
                 var asciiValue: Rune = Rune(ci.hashCode() & 0xff - 128)
                 if (c40 && HighLevelEncoder.isNativeC40(asciiValue) || !c40 && HighLevelEncoder.isNativeText(asciiValue)) {
-                    c40Values.append(UInt8(1));
+                    c40Values.add(UInt8(1));
 
                     //Shift 2
-                    c40Values.append(UInt8(30));
+                    c40Values.add(UInt8(30));
 
                     //Upper Shift
-                    c40Values.append(UInt8(getC40Value(c40, 0, asciiValue, fnc1)));
+                    c40Values.add(UInt8(getC40Value(c40, 0, asciiValue, fnc1)));
                 } else {
-                    c40Values.append(UInt8(1));
+                    c40Values.add(UInt8(1));
 
                     //Shift 2
-                    c40Values.append(UInt8(30));
+                    c40Values.add(UInt8(30));
 
                     //Upper Shift
                     var shiftValue: Int64 = getShiftValue(asciiValue, c40, fnc1);
-                    c40Values.append(UInt8(shiftValue));
+                    c40Values.add(UInt8(shiftValue));
 
                     // Shift[123]
-                    c40Values.append(UInt8(getC40Value(c40, shiftValue, asciiValue, fnc1)));
+                    c40Values.add(UInt8(getC40Value(c40, shiftValue, asciiValue, fnc1)));
                 }
             }
         }
 
         if ((c40Values.size % 3) != 0) {
             @Assert((c40Values.size - 2) % 3 == 0 && fromPosition + characterLength == input.length())
-            c40Values.append(0);
+            c40Values.add(0);
         }
 
-        var result: Array<UInt8> = Array<UInt8>(c40Values.size / 3 * 2, item: 0);
+        var result: Array<UInt8> = Array<UInt8>(c40Values.size / 3 * 2, repeat: 0);
         var byteIndex: Int64 = 0;
         for (i in 0..c40Values.size : 3) {
             setC40Word(
@@ -588,12 +588,12 @@ public class Edge {
 
     func getEDFBytes(): Array<UInt8> {
         var numberOfThirds: Int64 = Int64(ceil(Float64(characterLength) / 4.0))
-        var result: Array<UInt8> = Array<UInt8>(numberOfThirds * 3, item: 0)
+        var result: Array<UInt8> = Array<UInt8>(numberOfThirds * 3, repeat: 0)
         var pos: Int64 = fromPosition
         var endPos: Int64 = min(fromPosition + characterLength - 1, input.length() - 1);
 
         for (i in 0..numberOfThirds) {
-            var edfValues: Array<Int64> = Array<Int64>(4, item: 0)
+            var edfValues: Array<Int64> = Array<Int64>(4, repeat: 0)
 
             for (j in 0..4) {
                 if (pos <= endPos) {
@@ -707,13 +707,13 @@ public class Result {
         //add padding
         var capacity: Int64 = solution.getMinSymbolSize(bytesAL.size);
         if (bytesAL.size < capacity) {
-            bytesAL.append(129);
+            bytesAL.add(129);
         }
         while (bytesAL.size < capacity) {
-            bytesAL.append(UInt8(randomize253State(bytesAL.size + 1)));
+            bytesAL.add(UInt8(randomize253State(bytesAL.size + 1)));
         }
 
-        this.bytes = Array<UInt8>(bytesAL.size, item: 0)
+        this.bytes = Array<UInt8>(bytesAL.size, repeat: 0)
 
         for (i in 0..bytes.size) {
             bytes[i] = bytesAL[i]
@@ -732,15 +732,15 @@ public class Result {
                 if (current_p.getOrThrow().getPreviousStartMode() != current_p.getOrThrow().getMode()) {
                     if (current_p.getOrThrow().getMode() == Mode.B256) {
                         if (size_p <= 249) {
-                            bytesAL.insert(0, UInt8(size_p))
+                            bytesAL.add(UInt8(size_p), at: 0)
                             size_p++
                         } else {
-                            bytesAL.insert(0, UInt8(size_p % 250));
-                            bytesAL.insert(0, UInt8(size_p / 250 + 249));
+                            bytesAL.add(UInt8(size_p % 250), at: 0);
+                            bytesAL.add( UInt8(size_p / 250 + 249), at: 0);
                             size_p += 2
                         }
-                        randomizePostfixLength.append(bytesAL.size);
-                        randomizeLengths.append(size_p);
+                        randomizePostfixLength.add(bytesAL.size);
+                        randomizeLengths.add(size_p);
                     }
                     prepend(current_p.getOrThrow().getLatchBytes(), bytesAL);
                     size_p = 0
@@ -748,15 +748,15 @@ public class Result {
             } else {
                 if (current_p.getOrThrow().getMode() == Mode.B256) {
                     if (size_p <= 249) {
-                        bytesAL.insert(0, UInt8(size_p))
+                        bytesAL.add(UInt8(size_p), at: 0)
                         size_p++
                     } else {
-                        bytesAL.insert(0, UInt8(size_p % 250));
-                        bytesAL.insert(0, UInt8(size_p / 250 + 249));
+                        bytesAL.add(UInt8(size_p % 250), at: 0);
+                        bytesAL.add(UInt8(size_p / 250 + 249), at: 0);
                         size_p += 2
                     }
-                    randomizePostfixLength.append(bytesAL.size);
-                    randomizeLengths.append(size_p);
+                    randomizePostfixLength.add(bytesAL.size);
+                    randomizeLengths.add(size_p);
                 }
                 prepend(current_p.getOrThrow().getLatchBytes(), bytesAL);
                 size_p = 0
@@ -775,7 +775,7 @@ public class Result {
 
     public static func prepend(bytes: Array<UInt8>, into: ArrayList<UInt8>): Int64 {
         for (i in bytes.size - 1..=0 : -1) {
-            into.insert(0, bytes[i]);
+            into.add(bytes[i], at: 0);
         }
         return bytes.size;
     }
@@ -797,11 +797,11 @@ public class Result {
             var Pad_codeword_value: Int64 = Int64(bytesAL[Pad_codeword_position]) & 0xff
             var pseudo_random_number: Int64 = ((149 * (Pad_codeword_position + 1)) % 255) + 1
             var temp_variable: Int64 = Pad_codeword_value + pseudo_random_number
-            bytesAL.set(Pad_codeword_position, UInt8(if (temp_variable <= 255) {
+            bytesAL[Pad_codeword_position] = UInt8(if (temp_variable <= 255) {
                     temp_variable
                 } else {
                     temp_variable - 256
-                }));
+                });
         }
     }
 
@@ -1019,7 +1019,7 @@ public class MinimalEncoder {
             var modes: Array<Mode> = [Mode.C40, Mode.TEXT]
 
             for (i in 0..modes.size) {
-                var characterLength: Array<Int64> = Array<Int64>(1, item: 0)
+                var characterLength: Array<Int64> = Array<Int64>(1, repeat: 0)
                 if (getNumberOfC40Words(input, start, modes[i] == Mode.C40, characterLength) > 0) {
                     addEdge(edges, Edge(input, modes[i], start, characterLength[0], previous));
                 }
@@ -1244,7 +1244,7 @@ public class MinimalEncoder {
 
         // Array that represents vertices. There is a vertex for every character and mode.
         // The last dimension in the array below encodes the 6 modes ASCII, C40, TEXT, X12, EDF and B256
-        var edges: Array<Array<?Edge>> = Array<Array<?Edge>>(inputLength + 1, {int: Int64 => Array<?Edge>(6, item: None)}
+        var edges: Array<Array<?Edge>> = Array<Array<?Edge>>(inputLength + 1, {int: Int64 => Array<?Edge>(6, repeat: None)}
         );
 
         addEdges(input, edges, 0, None);

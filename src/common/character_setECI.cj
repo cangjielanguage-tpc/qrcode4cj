@@ -104,7 +104,7 @@ public open class CharsetEncoder {
             return result
         }
         catch (e:EncoderException) {
-            var result = Array<UInt8>(c.size,item:0)
+            var result = Array<UInt8>(c.size,repeat:0)
             for (i in 0..c.size) {
                 result[i] = UInt8(c[i].hashCode())
             }

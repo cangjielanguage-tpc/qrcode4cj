@@ -68,7 +68,7 @@ public class MultiFinderPatternFinder <: FinderPatternFinder {
         for (fpN in 0..PossibleCentersGotten.size) {
             var fp: FinderPattern = PossibleCentersGotten[fpN]
             if (fp.getCount() >= 2) {
-                possibleCenters.append(fp)
+                possibleCenters.add(fp)
             }
         }
         var size: Int64 = possibleCenters.size
@@ -182,7 +182,7 @@ public class MultiFinderPatternFinder <: FinderPatternFinder {
                     }
 
                     // All tests passed!
-                    results.append(test)
+                    results.add(test)
                 }
             }
         }
@@ -209,7 +209,7 @@ public class MultiFinderPatternFinder <: FinderPatternFinder {
             iSkip = MIN_SKIP
         }
 
-        var stateCount: Array<Int64> = Array<Int64>(5, item: 0)
+        var stateCount: Array<Int64> = Array<Int64>(5, repeat: 0)
 
         var i: Int64 = iSkip - 1
         while (i < maxI) {
@@ -263,7 +263,7 @@ public class MultiFinderPatternFinder <: FinderPatternFinder {
             for (i in 0..patternResult.size) {
                 pattern[i] = (patternResult[i] as FinderPattern).getOrThrow()
             }
-            result.append(FinderPatternInfo(pattern))
+            result.add(FinderPatternInfo(pattern))
         }
         return result.toArray()
     }

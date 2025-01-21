@@ -5,7 +5,7 @@
 package QRCode4cj.client.result
 
 import QRCode4cj.common.Result
-import std.format.*
+
 import std.collection.*
 import QRCode4cj.tools.*
 import QRCode4cj.common.*

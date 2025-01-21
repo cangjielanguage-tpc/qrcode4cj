@@ -56,7 +56,7 @@ public class BitArray <: Hashable & ToString & Equatable<BitArray> {
     }
 
     private static func makeArray(size: Int64): Array<Int32> {
-        return Array<Int32>((size + 31) >> 5, item: 0)
+        return Array<Int32>((size + 31) >> 5, repeat: 0)
     }
 
     /**
@@ -242,11 +242,11 @@ public class BitArray <: Hashable & ToString & Equatable<BitArray> {
 
     /**
      * Appends the least-significant bits, from value, in order from most-significant to
-     * least-significant. For example, appending 6 bits from 0x000001E will append the bits
+     * least-significant. For example, appending 6 bits from 0x000001E will add the bits
      * 0, 1, 1, 1, 1, 0 in that order.
      *
-     * @param value {@code int} containing bits to append
-     * @param numBits bits from value to append
+     * @param value {@code int} containing bits to add
+     * @param numBits bits from value to add
      */
     public func appendBits(value: Int64, numBits: Int64) {
         if (numBits < 0 || numBits > 32) {
@@ -327,7 +327,7 @@ public class BitArray <: Hashable & ToString & Equatable<BitArray> {
      * Reverses all bits in the array.
      */
     public func reverse() {
-        let newBits = Array<Int32>(this.bits.size, item: 0)
+        let newBits = Array<Int32>(this.bits.size, repeat: 0)
         let len = (this.size - 1) >> 5
         let oldBitsLen = len + 1
         for (i in 0..oldBitsLen) {

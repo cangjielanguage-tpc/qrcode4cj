@@ -27,7 +27,7 @@ public open class DefaultPlacement {
         this.codewordsArray = this.codewords.toRuneArray()
         this.numcols = numcols
         this.numrows = numrows
-        this.bits = Array<UInt8>(numcols * numrows, item: 255)
+        this.bits = Array<UInt8>(numcols * numrows, repeat: 255)
     }
 
     public func getNumrows(): Int64 {

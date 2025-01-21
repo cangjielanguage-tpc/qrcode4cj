@@ -137,7 +137,7 @@ public class HybridBinarizer <: GlobalHistogramBinarizer {
         height: Int64): Array<Array<Int64>> {
         let maxYOffset = height - BLOCK_SIZE
         let maxXOffset = width - BLOCK_SIZE
-        let blackPoints = Array<Array<Int64>>(subHeight, {n: Int64 => Array<Int64>(subWidth, item: 0)})
+        let blackPoints = Array<Array<Int64>>(subHeight, {n: Int64 => Array<Int64>(subWidth, repeat: 0)})
         for (y in 0..subHeight) {
             var yoffset = y << BLOCK_SIZE_POWER
             if (yoffset > maxYOffset) {

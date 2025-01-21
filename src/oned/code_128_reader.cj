@@ -150,7 +150,7 @@ public open class Code128Reader <: OneDReader {
         var rowOffset: Int64 = row.getNextSet(0)
 
         var counterPosition: Int64 = 0
-        var counters_: Array<Int64> = Array<Int64>(6, item: 0)
+        var counters_: Array<Int64> = Array<Int64>(6, repeat: 0)
         var patternStart: Int64 = rowOffset
         var isWhite: Bool = false
         var patternLength: Int64 = counters_.size
@@ -181,7 +181,7 @@ public open class Code128Reader <: OneDReader {
                         patternStart,
                         false
                     )) {
-                        return Array<Int64>([patternStart, i, bestMatch])
+                        return [patternStart, i, bestMatch]
                     }
                     patternStart += counters_[0] + counters_[1]
                     System.arraycopy(counters_, 2, counters_, 0, counterPosition - 1)
@@ -230,7 +230,7 @@ public open class Code128Reader <: OneDReader {
         var startPatternInfo: Array<Int64> = findStartPattern(row)
         var startCode: Int64 = startPatternInfo[2]
         var rawCodes: ArrayList<UInt8> = ArrayList<UInt8>(20)
-        rawCodes.append(UInt8(startCode))
+        rawCodes.add(UInt8(startCode))
 
         var codeSet: Int64
         if (startCode == CODE_START_A) {
@@ -250,7 +250,7 @@ public open class Code128Reader <: OneDReader {
 
         var lastStart: Int64 = startPatternInfo[0]
         var nextStart: Int64 = startPatternInfo[1]
-        var counters: Array<Int64> = Array<Int64>(6, item: 0)
+        var counters: Array<Int64> = Array<Int64>(6, repeat: 0)
 
         var lastCode: Int64 = 0
         var code: Int64 = 0
@@ -270,14 +270,14 @@ public open class Code128Reader <: OneDReader {
             // Decode another code from image
             code = decodeCode(row, counters, nextStart)
 
-            rawCodes.append(UInt8(code))
+            rawCodes.add(UInt8(code))
 
             /* Remember whether the last code was printable or not (excluding CODE_STOP) */
             if (code != CODE_STOP) {
                 lastCharacterWasPrintable = true
             }
 
-            /* Add to checksum computation (if not CODE_STOP of course) */ 
+            /* Add to checksum computation (if not CODE_STOP of course) */
             if (code != CODE_STOP) {
                 multiplier++
                 checksumTotal += multiplier * code
@@ -298,16 +298,16 @@ public open class Code128Reader <: OneDReader {
             if (codeSet == CODE_CODE_A) {
                 if (code < 64) {
                     if (shiftUpperMode == upperMode_) {
-                        result.append(Rune(r' '.hashCode() + code))
+                        result.add(Rune(r' '.hashCode() + code))
                     } else {
-                        result.append(Rune(r' '.hashCode() + code + 128))
+                        result.add(Rune(r' '.hashCode() + code + 128))
                     }
                     shiftUpperMode = false
                 } else if (code < 96) {
                     if (shiftUpperMode == upperMode_) {
-                        result.append(Rune(code - 64))
+                        result.add(Rune(code - 64))
                     } else {
-                        result.append(Rune(code + 64))
+                        result.add(Rune(code + 64))
                     }
                     shiftUpperMode = false
                 } else {
@@ -327,10 +327,10 @@ public open class Code128Reader <: OneDReader {
                             if (result.size == 0) {
                                 // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code is
                                 // FNC1 then this is GS1-128. We add the symbology identifier.
-                                result.appendAll("]C1".toRuneArray())
+                                result.add(all:"]C1".toRuneArray())
                             } else {
                                 // GS1 specification 5.4.7.5. Every subsequent FNC1 is returned as ASCII 29 (GS)
-                                result.append(Rune(29))
+                                result.add(Rune(29))
                             }
                         }
                     } else if (code == CODE_FNC_2) {
@@ -360,9 +360,9 @@ public open class Code128Reader <: OneDReader {
             } else if (codeSet == CODE_CODE_B) {
                 if (code < 96) {
                     if (shiftUpperMode == upperMode_) {
-                        result.append(Rune(r' '.hashCode() + code))
+                        result.add(Rune(r' '.hashCode() + code))
                     } else {
-                        result.append(Rune(r' '.hashCode() + code + 128))
+                        result.add(Rune(r' '.hashCode() + code + 128))
                     }
                     shiftUpperMode = false
                 } else {
@@ -379,10 +379,10 @@ public open class Code128Reader <: OneDReader {
                             if (result.size == 0) {
                                 // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
                                 // is FNC1 then this is GS1-128. We add the symbology identifier.
-                                result.appendAll("]C1".toRuneArray())
+                                result.add(all:"]C1".toRuneArray())
                             } else {
                                 // GS1 specification 5.4.7.5. Every subsequent FNC1 is returned as ASCII 29 (GS)
-                                result.append(Rune(29))
+                                result.add(Rune(29))
                             }
                         }
                     } else if (code == CODE_FNC_2) {
@@ -412,9 +412,9 @@ public open class Code128Reader <: OneDReader {
             } else if (codeSet == CODE_CODE_C) {
                 if (code < 100) {
                     if (code < 10) {
-                        result.append(r'0')
+                        result.add(r'0')
                     }
-                    result.appendAll(code.toString().toRuneArray())
+                    result.add(all:code.toString().toRuneArray())
                 } else {
                     if (code != CODE_STOP) {
                         lastCharacterWasPrintable = false
@@ -430,10 +430,10 @@ public open class Code128Reader <: OneDReader {
                             if (result.size == 0) {
                                 // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
                                 // is FNC1 then this is GS1-128. We add the symbology identifier.
-                                result.appendAll("]C1".toRuneArray())
+                                result.add(all:"]C1".toRuneArray())
                             } else {
                                 // GS1 specification 5.4.7.5. Every subsequent FNC1 is returned as ASCII 29 (GS)
-                                result.append(Rune(29))
+                                result.add(Rune(29))
                             }
                         }
                     } else if (code == CODE_CODE_A) {
@@ -472,7 +472,7 @@ public open class Code128Reader <: OneDReader {
         /* Pull out from sum the value of the penultimate check code */
         checksumTotal -= multiplier * lastCode
 
-        /* lastCode is the checksum then: */ 
+        /* lastCode is the checksum then: */
         if (checksumTotal % 103 != lastCode) {
             throw Qrcoder4cjChecksumException.getChecksumInstance()
         }
@@ -500,7 +500,7 @@ public open class Code128Reader <: OneDReader {
         var right: Float32 = Float32(lastStart + lastPatternSize) / 2.0
 
         var rawCodesSize: Int64 = rawCodes.size
-        var rawBytes: Array<UInt8> = Array<UInt8>(rawCodesSize, item: 0)
+        var rawBytes: Array<UInt8> = Array<UInt8>(rawCodesSize, repeat: 0)
 
         for (i in 0..rawCodesSize) {
             rawBytes[i] = rawCodes.get(i).getOrThrow()
@@ -508,12 +508,7 @@ public open class Code128Reader <: OneDReader {
         var resultObject: Result = Result(
             String(result),
             rawBytes,
-            Array<ResultPoint>(
-                [
-                    ResultPoint(left, Float32(rowNumber)),
-                    ResultPoint(right, Float32(rowNumber))
-                ]
-            ),
+            [ResultPoint(left, Float32(rowNumber)), ResultPoint(right, Float32(rowNumber))],
             BarcodeFormat.CODE_128
         )
         resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]C${symbologyModifier}")

@@ -36,7 +36,7 @@ public class MultiDetector <: Detector {
         var result: ArrayList<DetectorResult> = ArrayList<DetectorResult>()
         for (i in 0..infos.size) {
             try {
-                result.append(processFinderPatternInfo(infos[i]))
+                result.add(processFinderPatternInfo(infos[i]))
             } catch (e: Qrcoder4cjReaderException) {
                 // ignore
             }

@@ -76,8 +76,8 @@ public open class Code93Reader <: OneDReader {
     ]
     static let ASTERISK_ENCODING: Int64 = CHARACTER_ENCODINGS[47]
 
-    private var decodeRowResult: ArrayList<Rune> = ArrayList<Rune>( /*Array<Rune>(20,item:' ') */ )
-    private var counters: Array<Int64> = Array<Int64>(6, item: 0)
+    private var decodeRowResult: ArrayList<Rune> = ArrayList<Rune>( /*Array<Rune>(20,repeat:' ') */ )
+    private var counters: Array<Int64> = Array<Int64>(6, repeat: 0)
 
     public init() {
     }
@@ -88,7 +88,7 @@ public open class Code93Reader <: OneDReader {
         // Read off white space
         var nextStart: Int64 = row.getNextSet(start[1]);
         var end: Int64 = row.getSize();
-        counters = Array<Int64>(6, item: 0)
+        counters = Array<Int64>(6, repeat: 0)
         var theCounters: Array<Int64> = counters
         var result: ArrayList<Rune> = decodeRowResult
         var decodedChar: Rune
@@ -100,7 +100,7 @@ public open class Code93Reader <: OneDReader {
                 throw Qrcoder4cjNotFoundException.getNotFoundInstance();
             }
             decodedChar = patternToChar(pattern)
-            result.append(decodedChar);
+            result.add(decodedChar);
             lastStart = nextStart
 
             for (i in 0..theCounters.size) {
@@ -110,7 +110,7 @@ public open class Code93Reader <: OneDReader {
             // Read off white space
             nextStart = row.getNextSet(nextStart)
         } while (decodedChar != r'*')
-        result.remove(result.size - 1);
+        result.remove(at: result.size - 1);
 
         // remove asterisk
         var lastPatternSize: Int64 = 0;
@@ -139,7 +139,7 @@ public open class Code93Reader <: OneDReader {
         var left: Float32 = Float32(start[1] + start[0]) / 2.0
         var right: Float32 = Float32(lastStart) + Float32(lastPatternSize) / 2.0
         var resultObject: Result = Result(resultString, Array<UInt8>(),
-            Array<ResultPoint>([ResultPoint(left, Float32(rowNumber)), ResultPoint(right, Float32(rowNumber))]),
+            [ResultPoint(left, Float32(rowNumber)), ResultPoint(right, Float32(rowNumber))],
             BarcodeFormat.CODE_93);
         resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]G0");
 
@@ -149,7 +149,7 @@ public open class Code93Reader <: OneDReader {
     private func findAsteriskPattern(row: BitArray): Array<Int64> {
         var width: Int64 = row.getSize();
         var rowOffset: Int64 = row.getNextSet(0);
-        counters = Array<Int64>(6, item: 0)
+        counters = Array<Int64>(6, repeat: 0)
         var theCounters_: Array<Int64> = counters
         var patternStart: Int64 = rowOffset
         var isWhite: Bool = false;
@@ -265,12 +265,12 @@ public open class Code93Reader <: OneDReader {
                         throw Qrcoder4cjFormatException.getFormatInstance();
                     }
                 }
-                decoded.append(decodedChar);
+                decoded.add(decodedChar);
 
                 // bump up i again since we read two characters
                 i++
             } else {
-                decoded.append(c);
+                decoded.add(c);
             }
             i++
         }

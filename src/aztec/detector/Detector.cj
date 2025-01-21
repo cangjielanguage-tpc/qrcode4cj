@@ -230,7 +230,7 @@ public class Detector {
         }
 
         var numECCodewords: Int64 = numCodewords_ - numDataCodewords
-        var parameterWords: Array<Int64> = Array<Int64>(numCodewords_, item: 0)
+        var parameterWords: Array<Int64> = Array<Int64>(numCodewords_, repeat: 0)
         var i: Int64 = numCodewords_ - 1
         while (i >= 0) {
             parameterWords[i] = Int64(parameterDataItem & 0xF)

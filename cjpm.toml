@@ -1,12 +1,12 @@
+# [ci_lib]={image}
 [target.aarch64-linux-ohos]
   compile-option = "-B\"${DEVECO_CANGJIE_HOME}/compiler/third_party/llvm/bin\" -B\"${DEVECO_CANGJIE_HOME}/musl/usr/lib/aarch64-linux-ohos\" -L\"${DEVECO_CANGJIE_HOME}/musl/usr/lib/aarch64-linux-ohos\" -L\"${DEVECO_CANGJIE_HOME}/build/linux_ohos_aarch64_llvm/openssl\" --sysroot \"${DEVECO_CANGJIE_HOME}/musl\""
 
 [dependencies]
-  charset4cj = {branch = "v0.0.1.B001", git = "https://gitcode.com/Cangjie-TPC/charset4cj.git", version = "0.0.1"}
-  image = {branch = "qrcode_lib", git = "https://gitee.com/HW-PLLab/image.git", version = "0.0.1"}
+  charset4cj = {branch = "develop", git = "https://gitcode.com/Cangjie-TPC/charset4cj.git", version = "0.0.1"}
 
 [package]
-  cjc-version = "0.54.3"
+  cjc-version = "0.58.3"
   compile-option = "-O2 --int-overflow=wrapping --warn-off all"
   description = "CangjieUI Application"
   link-option = ""

@@ -17,7 +17,7 @@ public open class MinimalECIInput <: ECIInput {
         this.fnc1 = fnc1
         var encoderSet: ECIEncoderSet = ECIEncoderSet(stringToEncode, priorityCharset, fnc1);
         if (encoderSet.length() == 1) { //optimization for the case when all can be encoded without ECI in ISO-8859-1
-            bytes = Array<Int64>(stringToEncode.charSize, item: 0)
+            bytes = Array<Int64>(stringToEncode.charSize, repeat: 0)
             for (i in 0..bytes.size) {
                 var c: Rune = stringToEncode[i];
                 if (c.hashCode() == fnc1) {
@@ -82,7 +82,7 @@ public open class MinimalECIInput <: ECIInput {
             if (isECI(i)) {
                 throw IllegalArgumentException("value at ${i} is not a character but an ECI");
             }
-            result.append(charAt(i));
+            result.add(charAt(i));
         }
         return UTF32String(result)
     }
@@ -131,18 +131,18 @@ public open class MinimalECIInput <: ECIInput {
         var result: ArrayList<Rune> = ArrayList<Rune>();
         for (i in 0..length()) {
             if (i > 0) {
-                result.appendAll(", ".toRuneArray());
+                result.add(all:", ".toRuneArray());
             }
             if (isECI(i)) {
-                result.appendAll("ECI(".toRuneArray());
-                result.appendAll(getECIValue(i).toString().toRuneArray());
-                result.append(r')');
+                result.add(all:"ECI(".toRuneArray());
+                result.add(all:getECIValue(i).toString().toRuneArray());
+                result.add(r')');
             } else if (charAt(i).hashCode() < 128) {
-                result.append(r'\'');
-                result.append(charAt(i));
-                result.append(r'\'');
+                result.add(r'\'');
+                result.add(charAt(i));
+                result.add(r'\'');
             } else {
-                result.appendAll(charAt(i).hashCode().toString().toRuneArray())
+                result.add(all:charAt(i).hashCode().toString().toRuneArray())
             }
         }
         return String(result);
@@ -189,7 +189,7 @@ public open class MinimalECIInput <: ECIInput {
         // Array that represents vertices. There is a vertex for every character and encoding.
         var edges: Array<Array<?InputEdge>> = Array<Array<?InputEdge>>(
             inputLength + 1,
-            {int: Int64 => Array<?InputEdge>(encoderSet.length(), item: None)}
+            {int: Int64 => Array<?InputEdge>(encoderSet.length(), repeat: None)}
         )
 
         addEdges(stringToEncode, encoderSet, edges, 0, None, fnc1);
@@ -230,7 +230,7 @@ public open class MinimalECIInput <: ECIInput {
         while (currentFlag) {
             (current, currentFlag) = exencodeMinimally(current, intsAL, encoderSet)
         }
-        var ints: Array<Int64> = Array<Int64>(intsAL.size, item: 0)
+        var ints: Array<Int64> = Array<Int64>(intsAL.size, repeat: 0)
         for (i in 0..ints.size) {
             ints[i] = intsAL.get(i).getOrThrow()
         }
@@ -243,11 +243,11 @@ public open class MinimalECIInput <: ECIInput {
         var currentFlag: Bool
         var current_p = current
         if (current_p.getOrThrow().isFNC1()) {
-            intsAL.insert(0, 1000);
+            intsAL.add(1000, at: 0);
         } else {
             var bytes: Array<UInt8> = encoderSet.encode(current_p.getOrThrow().c, current_p.getOrThrow().encoderIndex);
             for (i in bytes.size - 1..=0 : -1) {
-                intsAL.insert(0, Int64(bytes[i] & 0xFF));
+                intsAL.add( Int64(bytes[i] & 0xFF), at: 0);
             }
         }
         var previousEncoderIndex: Int64 = 0
@@ -256,7 +256,7 @@ public open class MinimalECIInput <: ECIInput {
         }
 
         if (previousEncoderIndex != current_p.getOrThrow().encoderIndex) {
-            intsAL.insert(0, 256 + encoderSet.getECIValue(current_p.getOrThrow().encoderIndex));
+            intsAL.add(256 + encoderSet.getECIValue(current_p.getOrThrow().encoderIndex),at: 0);
         }
         current_p = current_p.getOrThrow().previous
         if (let Some(c) <- current_p) {

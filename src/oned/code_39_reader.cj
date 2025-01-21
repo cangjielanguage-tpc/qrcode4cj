@@ -110,11 +110,11 @@ public open class Code39Reader <: OneDReader {
         this.usingCheckDigit = usingCheckDigit
         this.extendedMode = extendedMode
         decodeRowResult = ArrayList<Rune>()
-        counters = Array<Int64>(9, item: 0)
+        counters = Array<Int64>(9, repeat: 0)
     }
 
     public override func decodeRow(rowNumber: Int64, row: BitArray, _: HashMap<DecodeHintType, Any>): Result {
-        counters = Array<Int64>(9, item: 0)
+        counters = Array<Int64>(9, repeat: 0)
         decodeRowResult = ArrayList<Rune>()
         var theCounters: Array<Int64> = counters
         var result: ArrayList<Rune> = decodeRowResult
@@ -177,7 +177,7 @@ public open class Code39Reader <: OneDReader {
         var right: Float32 = Float32(lastStart + lastPatternSize) / 2.0
 
         var resultObject: Result = Result(resultString, Array<UInt8>(),
-            Array<ResultPoint>([ResultPoint(left, Float32(rowNumber)), ResultPoint(right, Float32(rowNumber))]),
+           [ResultPoint(left, Float32(rowNumber)), ResultPoint(right, Float32(rowNumber))],
             BarcodeFormat.CODE_39)
         resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]A0")
 
@@ -193,7 +193,7 @@ public open class Code39Reader <: OneDReader {
             throw Qrcoder4cjNotFoundException.getNotFoundInstance()
         }
         var decodedChar = patternToChar(pattern)
-        result.append(decodedChar)
+        result.add(decodedChar)
         var lastStart = nextStart_p
         for (i in 0..theCounters.size) {
             nextStart_p += theCounters[i]
@@ -338,12 +338,12 @@ public open class Code39Reader <: OneDReader {
                     }
                     case _ => ""
                 }
-                decoded.append(decodedChar)
+                decoded.add(decodedChar)
 
                 /* bump up i again since we read two characters */
                 i++
             } else {
-                decoded.append(c)
+                decoded.add(c)
             }
             i++
         }

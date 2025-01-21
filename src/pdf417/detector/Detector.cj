@@ -135,7 +135,7 @@ public open class Detector {
                 continue
             }
             foundBarcodeInRow = true
-            barcodeCoordinates.append(vertices)
+            barcodeCoordinates.add(vertices)
             if (!multiple) {
                 break
             }
@@ -160,7 +160,7 @@ public open class Detector {
         var startColumn_ = startColumn
         var startRow_ = startRow
 
-        var result: Array<ResultPoint> = Array<ResultPoint>(8, item: ResultPoint())
+        var result: Array<ResultPoint> = Array<ResultPoint>(8, repeat: ResultPoint())
         copyToResult(
             result,
             findRowsWithPattern(matrix, height, width, startRow_, startColumn_, START_PATTERN),
@@ -203,9 +203,9 @@ public open class Detector {
     private static func findRowsWithPattern(matrix: BitMatrix, height: Int64, width: Int64, startRow: Int64,
         startColumn: Int64, pattern: Array<Int64>): Array<ResultPoint> {
         var startRow_ = startRow
-        var result: Array<ResultPoint> = Array<ResultPoint>(4, item: ResultPoint())
+        var result: Array<ResultPoint> = Array<ResultPoint>(4, repeat: ResultPoint())
         var found: Bool = false
-        var counters: Array<Int64> = Array<Int64>(pattern.size, item: 0)
+        var counters: Array<Int64> = Array<Int64>(pattern.size, repeat: 0)
 
         while (startRow_ < height) {
             var loc: Array<Int64> = findGuardPatternDetect(matrix, startColumn, startRow_, width, pattern, counters)
@@ -267,7 +267,7 @@ public open class Detector {
             result[3] = ResultPoint(Float32(previousRowLoc[1]), Float32(stopRow))
         }
         if (stopRow - startRow_ < BARCODE_MIN_HEIGHT) {
-            return Array<ResultPoint>(4, item: ResultPoint())
+            return Array<ResultPoint>(4, repeat: ResultPoint())
         }
         return result
     }

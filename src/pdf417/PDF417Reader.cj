@@ -104,7 +104,7 @@ public open class PDF417Reader <: Reader & MultipleBarcodeReader {
                 ResultMetadataType.SYMBOLOGY_IDENTIFIER,
                 "]L" + decoderResult.getSymbologyModifier().toString()
             );
-            results.append(result);
+            results.add(result);
         }
         EMPTY_RESULT_ARRAY = results.toArray()
         return EMPTY_RESULT_ARRAY

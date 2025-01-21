@@ -118,7 +118,7 @@ open class DetectionResultRowIndicatorColumn <: DetectionResultColumn {
         var barcodeMetadata: ?BarcodeMetadata = getBarcodeMetadata();
         if (let Some(b) <- barcodeMetadata) {
             adjustIncompleteIndicatorColumnRowNumbers(b);
-            var result: Array<Int64> = Array<Int64>(b.getRowCount(), item: 0)
+            var result: Array<Int64> = Array<Int64>(b.getRowCount(), repeat: 0)
             var words = getCodewords()
             for (i in 0..words.size) {
                 if (words[i].flag) {

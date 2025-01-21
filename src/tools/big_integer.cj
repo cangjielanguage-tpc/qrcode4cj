@@ -226,11 +226,11 @@ public class BigInteger {
         var carry = 0
 
         if (n1.size >= n2.size) {
-            add.appendAll(number1)
-            number2.insertAll(0, StringBuilder(r'0', n1.size - n2.size).toString().toRuneArray())
+            add.add(all: number1)
+            number2.add(all: StringBuilder(r'0', n1.size - n2.size).toString().toRuneArray(), at: 0)
         } else {
-            add.appendAll(number2)
-            number1.insertAll(0, StringBuilder(r'0', n2.size - n1.size).toString().toRuneArray())
+            add.add(all: number2)
+            number1.add(all: StringBuilder(r'0', n2.size - n1.size).toString().toRuneArray(), at: 0)
         }
 
         for (i in number1.size - 1..-1 : -1) {
@@ -251,7 +251,7 @@ public class BigInteger {
 
         if (add[0] > r'9') {
             add[0] = numberToChar(charToNumber(add[0]) - 10)
-            add.insert(0, r'1')
+            add.add(r'1', at: 0)
         }
 
         return String(add)
@@ -263,11 +263,11 @@ public class BigInteger {
         let sub = ArrayList<Rune>()
 
         if (n1.size >= n2.size) {
-            sub.appendAll(number1)
-            number2.insertAll(0, StringBuilder(r'0', n1.size - n2.size).toString().toRuneArray())
+            sub.add(all: number1)
+            number2.add(all: StringBuilder(r'0', n1.size - n2.size).toString().toRuneArray(), at: 0)
         } else {
-            sub.appendAll(number2)
-            number1.insertAll(0, StringBuilder(r'0', n2.size - n1.size).toString().toRuneArray())
+            sub.add(all: number2)
+            number1.add(all: StringBuilder(r'0', n2.size - n1.size).toString().toRuneArray(), at: 0)
         }
 
         for (i in number1.size - 1..-1 : -1) {
@@ -279,7 +279,7 @@ public class BigInteger {
         }
 
         while (sub[0] == r'0' && sub.size != 1) {
-            sub.remove(0)
+            sub.remove(at: 0)
         }
 
         return String(sub)
@@ -291,11 +291,11 @@ public class BigInteger {
         var res = "0"
 
         if (n1.size > n2.size) {
-            number1.appendAll(n2.toRuneArray())
-            number2.appendAll(n1.toRuneArray())
+            number1.add(all: n2.toRuneArray())
+            number2.add(all: n1.toRuneArray())
         } else {
-            number1.appendAll(n1.toRuneArray())
-            number2.appendAll(n2.toRuneArray())
+            number1.add(all: n1.toRuneArray())
+            number2.add(all: n2.toRuneArray())
         }
 
         for (i in number1.size - 1..-1 : -1) {
@@ -313,16 +313,16 @@ public class BigInteger {
             }
 
             if (carry > 0) {
-                tmp.insert(0, numberToChar(carry))
+                tmp.add(numberToChar(carry), at: 0)
             }
 
-            tmp.appendAll(StringBuilder(r'0', number1.size - i - 1).toString().toRuneArray())
+            tmp.add(all: StringBuilder(r'0', number1.size - i - 1).toString().toRuneArray())
             res = add(res, String(tmp))
         }
 
         let arr = ArrayList<Rune>(res.toRuneArray())
         while (arr[0] == r'0' && arr.size != 1) {
-            arr.remove(0)
+            arr.remove(at: 0)
         }
 
         return String(arr)
@@ -334,16 +334,16 @@ public class BigInteger {
 
         for (i in 0..n.size) {
             rem = rem * 10 + charToNumber(Rune(n[i]))
-            result.append(numberToChar(rem / den))
+            result.add(numberToChar(rem / den))
             rem %= den
         }
 
         while (result[0] == r'0' && result.size != 1) {
-            result.remove(0)
+            result.remove(at: 0)
         }
 
         if (result.size == 0) {
-            result.append(r'0')
+            result.add(r'0')
         }
 
         return (String(result), rem)

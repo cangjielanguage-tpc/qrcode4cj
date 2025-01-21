@@ -38,14 +38,14 @@ class X12Encoder <: C40Encoder {
 
     public func encodeChar(c: Rune, sb: ArrayList<Rune>): Int64 {
         match (c) {
-            case r'\r' => sb.append(r'\0');
-            case r'*' => sb.append(Rune(1));
-            case r'>' => sb.append(Rune(2));
-            case r' ' => sb.append(Rune(3));
+            case r'\r' => sb.add(r'\0');
+            case r'*' => sb.add(Rune(1));
+            case r'>' => sb.add(Rune(2));
+            case r' ' => sb.add(Rune(3));
             case _ => if (c >= r'0' && c <= r'9') {
-                sb.append(Rune(c.hashCode() - 48 + 4));
+                sb.add(Rune(c.hashCode() - 48 + 4));
             } else if (c >= r'A' && c <= r'Z') {
-                sb.append(Rune(c.hashCode() - 65 + 14));
+                sb.add(Rune(c.hashCode() - 65 + 14));
             } else {
                 HighLevelEncoder.illegalCharacter(c);
             }

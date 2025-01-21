@@ -127,7 +127,7 @@ public open class C40Encoder <: Encoder {
         var available: Int64 = context.getSymbolInfo().getOrThrow().getDataCapacity() - curCodewordCount
 
         if (rest == 2) {
-            buffer.append(r'\0');
+            buffer.add(r'\0');
             //Shift 1
             while (buffer.size >= 3) {
                 writeNextTriplet(context, buffer);
@@ -160,48 +160,48 @@ public open class C40Encoder <: Encoder {
 
     public open func encodeChar(c: Rune, sb: ArrayList<Rune>): Int64 {
         if (c == r' ') {
-            sb.append(r'\u{3}');
+            sb.add(r'\u{3}');
             return 1;
         }
         if (c >= r'0' && c <= r'9') {
-            sb.append(Rune(c.hashCode() - 48 + 4));
+            sb.add(Rune(c.hashCode() - 48 + 4));
             return 1;
         }
         if (c >= r'A' && c <= r'Z') {
-            sb.append(Rune(c.hashCode() - 65 + 14));
+            sb.add(Rune(c.hashCode() - 65 + 14));
             return 1;
         }
         if (c < r' ') {
-            sb.append(r'\u{0}');
+            sb.add(r'\u{0}');
             //Shift 1 Set
-            sb.append(c);
+            sb.add(c);
             return 2;
         }
         if (c <= r'/') {
-            sb.append(r'\u{1}');
+            sb.add(r'\u{1}');
             //Shift 2 Set
-            sb.append(Rune(c.hashCode() - 33));
+            sb.add(Rune(c.hashCode() - 33));
             return 2;
         }
         if (c <= r'@') {
-            sb.append(r'\u{1}');
+            sb.add(r'\u{1}');
             //Shift 2 Set
-            sb.append(Rune(c.hashCode() - 58 + 15));
+            sb.add(Rune(c.hashCode() - 58 + 15));
             return 2;
         }
         if (c <= r'_') {
-            sb.append(r'\u{1}');
+            sb.add(r'\u{1}');
             //Shift 2 Set
-            sb.append(Rune(c.hashCode() - 91 + 22));
+            sb.add(Rune(c.hashCode() - 91 + 22));
             return 2;
         }
         if (c.hashCode() <= 127) {
-            sb.append(r'\u{2}');
+            sb.add(r'\u{2}');
             //Shift 3 Set
-            sb.append(Rune(c.hashCode() - 96));
+            sb.add(Rune(c.hashCode() - 96));
             return 2;
         }
-        sb.appendAll("\u{1}\u{001e}".toRuneArray());
+        sb.add(all:"\u{1}\u{001e}".toRuneArray());
         //Shift 2, Upper Shift
         var len: Int64 = 2;
         len += encodeChar(Rune(c.hashCode() - 128), sb)

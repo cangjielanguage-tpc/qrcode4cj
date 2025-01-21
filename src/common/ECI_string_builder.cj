@@ -26,41 +26,41 @@ public class ECIStringBuilder <: ToString {
      *
      * @param value character whose lowest byte is to be appended
      */
-    public func append(value: Rune) {
-        currentBytes.append(Rune(UInt32(value) & 0xff))
+    public func add(value: Rune) {
+        currentBytes.add(Rune(UInt32(value) & 0xff))
     }
 
     /**
      * Appends {@code value} as a byte value
      *
-     * @param value byte to append
+     * @param value byte to add
      */
-    public func append(value: Byte) {
-        currentBytes.append(Rune(UInt32(value) & 0xff))
+    public func add(value: Byte) {
+        currentBytes.add(Rune(UInt32(value) & 0xff))
     }
 
     /**
      * Appends the characters in {@code value} as bytes values
      *
-     * @param value string to append
+     * @param value string to add
      */
-    public func append(value: String) {
-        currentBytes.appendAll(value.toRuneArray());
+    public func add(value: String) {
+        currentBytes.add(all:value.toRuneArray());
     }
 
     /**
-     * Append the string repesentation of {@code value} (short for {@code append(String.valueOf(value))})
+     * Append the string repesentation of {@code value} (short for {@code add(String.valueOf(value))})
      *
-     * @param value int to append as a string
+     * @param value int to add as a string
      */
-    public func append(value: Int64) {
-        append(value.toString());
+    public func add(value: Int64) {
+        add(value.toString());
     }
 
     /**
      * Appends ECI value to output.
      *
-     * @param value ECI value to append, as an int
+     * @param value ECI value to add, as an int
      * @throws Qrcoder4cjFormatException on invalid ECI value
      */
     public func appendECI(value: Int64) {
@@ -79,7 +79,7 @@ public class ECIStringBuilder <: ToString {
                     result = currentBytes
                     currentBytes = ArrayList<Rune>()
                 } else {
-                    result.appendAll(currentBytes);
+                    result.add(all:currentBytes);
                     currentBytes = ArrayList<Rune>()
                 }
             }
@@ -91,19 +91,19 @@ public class ECIStringBuilder <: ToString {
                 result = ArrayList<Rune>(resultdata.toRuneArray())
             } else {
                 var resultdata: String = currentCharset.newDecoder().decode(bytes);
-                result.appendAll(resultdata.toRuneArray());
+                result.add(all:resultdata.toRuneArray());
             }
         }
     }
 
     /**
-     * Appends the characters from {@code value} (unlike all other append methods of this class who append bytes)
+     * Appends the characters from {@code value} (unlike all other add methods of this class who add bytes)
      *
-     * @param value characters to append
+     * @param value characters to add
      */
     public func appendCharacters(value: ArrayList<Rune>) {
         encodeCurrentBytesIfAny();
-        result.appendAll(value);
+        result.add(all:value);
     }
 
     /**

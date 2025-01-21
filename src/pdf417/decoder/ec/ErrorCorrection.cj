@@ -30,7 +30,7 @@ public open class ErrorCorrection {
         erasures: Array<Int64>
     ): Int64 {
         var poly: ModulusPoly = ModulusPoly(field, received)
-        var S: Array<Int64> = Array<Int64>(numECCodewords, item: 0)
+        var S: Array<Int64> = Array<Int64>(numECCodewords, repeat: 0)
         var error: Bool = false
         for (i in numECCodewords..0 : -1) {
             var eval: Int64 = poly.evaluateAt(field.exp(i))
@@ -135,7 +135,7 @@ public open class ErrorCorrection {
     private func findErrorLocations(errorLocator: ModulusPoly): Array<Int64> {
         // This is a direct application of Chien's search
         var numErrors: Int64 = errorLocator.getDegree()
-        var result: Array<Int64> = Array<Int64>(numErrors, item: 0)
+        var result: Array<Int64> = Array<Int64>(numErrors, repeat: 0)
         var e: Int64 = 0
         var i = 1;
         while (i < field.getSize() && e < numErrors) {
@@ -158,9 +158,9 @@ public open class ErrorCorrection {
     ): Array<Int64> {
         var errorLocatorDegree: Int64 = errorLocator.getDegree()
         if (errorLocatorDegree < 1) {
-            return Array<Int64>(0, item: 0)
+            return Array<Int64>(0, repeat: 0)
         }
-        var formalDerivativeCoefficients: Array<Int64> = Array<Int64>(errorLocatorDegree, item: 0)
+        var formalDerivativeCoefficients: Array<Int64> = Array<Int64>(errorLocatorDegree, repeat: 0)
         for (i in 1..errorLocatorDegree + 1) {
             formalDerivativeCoefficients[errorLocatorDegree - i] = field.multiply(i, errorLocator.getCoefficient(i))
         }
@@ -168,7 +168,7 @@ public open class ErrorCorrection {
 
         // This is directly applying Forney's Formula
         var s: Int64 = errorLocations.size
-        var result: Array<Int64> = Array<Int64>(s, item: 0)
+        var result: Array<Int64> = Array<Int64>(s, repeat: 0)
         for (i in 0..s) {
             var xiInverse: Int64 = field.inverse(errorLocations[i])
             var numerator: Int64 = field.subtract(0, errorEvaluator.evaluateAt(xiInverse))

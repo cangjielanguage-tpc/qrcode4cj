@@ -51,13 +51,13 @@ public open class BizcardResultParser <: AbstractDoCoMoResultParser {
     private static func buildPhoneNumbers(number1: String, number2: String, number3: String): Array<String> {
         var numbers: ArrayList<String> = ArrayList<String>(3);
         if (number1 != "") {
-            numbers.append(number1);
+            numbers.add(number1);
         }
         if (number2 != "") {
-            numbers.append(number2);
+            numbers.add(number2);
         }
         if (number3 != "") {
-            numbers.append(number3);
+            numbers.add(number3);
         }
         var size: Int64 = numbers.size;
         if (size == 0) {

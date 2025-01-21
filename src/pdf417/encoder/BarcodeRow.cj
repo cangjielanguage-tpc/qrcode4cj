@@ -16,7 +16,7 @@ open class BarcodeRow {
      * Creates a Barcode row of the width
      */
     init(width: Int64) {
-        this.row = Array<UInt8>(width, item: 0)
+        this.row = Array<UInt8>(width, repeat: 0)
         currentLocation = 0
     }
 
@@ -62,7 +62,7 @@ open class BarcodeRow {
      * @return the scaled row
      */
     func getScaledRow(scale: Int64): Array<UInt8> {
-        var output: Array<UInt8> = Array<UInt8>(row.size * scale, item: 0)
+        var output: Array<UInt8> = Array<UInt8>(row.size * scale, repeat: 0)
         for (i in 0..output.size) {
             output[i] = row[i / scale]
         }

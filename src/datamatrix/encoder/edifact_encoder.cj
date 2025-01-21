@@ -33,7 +33,7 @@ class EdifactEncoder <: Encoder {
                 }
             }
         }
-        buffer.append(Rune(31)) //Unlatch
+        buffer.add(Rune(31)) //Unlatch
         handleEOD(context, buffer);
     }
 
@@ -99,9 +99,9 @@ class EdifactEncoder <: Encoder {
 
     private static func encodeChar(c: Rune, sb: ArrayList<Rune>) {
         if (c >= r' ' && c <= r'?') {
-            sb.append(c);
+            sb.add(c);
         } else if (c >= r'@' && c <= r'^') {
-            sb.append(Rune(UInt32(c) - 64));
+            sb.add(Rune(UInt32(c) - 64));
         } else {
             HighLevelEncoder.illegalCharacter(c);
         }
@@ -137,12 +137,12 @@ class EdifactEncoder <: Encoder {
         var cw2: Rune = Rune((v >> 8 & 255))
         var cw3: Rune = Rune(v & 255)
         var res: ArrayList<Rune> = ArrayList<Rune>();
-        res.append(cw1);
+        res.add(cw1);
         if (len >= 2) {
-            res.append(cw2);
+            res.add(cw2);
         }
         if (len >= 3) {
-            res.append(cw3);
+            res.add(cw3);
         }
         return UTF32String(res);
     }

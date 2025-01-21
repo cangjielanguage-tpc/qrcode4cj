@@ -16,7 +16,7 @@ import std.convert.*
 public class Code93Writer <: OneDimensionalCodeWriter {
     protected override func getSupportedWriteFormats(): ArrayList<BarcodeFormat> {
         var returnData: ArrayList<BarcodeFormat> = ArrayList<BarcodeFormat>()
-        returnData.append(BarcodeFormat.CODE_93)
+        returnData.add(BarcodeFormat.CODE_93)
         return returnData
     }
 
@@ -39,7 +39,7 @@ public class Code93Writer <: OneDimensionalCodeWriter {
         //length of code + 2 start/stop characters + 2 checksums, each of 9 bits, plus a termination bar
         var codeWidth: Int64 = (contents.charSize + 2 + 2) * 9 + 1
 
-        var result: Array<Bool> = Array<Bool>(codeWidth, item: false)
+        var result: Array<Bool> = Array<Bool>(codeWidth, repeat: false)
 
         //start character (*)
         var pos: Int64 = appendPattern(result, 0, Code93Reader.ASTERISK_ENCODING);
@@ -53,7 +53,7 @@ public class Code93Writer <: OneDimensionalCodeWriter {
         var check1: Int64 = computeChecksumIndex(contents, 20);
         pos += appendPattern(result, pos, Code93Reader.CHARACTER_ENCODINGS[check1])
 
-        //append the contents to reflect the first checksum added
+        //add the contents to reflect the first checksum added
         contents += UTF32String(Code93Reader.ALPHABET_STRING.get(check1))
         var check2: Int64 = computeChecksumIndex(contents, 15);
         pos += appendPattern(result, pos, Code93Reader.CHARACTER_ENCODINGS[check2])
@@ -68,9 +68,9 @@ public class Code93Writer <: OneDimensionalCodeWriter {
     }
 
     /**
-     * @param target output to append to
+     * @param target output to add to
      * @param pos start position
-     * @param pattern pattern to append
+     * @param pattern pattern to add
      * @param startColor unused
      *
      * @return 9
@@ -120,52 +120,52 @@ public class Code93Writer <: OneDimensionalCodeWriter {
             /* ($)=a, (%)=b, (/)=c, (+)=d. see Code93Reader.ALPHABET_STRING */
             if (character.hashCode() == 0) {
                 /* NUL: (%)U */
-                extendedContent.appendAll("bU".toRuneArray());
+                extendedContent.add(all:"bU".toRuneArray());
             } else if (character.hashCode() <= 26) {
                 /* SOH - SUB: ($)A - ($)Z */
-                extendedContent.append(r'a');
-                extendedContent.append(Rune(r'A'.hashCode() + character.hashCode() - 1));
+                extendedContent.add(r'a');
+                extendedContent.add(Rune(r'A'.hashCode() + character.hashCode() - 1));
             } else if (character.hashCode() <= 31) {
                 /* ESC - US: (%)A - (%)E */
-                extendedContent.append(r'b');
-                extendedContent.append(Rune(r'A'.hashCode() + character.hashCode() - 27));
+                extendedContent.add(r'b');
+                extendedContent.add(Rune(r'A'.hashCode() + character.hashCode() - 27));
             } else if (character == r' ' || character == r'$' || character == r'%' || character == r'+') {
                 /* space $ % + */
-                extendedContent.append(character);
+                extendedContent.add(character);
             } else if (character <= r',') {
                 /* ! " # & ' ( ) * ,: (/)A - (/)L */
-                extendedContent.append(r'c');
-                extendedContent.append(Rune(r'A'.hashCode() + character.hashCode() - r'!'.hashCode()));
+                extendedContent.add(r'c');
+                extendedContent.add(Rune(r'A'.hashCode() + character.hashCode() - r'!'.hashCode()));
             } else if (character <= r'9') {
-                extendedContent.append(character);
+                extendedContent.add(character);
             } else if (character == r':') {
                 // :: (/)Z
-                extendedContent.appendAll("cZ".toRuneArray());
+                extendedContent.add(all:"cZ".toRuneArray());
             } else if (character <= r'?') {
                 // ; - ?: (%)F - (%)J
-                extendedContent.append(r'b');
-                extendedContent.append(Rune(r'F'.hashCode() + character.hashCode() - r';'.hashCode()));
+                extendedContent.add(r'b');
+                extendedContent.add(Rune(r'F'.hashCode() + character.hashCode() - r';'.hashCode()));
             } else if (character == r'@') {
                 /* @: (%)V */
-                extendedContent.appendAll("bV".toRuneArray());
+                extendedContent.add(all:"bV".toRuneArray());
             } else if (character <= r'Z') {
                 /* A - Z */
-                extendedContent.append(character);
+                extendedContent.add(character);
             } else if (character <= r'_') {
                 /* [ - _: (%)K - (%)O */
-                extendedContent.append(r'b');
-                extendedContent.append(Rune(r'K'.hashCode() + character.hashCode() - r'['.hashCode()));
+                extendedContent.add(r'b');
+                extendedContent.add(Rune(r'K'.hashCode() + character.hashCode() - r'['.hashCode()));
             } else if (character == r'`') {
                 /* `: (%)W */
-                extendedContent.appendAll("bW".toRuneArray());
+                extendedContent.add(all:"bW".toRuneArray());
             } else if (character <= r'z') {
                 /* a - z: (*)A - (*)Z */
-                extendedContent.append(r'd');
-                extendedContent.append(Rune(r'A'.hashCode() + character.hashCode() - r'a'.hashCode()));
+                extendedContent.add(r'd');
+                extendedContent.add(Rune(r'A'.hashCode() + character.hashCode() - r'a'.hashCode()));
             } else if (character.hashCode() <= 127) {
                 /* { - DEL: (%)P - (%)T */
-                extendedContent.append(r'b');
-                extendedContent.append(Rune(r'P'.hashCode() + character.hashCode() - r'{'.hashCode()));
+                extendedContent.add(r'b');
+                extendedContent.add(Rune(r'P'.hashCode() + character.hashCode() - r'{'.hashCode()));
             } else {
                 throw IllegalArgumentException("Requested content contains a non-encodable character: r'${character}'");
             }

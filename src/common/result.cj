@@ -132,7 +132,7 @@ public class Result {
         if (resultMetadata.size == 0) {
             resultMetadata = HashMap<ResultMetadataType, Any>()
         }
-        resultMetadata.put(rmtype, value);
+        resultMetadata.add(rmtype, value);
     }
 
     public func putAllMetadata(metadata: HashMap<ResultMetadataType, Any>) {
@@ -140,7 +140,7 @@ public class Result {
             if (resultMetadata.size == 0) {
                 resultMetadata = metadata
             } else {
-                resultMetadata.putAll(metadata);
+                resultMetadata.add(all: metadata);
             }
         }
     }
@@ -152,7 +152,7 @@ public class Result {
         } else if (newPoints.size > 0) {
             var allPoints: Array<ResultPoint> = Array<ResultPoint>(
                 oldPoints.size + newPoints.size,
-                item: ResultPoint()
+                repeat: ResultPoint()
             );
 
             System.arraycopy(oldPoints, 0, allPoints, 0, oldPoints.size)

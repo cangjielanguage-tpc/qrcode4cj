@@ -94,7 +94,7 @@ public abstract class UPCEANReader <: OneDReader {
         var startRange: Array<Int64> = Array<Int64>()
         var nextStart: Int64 = 0
         while (!foundStart) {
-            var counters: Array<Int64> = Array<Int64>(START_END_PATTERN.size, item: 0)
+            var counters: Array<Int64> = Array<Int64>(START_END_PATTERN.size, repeat: 0)
             startRange = findGuardPattern(row, nextStart, false, START_END_PATTERN, counters)
             var start: Int64 = startRange[0]
             nextStart = startRange[1]
@@ -193,12 +193,8 @@ public abstract class UPCEANReader <: OneDReader {
         var decodeResult: Result = Result(
             resultString.toString(),
             Array<UInt8>(), // no natural byte representation for these barcodes
-            Array<ResultPoint>(
-                [
-                    ResultPoint(left, Float32(rowNumber)),
-                    ResultPoint(right, Float32(rowNumber))
-                ]
-            ),
+
+            [ResultPoint(left, Float32(rowNumber)), ResultPoint(right, Float32(rowNumber))],
             format
         )
 
@@ -240,7 +236,7 @@ public abstract class UPCEANReader <: OneDReader {
             if (let Some(hints_one) <- hints.get(DecodeHintType.ALLOWED_EAN_EXTENSIONS)) {
                 allowedExtensions = Array<Int64>(
                     (hints_one as Int64).getOrThrow(),
-                    item: 0
+                    repeat: 0
                 )
             } else {
                 allowedExtensions = Array<Int64>()
@@ -321,7 +317,7 @@ public abstract class UPCEANReader <: OneDReader {
     }
 
     static func findGuardPattern(row: BitArray, rowOffset: Int64, whiteFirst: Bool, pattern: Array<Int64>): Array<Int64> {
-        return findGuardPattern(row, rowOffset, whiteFirst, pattern, Array<Int64>(pattern.size, item: 0))
+        return findGuardPattern(row, rowOffset, whiteFirst, pattern, Array<Int64>(pattern.size, repeat: 0))
     }
 
     /**
@@ -427,7 +423,7 @@ public abstract class UPCEANReader <: OneDReader {
      *
      * @param row row of black/white values to search
      * @param startRange start/end offset of start guard pattern
-     * @param resultString {@link StringBuilder} to append decoded chars to
+     * @param resultString {@link StringBuilder} to add decoded chars to
      *
      * @return horizontal offset of first pixel after the "middle" that was decoded
      * @throws Qrcoder4cjNotFoundException if decoding could not complete successfully

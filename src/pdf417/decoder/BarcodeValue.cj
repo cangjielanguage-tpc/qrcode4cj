@@ -23,7 +23,7 @@ open class BarcodeValue {
         }
         confidenceNum++
 
-        values.put(value, confidenceNum);
+        values.add(value, confidenceNum);
     }
 
     /**
@@ -37,9 +37,9 @@ open class BarcodeValue {
             if (entryv > maxConfidence) {
                 maxConfidence = entryv
                 result.clear();
-                result.append(entryk);
+                result.add(entryk);
             } else if (entryv == maxConfidence) {
-                result.append(entryk);
+                result.add(entryk);
             }
         }
         return result.toArray();

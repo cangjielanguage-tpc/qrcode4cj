@@ -70,7 +70,7 @@ public open class CodaBarReader <: OneDReader {
 
     public init() {
         decodeRowResult = ArrayList<Rune>()
-        counters = Array<Int64>(80, item: 0)
+        counters = Array<Int64>(80, repeat: 0)
         counterLength = 0
     }
 
@@ -89,7 +89,7 @@ public open class CodaBarReader <: OneDReader {
             // Hack: We store the position in the alphabet table into a
             // StringBuilder, so that we can access the decoded patterns in
             // validatePattern. We'll translate to the actual characters later.
-            decodeRowResult.append(Rune(charOffset))
+            decodeRowResult.add(Rune(charOffset))
             nextStart += 8
 
             // Stop as soon as we see the end character.
@@ -121,7 +121,7 @@ public open class CodaBarReader <: OneDReader {
         // Translate character table offsets to actual characters.
         var ldecodeRowResult: ArrayList<Rune> = ArrayList<Rune>()
         for (i in 0..decodeRowResult.size) {
-            ldecodeRowResult.append(ALPHABET_STRING[decodeRowResult.get(i).getOrThrow().hashCode()])
+            ldecodeRowResult.add(ALPHABET_STRING[decodeRowResult.get(i).getOrThrow().hashCode()])
         }
         decodeRowResult = ldecodeRowResult
 
@@ -140,7 +140,7 @@ public open class CodaBarReader <: OneDReader {
         var right: Float32 = Float32(runningCount)
 
         var result: Result = Result(String(decodeRowResult), Array<UInt8>(),
-            Array<ResultPoint>([ResultPoint(left, Float32(rowNumber)), ResultPoint(right, Float32(rowNumber))]),
+            [ResultPoint(left, Float32(rowNumber)), ResultPoint(right, Float32(rowNumber))],
             BarcodeFormat.CODABAR)
 
         result.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]F0")
@@ -166,15 +166,15 @@ public open class CodaBarReader <: OneDReader {
         }
 
         if (hints.size == 0 || !hints.contains(DecodeHintType.RETURN_CODABAR_START_END)) {
-            decodeRowResult.remove(decodeRowResult.size - 1)
-            decodeRowResult.remove(0)
+            decodeRowResult.remove(at: decodeRowResult.size - 1)
+            decodeRowResult.remove(at: 0)
         }
     }
 
     private func validatePattern(start: Int64) {
         // First, sum up the total size of our four categories of stripe sizes;
-        var sizes: Array<Int64> = Array<Int64>(4, item: 0);
-        var counts: Array<Int64> = Array<Int64>(4, item: 0);
+        var sizes: Array<Int64> = Array<Int64>(4, repeat: 0);
+        var counts: Array<Int64> = Array<Int64>(4, repeat: 0);
         var end: Int64 = decodeRowResult.size - 1
 
         // We break out of this loop in the middle, in order to handle
@@ -198,8 +198,8 @@ public open class CodaBarReader <: OneDReader {
         }
 
         // Calculate our allowable size thresholds using fixed-point math.
-        var maxes: Array<Float32> = Array<Float32>(4, item: 0.0)
-        var mins: Array<Float32> = Array<Float32>(4, item: 0.0)
+        var maxes: Array<Float32> = Array<Float32>(4, repeat: 0.0)
+        var mins: Array<Float32> = Array<Float32>(4, repeat: 0.0)
 
         // Define the threshold of acceptability to be the midpoint between the
         // average small stripe and the average large stripe. No stripe lengths
@@ -270,7 +270,7 @@ public open class CodaBarReader <: OneDReader {
         counters[counterLength] = e
         counterLength++
         if (counterLength >= counters.size) {
-            var temp: Array<Int64> = Array<Int64>(counterLength * 2, item: 0)
+            var temp: Array<Int64> = Array<Int64>(counterLength * 2, repeat: 0)
             System.arraycopy(counters, 0, temp, 0, counterLength);
             counters = temp
         }

@@ -74,7 +74,7 @@ public open class ExpandedProductResultParser <: ResultParser {
                     priceCurrency = value.substring(0, 3).toString()
                     priceIncrement = ai.substring(3).toString()
                 case _ => // No match with common AIs
-                    uncommonAIs.put(ai.toString(), value.toString());
+                    uncommonAIs.add(ai.toString(), value.toString());
             }
         }
 
@@ -102,7 +102,7 @@ public open class ExpandedProductResultParser <: ResultParser {
             if (currentChar < r'0' || currentChar > r'9') {
                 return UTF32String("");
             }
-            buf.append(currentChar);
+            buf.add(currentChar);
         }
         return UTF32String(buf);
     }
@@ -119,9 +119,9 @@ public open class ExpandedProductResultParser <: ResultParser {
                 if (findAIvalue(index, rawTextAux) != UTF32String("")) {
                     break
                 }
-                buf.append(r'(');
+                buf.add(r'(');
             } else {
-                buf.append(c);
+                buf.add(c);
             }
         }
         return UTF32String(buf);

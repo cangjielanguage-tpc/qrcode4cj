@@ -59,12 +59,12 @@ public enum ResultMetadataType <: Equatable<ResultMetadataType> & Hashable & ToS
      */
     | PDF417_EXTRA_METADATA
     /**
-     * If the code format supports structured append and the current scanned code is part of one then the
+     * If the code format supports structured add and the current scanned code is part of one then the
      * sequence number is given with it.
      */
     | STRUCTURED_APPEND_SEQUENCE
     /**
-     * If the code format supports structured append and the current scanned code is part of one then the
+     * If the code format supports structured add and the current scanned code is part of one then the
      * parity is given with it.
      */
     | STRUCTURED_APPEND_PARITY

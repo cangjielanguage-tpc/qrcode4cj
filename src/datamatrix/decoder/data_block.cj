@@ -53,8 +53,8 @@ class DataBlock {
                 var numDataCodewords: Int64 = ecBlockArray[j].getDataCodewords();
                 var numBlockCodewords: Int64 = ecBlocks.getECCodewords() + numDataCodewords
 
-                //result[numResultBlocks] = DataBlock(numDataCodewords, Array<Byte>(numBlockCodewords, item: 0))
-                result.append(DataBlock(numDataCodewords, Array<Byte>(numBlockCodewords, item: 0)));
+                //result[numResultBlocks] = DataBlock(numDataCodewords, Array<Byte>(numBlockCodewords, repeat: 0))
+                result.add(DataBlock(numDataCodewords, Array<Byte>(numBlockCodewords, repeat: 0)));
                 numResultBlocks++
             }
         }
