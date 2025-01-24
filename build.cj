@@ -8,7 +8,12 @@ import std.process.*
  */
 func stagePostBuild(): Int64 {
     // process before "cjpm build"
-    copy(Path(".${Path.Separator}image"), to: Path(".${Path.Separator}target${Path.Separator}release${Path.Separator}image"), overwrite: true)
+    let imagepath = ".${Path.Separator}ci_test${Path.Separator}lib_QRCode4cj${Path.Separator}image"
+    if (exists(imagepath)) {
+        Process.runOutput("cjpm", ["build", "-i"], workingDirectory: Path(imagepath))
+        copy(Path("${imagepath}${Path.Separator}target${Path.Separator}release${Path.Separator}image"),
+            to: Path(".${Path.Separator}target${Path.Separator}release${Path.Separator}image"), overwrite: true)
+    }
     0
 }
 
