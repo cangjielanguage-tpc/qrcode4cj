@@ -232,37 +232,31 @@ public class BitMatrix <: Equatable<BitMatrix> & ToString {
      * @param height The height of the region
      */
     public func setRegion(left: Int64, top: Int64, width: Int64, height: Int64) {
-        if (top < 0 || left < 0) {
-            throw IllegalArgumentException("Left and top must be nonnegative")
-        }
-        if (height < 1 || width < 1) {
-            throw IllegalArgumentException("Height and width must be at least 1")
-        }
-        let right = left + width
-        let bottom = top + height
-        if (bottom > this.height || right > this.width) {
-            throw IllegalArgumentException("The region must fit inside the matrix")
-        }
-        var L = 1
-        var xl = left >> 5
-        var x1 = xl
-        for (x in (left + 1)..right) {
-            var x2 = x >> 5
-            if (x2 != x1) {
-                L += 1
-                x1 = x2
-            }
-        }
+        if (top >= 0 && left >= 0) {
+            if (height >= 1 && width >= 1) {
+                var right = left + width;
+                var bottom = top + height;
+                if (bottom <= this.height && right <= this.width) {
+                    var y = top
+                    while(y < bottom) {
+                        var offset = y * this.rowSize;
+                        var x = left
+                        while( x < right) {
+                            var var10000 = this.bits;
+                            var10000[offset + x / 32] |= 1 << (x & 31);
+                            x++
+                        }
+                        y++
+                    }
 
-        var arr = Array<Int32>(L, repeat: 0)
-        for (x in left..right) {
-            arr[(x >> 5) - xl] |= 1 << (x & 0x1f)
-        }
-        for (y in top..bottom) {
-            let offset = y * rowSize
-            for (x in 0..L) {
-                bits[offset + xl + x] |= arr[x]
+                } else {
+                    throw IllegalArgumentException("The region must fit inside the matrix");
+                }
+            } else {
+                throw IllegalArgumentException("Height and width must be at least 1");
             }
+        } else {
+            throw IllegalArgumentException("Left and top must be nonnegative");
         }
     }
 

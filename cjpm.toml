@@ -1,6 +1,6 @@
 # [ci_lib]={image}
-[target.aarch64-linux-ohos]
-  compile-option = "-B\"${DEVECO_CANGJIE_HOME}/compiler/third_party/llvm/bin\" -B\"${DEVECO_CANGJIE_HOME}/musl/usr/lib/aarch64-linux-ohos\" -L\"${DEVECO_CANGJIE_HOME}/musl/usr/lib/aarch64-linux-ohos\" -L\"${DEVECO_CANGJIE_HOME}/build/linux_ohos_aarch64_llvm/openssl\" --sysroot \"${DEVECO_CANGJIE_HOME}/musl\""
+# [target.aarch64-linux-ohos]
+#  compile-option = "-B\"${DEVECO_CANGJIE_HOME}/compiler/third_party/llvm/bin\" -B\"${DEVECO_CANGJIE_HOME}/musl/usr/lib/aarch64-linux-ohos\" -L\"${DEVECO_CANGJIE_HOME}/musl/usr/lib/aarch64-linux-ohos\" -L\"${DEVECO_CANGJIE_HOME}/build/linux_ohos_aarch64_llvm/openssl\" --sysroot \"${DEVECO_CANGJIE_HOME}/musl\""
 
 [dependencies]
   charset4cj = {branch = "develop", git = "https://gitcode.com/Cangjie-TPC/charset4cj.git", version = "0.0.1"}
