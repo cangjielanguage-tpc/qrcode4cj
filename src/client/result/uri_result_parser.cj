@@ -46,12 +46,12 @@ public open class URIResultParser <: ResultParser {
             m = URL_WITHOUT_PROTOCOL_PATTERN.matcher(uri)
             n = m.find()
             if (let Some(v) <- n) {
-                if ((uri.indexOf(n.getOrThrow().matchStr()) == 0)) {
+                if ((uri.indexOf(n.getOrThrow().matchString()) == 0)) {
                     return true
                 }
             }
         } else {
-            if ((uri.indexOf(n.getOrThrow().matchStr()) == 0)) {
+            if ((uri.indexOf(n.getOrThrow().matchString()) == 0)) {
                 return true
             }
         }

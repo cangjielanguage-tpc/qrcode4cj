@@ -38,7 +38,7 @@ public open class VCardResultParser <: ResultParser {
         if (let None <- n) {
             return None
         } else {
-            if (rawText.indexOf(n.getOrThrow().matchStr()) != 0) {
+            if (rawText.indexOf(n.getOrThrow().matchString()) != 0) {
                 return None
             }
         }
@@ -118,7 +118,7 @@ public open class VCardResultParser <: ResultParser {
             // group 0 = whole pattern; end(0) is past final colon
             if (let Some(result) <- matcher.find(1)) {
                 if (result.groupNumber() > 0) {
-                    metadataString = result.matchStr(1)
+                    metadataString = result.matchString(1)
                 }
             }
 
@@ -199,7 +199,7 @@ public open class VCardResultParser <: ResultParser {
                     element_ = NEWLINE_ESCAPE.matcher(element_).replaceAll("\n")
                     while (true) {
                         if (let Some(r) <- VCARD_ESCAPES.matcher(element_).find()) {
-                            element_ = VCARD_ESCAPES.matcher(element_).replace(r.matchStr(1))
+                            element_ = VCARD_ESCAPES.matcher(element_).replace(r.matchString(1))
                         } else {
                             break
                         }

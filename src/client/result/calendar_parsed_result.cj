@@ -250,8 +250,8 @@ public open class CalendarParsedResult <: ParsedResult {
         var durationMS: Int64 = 0
 
         for (i in 0..RFC2445_DURATION_FIELD_UNITS.size) {
-            if (result.getOrThrow().groupNumber() >= i + 1 && result.getOrThrow().matchStr(i + 1) != "") {
-                durationMS += RFC2445_DURATION_FIELD_UNITS[i] * Int64.parse(result.getOrThrow().matchStr(i + 1))
+            if (result.getOrThrow().groupNumber() >= i + 1 && result.getOrThrow().matchString(i + 1) != "") {
+                durationMS += RFC2445_DURATION_FIELD_UNITS[i] * Int64.parse(result.getOrThrow().matchString(i + 1))
             }
         }
         return durationMS
