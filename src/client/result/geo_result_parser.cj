@@ -30,23 +30,23 @@ public open class GeoResultParser <: ResultParser {
         }
         var query: String = ""
         if (m.getOrThrow().groupNumber() >= 4) {
-            query = m.getOrThrow().matchStr(4)
+            query = m.getOrThrow().matchString(4)
         }
         var latitude: Float64
         var longitude: Float64
         var altitude: Float64
         try {
-            latitude = Float64.parse(m.getOrThrow().matchStr(1))
+            latitude = Float64.parse(m.getOrThrow().matchString(1))
             if (latitude > 90.0 || latitude < -90.0) {
                 return None
             }
-            longitude = Float64.parse(m.getOrThrow().matchStr(2))
+            longitude = Float64.parse(m.getOrThrow().matchString(2))
             if (longitude > 180.0 || longitude < -180.0) {
                 return None
             }
             var mat3: String = ""
             if (m.getOrThrow().groupNumber() >= 3) {
-                mat3 = m.getOrThrow().matchStr(3)
+                mat3 = m.getOrThrow().matchString(3)
             }
             if (mat3 == "") {
                 altitude = 0.0

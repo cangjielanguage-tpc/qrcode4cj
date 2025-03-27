@@ -37,7 +37,7 @@ public enum Mode <: Equatable<Mode> & ToString {
             case 0x8 => return KANJI([8, 10, 12], 0x08);
             case 0x9 => return FNC1_SECOND_POSITION([0, 0, 0], 0x09);
             case 0xD => // 0xD is defined in GBT 18284-2000, may not be supported in foreign country
-                    return HANZI([8, 10, 12], 0x0D);
+                return HANZI([8, 10, 12], 0x0D);
             case _ => throw IllegalArgumentException();
         }
     }
