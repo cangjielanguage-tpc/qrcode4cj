@@ -5,7 +5,7 @@
 package QRCode4cj.client.result
 
 import std.io.*
-import encoding.url.*
+import stdx.encoding.url.*
 import QRCode4cj.common.StandardCharsets
 import QRCode4cj.common.MyCharset
 import std.regex.*
