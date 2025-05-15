@@ -3,7 +3,7 @@
  */
 package QRCode4cj.common.reedsolomon
 
-import encoding.hex.*
+import stdx.encoding.hex.*
 import QRCode4cj.tools.*
 
 public class GenericGF {

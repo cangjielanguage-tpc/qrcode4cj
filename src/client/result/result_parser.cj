@@ -7,7 +7,7 @@ import std.regex.*
 import QRCode4cj.tools.*
 import QRCode4cj.common.*
 import std.collection.*
-import encoding.url.*
+import stdx.encoding.url.*
 
 /**
  * <p>Abstract class representing the result of decoding a barcode, as more than
